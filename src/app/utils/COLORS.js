@@ -1,0 +1,15 @@
+export const COLORS = {
+  primaryColor: '#FFF',
+  secondaryColor: '#000',
+  portColor: '#0EC9F2',
+  vision: '#46DABE',
+  serviceColor: '#0E52F2',
+  textColor: '#5A5A5A',
+  contactBackground: '#000371',
+  cardBackground : "#E9EEF4",
+  globalCardBackground : "#F2F7FC",
+  headerBackground : "#111F40",
+  pointerBackground : '#5F62E9',
+  footerBackground : "#111",
+  footerTextColor : "#ccc",
+};
