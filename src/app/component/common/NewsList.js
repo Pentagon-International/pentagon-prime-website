@@ -6,6 +6,7 @@ import {
   Flex,
   Grid,
   GridCol,
+  Group,
   Image,
   Text,
   Title,
@@ -63,18 +64,26 @@ const NewsList = ({ newsItems }) => {
               <Text color={COLORS.textColor} size="xs" tt="uppercase">
                 {fields.newsName}
               </Text>
-              <Text fw={600} size="sm" style={styles.newsTitle}>
+              <Text fw={600} size="smx" style={styles.newsTitle}>
                 {fields.newsTitle}
               </Text>
-              <a
-                href={fields.knowmore}
-                style={styles.readMore}
-                target="_blank"
-                rel="noopener noreferrer"
 
-              >
-                Read More
-              </a>
+              <Flex align="center" gap={4} style={{ display: 'inline-flex', alignItems: 'center' }}>
+                <a
+                  href={fields.knowmore}
+                  style={styles.readMore}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Read More
+                </a>
+                <IconArrowRight
+                  stroke={2}
+                  color={COLORS.serviceColor}
+                  size={16}
+                  style={{ transform: 'translateY(1px)' }}
+                />
+              </Flex>
             </Flex>
           </GridCol>
         ))}
@@ -129,13 +138,13 @@ const styles = {
   readMore: {
     color: COLORS.serviceColor,
     fontWeight: 400,
-    paddingTop: '10px',
-    marginTop: 'auto',
-    fontSize: '16px',
-    display: 'inline-block',
+    fontSize: '14px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
     textDecoration: 'none',
     cursor: 'pointer',
-    fontSize: '14px',
+    transition: 'color 0.3s ease',
   },
   paginationDot: {
     width: 8,

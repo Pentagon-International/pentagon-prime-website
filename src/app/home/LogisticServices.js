@@ -23,11 +23,11 @@ const LogisticsServices = async () => {
         <Container {...styles.container}>
             <Flex {...styles.flexContainer}>
                 <Stack>
-                    <Title maw={'75%'} fw={800} size={'lg'}>
+                    <Title maw={'75%'} fw={800} size={'lgx2'}>
                         OUR <span style={styles.highlight}>LOGISTICS SERVICES</span> DELIVER OPERATIONAL EXCELLENCE AND ENHANCE TRADE VALUE
                     </Title>
                 </Stack>
-                <Button w={'30%'} size="md" color={'#0E52F2'}>View All Services</Button>
+                <Button fz={'smx'} size="md" w={'12rem'} color={'#0E52F2'}>View All Services</Button>
             </Flex>
             <Grid columns={9} mt='lg' gutter='lg' >
                 {res.items?.map((item, index) => (

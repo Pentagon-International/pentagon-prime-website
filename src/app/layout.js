@@ -15,15 +15,15 @@ const KumbhSans = Kumbh_Sans({
 const theme = {
   fontFamily: KumbhSans.style.fontFamily,
   fontSizes: {
-    xs: "12px",
-    smx: "14px",
-    sm: "16px",
-    base: "18px",
-    md: "20px",
-    lgx: "24px",
-    lgx2: "28px",
-    lg: "32px",
-    xl: "40px",
+    xs: "clamp(0.7rem, 0.8vw, 0.9rem)",
+    smx: "clamp(0.8rem, 1vw, 1rem)",
+    sm: "clamp(0.9rem, 1.2vw, 1.1rem)",
+    base: "clamp(1rem, 1.5vw, 1.25rem)",
+    md: "clamp(1.1rem, 1.8vw, 1.5rem)",
+    lgx: "clamp(1.3rem, 2.2vw, 1.75rem)",
+    lgx2: "clamp(1.5rem, 2.5vw, 2rem)",
+    lg: "clamp(1.75rem, 3vw, 2.5rem)",
+    xl: "clamp(2rem, 3.5vw, 3rem)",
   },
   components: {
     TextInput: {

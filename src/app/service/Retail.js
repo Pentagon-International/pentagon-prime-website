@@ -28,7 +28,7 @@ const Retail = async () => {
         prep, kitting, replenishment, ecommerce fulfillment, B2B fulfillment,
         parcel, and returns.
       </Text>
-      <Image src={Images.prime_network} alt="prime_network" />
+      <Image src={Images.prime_network} w={'75%'} mx={'auto'} alt="prime_network" />
       <Title size={'lgx2'} mt={10} tt={'uppercase'} textWrap="balance">
         How it works
       </Title>

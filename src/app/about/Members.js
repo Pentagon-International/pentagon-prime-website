@@ -28,7 +28,7 @@ const Members = async () => {
         <Card
           bg={'#F2F7FC'}
           padding="lg"
-          radius="md"
+          radius="lg"
           style={{ width: '50%', height: 'auto' }}
         >
           <Flex gap="60" style={{ padding: '16px' }}>
@@ -41,7 +41,6 @@ const Members = async () => {
                     width: '100%',
                     height: '100%',
                     objectFit: 'cover',
-                    borderRadius: '12px',
                   }}
                 />
               </CardSection>

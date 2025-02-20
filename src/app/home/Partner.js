@@ -62,12 +62,12 @@ const Partner = () => {
         <Carousel
           slideSize="100%"
           slideGap="xs"
-          controlsOffset={0}
+          controlsOffset={'sm'}
           controlSize={32}
           loop
           dragFree={false}
           align="start"
-          px={15}
+          // px={15}
         >
           <CarouselSlide>
             <Flex style={styles.carouselSlide}>
@@ -89,7 +89,7 @@ const Partner = () => {
           <CarouselSlide>
             <Flex style={styles.carouselSlide}>
               <Box style={styles.testimonialBox}>
-                <Text>
+                <Text size='sm' maw={'80%'} tw="balance">
                   We sincerely appreciate your exceptional customer service,
                   handling challenging issues, and the professional way you
                   conduct business. Your cooperative spirit and attention to

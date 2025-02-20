@@ -57,7 +57,7 @@ const QuoteCard = async () => {
           <Flex mt={50} align={'center'} justify={'space-between'}>
             {res.items.map((item) => (
               <Stack gap={0} key={item.sys.id}>
-                <Title size={'lg'} style={{ textTransform: 'uppercase' }} tt={'uppercase'}>
+                <Title size={'lgx2'} style={{ textTransform: 'uppercase' }} tt={'uppercase'}>
                   {item.fields.tradeValue}
                 </Title>
                 <Text size={'sm'}>{item.fields.tradeName}</Text>

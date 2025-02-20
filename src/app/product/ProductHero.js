@@ -29,6 +29,19 @@ const styles = {
     justifyContent: 'center',
     padding: '0 7%',
   },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 1,
+  },
+  content: {
+    position: 'relative',
+    zIndex: 2,
+  },
   title: {
     color: 'white',
     textTransform: 'uppercase',
@@ -42,7 +55,8 @@ const styles = {
 const ProductHero = () => {
   return (
     <Box style={styles.background}>
-      <Container fluid px={'7%'} py={'70px'}>
+      <Box style={styles.overlay} />
+      <Container fluid px={'7%'} py={'70px'} style={styles.content}>
         <Group>
           <Image src={Images.sea_freight} alt="Sea Freight Forwarding" />
           <Text size='sm' color="white">Sea Freight Forwarding</Text>

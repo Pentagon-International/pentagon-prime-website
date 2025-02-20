@@ -4,6 +4,7 @@ import Retail from './Retail';
 import Ship from './Ship';
 import QuoteCard from './QuoteCard';
 import BottomCard from '../component/common/BottomCard';
+import FAQ from '../component/common/FAQ';
 
 const page = () => {
   const title = 'Want to GET PRIME experience?';
@@ -16,6 +17,7 @@ const page = () => {
       <Retail />
       <Ship />
       <QuoteCard />
+      <FAQ />
       <BottomCard title={title} text={text} button={button} />
     </>
   );

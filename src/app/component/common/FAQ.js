@@ -20,7 +20,7 @@ const FAQ = async () => {
   return (
     <Container fluid px="7%" pt="70px">
       <Stack>
-        <Title tt={'uppercase'} size={'lgx'}>
+        <Title tt={'uppercase'} size={'lgx2'}>
           Frequently Asked Questions
         </Title>
         <Accordion
@@ -33,10 +33,10 @@ const FAQ = async () => {
             return (
               <AccordionItem key={item.sys.id} value={shortvalue || ''}>
                 <AccordionControl>
-                  <Text size='sm' fw={700}>{question || 'Untitled Question'}</Text>
+                  <Text size='sm' fw={600}>{question || 'Untitled Question'}</Text>
                 </AccordionControl>
                 <AccordionPanel>
-                  <Text size='smx'>
+                  <Text size='smx' tw="balance">
                     {answer || 'No answer available at the moment.'}
                   </Text>
                 </AccordionPanel>

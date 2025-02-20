@@ -18,6 +18,9 @@ export const styles = {
     position: 'relative',
     width: '100%',
     height: 'auto',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   overlayImage: {
     position: 'absolute',

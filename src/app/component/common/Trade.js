@@ -1,8 +1,8 @@
 import React from 'react';
 import TradeCard from './TradeCard';
-import {client} from '@/app/api/contentful';
+import { client } from '@/app/api/contentful';
 
-const Trade = async ({background}) => {
+const Trade = async ({ background }) => {
   const res = await client.getEntries({
     content_type: 'logisticsTrade',
     order: 'sys.createdAt',

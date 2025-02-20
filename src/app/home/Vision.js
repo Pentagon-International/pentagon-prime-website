@@ -50,6 +50,7 @@ const CTAButton = ({ children, onClick, variant = 'filled' }) => (
   <Button
     radius="md"
     size="sm"
+    fz={'smx'}
     color={variant === 'filled' ? COLORS.portColor : 'transparent'}
     onClick={onClick}
   >

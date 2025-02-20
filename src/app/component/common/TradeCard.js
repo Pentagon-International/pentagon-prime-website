@@ -2,10 +2,10 @@ import { Flex, Text, Title, Container, Group, Box } from '@mantine/core';
 
 const TradeItem = ({ tradeValue, tradeName }) => (
   <Flex justify="space-between" direction="column">
-    <Title size="lg" order={4}>
+    <Title size="md" order={4}>
       {tradeValue}
     </Title>
-    <Text lh="27px">{tradeName}</Text>
+    <Text size='sm' lh="27px">{tradeName}</Text>
   </Flex>
 );
 
@@ -26,7 +26,7 @@ const TradeCard = ({ title = '', item = [], background = '' }) => {
           {title && (
             <Text
               w="25%"
-              size="md"
+              size="base"
               tw='balance'
               style={{ wordBreak: 'break-word' }}
             >

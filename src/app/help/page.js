@@ -11,7 +11,9 @@ const page = () => {
   const button = 'Get Started';
   return (
     <>
-      <HelpCenter />
+      <div style={{ backgroundColor: '#111F40', height: '100vh' }}>
+        <HelpCenter />
+      </div>
       <Resources />
       <Toolkit />
       <BottomCard title={title} text={text} button={button} />
