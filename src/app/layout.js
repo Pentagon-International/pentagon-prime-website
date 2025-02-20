@@ -1,4 +1,4 @@
-import { MantineProvider, TextInput } from '@mantine/core';
+import { MantineProvider } from '@mantine/core';
 import { Kumbh_Sans } from 'next/font/google';
 import Footer from './component/footer/Footer';
 import Header from './component/header/Header';
@@ -6,14 +6,21 @@ import './globals.css';
 import '@mantine/core/styles.css';
 import '@mantine/carousel/styles.css';
 
-const KumbhSans = Kumbh_Sans({
+const kumbhSans = Kumbh_Sans({
   weight: '400',
-  style: 'normal',
   subsets: ['latin'],
 });
 
+export const metadata = {
+  title: "Pentagon Prime",
+  description: "Pentagon Prime is a unit of Pentagon Group",
+  icons: {
+    icon: "/logo-pp.png",
+  },
+};
+
 const theme = {
-  fontFamily: KumbhSans.style.fontFamily,
+  fontFamily: kumbhSans.style.fontFamily,
   fontSizes: {
     xs: "clamp(0.7rem, 0.8vw, 0.9rem)",
     smx: "clamp(0.8rem, 1vw, 1rem)",
@@ -29,29 +36,17 @@ const theme = {
     TextInput: {
       styles: {
         input: {
-          fontSize: "14px"
+          fontSize: "14px",
         },
       },
     },
-
   },
 };
-
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-          name="description"
-          content="Pentagon Prime is a unit of Pentagon Group"
-        />
-        <link rel="icon" href={'./logo-pp.png'} />
-        <title>Pentagon Prime</title>
-      </head>
-      <body className={KumbhSans.className}>
+      <body className={kumbhSans.className}>
         <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
           <Header />
           <main className="main">{children}</main>

@@ -177,10 +177,10 @@ Ensure `.env.local` is listed in `.gitignore` to prevent exposing sensitive info
 - Check if Contentful tokens are correct.
 - Verify content is published in the Contentful dashboard.
 
-### **3. Deployment Issues**
+<!-- ### **3. Deployment Issues**
 
 - Inspect GitHub Actions logs for errors.
-- Confirm AWS S3 and CloudFront configurations are correctly set.
+- Confirm AWS S3 and CloudFront configurations are correctly set. -->
 
 ---
 
