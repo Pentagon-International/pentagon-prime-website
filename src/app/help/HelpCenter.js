@@ -26,32 +26,35 @@ const HelpCenter = () => {
       }}
     >
       <Center w={'100%'} h={'100%'}>
-        <Stack w={'40vw'} c={COLORS.primaryColor}>
-          <Text align={'center'}>Help Center</Text>
-          <Title size={'lg'} align={'center'} tt={'uppercase'}>
+        <Stack w={'50vw'} c={COLORS.primaryColor}>
+          <Text size={'base'} align={'center'}>Help Center</Text>
+          <Title size={'xl'} align={'center'} tt={'uppercase'}>
             How Can We Help You  ?
           </Title>
-          <Flex gap={0} w={'100%'}>
+          <Flex gap={10} w={'100%'} align={'center'} dir='row'>
             <TextInput
-              size="md"
+              size="lg"
               className="input"
-              w={'100%'}
+              w={'80%'}
+              radius={'md'}
               bg={'inherit'}
               placeholder="Search by term or phrase ..."
-              rightSectionWidth={90}
-              rightSection={
-                <Button w={'100%'} fz={'smx'} size="sm" bg={COLORS.serviceColor}>
-                  Search
-                </Button>
-              }
+              styles={{
+                input: {
+                  backgroundColor: 'transparent !important',
+                  borderColor: `${COLORS.primaryColor} !important`,
+                }
+              }}
             />
+            <Button p={'18px 32px'} radius={'md'} fz={'smx'} size="lg" bg={COLORS.serviceColor}>
+              Search
+            </Button>
           </Flex>
           <Text size={'sm'} align={'center'}>
             Already a Pentagon Prime client? Login for assistance
           </Text>
         </Stack>
       </Center>
-      {/* </BackgroundImage> */}
     </Box>
   );
 };

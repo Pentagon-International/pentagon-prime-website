@@ -13,25 +13,25 @@ const Contact = () => {
           height: '100vh',
         }}
       >
-        <Stack p={50}>
-          <Title size={'lg'} style={{ textTransform: 'uppercase' }}>Contact Us</Title>
-          <Text size='smx' >
+        <Stack p={15}>
+          <Title size={'40px'} lh={'lgx2'} fw={800} tt={'uppercase'}>Contact Us</Title>
+          <Text size='base' lh={'28px'} tw='balance' >
             Ready to begin your journey with Pentagon Prime, have a question, or
             need assistance? We're here to help.
           </Text>
-          <Text size='sm' fw={700}>Headquarters</Text>
-          <Text size='smx' tw="balance" maw={'55%'}>
+          <Text size='base' fw={700}>Headquarters</Text>
+          <Text size='sm' tw="balance" maw={'70%'}>
             Unit No. 204 Satellite Silver, Marol Naka Andheri Kurla Road,
             Andheri (east) Mumbai, Maharashtra – 400059, India
           </Text>
-          <Text size='sm' fw={700}>Phone & Email Address</Text>
+          <Text size='base' fw={700}>Phone & Email Address</Text>
           <Group>
             <IconPhone color="#0EC9F2" size={20} />
-            <Text size='smx'>022 4596 6999</Text>
+            <Text size='sm'>022 4596 6999</Text>
           </Group>
           <Group>
             <IconMail color="#0EC9F2" size={20} />
-            <Text size='smx'>pentagon@pentagonindia.net</Text>
+            <Text size='sm'>pentagon@pentagonindia.net</Text>
           </Group>
         </Stack>
         <Image src={'/images/pentagon.png'} alt="pentagon logo" />

@@ -1,8 +1,9 @@
 import { Box, Container, Grid, GridCol, Text, Title } from '@mantine/core';
 import { COLORS } from '../utils/COLORS';
 import Images from '../utils/image';
+import { highlightText } from '../utils/highlightText';
 
-const NewsRoom = () => {
+const NewsRoom = ({ title, content }) => {
   return (
     <Box mt={70} style={{ minHeight: '100vh', backgroundColor: '#0E53F2' }}>
       <Container fluid px="7%" style={{ color: COLORS.primaryColor }}>
@@ -16,14 +17,11 @@ const NewsRoom = () => {
               minHeight: '100vh',
             }}
           >
-            <Title tt="uppercase" size={'lg'}>
-              Newsroom & Resources
+            <Title tt="uppercase" size={'39px'} fw={800} lh={'lgx2'}>
+              {highlightText(title)}
             </Title>
-            <Text mt={20} size="sm" maw={'70%'}>
-              Our engineers are taking on huge and unique challenges: to start
-              with, our teams are creating a data model that represents all the
-              complexities of logistics in a way that’s true to reality, yet
-              easy to understand and access.
+            <Text mt={20} size="base" >
+              {highlightText(content)}
             </Text>
           </GridCol>
           <GridCol span={1} pr={30} style={{ minHeight: '100vh' }}>

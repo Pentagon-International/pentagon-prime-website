@@ -18,13 +18,13 @@ const FeaturedNews = async () => {
             <Text
               c={COLORS.textColor}
               tt={'uppercase'}
-              size="smx"
+              size="sm"
               fw={500}
               mt={20}
             >
               {item.fields.title}
             </Text>
-            <Text size='sm' fw={600} mt={10}>{item.fields.description}</Text>
+            <Text size='smx' fw={600} mt={10}>{item.fields.description}</Text>
             <a
               href={item.fields.knowmore}
               style={{

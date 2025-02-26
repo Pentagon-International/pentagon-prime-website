@@ -27,7 +27,7 @@ const Global = async () => {
   return (
     <Container fluid px={'7%'} py={'70px'}>
       <Center tt={'uppercase'}>
-        <Title>
+        <Title size={'xl'} fw={800} lh={'lgx2'}>
           Our <span style={{ color: COLORS.serviceColor }}> Global</span> Presence
         </Title>
       </Center>
@@ -36,14 +36,14 @@ const Global = async () => {
       <Grid columns={12} align={'center'} justify="center">
         {res.items.map((item) => (
           <GridCol key={item.sys.id} span={3}>
-            <Card bg={'#F2F7FC'} radius={'32px'} p={25}>
-              <Title size={'sm'} order={5}>{item?.fields?.place}</Title>
-              <Text size='smx' c={COLORS.textColor} mt={20}>
+            <Card mih={'200px'} bg={'#F2F7FC'} radius={'32px'} p={30}>
+              <Title size={'md'} fw={700} order={5}>{item?.fields?.place}</Title>
+              <Text size='smx' mih={'100px'} c={COLORS.textColor} mt={20}>
                 {item?.fields?.address}
               </Text>
-              <Group mt={20} align="center">
+              <Group align="center" gap={5}>
                 <IconPhoneCall size={14} color={COLORS.serviceColor} />
-                <Text size='xs'>{item?.fields?.number}</Text>
+                <Text size='smx'>{item?.fields?.number}</Text>
               </Group>
             </Card>
           </GridCol>

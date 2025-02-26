@@ -42,3 +42,8 @@ a {
 .span-color {
   color: #0ec9f2;
 }
+
+.custom-placeholder::placeholder {
+  color: #000 !important;
+  font-weight: 500 ! important;
+}

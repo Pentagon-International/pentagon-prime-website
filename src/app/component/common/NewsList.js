@@ -35,7 +35,7 @@ const NewsList = ({ newsItems }) => {
 
   return (
     <Container fluid px="7%">
-      <Title mb="xl" size="lg">
+      <Title mb="xl" size="lg" fw={800}>
         NEWS & EVENTS
       </Title>
 
@@ -61,10 +61,10 @@ const NewsList = ({ newsItems }) => {
                 mah={'250px'}
                 mih={'250px'}
               />
-              <Text color={COLORS.textColor} size="xs" tt="uppercase">
+              <Text color={COLORS.textColor} fw={700} size="xs" tt="uppercase">
                 {fields.newsName}
               </Text>
-              <Text fw={600} size="smx" style={styles.newsTitle}>
+              <Text fw={700} size="smx" style={styles.newsTitle}>
                 {fields.newsTitle}
               </Text>
 
@@ -134,6 +134,7 @@ const NewsList = ({ newsItems }) => {
 const styles = {
   newsTitle: {
     minHeight: '50px',
+    color: '#121212'
   },
   readMore: {
     color: COLORS.serviceColor,

@@ -13,6 +13,7 @@ import { IconBrandParsinta } from '@tabler/icons-react';
 import { COLORS } from '@/app/utils/COLORS';
 import Images from '@/app/utils/image';
 import Trade from '../component/common/Trade';
+import { highlightText } from '../utils/highlightText';
 
 const styles = {
   container: {
@@ -29,13 +30,9 @@ const styles = {
   textContainer: {
     flex: 1,
     textAlign: 'left',
-    padding: '0 5%'
+    padding: '0 2%'
   },
-  title: {
-    lineHeight: '1.2',
-    fontWeight: 900,
-    fontFamily: `'Montserrat', sans-serif`,
-  },
+
   highlightText: {
     color: COLORS.vision,
   },
@@ -49,8 +46,11 @@ const styles = {
 const CTAButton = ({ children, onClick, variant = 'filled' }) => (
   <Button
     radius="md"
-    size="sm"
-    fz={'smx'}
+    size="lg"
+    fz={'sm'}
+    lh={'sm'}
+    p={'18px 32px'}
+    fw={700}
     color={variant === 'filled' ? COLORS.portColor : 'transparent'}
     onClick={onClick}
   >
@@ -58,7 +58,7 @@ const CTAButton = ({ children, onClick, variant = 'filled' }) => (
   </Button>
 );
 
-const Vision = () => {
+const Vision = ({ title, content }) => {
   return (
     <Box style={styles.container}>
       <Trade />
@@ -67,11 +67,10 @@ const Vision = () => {
           <Image src={Images.vision} alt="PentagonPrime Logo" />
         </Group>
         <Flex direction="column" style={styles.textContainer}>
-          <Title size={'lg'} tw="balance" style={styles.title}>
-            VISION 20240 - POWERING{' '}
-            <span style={styles.highlightText}>GREEN LOGISTICS WORLDWIDE</span>
+          <Title size={'lg'} tt={'uppercase'} lh={'lg'} tw="balance" fw={900}>
+            {highlightText(title)}
           </Title>
-          <Text mt="md" maw={'75%'} size="sm">
+          <Text mt="md" maw={'75%'} lh={'sm'} size="sm">
             Carry the message of sustainability and green logistics (solar,
             energy movements worldwide). Green logistics options include
             solar-powered and nuclear-powered transport solutions.

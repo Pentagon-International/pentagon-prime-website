@@ -26,10 +26,10 @@ const TeamMember = ({ image, title, description, reverse }) => (
       </GridCol>
     )}
     <GridCol span={6} style={styles.gridCol}>
-      <Title textWrap="balance" tt={'uppercase'} size={'24px'} style={styles.teamTitle}>
+      <Title textWrap="balance" tt={'uppercase'} fw={800} lh={'lgx2'} size={'lgx2'} style={styles.teamTitle}>
         {highlightText(title)}
       </Title>
-      <Text mt={10} size='sm'>
+      <Text mt={10} size='sm' lh={'sm'}>
         {description}
       </Text>
     </GridCol>
@@ -41,7 +41,7 @@ const TeamMember = ({ image, title, description, reverse }) => (
   </Grid>
 );
 
-const LogisticsTeam = async () => {
+const LogisticsTeam = async ({ title, content }) => {
   const res = await client.getEntries({
     content_type: 'logisticsTeam',
     order: 'sys.createdAt',
@@ -49,10 +49,9 @@ const LogisticsTeam = async () => {
 
   return (
     <Container {...styles.container}>
-      <Title size={'lg'} tt={'uppercase'}>THINK OF US AS YOUR LOGISTICS TEAM</Title>
-      <Text size='sm' maw={'60%'} fw={800} c={COLORS.textColor}>
-        We deliver scalable and adaptable logistics services to help you focus
-        on expanding your company.
+      <Title size={'lg'} lh={'lgx2'} tt={'uppercase'} fw={800}>{title}</Title>
+      <Text size='sm' maw={'55%'} fw={500} c={COLORS.textColor}>
+        {content}
       </Text>
 
       <Flex wrap="wrap" justify="center" gap="md">

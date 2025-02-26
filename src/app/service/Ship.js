@@ -12,23 +12,20 @@ import {
 } from '@mantine/core';
 import { client } from '../api/contentful';
 import { COLORS } from '../utils/COLORS';
+import { highlightText } from '../utils/highlightText';
 
-const Ship = async () => {
+const Ship = async ({ first_title, first_content, second_title, second_content }) => {
   const res = await client.getEntries({
     content_type: 'shipment',
     order: 'sys.createdAt',
   });
   return (
-    <Container fluid px={'7%'} py={'30px'}>
-      <Stack gap={50}>
+    <Container fluid px={'7%'} py={'10px'}>
+      <Stack gap={100}>
         <Flex direction={'column'}>
-          <Title size={'lg'} tt={'uppercase'}>Ship Anywhere</Title>
-          <Text size='smx' c={COLORS.textColor} w={'40vw'}>
-            Instantly price and book both international and domestic freight in
-            one central location. Plus, add any additional services including
-            customs clearance, cargo insurance, and supply chain financing. We
-            provide transparent pricing and enable visibility across your entire
-            supply chain.
+          <Title size={'xl'} tt={'uppercase'}>{highlightText(first_title)}</Title>
+          <Text size='sm' c={COLORS.textColor} w={'40vw'}>
+            {highlightText(first_content)}
           </Text>
           <Grid columns={3} gutter={'xl'} mt={30}>
             {res.items.map((item) => (
@@ -40,7 +37,7 @@ const Ship = async () => {
                 <Text size="sm" fw={500} mt={20}>
                   {item.fields.title}
                 </Text>
-                <Text size='xs' mt={10} color="dimmed">
+                <Text size='smx' mt={10} color="dimmed">
                   {item.fields.description}
                 </Text>
               </GridCol>
@@ -49,13 +46,9 @@ const Ship = async () => {
         </Flex>
 
         <Flex direction={'column'}>
-          <Title size={'lg'} tt={'uppercase'}>Ship Everywhere</Title>
-          <Text size='smx' c={COLORS.textColor} w={'40vw'}>
-            Instantly price and book both international and domestic freight in
-            one central location. Plus, add any additional services including
-            customs clearance, cargo insurance, and supply chain financing. We
-            provide transparent pricing and enable visibility across your entire
-            supply chain.
+          <Title size={'xl'} tt={'uppercase'}>{highlightText(second_title)}</Title>
+          <Text size='sm' c={COLORS.textColor} w={'40vw'}>
+            {highlightText(second_content)}
           </Text>
           <Grid columns={3} gutter={'xl'} mt={30}>
             {res.items.map((item) => (
@@ -67,7 +60,7 @@ const Ship = async () => {
                 <Text size="sm" fw={500} mt={20}>
                   {item.fields.title}
                 </Text>
-                <Text mt={10} size='xs' color="dimmed">
+                <Text mt={10} size='smx' color="dimmed">
                   {item.fields.description}
                 </Text>
               </GridCol>

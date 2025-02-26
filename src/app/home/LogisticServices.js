@@ -2,6 +2,7 @@ import { Button, Container, Flex, Grid, Stack, Title } from '@mantine/core';
 import React from 'react';
 import ServiceCard from '../component/common/ServiceCard';
 import { client } from '@/app/api/contentful';
+import { highlightText } from '../utils/highlightText';
 
 
 const styles = {
@@ -11,7 +12,7 @@ const styles = {
 };
 
 
-const LogisticsServices = async () => {
+const LogisticsServices = async ({ title }) => {
     const res = await client.getEntries({
         content_type: 'logisticsServices',
         order: 'sys.createdAt',
@@ -23,11 +24,11 @@ const LogisticsServices = async () => {
         <Container {...styles.container}>
             <Flex {...styles.flexContainer}>
                 <Stack>
-                    <Title maw={'75%'} fw={800} size={'lgx2'}>
-                        OUR <span style={styles.highlight}>LOGISTICS SERVICES</span> DELIVER OPERATIONAL EXCELLENCE AND ENHANCE TRADE VALUE
+                    <Title tt={'uppercase'} lh={'lgx2'} fw={800} size={'lgx2'}>
+                        {highlightText(title)}
                     </Title>
                 </Stack>
-                <Button fz={'smx'} size="md" w={'12rem'} color={'#0E52F2'}>View All Services</Button>
+                <Button fz={'smx'} p={'23px 32px'} fw={700} size="xl" w={'12rem'} color={'#0E52F2'}>View All Services</Button>
             </Flex>
             <Grid columns={9} mt='lg' gutter='lg' >
                 {res.items?.map((item, index) => (
@@ -40,3 +41,11 @@ const LogisticsServices = async () => {
 
 
 export default LogisticsServices;
+
+
+//   const styles = {
+//     "#": COLORS.portColor,
+//     "$": COLORS.serviceColor,
+//     "%": COLORS.vision,
+//     "?": COLORS.questionColor,
+//   };

@@ -11,6 +11,7 @@ import {
 } from '@mantine/core';
 import { COLORS } from '../utils/COLORS';
 import Images from '../utils/image';
+import { theme } from '../utils/theme';
 
 const ACinfo = () => {
   return (
@@ -19,10 +20,13 @@ const ACinfo = () => {
         <Grid columns={12}>
           <GridCol span={6}>
             <Group>
-              <Title size={'md'} tt={'uppercase'} textWrap="balance">
+              <Title size={'lgx'} fw={800} lh={'lgx2'} tt={'uppercase'} textWrap="balance">
                 Additional Contact Information
               </Title>
-              <List size='sm' style={{ color: COLORS.textColor, padding: '20px 50px' }}>
+              <List c={COLORS.textColor} p={'20px 50px'} style={{
+                lineHeight: theme.lineHeights.lgx2,
+                fontSize: theme.fontSizes.sm
+              }}>
                 <ListItem >
                   For media inquiries please email{' '}
                   <span style={{ textDecoration: 'underline' }}>

@@ -1,7 +1,8 @@
 import { Box, Container, Group, Image, Text, Title } from '@mantine/core';
 import Images from '../utils/image';
+import { highlightText } from '../utils/highlightText';
 
-const About = () => {
+const About = ({ title, content }) => {
   const styles = {
     heroContainer: {
       height: '100vh',
@@ -28,7 +29,7 @@ const About = () => {
       backgroundPosition: 'center',
     },
     textContainer: {
-      width: '50%',
+      width: '70%',
       textAlign: 'left',
       paddingRight: '5%',
       boxSizing: 'border-box',
@@ -39,7 +40,7 @@ const About = () => {
       height: '100%',
     },
     textContent: {
-      maxWidth: '30vw',
+      maxWidth: '40vw',
       textAlign: 'left',
     },
   };
@@ -60,24 +61,12 @@ const About = () => {
           />
         </Box>
         <Group align="center" style={styles.textContainer}>
-          <Title
-            size={'lg'}
-            textWrap="balance"
-            tt={'uppercase'}
-            style={{ wordBreak: 'break-word' }}
-          >
-            <span style={{ color: '#0E53F2' }}>Our best-in-class services </span>
-            take you ahead of your competition.
+          <Title size="40px" textWrap="balance" tt="uppercase" style={{ whiteSpace: 'pre-line' }}>
+            {highlightText(title)}
           </Title>
-          <Text size='smx' mt={20} style={styles.textContent}>
-            In 2007, Pentagon Prime began its operations in India to provide the
-            finest shipping and logistics solutions. Our commitment to the
-            global logistics trade with a range of reliable and comprehensive
-            freight forwarding services has been unwavering for 15 years.
-          </Text>
-          <Text size='smx' mt={10} style={styles.textContent}>
-            Here, we deliver scalable and adaptable logistics services to help
-            you focus on expanding your company.
+
+          <Text size='sm' mt={20} ta={'left'} maw={'40vw'}>
+            {highlightText(content)}
           </Text>
         </Group>
       </Container>

@@ -10,7 +10,7 @@ const Values = async () => {
 
   return (
     <Container fluid px={'7%'}>
-      <Title size={'lg'} tt={'uppercase'}>
+      <Title size={'xl'} fw={800} lh={'lgx2'} tt={'uppercase'}>
         our <span style={{ color: '#0E53F2' }}>values</span>{' '}
       </Title>
       <Grid columns={9} mt="xl">

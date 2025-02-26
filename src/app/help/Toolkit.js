@@ -1,27 +1,30 @@
 import { Center, Container, Grid, Text, Title } from '@mantine/core';
 import { client } from '../api/contentful';
 import ServiceCard from '../component/common/ServiceCard';
+import { highlightText } from '../utils/highlightText';
 
-const Toolkit = async () => {
+const Toolkit = async ({ title, content }) => {
   const res = await client.getEntries({
     content_type: 'toolkit',
     order: 'sys.createdAt',
   });
 
+  const anchorText = 'Learn More';
+
   return (
     <Container fluid px={'7%'} py={'70px'}>
       <Center>
-        <Title size={'lg'} tt={'uppercase'}>Prime Toolkit</Title>
+        <Title size={'40px'} fw={800} lh={'lgx2'} tt={'uppercase'}>{highlightText(title)}</Title>
       </Center>
       <Center>
-        <Text size='smx'>
-          This is how you can control business expenses & Reduce spending
+        <Text size='sm'>
+          {highlightText(content)}
         </Text>
       </Center>
 
       <Grid columns={9} mt="xl">
         {res.items?.map((item, index) => (
-          <ServiceCard key={index} item={item} backgroundColor="#fff" />
+          <ServiceCard key={index} item={item} backgroundColor="#fff" border={'2px solid #D2E8FF'} anchorText={anchorText} />
         ))}
       </Grid>
     </Container>

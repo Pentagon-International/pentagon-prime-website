@@ -20,23 +20,31 @@ const FAQ = async () => {
   return (
     <Container fluid px="7%" pt="70px">
       <Stack>
-        <Title tt={'uppercase'} size={'lgx2'}>
+        <Title fw={800} tt={'uppercase'} size={'lg'}>
           Frequently Asked Questions
         </Title>
         <Accordion
           chevronPosition="right"
           variant="separated"
           chevron={<IconPlus size={18} />}
+          transitionDuration={600}
+          styles={{
+            chevron: {
+              '&[dataRotate]': {
+                transform: 'rotate(45deg)',
+              },
+            }
+          }}
         >
           {res.items?.map((item) => {
             const { question, answer, shortvalue } = item.fields || {};
             return (
               <AccordionItem key={item.sys.id} value={shortvalue || ''}>
                 <AccordionControl>
-                  <Text size='sm' fw={600}>{question || 'Untitled Question'}</Text>
+                  <Text size='base' fw={600}>{question || 'Untitled Question'}</Text>
                 </AccordionControl>
                 <AccordionPanel>
-                  <Text size='smx' tw="balance">
+                  <Text size='sm' maw={'75%'} tw="balance">
                     {answer || 'No answer available at the moment.'}
                   </Text>
                 </AccordionPanel>
@@ -45,7 +53,7 @@ const FAQ = async () => {
           })}
         </Accordion>
       </Stack>
-    </Container>
+    </Container >
   );
 };
 

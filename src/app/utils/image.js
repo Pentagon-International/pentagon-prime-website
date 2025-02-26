@@ -20,7 +20,8 @@ const Images = {
   service: '/images/service.png',
   ship: '/images/ship.png',
   newsRoom: '/images/newsRoom.png',
-  
+  quote: '/images/quote_img.svg',
+
 };
 
 export default Images;

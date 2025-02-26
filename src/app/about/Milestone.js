@@ -9,9 +9,9 @@ const Milestone = async () => {
   });
 
   return (
-    <Container fluid px={'7%'} mt={50}>
-      <Title tt={'uppercase'} size={'lg'}>Milestone</Title>
-      <Text size='smx' mt={20} w={'30%'}>
+    <Container fluid px={'7%'} h={'auto'} mt={50}>
+      <Title tt={'uppercase'} fw={800} lh={'lgx2'} size={'40px'}>Milestone</Title>
+      <Text size='base' mt={20} w={'40%'}>
         Our journey continues, and we invite you to be part of this exciting
         evolution in content creation.
       </Text>

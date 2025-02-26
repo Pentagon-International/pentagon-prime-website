@@ -65,7 +65,7 @@ const MilestoneTimeline = ({ milestones }) => {
       );
       yearText.setAttribute('x', position.x - 10);
       yearText.setAttribute('y', position.y - 30);
-      yearText.setAttribute('font-size', '12');
+      yearText.setAttribute('font-size', '24');
       yearText.setAttribute('fill', COLORS.textColor);
       yearText.setAttribute('font-weight', 600);
       yearText.setAttribute('dominant-baseline', 'middle');
@@ -103,7 +103,7 @@ const MilestoneTimeline = ({ milestones }) => {
   }, [activeIndex, milestones]);
 
   return (
-    <div style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <svg
         width="1194"
         height="488"
@@ -126,7 +126,7 @@ const MilestoneTimeline = ({ milestones }) => {
           bg={'#0EC9F21A'}
           style={{
             position: 'absolute',
-            bottom: -10,
+            bottom: -130,
             right: 20,
             padding: '30px 50px',
             width: '40%',
@@ -134,7 +134,7 @@ const MilestoneTimeline = ({ milestones }) => {
             borderRadius: '8px',
           }}
         >
-          <Title size={'sm'} order={3}>{selectedMilestone.fields.year}</Title>
+          <Title size={'md'} order={3}>{selectedMilestone.fields.year}</Title>
           <ul style={{ color: COLORS.textColor, marginTop: '20px' }}>
             {selectedMilestone.fields.description?.content.map(
               (item, index) => {
@@ -145,7 +145,7 @@ const MilestoneTimeline = ({ milestones }) => {
                         const text =
                           listItem.content[0]?.content[0]?.value ||
                           'No description available';
-                        return <li style={{ fontSize: '12px' }} key={`${index}-${i}`}>{text}</li>;
+                        return <li style={{ fontSize: '18px' }} key={`${index}-${i}`}>{text}</li>;
                       })}
                     </ul>
                   );
@@ -162,7 +162,7 @@ const MilestoneTimeline = ({ milestones }) => {
         w={20}
         h={20}
         alt="arrow"
-        style={{ position: 'absolute', bottom: 220, right: -5 }}
+        style={{ position: 'absolute', bottom: 240, right: -10 }}
       />
     </div>
   );

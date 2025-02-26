@@ -59,7 +59,7 @@ const CertificateList = ({ certificateItems }) => {
         <Container {...styles.container}>
             <Stack spacing={'lg'}>
                 <Center>
-                    <Title size={'lg'} tt={'uppercase'}>Our Certifications & Affiliations</Title>
+                    <Title size={'lg'} fw={800} tt={'uppercase'}>Our Certifications & Affiliations</Title>
                 </Center>
                 <Center>
                     <Flex mt={'xl'} align={'center'} justify={'center'} gap={'md'}>

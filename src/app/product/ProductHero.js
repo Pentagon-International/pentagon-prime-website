@@ -1,15 +1,17 @@
 import {
   Box,
   Container,
-  Grid,
-  GridCol,
   Group,
   Image,
+  Stack,
   Text,
   Title,
 } from '@mantine/core';
 import React from 'react';
 import Images from '../utils/image';
+import { COLORS } from '../utils/COLORS';
+import { theme } from '../utils/theme';
+import { highlightText } from '../utils/highlightText';
 
 const styles = {
   background: {
@@ -19,15 +21,12 @@ const styles = {
     backgroundPosition: 'center',
     color: 'white',
     height: '100vh',
+    width: '100%',
     position: 'relative',
     overflow: 'hidden',
     top: 0,
     left: 0,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '0 7%',
+    textAlign: 'center',
   },
   overlay: {
     position: 'absolute',
@@ -38,38 +37,25 @@ const styles = {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     zIndex: 1,
   },
-  content: {
-    position: 'relative',
-    zIndex: 2,
-  },
-  title: {
-    color: 'white',
-    textTransform: 'uppercase',
-    fontFamily: `'Montserrat', sans-serif`,
-  },
-  highlight: {
-    color: '#0EC9F2',
-  },
 };
 
-const ProductHero = () => {
+const ProductHero = ({ title, icon, iconTitle }) => {
   return (
     <Box style={styles.background}>
       <Box style={styles.overlay} />
-      <Container fluid px={'7%'} py={'70px'} style={styles.content}>
-        <Group>
-          <Image src={Images.sea_freight} alt="Sea Freight Forwarding" />
-          <Text size='sm' color="white">Sea Freight Forwarding</Text>
-        </Group>
-        <Grid columns={3} mt={20}>
-          <GridCol span={1.8}>
-            <Title size={'xl'} tw='balance' style={styles.title}>
-              Manage all your
-              <span style={styles.highlight}>sea freight forwarding</span>{' '}
-              requirements with us.
-            </Title>
-          </GridCol>
-        </Grid>
+      <Container fluid px={'7%'} mx={0} py="70px" w={'100%'} h={'100%'} ta={'left'} display={'flex'} pos={'relative'} justify='center' style={{ zIndex: 2, flexDirection: 'column' }}>
+        <Stack gap={20} pt={80}>
+          <Group align='center' gap={10}>
+            <Image radius={25} src={icon} w={40} h={40} alt="Sea Freight Forwarding" />
+            <Text size='base' fw={700} c={COLORS.primaryColor}>{iconTitle}</Text>
+          </Group>
+          <Title lh={theme.lineHeights.xlx} fw={900} c={COLORS.primaryColor} tt={'uppercase'} style={{
+            fontSize: theme.fontSizes.xxl
+          }}>
+            {highlightText(title)}
+          </Title>
+        </Stack>
+
       </Container>
     </Box>
   );

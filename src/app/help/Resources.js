@@ -25,10 +25,10 @@ const Resources = async () => {
                 src={item.fields.image?.fields?.file?.url}
                 alt={item.name}
               />
-              <Text size={'smx'} fw={700} c={COLORS.secondaryColor}>
+              <Text size={'sm'} fw={700} c={COLORS.secondaryColor}>
                 {item.fields.insurance_name}
               </Text>
-              <Text size={'xs'} c={COLORS.textColor}>Read</Text>
+              <Text size={'smx'} td={'underline'} c={COLORS.textColor}>Read</Text>
             </Flex>
           </GridCol>
         ))}

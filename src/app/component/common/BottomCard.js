@@ -16,10 +16,10 @@ const BottomCard = ({ title, text, button }) => {
       <Container fluid px="7%" py="lg">
         <Flex align={'center'} justify={'space-between'}>
           <Stack>
-            <Title size={'lgx2'} tt={'uppercase'}>{title}</Title>
-            <Text size='smx' c={COLORS.textColor}>{text}</Text>
+            <Title size={'lg'} tt={'uppercase'}>{title}</Title>
+            <Text size='sm' c={COLORS.textColor}>{text}</Text>
           </Stack>
-          <Button fz={'sm'} bg={COLORS.serviceColor} size="md">
+          <Button fz={'sm'} p={'24px 32px'} bg={COLORS.serviceColor} size="xl">
             {button}
           </Button>
         </Flex>
