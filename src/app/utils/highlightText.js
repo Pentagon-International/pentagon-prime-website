@@ -9,9 +9,9 @@ const styles = {
 
 export const highlightText = (text) => {
   return text
-    .split(/(\$[^$]+\$|#[^#]+#|%[^%]+%|@[^@]+@)/g) // Split special character blocks
-    .map((part, index) => {
-      const match = part.match(/^(\$|#|%|@)(.+)\1$/); // Check if it's inside special characters
+    ?.split(/(\$[^$]+\$|#[^#]+#|%[^%]+%|@[^@]+@)/g) // Split special character blocks
+    ?.map((part, index) => {
+      const match = part?.match(/^(\$|#|%|@)(.+)\1$/); // Check if it's inside special characters
 
       if (match) {
         const char = match[1]; // Extract special character
@@ -21,7 +21,7 @@ export const highlightText = (text) => {
           <span key={index} style={{
             color: styles[char],
           }}>
-            {content.split(/(<br\s*\/?>)/gi).map((seg, i) =>
+            {content?.split(/(<br\s*\/?>)/gi).map((seg, i) =>
               /<br\s*\/?>/i.test(seg) ? <br key={`${index}-${i}`} /> : seg
             )}
           </span >
@@ -29,7 +29,7 @@ export const highlightText = (text) => {
       }
 
       // Process normal text and replace <br/> with JSX <br />
-      return part.split(/(<br\s*\/?>)/gi).map((seg, i) =>
+      return part?.split(/(<br\s*\/?>)/gi).map((seg, i) =>
         /<br\s*\/?>/i.test(seg) ? <br key={`${index}-${i}`} /> : seg
       );
     });

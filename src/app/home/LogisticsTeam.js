@@ -22,11 +22,13 @@ const TeamMember = ({ image, title, description, reverse }) => (
   <Grid align="center">
     {!reverse && (
       <GridCol mt={'xs'} span={6}>
-        <Image src={image} alt={title} />
+        <Image src={image} alt={title} w={'100%'} h={'300px'}
+          style={{ objectFit: 'cover', borderRadius: '8px' }}
+        />
       </GridCol>
     )}
     <GridCol span={6} style={styles.gridCol}>
-      <Title textWrap="balance" tt={'uppercase'} fw={800} lh={'lgx2'} size={'lgx2'} style={styles.teamTitle}>
+      <Title textWrap="balance" tt={'uppercase'} fw={800} lh={'lgx'} size={'lgx2'} style={styles.teamTitle}>
         {highlightText(title)}
       </Title>
       <Text mt={10} size='sm' lh={'sm'}>
@@ -35,7 +37,9 @@ const TeamMember = ({ image, title, description, reverse }) => (
     </GridCol>
     {reverse && (
       <GridCol mt={30} span={6}>
-        <Image src={image} alt={title} />
+        <Image src={image} alt={title} w={'100%'} h={'300px'}
+          style={{ objectFit: 'cover', borderRadius: '8px' }}
+        />
       </GridCol>
     )}
   </Grid>
@@ -46,6 +50,8 @@ const LogisticsTeam = async ({ title, content }) => {
     content_type: 'logisticsTeam',
     order: 'sys.createdAt',
   });
+
+
 
   return (
     <Container {...styles.container}>
@@ -58,7 +64,7 @@ const LogisticsTeam = async ({ title, content }) => {
         {res.items?.map((item, index) => (
           <TeamMember
             key={index}
-            image={item.fields.logisticsTeamImage.fields.file.url || ''}
+            image={item.fields.imageUrl || null}
             title={item.fields.teamTitle}
             description={item.fields.teamDescription}
             reverse={index % 2 !== 0}

@@ -47,3 +47,14 @@ a {
   color: #000 !important;
   font-weight: 500 ! important;
 }
+
+.unstyled-button {
+  color: rgba(58, 62, 119, 1);
+  font-weight: 600;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.unstyled-button:hover {
+  color: rgb(15, 15, 15);
+}

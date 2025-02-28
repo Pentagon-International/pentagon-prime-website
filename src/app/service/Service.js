@@ -1,20 +1,26 @@
 
+'use client';
+
 import {
-  Box,
+  BackgroundImage,
   Button,
-  Flex,
   Group,
   Image,
   Stack,
   Text,
   Title,
 } from '@mantine/core';
-import Images from '../utils/image';
 import { COLORS } from '../utils/COLORS';
 import { theme } from '../utils/theme';
 import { highlightText } from '../utils/highlightText';
+import Images from '../utils/image';
+import { useRouter } from 'next/navigation';
 
-export default function Service({ title, icon, iconTitle, content }) {
+
+export default function Service({ title, icon, iconTitle, content, backgroundImage }) {
+
+  const router = useRouter();
+
   return (
     <div
       style={{
@@ -26,11 +32,13 @@ export default function Service({ title, icon, iconTitle, content }) {
         color: '#FFF',
       }}
     >
-      <div style={{ width: '50%' }}>
+      <div style={{ width: '50%', overflowY: 'visible' }}>
         <Stack px={'20%'} py={'70px'}>
-          <Group>
-            <Image radius={25} src={icon} w={40} h={40} alt="sea freight" />
-            <Text size="sm">{highlightText(iconTitle)}</Text>
+          <Group align='center' w={'60vw'} style={{ overflowY: 'visible', zIndex: 10 }} >
+            <Image radius={25} src={icon || Images.sea_freight} w={40} h={40} alt="sea freight" />
+            <Text size="sm">
+              {highlightText(iconTitle)}
+            </Text>
           </Group>
           <Title
             style={{ overflowY: 'visible', zIndex: 10, fontSize: theme.fontSizes.xxl }}
@@ -41,24 +49,33 @@ export default function Service({ title, icon, iconTitle, content }) {
           >
             {highlightText(title)}
           </Title>
-          <Text tw='balance' size="sm" w={'40vw'} lh={'sm'}>
+          <Text tw='balance' size="sm" w={'40vw'} px={'auto'} lh={'sm'}>
             {highlightText(content)}
           </Text>
-          <Button p={'18px 32px'} size="xl" fz={'sm'} bg={COLORS.serviceColor} w={'fit-content'}>
+          <Button size="md" fz={'sm'} bg={COLORS.serviceColor} w={'fit-content'} onClick={() => router.push('/contact')}>
             Join Now
           </Button>
         </Stack>
       </div>
-      <div
-        style={{
-          width: '50%',
-          overflowX: 'hidden',
-          backgroundImage: `url(${Images.service})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      ></div>
+      <div style={{ position: 'relative', width: '50%', height: '100vh' }}>
+        <BackgroundImage
+          src={backgroundImage || Images.service}
+          w={'100%'}
+          h={'100%'}
+          fit="cover"
+          alt="sea freight"
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+          }}
+        />
+      </div>
     </div>
   );
 }

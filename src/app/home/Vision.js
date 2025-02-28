@@ -36,11 +36,6 @@ const styles = {
   highlightText: {
     color: COLORS.vision,
   },
-  unstyledButton: {
-    color: 'rgba(58, 62, 119, 1)',
-    fontWeight: 600,
-    fontSize: '14px'
-  },
 };
 
 const CTAButton = ({ children, onClick, variant = 'filled' }) => (
@@ -71,16 +66,14 @@ const Vision = ({ title, content }) => {
             {highlightText(title)}
           </Title>
           <Text mt="md" maw={'75%'} lh={'sm'} size="sm">
-            Carry the message of sustainability and green logistics (solar,
-            energy movements worldwide). Green logistics options include
-            solar-powered and nuclear-powered transport solutions.
+            {highlightText(content)}
           </Text>
           <Group mt="lg" gap={'xl'}>
             <CTAButton>Get in Touch</CTAButton>
-            <UnstyledButton size={'sm'} style={styles.unstyledButton}>
-              <Flex align="center" gap={8}>
+            <UnstyledButton size={'sm'} className='unstyled-button'>
+              <Flex align="center" gap={8} className='unstyled-button'>
                 <IconBrandParsinta size={18} />
-                <span style={{ ...styles.unstyledButton }}>Watch Video</span>
+                <span>Watch Video</span>
               </Flex>
             </UnstyledButton>
           </Group>

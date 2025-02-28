@@ -27,13 +27,11 @@ const QuoteCard = async () => {
 
   const {
     quote,
-    author_name,
+    authorName,
     role,
     companyName
   } = quoteData.items[0].fields;
 
-  console.log(quoteData.items[0].fields);
-  console.log(quote , author_name, role, companyName);
   
   
 
@@ -55,7 +53,7 @@ const QuoteCard = async () => {
                 </Text>
                 <Flex w={'100%'} align={'center'} justify={'space-between'}>
                   <Stack mt={20} gap={0}>
-                    <Text size={'base'} fw={700}>{author_name}</Text>
+                    <Text size={'base'} fw={700}>{authorName}</Text>
                     <Text size={'sm'}>{role}</Text>
                   </Stack>
                   <Box bg={COLORS.primaryColor} p={'5px 10px'}>

@@ -18,6 +18,9 @@ import { usePathname } from 'next/navigation';
 import { COLORS } from '@/app/utils/COLORS';
 import Images from '@/app/utils/image';
 import { featuresMap, NavLink } from '../common/NavLink';
+import { IconPhone } from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
+
 
 
 const navItems = [
@@ -34,6 +37,8 @@ const Header = () => {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const currentPath = usePathname();
+  const router = useRouter();
+
 
   const isAppliedBackground = ['/', '/contact', '/resource'].includes(currentPath);
 
@@ -85,20 +90,22 @@ const Header = () => {
               ))}
             </Flex>
             <Group visibleFrom="sm">
-              <Anchor size="smx" style={{ color: COLORS.portColor, textDecoration: 'underline' }}>
+              {/* <Anchor size="smx" style={{ color: COLORS.portColor, textDecoration: 'underline' }}>
                 Talk to an Expert
-              </Anchor>
+              </Anchor> */}
               <Button
                 variant="outline"
                 size="md"
                 fz={'smx'}
-                p={'12px 32px'}
+                // p={'12px 32px'}
                 style={{
                   borderColor: COLORS.primaryColor,
                   color: COLORS.primaryColor,
                 }}
+                leftSection={<IconPhone />}
+                onClick={() => router.push('/contact')}
               >
-                Login
+                Talk to an Expert
               </Button>
             </Group>
             <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
@@ -123,11 +130,11 @@ const Header = () => {
                   </Box>
                 ))}
                 <Divider my="sm" />
-                <Anchor size="md" ta="center" style={{ color: COLORS.portColor, textDecoration: 'underline' }}>
+                {/* <Anchor size="md" ta="center" style={{ color: COLORS.portColor, textDecoration: 'underline' }}>
                   Talk to an Expert
-                </Anchor>
-                <Button variant="outline" size="md" fullWidth style={{ borderColor: COLORS.serviceColor, color: COLORS.serviceColor }}>
-                  Login
+                </Anchor> */}
+                <Button variant="outline" size="md" fullWidth style={{ borderColor: COLORS.serviceColor, color: COLORS.serviceColor }} onClick={() => router.push('/contact')}>
+                  Talk to an Expert
                 </Button>
               </Flex>
             </Drawer>

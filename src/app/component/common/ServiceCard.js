@@ -19,7 +19,7 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
                     />
                 </Flex>
                 <Group>
-                    <Title lh={'lgx'} tw='balance' mih={'40px'} display={'flex'} alignitems={'center'} fw={700} size={'sm'} order={4}>{item.fields.service_title || item.fields.title}</Title>
+                    <Title tw='balance' display={'flex'} alignitems={'center'} fw={700} size={'sm'} order={4}>{item.fields.service_title || item.fields.title}</Title>
                     <Text tw='balance' c={COLORS.textColor} lh={'sm'} size='smx' style={{ flexGrow: 1 }}>{item.fields.service_description || item.fields.description}</Text>
                 </Group>
                 {item.fields?.knowmore && (

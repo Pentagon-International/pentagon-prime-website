@@ -1,3 +1,5 @@
+'use client';
+
 import {
   BackgroundImage,
   Box,
@@ -10,9 +12,13 @@ import {
   Title,
 } from '@mantine/core';
 import { COLORS } from '../utils/COLORS';
+import { useRouter } from 'next/navigation';
+
 
 
 const HelpCenter = () => {
+
+  const router = useRouter();
   return (
     <Box
       h={'100vh'}
@@ -46,7 +52,9 @@ const HelpCenter = () => {
                 }
               }}
             />
-            <Button p={'18px 32px'} radius={'md'} fz={'smx'} size="lg" bg={COLORS.serviceColor}>
+            <Button fz={'sm'} size='lg' fw={600} bg={COLORS.serviceColor}
+              onClick={() => router.push('/contact')}
+            >
               Search
             </Button>
           </Flex>

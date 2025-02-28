@@ -23,7 +23,7 @@ const Ship = async ({ first_title, first_content, second_title, second_content }
     <Container fluid px={'7%'} py={'10px'}>
       <Stack gap={100}>
         <Flex direction={'column'}>
-          <Title size={'xl'} tt={'uppercase'}>{highlightText(first_title)}</Title>
+          <Title size={'lg'} tt={'uppercase'}>{highlightText(first_title)}</Title>
           <Text size='sm' c={COLORS.textColor} w={'40vw'}>
             {highlightText(first_content)}
           </Text>
@@ -46,7 +46,7 @@ const Ship = async ({ first_title, first_content, second_title, second_content }
         </Flex>
 
         <Flex direction={'column'}>
-          <Title size={'xl'} tt={'uppercase'}>{highlightText(second_title)}</Title>
+          <Title size={'lg'} tt={'uppercase'}>{highlightText(second_title)}</Title>
           <Text size='sm' c={COLORS.textColor} w={'40vw'}>
             {highlightText(second_content)}
           </Text>

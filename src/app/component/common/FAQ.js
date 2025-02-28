@@ -41,10 +41,10 @@ const FAQ = async () => {
             return (
               <AccordionItem key={item.sys.id} value={shortvalue || ''}>
                 <AccordionControl>
-                  <Text size='base' fw={600}>{question || 'Untitled Question'}</Text>
+                  <Text size='sm' fw={500}>{question || 'Untitled Question'}</Text>
                 </AccordionControl>
                 <AccordionPanel>
-                  <Text size='sm' maw={'75%'} tw="balance">
+                  <Text size='smx' maw={'75%'} tw="balance">
                     {answer || 'No answer available at the moment.'}
                   </Text>
                 </AccordionPanel>

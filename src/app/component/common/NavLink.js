@@ -7,6 +7,7 @@ import {
     HoverCardDropdown,
     HoverCardTarget,
     SimpleGrid,
+    Stack,
     Text,
     ThemeIcon,
     UnstyledButton
@@ -75,15 +76,13 @@ export const featuresMap = {
     ],
 };
 
-// FeatureItem Component
 const FeatureItem = ({ feature }) => (
     <UnstyledButton
         style={{
             display: 'block',
             width: '100%',
-            padding: '8px 12px',
             borderRadius: '4px',
-            transition: 'background-color 0.2s ease-in-out',
+            transition: 'background-color 0.4s ease-in-out',
         }}
         onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E3E3E3')}
         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
@@ -92,17 +91,22 @@ const FeatureItem = ({ feature }) => (
             <ThemeIcon size={26} variant="default" radius="md">
                 <feature.icon size={18} color={COLORS.secondaryColor} />
             </ThemeIcon>
-            <div>
+            <Stack>
                 <Text size="xs" fw={500} color={COLORS.secondaryColor}>
                     {feature.title}
                 </Text>
                 <Text size="xs" color="dimmed">
                     {feature.description}
                 </Text>
-            </div>
+            </Stack>
         </Group>
+
     </UnstyledButton>
 );
+
+
+
+
 
 export const NavLink = ({ item }) => {
     const [opened, { open, close }] = useDisclosure(false);
@@ -132,14 +136,14 @@ export const NavLink = ({ item }) => {
             </HoverCardTarget>
 
             <HoverCardDropdown
-                style={{ overflow: "hidden", zIndex: 1100, color: COLORS.primaryColor }}
+                style={{ overflow: "hidden", zIndex: 1100, color: COLORS.primaryColor, padding: '10px 20px' }}
             >
-                <Group justify="space-between" px="md">
-                    <Text fw={500} size="xs" color={COLORS.secondaryColor}>
+                <Group gap={10} justify="space-between" >
+                    <Text fw={500} size="smx" color={COLORS.secondaryColor}>
                         {item.label}
                     </Text>
                     {featuresMap[item.label]?.length > 2 && (
-                        <Anchor href="#" fz="xs">
+                        <Anchor href="#" fz="smx">
                             View all
                         </Anchor>
                     )}

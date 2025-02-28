@@ -3,6 +3,7 @@ import React from 'react';
 import ServiceCard from '../component/common/ServiceCard';
 import { client } from '@/app/api/contentful';
 import { highlightText } from '../utils/highlightText';
+import { COLORS } from '../utils/COLORS';
 
 
 const styles = {
@@ -28,7 +29,9 @@ const LogisticsServices = async ({ title }) => {
                         {highlightText(title)}
                     </Title>
                 </Stack>
-                <Button fz={'smx'} p={'23px 32px'} fw={700} size="xl" w={'12rem'} color={'#0E52F2'}>View All Services</Button>
+                <Button fz={'sm'} size='lg' fw={600} bg={COLORS.serviceColor}>
+                    View All Services
+                </Button>
             </Flex>
             <Grid columns={9} mt='lg' gutter='lg' >
                 {res.items?.map((item, index) => (
@@ -41,11 +44,3 @@ const LogisticsServices = async ({ title }) => {
 
 
 export default LogisticsServices;
-
-
-//   const styles = {
-//     "#": COLORS.portColor,
-//     "$": COLORS.serviceColor,
-//     "%": COLORS.vision,
-//     "?": COLORS.questionColor,
-//   };

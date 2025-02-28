@@ -1,8 +1,13 @@
+'use client';
+
 import { COLORS } from '@/app/utils/COLORS';
 import Images from '@/app/utils/image';
 import { Box, Button, Container, Flex, Stack, Text, Title } from '@mantine/core';
+import { useRouter } from 'next/navigation';
 
 const BottomCard = ({ title, text, button }) => {
+
+  const router = useRouter();
   return (
     <Box
       mt={20}
@@ -19,7 +24,9 @@ const BottomCard = ({ title, text, button }) => {
             <Title size={'lg'} tt={'uppercase'}>{title}</Title>
             <Text size='sm' c={COLORS.textColor}>{text}</Text>
           </Stack>
-          <Button fz={'sm'} p={'24px 32px'} bg={COLORS.serviceColor} size="xl">
+          <Button fz={'sm'} size='lg' fw={600} bg={COLORS.serviceColor}
+            onClick={() => router.push('/contact')}
+          >
             {button}
           </Button>
         </Flex>
