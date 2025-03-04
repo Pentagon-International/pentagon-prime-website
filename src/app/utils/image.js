@@ -21,6 +21,7 @@ const Images = {
   ship: '/images/ship.png',
   newsRoom: '/images/newsRoom.png',
   quote: '/images/quote_img.svg',
+  pentagon_hero: '/images/pentagon_hero.png',
 
 };
 
