@@ -126,9 +126,9 @@ const MilestoneTimeline = ({ milestones }) => {
           bg={'#0EC9F21A'}
           style={{
             position: 'absolute',
-            bottom: -130,
+            top: 280,
             right: 20,
-            padding: '30px 50px',
+            padding: '20px 30px',
             width: '40%',
             marginTop: '10px',
             borderRadius: '8px',
@@ -145,7 +145,7 @@ const MilestoneTimeline = ({ milestones }) => {
                         const text =
                           listItem.content[0]?.content[0]?.value ||
                           'No description available';
-                        return <li style={{ fontSize: '18px' }} key={`${index}-${i}`}>{text}</li>;
+                        return <li style={{ fontSize: '16px' }} key={`${index}-${i}`}>{text}</li>;
                       })}
                     </ul>
                   );
@@ -162,7 +162,7 @@ const MilestoneTimeline = ({ milestones }) => {
         w={20}
         h={20}
         alt="arrow"
-        style={{ position: 'absolute', bottom: 240, right: -10 }}
+        style={{ position: 'absolute', top: 265, right: -10 }}
       />
     </div>
   );

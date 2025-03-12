@@ -12,4 +12,6 @@ export const COLORS = {
   pointerBackground : '#5F62E9',
   footerBackground : "#111",
   footerTextColor : "#ccc",
+  background : '#F9F9F9',
+  accordian_background : '#F5F5F5'
 };

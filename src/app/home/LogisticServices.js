@@ -4,6 +4,7 @@ import ServiceCard from '../component/common/ServiceCard';
 import { client } from '@/app/api/contentful';
 import { highlightText } from '../utils/highlightText';
 import { COLORS } from '../utils/COLORS';
+import { theme } from '../utils/theme';
 
 
 const styles = {
@@ -25,7 +26,7 @@ const LogisticsServices = async ({ title }) => {
         <Container {...styles.container}>
             <Flex {...styles.flexContainer}>
                 <Stack>
-                    <Title tt={'uppercase'} lh={'lgx2'} fw={800} size={'lgx2'}>
+                    <Title tt={'uppercase'} lh={'lgx2'} fw={800} size={'40px'}>
                         {highlightText(title)}
                     </Title>
                 </Stack>

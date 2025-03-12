@@ -1,4 +1,5 @@
 import { client } from '@/app/api/contentful';
+import { COLORS } from '@/app/utils/COLORS';
 import {
   Accordion,
   AccordionControl,
@@ -9,7 +10,7 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import { IconPlus, IconMinus } from '@tabler/icons-react';
+import { IconPlus } from '@tabler/icons-react';
 
 const FAQ = async () => {
   const res = await client.getEntries({
@@ -18,7 +19,7 @@ const FAQ = async () => {
   });
 
   return (
-    <Container fluid px="7%" pt="70px">
+    <Container fluid mt={50} bg={COLORS.accordian_background} px="7%" pt="70px">
       <Stack>
         <Title fw={800} tt={'uppercase'} size={'lg'}>
           Frequently Asked Questions
@@ -26,25 +27,28 @@ const FAQ = async () => {
         <Accordion
           chevronPosition="right"
           variant="separated"
-          chevron={<IconPlus size={18} />}
+          chevron={<IconPlus color={COLORS.secondaryColor} size={18} />}
           transitionDuration={600}
           styles={{
             chevron: {
+              backgroundColor: COLORS.primaryColor,
+              borderRadius: '50%',
+              border: 'none',
               '&[dataRotate]': {
                 transform: 'rotate(45deg)',
               },
-            }
+            },
           }}
         >
           {res.items?.map((item) => {
             const { question, answer, shortvalue } = item.fields || {};
             return (
-              <AccordionItem key={item.sys.id} value={shortvalue || ''}>
-                <AccordionControl>
-                  <Text size='sm' fw={500}>{question || 'Untitled Question'}</Text>
+              <AccordionItem style={{ backgroundColor: COLORS.accordian_background }} key={item.sys.id} value={shortvalue || ''}>
+                <AccordionControl style={{ backgroundColor: COLORS.accordian_background }}>
+                  <Text size='sm' fw={700}>{question || 'Untitled Question'}</Text>
                 </AccordionControl>
-                <AccordionPanel>
-                  <Text size='smx' maw={'75%'} tw="balance">
+                <AccordionPanel style={{ backgroundColor: COLORS.accordian_background, }}>
+                  <Text c={COLORS.textColor} size='smx' maw={'75%'} tw="balance">
                     {answer || 'No answer available at the moment.'}
                   </Text>
                 </AccordionPanel>

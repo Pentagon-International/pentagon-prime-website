@@ -118,7 +118,7 @@ const Members = async () => {
   });
 
   return (
-    <Container fluid px={'7%'} my={200}>
+    <Container fluid px={'7%'} py={'lg'}>
       <Flex justify="center" align="center" style={{ width: '100%' }}>
         <Card
           bg={'#F2F7FC'}

@@ -2,7 +2,9 @@ import { fetchEntries } from "@/app/utils/fetchEntries";
 import Service from "../Service";
 
 const ServicePage = async ({ params }) => {
-  const resData = params.slug ? await fetchEntries(params.slug) : await fetchEntries("service");
+  const { slug } = await params; 
+
+  const resData = slug ? await fetchEntries(slug) : await fetchEntries("service");
   
   return (
     <Service

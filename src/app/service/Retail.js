@@ -30,7 +30,7 @@ const Retail = async ({ first_title, first_content, second_title, second_content
       </Text>
       <Grid columns={12} mt="xl">
         {res.items.map((item) => (
-          <ServiceCard key={item.sys.id} item={item} backgroundColor={'#f5f5f5'} />
+          <ServiceCard key={item.sys.id} item={item} backgroundColor={'#fff'} />
         ))}
       </Grid>
     </Container>

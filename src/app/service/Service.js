@@ -33,16 +33,16 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
       }}
     >
       <div style={{ width: '50%', overflowY: 'visible' }}>
-        <Stack px={'20%'} py={'70px'}>
-          <Group align='center' w={'60vw'} style={{ overflowY: 'visible', zIndex: 10 }} >
+        <Stack px={'20%'} py={'50px'}>
+          <Group align='center' w={'70vw'} style={{ overflowY: 'visible', zIndex: 10 }} >
             <Image radius={25} src={icon || Images.sea_freight} w={40} h={40} alt="sea freight" />
-            <Text size="sm">
+            <Text size="sm" w={'45vw'} >
               {highlightText(iconTitle)}
             </Text>
           </Group>
           <Title
             style={{ overflowY: 'visible', zIndex: 10, fontSize: theme.fontSizes.xxl }}
-            w={'55vw'}
+            w={'65vw'}
             lh={theme.lineHeights.xxl}
             tt={'uppercase'}
             textWrap="balance"

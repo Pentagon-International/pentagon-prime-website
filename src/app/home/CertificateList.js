@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 
 
 const styles = {
-    container: { fluid: true, px: '7%', py: '70px' },
+    container: { fluid: true,  py: '70px' },
     actionIcon: {
         size: 'lg',
         variant: 'default',
@@ -56,7 +56,7 @@ const CertificateList = ({ certificateItems }) => {
 
 
     return (
-        <Container {...styles.container}>
+        <Container {...styles.container} bg={COLORS.background}>
             <Stack spacing={'lg'}>
                 <Center>
                     <Title size={'lg'} fw={800} tt={'uppercase'}>Our Certifications & Affiliations</Title>

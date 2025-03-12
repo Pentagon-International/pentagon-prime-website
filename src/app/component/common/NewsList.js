@@ -6,7 +6,6 @@ import {
   Flex,
   Grid,
   GridCol,
-  Group,
   Image,
   Text,
   Title,
@@ -77,12 +76,12 @@ const NewsList = ({ newsItems }) => {
                 >
                   Read More
                 </a>
-                <IconArrowRight
+                {/* <IconArrowRight
                   stroke={2}
                   color={COLORS.serviceColor}
                   size={16}
                   style={{ transform: 'translateY(1px)' }}
-                />
+                /> */}
               </Flex>
             </Flex>
           </GridCol>

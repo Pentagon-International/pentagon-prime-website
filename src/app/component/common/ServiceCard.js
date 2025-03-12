@@ -1,4 +1,5 @@
 import { COLORS } from '@/app/utils/COLORS';
+import { theme } from '@/app/utils/theme';
 import { Anchor, Card, Flex, GridCol, Group, Image, Text, Title } from '@mantine/core';
 import { IconArrowRight } from '@tabler/icons-react';
 import React from 'react';
@@ -19,8 +20,8 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
                     />
                 </Flex>
                 <Group>
-                    <Title tw='balance' display={'flex'} alignitems={'center'} fw={700} size={'sm'} order={4}>{item.fields.service_title || item.fields.title}</Title>
-                    <Text tw='balance' c={COLORS.textColor} lh={'sm'} size='smx' style={{ flexGrow: 1 }}>{item.fields.service_description || item.fields.description}</Text>
+                    <Title tw='balance' display={'flex'} alignitems={'center'} fw={700} size={theme.fontSizes.base} order={4}>{item.fields.service_title || item.fields.title}</Title>
+                    <Text tw='balance' c={COLORS.textColor} lh={'sm'} size='sm' style={{ flexGrow: 1 }}>{item.fields.service_description || item.fields.description}</Text>
                 </Group>
                 {item.fields?.knowmore && (
                     <Flex align="center" gap={4} style={{ display: 'inline-flex', alignItems: 'center' }}>
@@ -28,12 +29,12 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
                             pt={"10px"} mt={"auto"} display={'flex'} alignitems={'center'} size="xs" underline="hover">
                             {anchorText}
                         </Anchor>
-                        <IconArrowRight
+                        {/* <IconArrowRight
                             stroke={2}
                             color={COLORS.serviceColor}
                             size={16}
                             style={{ transform: 'translateY(5px)' }}
-                        />
+                        /> */}
                     </Flex>
                 )}
             </Card>

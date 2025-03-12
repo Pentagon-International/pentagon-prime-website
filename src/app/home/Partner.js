@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { COLORS } from '@/app/utils/COLORS';
 import { Carousel, CarouselSlide } from '@mantine/carousel';
 import { Box, Button, Container, Flex, Stack, Text, Title } from '@mantine/core';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { IconArrowNarrowLeft, IconArrowNarrowRight } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { client } from '../api/contentful';
 
@@ -39,7 +39,7 @@ const Partner = ({ title, content }) => {
             {content}
           </Text>
         </Stack>
-        <Button fz={'sm'} variant="outline" size='lg' fw={600} c={COLORS.serviceColor}
+        <Button fz={'sm'} variant="outline" size='lg' radius={'12px'} fw={600} c={COLORS.serviceColor}
           onClick={() => router.push('/contact')}
         >
           Get In Touch
@@ -50,14 +50,14 @@ const Partner = ({ title, content }) => {
         <Carousel
           slideSize="100%"
           slideGap="xs"
-          controlsOffset="lg"
+          controlsOffset={0}
           controlSize={32}
           loop
           dragFree={false}
           align="start"
           px={15}
-          nextControlIcon={<IconChevronRight size={24} color={COLORS.secondaryColor} />}
-          previousControlIcon={<IconChevronLeft size={24} color={COLORS.secondaryColor} />}
+          nextControlIcon={<IconArrowNarrowRight size={22} color={COLORS.secondaryColor} />}
+          previousControlIcon={<IconArrowNarrowLeft size={22} color={COLORS.secondaryColor} />}
         >
           {partners.map((item, index) => (
             <CarouselSlide key={index}>
@@ -102,6 +102,7 @@ const styles = {
   carouselWrapper: {
     marginTop: 50,
     position: 'relative',
+    padding : '20px'
   },
   carouselSlide: {
     width: '100%',
