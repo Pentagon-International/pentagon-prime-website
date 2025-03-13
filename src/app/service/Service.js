@@ -28,7 +28,7 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
         color: '#FFF',
       }}
     >
-      <div style={{ width: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ width: '50%', overflow : 'visible' , display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Stack p={100}>
           <Group align='center' style={{ zIndex: 10 }} >
             <Image radius={25} src={icon || Images.sea_freight} w={40} h={40} alt="sea freight" />
@@ -41,15 +41,17 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
               zIndex: 10,
               fontSize: theme.fontSizes.xxl,
               fontWeight: 900,
-              maxWidth: '140vw', 
-              border : '1px solid red'
+              boxSizing: 'border-box',
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
             }}
             lh={theme.lineHeights.xxl}
-            tt={'uppercase'}
-            textWrap="balance"
+            tt="uppercase"
+            size={'lg'}
           >
             {highlightText(title)}
           </Title>
+
 
           <Text tw='balance' size="sm" px={'auto'} lh={'sm'}>
             {highlightText(content)}
