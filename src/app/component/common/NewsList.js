@@ -33,7 +33,7 @@ const NewsList = ({ newsItems }) => {
   const currentItems = newsItems.slice(startIndex, startIndex + ITEMS_PER_VIEW);
 
   return (
-    <Container fluid px="7%">
+    <Container fluid px="7%" py={'70px'}>
       <Title mb="xl" size="lg" fw={800}>
         NEWS & EVENTS
       </Title>

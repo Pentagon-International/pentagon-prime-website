@@ -15,17 +15,26 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import {
     IconBook,
+    IconBuildingWarehouse,
     IconCaretDownFilled,
     IconCaretUpFilled,
     IconChartPie3,
-    IconCode,
+    IconClipboard,
     IconCoin,
+    IconCrane,
     IconFingerprint,
+    IconListCheck,
+    IconMapPin2,
     IconNotification,
+    IconPackageExport,
+    IconPackages,
     IconPlaneArrival,
-    IconShip
+    IconPresentationAnalytics,
+    IconShip,
+    IconSpeedboat,
+    IconTruck,
+    IconWorldDollar
 } from "@tabler/icons-react";
-
 
 export const featuresMap = {
     Products: [
@@ -42,67 +51,67 @@ export const featuresMap = {
         {
             icon: IconPlaneArrival,
             title: 'Air Freight Forwarding',
-            link : 'service/air-freight-forwarding'
+            link: '/service/air-freight-forwarding'
         },
         {
             icon: IconShip,
             title: 'Sea Freight Forwarding',
-            link : 'service/sea-freight-forwarding'
+            link: '/service/sea-freight-forwarding'
         },
         {
-            icon: IconBook,
+            icon: IconTruck,
             title: 'Multimodal Transport',
-            link : 'service/multimodal-transport'
+            link: '/service/multimodal-transport'
         },
         {
-            icon: IconBook,
+            icon: IconWorldDollar,
             title: 'Cross Country Trade',
-            link : 'service/cross-country-trade'
+            link: '/service/cross-country-trade'
         },
         {
-            icon: IconBook,
+            icon: IconPackages,
             title: 'Consolidation Services',
-            link : 'service/consolidation-services'
+            link: '/service/consolidation-services'
         },
         {
-            icon: IconBook,
+            icon: IconListCheck,
             title: 'Value Added Services',
-            link : 'service/value-added-services'
+            link: '/service/value-added-services'
         },
         {
-            icon: IconBook,
+            icon: IconClipboard,
             title: 'Custom Clearing',
-            link : 'service/custom-clearing'
+            link: '/service/customs-clearance'
         },
         {
-            icon: IconBook,
+            icon: IconPackageExport,
             title: 'Break Bulk Cargo Services',
-            link : 'service/break-bulk-cargo-services'
+            link: '/service/break-bulk-cargo'
         },
         {
-            icon: IconBook,
+            icon: IconCrane,
             title: 'ODC Project Cargo',
-            link : 'service/odc-project-cargo'
+            link: '/service/odc-project-cargo'
         },
         {
-            icon: IconBook,
+            icon: IconBuildingWarehouse,
             title: 'Warehousing and Storage',
-            link : 'service/warehousing-and-storage'
+            link: '/service/warehousing-and-storage'
         },
         {
-            icon: IconBook,
+            icon: IconPresentationAnalytics,
             title: 'Exhibition Cargo',
-            link : 'service/exhibition-cargo'
+            link: '/service/exhibition-cargo'
         },
         {
-            icon: IconBook,
+            icon: IconSpeedboat,
             title: 'Chartering and Coastal Movements',
-            link : 'service/chartering-and-coastal-movements'
+            link: '/service/chartering-and-coastal-movements'
         },
         {
-            icon: IconBook,
+            icon: IconMapPin2,
             title: 'First and Last-Mile Delivery',
-            link : 'service/first-and-last-mile-delivery'
+            link: '/service/first-and-last-mile-delivery'
         }
     ],
     Tools: [
@@ -131,34 +140,37 @@ export const featuresMap = {
     ],
 };
 
-const FeatureItem = ({ feature }) => (
-    <UnstyledButton
-        style={{
-            display: 'block',
-            width: '100%',
-            borderRadius: '4px',
-            transition: 'background-color 0.4s ease-in-out',
-        }}
-        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E3E3E3')}
-        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-    >
-        <Group wrap="nowrap" gap={10} align="center">
-            <ThemeIcon size={26} variant="default" radius="md">
-                <feature.icon size={18} color={COLORS.secondaryColor} />
-            </ThemeIcon>
-            <Stack>
-                <Anchor underline="none" href={feature.link} size="xs" fw={500} c={COLORS.secondaryColor}>
-                    {feature.title}
-                </Anchor>
-            </Stack>
-        </Group>
-
-    </UnstyledButton>
-);
-
-
-
-
+const FeatureItem = ({ feature }) => {
+    return (
+        <UnstyledButton
+            style={{
+                display: 'block',
+                width: '100%',
+                borderRadius: '4px',
+                transition: 'background-color 0.4s ease-in-out',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E3E3E3')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+        >
+            <Group wrap="nowrap" gap={10} align="center">
+                <ThemeIcon size={26} variant="default" radius="md">
+                    <feature.icon size={18} stroke={1.5} color={COLORS.secondaryColor} />
+                </ThemeIcon>
+                <Stack>
+                    <Anchor 
+                        underline="none" 
+                        href={feature.link} 
+                        size="xs" 
+                        fw={500} 
+                        c={COLORS.secondaryColor}
+                    >
+                        {feature.title}
+                    </Anchor>
+                </Stack>
+            </Group>
+        </UnstyledButton>
+    );
+};
 
 export const NavLink = ({ item }) => {
     const [opened, { open, close }] = useDisclosure(false);
@@ -190,7 +202,7 @@ export const NavLink = ({ item }) => {
             <HoverCardDropdown
                 style={{ overflow: "hidden", zIndex: 1100, color: COLORS.primaryColor, padding: '10px 20px' }}
             >
-                <Group gap={10} justify="space-between" >
+                <Group gap={10} justify="space-between">
                     <Text fw={500} size="14px" color={COLORS.secondaryColor}>
                         {item.label}
                     </Text>

@@ -23,31 +23,38 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
         height: '100vh',
         display: 'flex',
         flexDirection: 'row',
-        marginTop: '60px',
+        marginTop: '40px',
         backgroundColor: '#111F40',
         color: '#FFF',
       }}
     >
-      <div style={{ width: '50%', overflowY: 'visible', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Stack p={60}>
-          <Group align='center' style={{ overflowY: 'visible', zIndex: 10 }} >
+      <div style={{ width: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Stack p={100}>
+          <Group align='center' style={{ zIndex: 10 }} >
             <Image radius={25} src={icon || Images.sea_freight} w={40} h={40} alt="sea freight" />
             <Text size="sm" >
               {highlightText(iconTitle)}
             </Text>
           </Group>
           <Title
-            style={{ overflowY: 'visible', zIndex: 10, fontSize: theme.fontSizes.xxl, fontWeight: 900 }}
+            style={{
+              zIndex: 10,
+              fontSize: theme.fontSizes.xxl,
+              fontWeight: 900,
+              maxWidth: '140vw', 
+              border : '1px solid red'
+            }}
             lh={theme.lineHeights.xxl}
             tt={'uppercase'}
             textWrap="balance"
           >
             {highlightText(title)}
           </Title>
+
           <Text tw='balance' size="sm" px={'auto'} lh={'sm'}>
             {highlightText(content)}
           </Text>
-          <Button size="xl" radius={10} mt={20} fz={'sm'} bg={COLORS.serviceColor} w={'fit-content'} onClick={() => router.push('/contact')}>
+          <Button size="xl" radius={12} mt={10} fz={'sm'} bg={COLORS.serviceColor} w={'fit-content'} onClick={() => router.push('/contact')}>
             Join Now
           </Button>
         </Stack>
@@ -67,7 +74,7 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
             left: 0,
             width: '100%',
             height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
           }}
         />
       </div>

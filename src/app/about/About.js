@@ -54,10 +54,10 @@ const About = ({ title, content }) => {
         py={'70px'}
       >
         <Box style={styles.overlayContainer}>
-          <Image src={Images.about_vector} style={styles.overlayImage} />
+          <Image src={Images.about_vector} style={{...styles.overlayImage , width : '35%'}} />
           <Image
             src={Images.container}
-            style={{ ...styles.overlayImage, top: '-65px', zIndex: 2 }}
+            style={{ ...styles.overlayImage, top: '-125px', left: '68.5%', zIndex: 2 }}
           />
         </Box>
         <Group align="center" style={styles.textContainer}>

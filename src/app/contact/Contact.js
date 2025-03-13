@@ -1,5 +1,6 @@
 import { Container, Flex, Group, Image, Stack, Text, Title } from '@mantine/core';
 import { IconMail, IconPhone } from '@tabler/icons-react';
+import Images from '../utils/image';
 
 const Contact = () => {
   return (
@@ -34,7 +35,7 @@ const Contact = () => {
             <Text size='sm'>pentagon@pentagonindia.net</Text>
           </Group>
         </Stack>
-        <Image src={'/images/pentagon.png'} alt="pentagon logo" />
+        <Image h={'80%'} src={Images.contact_vector} alt="pentagon logo" />
       </Flex>
     </Container>
   );

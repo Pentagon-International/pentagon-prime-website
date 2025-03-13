@@ -22,7 +22,8 @@ const Images = {
   newsRoom: '/images/newsRoom.png',
   quote: '/images/quote_img.svg',
   pentagon_hero: '/images/pentagon_hero.png',
-
+  about_vector: 'images/about_vector.png',
+  contact_vector : 'images/contactUs_vector.png'
 };
 
 export default Images;

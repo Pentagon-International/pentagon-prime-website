@@ -41,7 +41,7 @@ const Hero = ({ title, content }) => {
       <Container fluid px={{ base: '5%', md: '7%' }} mt={60} py="60px" style={{ height: '100vh', margin: '0 auto' }}>
         <Box style={styles.overlayContainer}>
           <Image src={Images.vector_p} style={{ ...styles.overlayImage, width: '33%' }} />
-          <Image src={Images.container} style={{ ...styles.overlayImage, top: '-73px', left: '73.8%', zIndex: 2 }} />
+          <Image src={Images.container} style={{ ...styles.overlayImage, width: '60%', top: '-195px', left: '73.8%', zIndex: 2 }} />
         </Box>
 
         <Stack h={'100%'} gap={0} justify="center">
