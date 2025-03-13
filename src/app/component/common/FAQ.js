@@ -19,7 +19,7 @@ const FAQ = async () => {
   });
 
   return (
-    <Container fluid mt={50} bg={COLORS.accordian_background} px="7%" pt="70px">
+    <Container fluid bg={COLORS.accordian_background} px="7%" py={60}>
       <Stack>
         <Title fw={800} tt={'uppercase'} size={'lg'}>
           Frequently Asked Questions

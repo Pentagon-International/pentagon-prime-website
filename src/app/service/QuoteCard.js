@@ -32,9 +32,6 @@ const QuoteCard = async () => {
     companyName
   } = quoteData.items[0].fields;
 
-  
-  
-
   return (
     <Box mt={70} style={{ backgroundColor: '#111F40' }}>
       <Container fluid px="7%" py="lg">
@@ -48,10 +45,10 @@ const QuoteCard = async () => {
             <GridCol span={1}>
               <Group gap={0}>
                 <div style={{ backgroundImage: `url(${Images.quote})`, backgroundSize: 'cover', backgroundPosition: 'center', width: '30px', height: '30px' }} />
-                <Text size={'base'} style={{ textWrap: 'balance' }}>
+                <Text mt={20} style={{ textWrap: 'balance', fontSize: '20px' }}>
                   {quote}
                 </Text>
-                <Flex w={'100%'} align={'center'} justify={'space-between'}>
+                <Flex w={'100%'} align={'flex-end'} justify={'space-between'}>
                   <Stack mt={20} gap={0}>
                     <Text size={'base'} fw={700}>{authorName}</Text>
                     <Text size={'sm'}>{role}</Text>

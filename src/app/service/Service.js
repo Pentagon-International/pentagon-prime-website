@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -16,11 +15,8 @@ import { highlightText } from '../utils/highlightText';
 import Images from '../utils/image';
 import { useRouter } from 'next/navigation';
 
-
 export default function Service({ title, icon, iconTitle, content, backgroundImage }) {
-
   const router = useRouter();
-
   return (
     <div
       style={{
@@ -32,27 +28,26 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
         color: '#FFF',
       }}
     >
-      <div style={{ width: '50%', overflowY: 'visible' }}>
-        <Stack px={'20%'} py={'50px'}>
-          <Group align='center' w={'70vw'} style={{ overflowY: 'visible', zIndex: 10 }} >
+      <div style={{ width: '50%', overflowY: 'visible', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Stack p={60}>
+          <Group align='center' style={{ overflowY: 'visible', zIndex: 10 }} >
             <Image radius={25} src={icon || Images.sea_freight} w={40} h={40} alt="sea freight" />
-            <Text size="sm" w={'45vw'} >
+            <Text size="sm" >
               {highlightText(iconTitle)}
             </Text>
           </Group>
           <Title
-            style={{ overflowY: 'visible', zIndex: 10, fontSize: theme.fontSizes.xxl }}
-            w={'65vw'}
+            style={{ overflowY: 'visible', zIndex: 10, fontSize: theme.fontSizes.xxl, fontWeight: 900 }}
             lh={theme.lineHeights.xxl}
             tt={'uppercase'}
             textWrap="balance"
           >
             {highlightText(title)}
           </Title>
-          <Text tw='balance' size="sm" w={'40vw'} px={'auto'} lh={'sm'}>
+          <Text tw='balance' size="sm" px={'auto'} lh={'sm'}>
             {highlightText(content)}
           </Text>
-          <Button size="md" fz={'sm'} bg={COLORS.serviceColor} w={'fit-content'} onClick={() => router.push('/contact')}>
+          <Button size="xl" radius={10} mt={20} fz={'sm'} bg={COLORS.serviceColor} w={'fit-content'} onClick={() => router.push('/contact')}>
             Join Now
           </Button>
         </Stack>

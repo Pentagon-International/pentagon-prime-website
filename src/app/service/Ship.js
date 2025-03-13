@@ -4,7 +4,6 @@ import {
   Flex,
   Grid,
   GridCol,
-  Group,
   Image,
   Stack,
   Text,
@@ -20,14 +19,14 @@ const Ship = async ({ first_title, first_content, second_title, second_content }
     order: 'sys.createdAt',
   });
   return (
-    <Container fluid px={'7%'} py={'10px'}>
+    <Container fluid px={'7%'} py={'10px'} mb={160}>
       <Stack gap={100}>
         <Flex direction={'column'}>
           <Title size={'lg'} tt={'uppercase'}>{highlightText(first_title)}</Title>
           <Text size='sm' c={COLORS.textColor} w={'40vw'}>
             {highlightText(first_content)}
           </Text>
-          <Grid columns={3} gutter={'xl'} mt={30}>
+          <Grid columns={3} gutter={90} mt={60}>
             {res.items.map((item) => (
               <GridCol key={item.sys.id} span={1}>
                 <Image
@@ -50,7 +49,7 @@ const Ship = async ({ first_title, first_content, second_title, second_content }
           <Text size='sm' c={COLORS.textColor} w={'40vw'}>
             {highlightText(second_content)}
           </Text>
-          <Grid columns={3} gutter={'xl'} mt={30}>
+          <Grid columns={3} gutter={90} mt={60}>
             {res.items.map((item) => (
               <GridCol key={item.sys.id} span={1}>
                 <Image

@@ -8,6 +8,7 @@ import {
   Title,
   Container,
   Anchor,
+  Box,
 } from '@mantine/core';
 import {
   IconAt,
@@ -40,14 +41,16 @@ const Footer = () => {
   return (
     <footer style={{ backgroundColor: '#111', color: 'white', padding: '50px 0' }}>
       <Container fluid px="7%">
+        <Box mb={20}>
+          <Flex align="center" gap="xs">
+            <BackgroundImage src="/logo-pp.png" w={50} h={55} alt="PentagonPrime Logo" />
+            <Title size={'md'} order={3} color="white">
+              PentagonPrime
+            </Title>
+          </Flex>
+        </Box>
         <Flex justify="space-between" wrap="wrap" gap="lg">
           <Stack w={300} spacing="xs">
-            <Flex align="center" gap="xs">
-              <BackgroundImage src="/logo-pp.png" w={55} h={55} alt="PentagonPrime Logo" />
-              <Title size={'md'} order={3} color="white">
-                PentagonPrime
-              </Title>
-            </Flex>
             <Text size="sm" color="white">
               Pentagon Prime, a unit of Pentagon Group, provides logistics and freight forwarding services.
               We enable our clients to enhance efficiency with cost-effective solutions, connecting them seamlessly with the world.
@@ -59,7 +62,7 @@ const Footer = () => {
           </Stack>
 
           <Stack spacing="xs">
-            <Text weight={700} size="smx" style={{ textTransform: 'uppercase', color: '#ccc' }}>
+            <Text fw={700} size="smx" style={{ textTransform: 'uppercase', color: '#666' }}>
               Services
             </Text>
             {service1.map((item, index) => (
@@ -74,10 +77,7 @@ const Footer = () => {
             ))}
           </Stack>
 
-          <Stack spacing="xs">
-            <Text weight={700} size="smx" style={{ textTransform: 'uppercase', color: '#ccc' }}>
-              Services
-            </Text>
+          <Stack spacing="xs" mt={40}>
             {service2.map((item, index) => (
               <Anchor
                 key={index}

@@ -1,16 +1,18 @@
-import React from 'react';
-import Service from './Service';
-import { fetchEntries } from '../utils/fetchEntries';
+import React from "react";
+import Service from "./Service";
+import { fetchEntries } from "../utils/fetchEntries";
 
 const page = async () => {
-
-  const [serviceData] = await Promise.all([
-    fetchEntries('service')
-  ]);
+  const [serviceData] = await Promise.all([fetchEntries("service")]);
   return (
     <>
-      <Service title={serviceData.title} icon={serviceData?.icon?.fields?.file?.url} iconTitle={serviceData.iconTitle} content={serviceData.content} backgroundImage={serviceData?.backgroundImage?.fields?.file?.url} />
-
+      <Service
+        title={serviceData.title}
+        icon={serviceData?.icon?.fields?.file?.url}
+        iconTitle={serviceData.iconTitle}
+        content={serviceData.content}
+        backgroundImage={serviceData?.backgroundImage?.fields?.file?.url}
+      />
     </>
   );
 };

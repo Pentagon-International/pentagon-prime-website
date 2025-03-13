@@ -3,7 +3,6 @@ import Service from "../Service";
 
 const ServicePage = async ({ params }) => {
   const { slug } = await params; 
-
   const resData = slug ? await fetchEntries(slug) : await fetchEntries("service");
   
   return (
