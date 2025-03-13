@@ -24,12 +24,11 @@ import { useRouter } from 'next/navigation';
 
 
 const navItems = [
-  { label: 'Products', links: '/product', dropdown: true },
-  { label: 'Service', links: '/service', dropdown: false },
-  { label: 'Contact', links: '/contact', dropdown: false },
+  { label: 'Products', links: '/product', dropdown: false },
+  { label: 'Solutions', links: '/service', dropdown: true },
+  // { label: 'Tools', links: '/contact', dropdown: true },
   { label: 'About', links: '/about', dropdown: false },
-  { label: 'Help', links: '/help', dropdown: false },
-  { label: 'News', links: '/news', dropdown: false },
+  // { label: 'Company', links: '/help', dropdown: true },
 ];
 
 

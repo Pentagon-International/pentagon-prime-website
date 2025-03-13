@@ -15,40 +15,95 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import {
     IconBook,
+    IconCaretDownFilled,
+    IconCaretUpFilled,
     IconChartPie3,
-    IconChevronDown,
-    IconChevronUp,
     IconCode,
     IconCoin,
     IconFingerprint,
-    IconNotification
+    IconNotification,
+    IconPlaneArrival,
+    IconShip
 } from "@tabler/icons-react";
 
 
 export const featuresMap = {
     Products: [
         {
-            icon: IconCode,
+            icon: IconPlaneArrival,
             title: 'API Access',
-            description: 'Seamless API integrations for your products',
         },
         {
             icon: IconCoin,
             title: 'Pricing',
-            description: 'Transparent and flexible pricing models',
         },
     ],
     Solutions: [
         {
-            icon: IconFingerprint,
-            title: 'Security',
-            description: 'Enterprise-grade security for your data',
+            icon: IconPlaneArrival,
+            title: 'Air Freight Forwarding',
+            link : 'service/air-freight-forwarding'
+        },
+        {
+            icon: IconShip,
+            title: 'Sea Freight Forwarding',
+            link : 'service/sea-freight-forwarding'
         },
         {
             icon: IconBook,
-            title: 'Case Studies',
-            description: 'Success stories from our customers',
+            title: 'Multimodal Transport',
+            link : 'service/multimodal-transport'
         },
+        {
+            icon: IconBook,
+            title: 'Cross Country Trade',
+            link : 'service/cross-country-trade'
+        },
+        {
+            icon: IconBook,
+            title: 'Consolidation Services',
+            link : 'service/consolidation-services'
+        },
+        {
+            icon: IconBook,
+            title: 'Value Added Services',
+            link : 'service/value-added-services'
+        },
+        {
+            icon: IconBook,
+            title: 'Custom Clearing',
+            link : 'service/custom-clearing'
+        },
+        {
+            icon: IconBook,
+            title: 'Break Bulk Cargo Services',
+            link : 'service/break-bulk-cargo-services'
+        },
+        {
+            icon: IconBook,
+            title: 'ODC Project Cargo',
+            link : 'service/odc-project-cargo'
+        },
+        {
+            icon: IconBook,
+            title: 'Warehousing and Storage',
+            link : 'service/warehousing-and-storage'
+        },
+        {
+            icon: IconBook,
+            title: 'Exhibition Cargo',
+            link : 'service/exhibition-cargo'
+        },
+        {
+            icon: IconBook,
+            title: 'Chartering and Coastal Movements',
+            link : 'service/chartering-and-coastal-movements'
+        },
+        {
+            icon: IconBook,
+            title: 'First and Last-Mile Delivery',
+            link : 'service/first-and-last-mile-delivery'
+        }
     ],
     Tools: [
         {
@@ -87,17 +142,14 @@ const FeatureItem = ({ feature }) => (
         onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E3E3E3')}
         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
     >
-        <Group wrap="nowrap" gap={10} align="flex-start">
+        <Group wrap="nowrap" gap={10} align="center">
             <ThemeIcon size={26} variant="default" radius="md">
                 <feature.icon size={18} color={COLORS.secondaryColor} />
             </ThemeIcon>
             <Stack>
-                <Text size="xs" fw={500} color={COLORS.secondaryColor}>
+                <Anchor underline="none" href={feature.link} size="xs" fw={500} c={COLORS.secondaryColor}>
                     {feature.title}
-                </Text>
-                <Text size="xs" color="dimmed">
-                    {feature.description}
-                </Text>
+                </Anchor>
             </Stack>
         </Group>
 
@@ -126,11 +178,11 @@ export const NavLink = ({ item }) => {
                     onMouseEnter={open}
                     onMouseLeave={close}
                 >
-                    <Text size="sm" color={COLORS.primaryColor}>{item.label}</Text>
+                    <Text size="14px" color={COLORS.primaryColor}>{item.label}</Text>
                     {opened ? (
-                        <IconChevronUp size={16} color={COLORS.primaryColor} />
+                        <IconCaretUpFilled size={16} color={COLORS.primaryColor} />
                     ) : (
-                        <IconChevronDown size={16} color={COLORS.primaryColor} />
+                        <IconCaretDownFilled size={16} color={COLORS.primaryColor} />
                     )}
                 </a>
             </HoverCardTarget>
@@ -139,17 +191,12 @@ export const NavLink = ({ item }) => {
                 style={{ overflow: "hidden", zIndex: 1100, color: COLORS.primaryColor, padding: '10px 20px' }}
             >
                 <Group gap={10} justify="space-between" >
-                    <Text fw={500} size="smx" color={COLORS.secondaryColor}>
+                    <Text fw={500} size="14px" color={COLORS.secondaryColor}>
                         {item.label}
                     </Text>
-                    {featuresMap[item.label]?.length > 2 && (
-                        <Anchor href="#" fz="smx">
-                            View all
-                        </Anchor>
-                    )}
                 </Group>
                 <Divider my="sm" />
-                <SimpleGrid cols={2} spacing={10}>
+                <SimpleGrid cols={3} spacing={10}>
                     {featuresMap[item.label]?.map((feature) => (
                         <FeatureItem key={feature.title} feature={feature} />
                     ))}
@@ -158,7 +205,7 @@ export const NavLink = ({ item }) => {
         </HoverCard>
     ) : (
         <a href={item.links} style={{ display: "flex", alignItems: "center" }}>
-            <Text size="sm" color={COLORS.primaryColor}>{item.label}</Text>
+            <Text size="14px" color={COLORS.primaryColor}>{item.label}</Text>
         </a>
     );
 };

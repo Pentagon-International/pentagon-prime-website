@@ -22,10 +22,10 @@ const TradeCard = ({ title = '', item = [], background = '' }) => {
   return (
     <Container fluid px="7%" py="50px">
       <Box style={getCardStyles(background)}>
-        <Flex align="center" justify="center" wrap="wrap" w="100%">
+        <Flex align="center" justify="space-between" wrap="wrap" w="100%">
           {title && (
             <Text
-              w="40%"
+              w="30%"
               size="md"
               lh={'lgx'}
               tw='balance'
@@ -34,7 +34,7 @@ const TradeCard = ({ title = '', item = [], background = '' }) => {
               {title}
             </Text>
           )}
-          <Group ml={'5%'} wrap="wrap">
+          <Group gap={'50px'} ml={'5%'} wrap="wrap">
             {item.map(({ sys, fields }) => (
               <TradeItem
                 key={sys.id}

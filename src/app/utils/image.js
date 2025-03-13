@@ -2,7 +2,7 @@ const Images = {
   Icon: '/logo-pp.png',
   logo: '/images/logo.png',
   hero: '/images/hero_background.png',
-  vector_p: '/images/p.png',
+  vector_p: '/images/vector_p.png',
   container: '/images/container.png',
   vision: '/images/vision.png',
   prime_network: '/images/prime_network.png',

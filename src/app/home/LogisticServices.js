@@ -26,11 +26,11 @@ const LogisticsServices = async ({ title }) => {
         <Container {...styles.container}>
             <Flex {...styles.flexContainer}>
                 <Stack>
-                    <Title tt={'uppercase'} lh={'lgx2'} fw={800} size={'40px'}>
+                    <Title tt={'uppercase'} lh={'lgx2'} fw={800} size={'34px'}>
                         {highlightText(title)}
                     </Title>
                 </Stack>
-                <Button fz={'sm'} size='lg' fw={600} bg={COLORS.serviceColor}>
+                <Button fz={'sm'} size='lg' radius={'12px'} fw={600} bg={COLORS.serviceColor}>
                     View All Services
                 </Button>
             </Flex>

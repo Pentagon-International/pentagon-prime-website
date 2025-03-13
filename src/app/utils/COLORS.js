@@ -13,5 +13,7 @@ export const COLORS = {
   footerBackground : "#111",
   footerTextColor : "#ccc",
   background : '#F9F9F9',
-  accordian_background : '#F5F5F5'
+  accordian_background : '#F5F5F5',
+  arrow_background : '#F3F3F3',
+  news_title : '#121212'
 };

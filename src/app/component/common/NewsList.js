@@ -42,15 +42,17 @@ const NewsList = ({ newsItems }) => {
         columns={ITEMS_PER_VIEW}
         mt="xl"
         gutter="lg"
-        style={styles.slideContainer}
       >
         {currentItems.map(({ sys, fields }) => (
-          <GridCol span={1} key={sys.id}>
+          <GridCol  span={1} key={sys.id}>
             <Flex
-              gap={'md'}
               direction="column"
               h="100%"
               justify="space-between"
+              style={{
+                columnGap : '10px',
+                rowGap : '5px'
+              }}
             >
               <Image
                 src={fields.newsImage?.fields?.file?.url}
@@ -60,10 +62,10 @@ const NewsList = ({ newsItems }) => {
                 mah={'250px'}
                 mih={'250px'}
               />
-              <Text color={COLORS.textColor} fw={700} size="xs" tt="uppercase">
+              <Text c={COLORS.textColor} fw={700} size="xs" tt="uppercase">
                 {fields.newsName}
               </Text>
-              <Text fw={700} size="smx" style={styles.newsTitle}>
+              <Text fw={700} size="sm" maw={'72%'} c={COLORS.news_title}>
                 {fields.newsTitle}
               </Text>
 
@@ -76,12 +78,6 @@ const NewsList = ({ newsItems }) => {
                 >
                   Read More
                 </a>
-                {/* <IconArrowRight
-                  stroke={2}
-                  color={COLORS.serviceColor}
-                  size={16}
-                  style={{ transform: 'translateY(1px)' }}
-                /> */}
               </Flex>
             </Flex>
           </GridCol>
@@ -131,9 +127,10 @@ const NewsList = ({ newsItems }) => {
 };
 
 const styles = {
-  newsTitle: {
-    minHeight: '50px',
-    color: '#121212'
+  sliderWrapper: {
+    overflow: 'hidden', 
+    width: '100%',
+    padding: '0 2%', 
   },
   readMore: {
     color: COLORS.serviceColor,
@@ -151,9 +148,6 @@ const styles = {
     height: 8,
     borderRadius: '50%',
     display: 'inline-block',
-  },
-  slideContainer: {
-    transition: 'transform 0.3s ease-in-out',
   },
 };
 

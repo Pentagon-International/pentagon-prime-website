@@ -58,3 +58,43 @@ a {
 .unstyled-button:hover {
   color: rgb(15, 15, 15);
 }
+
+
+.mantine-Carousel-controls {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  width: 100%;
+  pointer-events: none; /* Ensures clicks only happen on buttons */
+}
+
+.mantine-Carousel-control {
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all; /* Enables click events */
+}
+
+/* Left arrow */
+.mantine-Carousel-control:first-child {
+  position: absolute;
+  left: -20px; 
+  top: 10px;
+}
+
+
+/* Right arrow */
+.mantine-Carousel-control:last-child {
+  position: absolute;
+  right: -20px; 
+  top: 10px;
+
+}

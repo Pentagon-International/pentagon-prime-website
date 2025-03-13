@@ -70,6 +70,9 @@ const CertificateList = ({ certificateItems }) => {
                         >
                             <IconArrowLeft
                                 size={24}
+                                style={{
+                                    backgroundColor : COLORS.arrow_background,
+                                }}
                                 color={startIndex === 0 ? COLORS.textColor : COLORS.secondaryColor}
                             />
                         </ActionIcon>
@@ -101,6 +104,9 @@ const CertificateList = ({ certificateItems }) => {
                         >
                             <IconArrowRight
                                 size={24}
+                                style={{
+                                    backgroundColor : COLORS.arrow_background,
+                                }}
                                 color={
                                     startIndex + itemsPerPage >= certificateItems.length
                                         ? COLORS.textColor

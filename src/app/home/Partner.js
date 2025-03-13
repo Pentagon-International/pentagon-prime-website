@@ -7,6 +7,7 @@ import { Box, Button, Container, Flex, Stack, Text, Title } from '@mantine/core'
 import { IconArrowNarrowLeft, IconArrowNarrowRight } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { client } from '../api/contentful';
+import { highlightText } from '../utils/highlightText';
 
 const Partner = ({ title, content }) => {
   const [partners, setPartners] = useState([]);
@@ -51,13 +52,12 @@ const Partner = ({ title, content }) => {
           slideSize="100%"
           slideGap="xs"
           controlsOffset={0}
-          controlSize={32}
-          loop
+          controlSize={35}
           dragFree={false}
+          containScroll="trimSnaps"
           align="start"
-          px={15}
-          nextControlIcon={<IconArrowNarrowRight size={22} color={COLORS.secondaryColor} />}
-          previousControlIcon={<IconArrowNarrowLeft size={22} color={COLORS.secondaryColor} />}
+          nextControlIcon={<IconArrowNarrowRight style={{ backgroundColor: COLORS.primaryColor }} size={22} color={COLORS.secondaryColor} />}
+          previousControlIcon={<IconArrowNarrowLeft style={{ backgroundColor: COLORS.primaryColor }} size={22} color={COLORS.secondaryColor} />}
         >
           {partners.map((item, index) => (
             <CarouselSlide key={index}>
@@ -68,11 +68,11 @@ const Partner = ({ title, content }) => {
                 }}
               >
                 <Box style={styles.testimonialBox}>
-                  <Text size="sm" maw="80%" tw="balance">
-                    {item.fields.content}
+                  <Text size='16px' lh={'sm'} maw={'90%'} tw="balance">
+                    {highlightText(item.fields.content)}
                   </Text>
-                  <Text size="sm" fw={700} c={COLORS.portColor} mt={20}>
-                    {item.fields.shortvalue}
+                  <Text size="base" fw={700} c={COLORS.portColor} mt={20}>
+                    {highlightText(item.fields.shortvalue)}
                   </Text>
                 </Box>
               </Flex>
@@ -102,24 +102,24 @@ const styles = {
   carouselWrapper: {
     marginTop: 50,
     position: 'relative',
-    padding : '20px'
+    padding: '20px'
   },
   carouselSlide: {
     width: '100%',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    height: '400px',
-    borderRadius: '10px',
+    height: '350px',
+    borderRadius: '54px',
     overflow: 'hidden',
     display: 'flex',
     alignItems: 'center',
     position: 'relative',
   },
   testimonialBox: {
-    padding: '20px 30px',
+    padding: '20px',
     borderRadius: '10px',
     color: 'white',
-    maxWidth: '50%',
+    maxWidth: '65%',
     marginLeft: 'auto',
     backdropFilter: 'blur(5px)',
   },
