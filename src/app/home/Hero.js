@@ -38,7 +38,7 @@ const Hero = ({ title, content }) => {
 
   return (
     <Box style={styles.heroContainer}>
-      <Container fluid px={{ base: '5%', md: '7%' }} mt={140} py="60px" style={{ height: '100vh', margin: '0 auto' }}>
+      <Container fluid px={{ base: '5%', md: '7%' }} mt={80} py="60px" style={{ height: '100vh', margin: '0 auto' }}>
         <Box style={styles.overlayContainer}>
           <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} />
         </Box>
@@ -47,7 +47,7 @@ const Hero = ({ title, content }) => {
           <Title c={COLORS.primaryColor} style={{ zIndex: 100 }} fw={900} order={1} lh="xl" tt="uppercase" size="50px">
             {highlightText(title)}
           </Title>
-          <Text lh="lgx" size="18px" maw={'40%'} fw={400} mt={15}>
+          <Text lh="lgx" size="22px" maw={'40%'} fw={400} mt={15}>
             {highlightText(content)}
           </Text>
 
@@ -122,7 +122,7 @@ const styles = {
   },
   overlayImage: {
     position: 'absolute',
-    top: '-80px',
+    top: '-100px',
     left: '75%',
     transform: 'translate(-50% , 10%)',
     width: '45%',

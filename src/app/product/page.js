@@ -41,7 +41,7 @@ const Product = async () => {
       <Trade background={background} />
       <ChooseUs />
       <News />
-      <FAQ />
+      {/* <FAQ /> */}
       <BottomCard title={title} text={text} button={button} />
     </>
   );

@@ -24,7 +24,7 @@ const PrimeNetwork = () => {
           }}
         />
       </Flex>
-      <Divider mt={120} size="md" />
+      {/* <Divider mt={120} size="md" /> */}
     </Container>
   );
 };

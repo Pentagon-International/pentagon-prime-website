@@ -102,7 +102,10 @@ const styles = {
   carouselWrapper: {
     marginTop: 50,
     position: 'relative',
-    padding: '20px'
+    padding: '20px',
+    width: '90%',
+    margin: '0 auto',
+    marginTop: '20px',
   },
   carouselSlide: {
     width: '100%',
