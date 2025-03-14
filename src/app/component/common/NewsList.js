@@ -62,14 +62,14 @@ const NewsList = ({ newsItems }) => {
                 mah={'250px'}
                 mih={'250px'}
               />
-              <Text c={COLORS.textColor} fw={700} size="xs" tt="uppercase">
+              <Text c="#999" fw={700} size="xs" mt={10} tt="uppercase">
                 {fields.newsName}
               </Text>
               <Text fw={700} size="sm" maw={'72%'} c={COLORS.news_title}>
                 {fields.newsTitle}
               </Text>
 
-              <Flex align="center" gap={4} style={{ display: 'inline-flex', alignItems: 'center' }}>
+              {/* <Flex align="center" gap={4} style={{ display: 'inline-flex', alignItems: 'center' }}>
                 <a
                   href={fields.knowmore}
                   style={styles.readMore}
@@ -78,7 +78,7 @@ const NewsList = ({ newsItems }) => {
                 >
                   Read More
                 </a>
-              </Flex>
+              </Flex> */}
             </Flex>
           </GridCol>
         ))}

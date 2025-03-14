@@ -24,7 +24,8 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
         direction={"column"}
         justify={"flex-start"}
         mih={"250px"}
-        py={"20px"}
+        p={"40px"}
+        radius={32}
       >
         <Flex
           alignitems={"center"}
@@ -52,6 +53,7 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
             fw={700}
             size={theme.fontSizes.base}
             order={4}
+            mt={28}
           >
             {item.fields.service_title || item.fields.title}
           </Title>
@@ -65,7 +67,7 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
             {item.fields.service_description || item.fields.description}
           </Text>
         </Group>
-        {item.fields?.knowmore && (
+        {/* {item.fields?.knowmore && (
           <Flex
             align="center"
             gap={4}
@@ -86,7 +88,7 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
               {anchorText}
             </Anchor>
           </Flex>
-        )}
+        )} */}
       </Card>
     </GridCol>
   );

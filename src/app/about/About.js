@@ -8,40 +8,40 @@ const About = ({ title, content }) => {
       height: '100vh',
       position: 'relative',
       overflow: 'hidden',
-      top: 0,
-      left: 0,
+      display: 'flex',
+      alignItems: 'center',
     },
     overlayContainer: {
-      position: 'relative',
-      width: '100%',
-      height: 'auto',
+      position: 'absolute',
+      width: '50%',
+      height: '100%',
+      top: 0,
+      right: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     overlayImage: {
-      position: 'absolute',
-      top: '-50px',
-      left: '70%',
-      transform: 'translateX(-50%)',
-      width: '50%',
-      objectFit: 'cover',
-      zIndex: 1,
-      backgroundRepeat: 'no-repeat',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
+      width: '90%',
+      height: 'auto',
+      objectFit: 'contain',
+      position: 'relative',
+      marginRight: '-10%',
+    },
+    contentWrapper: {
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      position: 'relative',
+      zIndex: 2,
     },
     textContainer: {
-      width: '70%',
-      textAlign: 'left',
+      width: '50%',
       paddingRight: '5%',
-      boxSizing: 'border-box',
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'flex-start',
-      height: '100%',
-    },
-    textContent: {
-      maxWidth: '40vw',
-      textAlign: 'left',
+      gap: '24px',
     },
   };
 
@@ -50,25 +50,43 @@ const About = ({ title, content }) => {
       <Container
         fluid
         px={'7%'}
-        mt={70}
-        py={'70px'}
+        h="100%"
       >
-        <Box style={styles.overlayContainer}>
-          <Image src={Images.about_vector} style={{...styles.overlayImage , width : '35%'}} />
-          <Image
-            src={Images.container}
-            style={{ ...styles.overlayImage, top: '-125px', left: '68.5%', zIndex: 2 }}
-          />
-        </Box>
-        <Group align="center" style={styles.textContainer}>
-          <Title size="40px" textWrap="balance" tt="uppercase" style={{ whiteSpace: 'pre-line' }}>
-            {highlightText(title)}
-          </Title>
+        <Box style={styles.contentWrapper}>
+          <Box style={styles.textContainer}>
+            <Title 
+              size="40px" 
+              textWrap="balance" 
+              tt="uppercase" 
+              style={{ 
+                whiteSpace: 'pre-line',
+                lineHeight: 1.2,
+                color: '#000'
+              }}
+            >
+              {highlightText(title)}
+            </Title>
 
-          <Text size='sm' mt={20} ta={'left'} maw={'40vw'}>
-            {highlightText(content)}
-          </Text>
-        </Group>
+            <Text 
+              size='sm' 
+              style={{ 
+                lineHeight: 1.6,
+                maxWidth: '90%',
+                color: '#666'
+              }}
+            >
+              {highlightText(content)}
+            </Text>
+          </Box>
+
+          <Box style={styles.overlayContainer}>
+            <Image 
+              src={Images.pentagon_line} 
+              style={styles.overlayImage}
+              fit="contain"
+            />
+          </Box>
+        </Box>
       </Container>
     </Box>
   );

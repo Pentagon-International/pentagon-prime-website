@@ -23,7 +23,11 @@ const Images = {
   quote: '/images/quote_img.svg',
   pentagon_hero: '/images/pentagon_hero.png',
   about_vector: 'images/about_vector.png',
-  contact_vector : 'images/contactUs_vector.png'
+  contact_vector : 'images/contactUs_vector.png',
+  vessel: '/images/vessel.jpg',
+  port: '/images/port.jpg',
+  pentagon_freight: '/images/pentagon-freight.png',
+  pentagon_line: '/images/pentagon-line.png'
 };
 
 export default Images;

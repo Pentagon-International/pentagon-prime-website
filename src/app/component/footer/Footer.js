@@ -1,3 +1,4 @@
+'use client';
 import { COLORS } from '@/app/utils/COLORS';
 import {
   BackgroundImage,
@@ -97,11 +98,11 @@ const Footer = () => {
             <Text size="sm" color="white">
               Unit No. 204, Satellite Silver, Marol Naka, Andheri Kurla Road, Andheri (East), Mumbai – 400059, India.
             </Text>
-            <Group align="center" spacing="sm">
+            <Group align="center" spacing="sm" onClick={() => window.open('tel:+912245966999')}>
               <IconPhone size={20} color="#0E53F2" />
               <Text size="sm" color="white">022 4596 6999</Text>
             </Group>
-            <Group align="center" spacing="xs">
+            <Group align="center" spacing="xs" onClick={() => window.open('mailto:pentagon@pentagonindia.net')}>
               <IconAt size={20} color="#0E53F2" />
               <Text size="sm" color="white">pentagon@pentagonindia.net</Text>
             </Group>

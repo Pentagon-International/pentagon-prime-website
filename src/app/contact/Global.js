@@ -1,18 +1,15 @@
-
 import {
   Card,
   Center,
   Container,
-  Flex,
   Grid,
   GridCol,
   Group,
   Image,
-  Stack,
   Text,
   Title,
 } from '@mantine/core';
-import { IconPhone, IconPhoneCall } from '@tabler/icons-react';
+import { IconPhoneCall } from '@tabler/icons-react';
 import React from 'react';
 import { client } from '../api/contentful';
 import { COLORS } from '../utils/COLORS';

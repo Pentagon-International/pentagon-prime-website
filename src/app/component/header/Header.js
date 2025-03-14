@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Anchor,
   Box,
@@ -11,56 +11,56 @@ import {
   Group,
   Image,
   Text,
-} from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
-import { COLORS } from '@/app/utils/COLORS';
-import Images from '@/app/utils/image';
-import { featuresMap, NavLink } from '../common/NavLink';
-import { IconPhone } from '@tabler/icons-react';
-import { useRouter } from 'next/navigation';
-
-
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { COLORS } from "@/app/utils/COLORS";
+import Images from "@/app/utils/image";
+import { featuresMap, NavLink } from "../common/NavLink";
+import { IconPhone } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 const navItems = [
-  { label: 'Products', links: '/product', dropdown: false },
-  { label: 'Solutions', links: '/service', dropdown: true },
+  { label: "Home", links: "/", dropdown: false },
+  { label: "Products", links: "/product", dropdown: false },
+  { label: "Solutions", links: "/service", dropdown: true },
   // { label: 'Tools', links: '/contact', dropdown: true },
-  { label: 'About', links: '/about', dropdown: false },
+  { label: "About", links: "/about", dropdown: false },
   // { label: 'Company', links: '/help', dropdown: true },
 ];
 
-
 const Header = () => {
-  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
+  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
+    useDisclosure(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const currentPath = usePathname();
   const router = useRouter();
 
-
-  const isAppliedBackground = ['/', '/contact', '/resource'].includes(currentPath);
+  const isAppliedBackground = ["/", "/contact", "/resource"].includes(
+    currentPath
+  );
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const headerStyle = {
-    position: 'fixed',
+    position: "fixed",
     top: 0,
     left: 0,
-    width: '100%',
+    width: "100%",
     backgroundColor: isScrolled
-      ? 'rgba(0, 0, 0, 0.7)'
+      ? "rgba(0, 0, 0, 0.7)"
       : !isAppliedBackground
-        ? '#111F40'
-        : 'transparent',
-    transition: 'background-color 0.3s ease-in-out',
-    backdropFilter: 'blur(10px)',
+      ? "#111F40"
+      : "transparent",
+    transition: "background-color 0.3s ease-in-out",
+    backdropFilter: "blur(10px)",
     zIndex: 1000,
-    padding: '8px 7%',
+    padding: "8px 7%",
     color: COLORS.primaryColor,
   };
 
@@ -80,8 +80,8 @@ const Header = () => {
       <Box>
         <header style={headerStyle}>
           <Flex justify="space-between" align="center" h="50">
-            <a href="/" style={{ display: 'flex', alignItems: 'center' }}>
-              <Image src={Images.logo} alt="Logo" />
+            <a href="/" style={{ display: "flex", alignItems: "center" }}>
+              <Image src={Images.logo} alt="Logo" h={40} />
             </a>
             <Flex h="100%" gap={30} align="center" visibleFrom="sm">
               {navItems.map((item) => (
@@ -89,25 +89,26 @@ const Header = () => {
               ))}
             </Flex>
             <Group visibleFrom="sm">
-              {/* <Anchor size="smx" style={{ color: COLORS.portColor, textDecoration: 'underline' }}>
-                Talk to an Expert
-              </Anchor> */}
               <Button
                 variant="outline"
                 size="md"
-                fz={'smx'}
-                // p={'12px 32px'}
+                fz={"smx"}
+                radius={"md"}
                 style={{
                   borderColor: COLORS.primaryColor,
                   color: COLORS.primaryColor,
                 }}
-                leftSection={<IconPhone />}
-                onClick={() => router.push('/contact')}
+                leftSection={<IconPhone stroke={1.5} size={18} />}
+                onClick={() => router.push("/contact")}
               >
                 Talk to an Expert
               </Button>
             </Group>
-            <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
+            <Burger
+              opened={drawerOpened}
+              onClick={toggleDrawer}
+              hiddenFrom="sm"
+            />
 
             <Drawer
               opened={drawerOpened}
@@ -121,23 +122,34 @@ const Header = () => {
                 {navItems.map((item) => (
                   <Box key={item.label}>
                     <a href={item.links} onClick={closeDrawer}>
-                      <Text size="md" color={COLORS.serviceColor}>{item.label}</Text>
+                      <Text size="md" color={COLORS.serviceColor}>
+                        {item.label}
+                      </Text>
                     </a>
-                    {item.dropdown && featuresMap[item.label]?.map((feature) => (
-                      <FeatureItem key={feature.title} feature={feature} />
-                    ))}
+                    {item.dropdown &&
+                      featuresMap[item.label]?.map((feature) => (
+                        <FeatureItem key={feature.title} feature={feature} />
+                      ))}
                   </Box>
                 ))}
                 <Divider my="sm" />
                 {/* <Anchor size="md" ta="center" style={{ color: COLORS.portColor, textDecoration: 'underline' }}>
                   Talk to an Expert
                 </Anchor> */}
-                <Button variant="outline" size="md" fullWidth style={{ borderColor: COLORS.serviceColor, color: COLORS.serviceColor }} onClick={() => router.push('/contact')}>
+                <Button
+                  variant="outline"
+                  size="md"
+                  fullWidth
+                  style={{
+                    borderColor: COLORS.serviceColor,
+                    color: COLORS.serviceColor,
+                  }}
+                  onClick={() => router.push("/contact")}
+                >
                   Talk to an Expert
                 </Button>
               </Flex>
             </Drawer>
-
           </Flex>
         </header>
       </Box>

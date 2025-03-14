@@ -10,7 +10,7 @@ const ChooseUs = async () => {
   return (
     <Container fluid px={'7%'} py={'30px'}>
       <Title size={'lg'} tt={'uppercase'}>why choose us ?</Title>
-      <Grid columns={9} mt="xl">
+      <Grid columns={9} mt="lg">
         {res.items?.map((item, index) => (
           <ServiceCard key={index} item={item} backgroundColor="#fff" border={'5px solid #D2E8FF'} />
         ))}

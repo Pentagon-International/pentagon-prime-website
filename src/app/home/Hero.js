@@ -40,19 +40,18 @@ const Hero = ({ title, content }) => {
     <Box style={styles.heroContainer}>
       <Container fluid px={{ base: '5%', md: '7%' }} mt={60} py="60px" style={{ height: '100vh', margin: '0 auto' }}>
         <Box style={styles.overlayContainer}>
-          <Image src={Images.vector_p} style={{ ...styles.overlayImage, width: '33%' }} />
-          <Image src={Images.container} style={{ ...styles.overlayImage, width: '60%', top: '-195px', left: '73.8%', zIndex: 2 }} />
+          <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} />
         </Box>
 
-        <Stack h={'100%'} gap={0} justify="center">
-          <Title c={COLORS.primaryColor} style={{ zIndex: 100 }} fw={900} order={1} lh="xl" tt="uppercase" size="60px">
+        <Stack h={'100%'} gap={0} justify="flex-start">
+          <Title c={COLORS.primaryColor} style={{ zIndex: 100 }} fw={900} order={1} lh="xl" tt="uppercase" size="50px">
             {highlightText(title)}
           </Title>
-          <Text lh="lgx" size="22px" maw={'40%'} fw={400} mt={15}>
+          <Text lh="lgx" size="18px" maw={'40%'} fw={400} mt={15}>
             {highlightText(content)}
           </Text>
 
-          <Stack mt={15} gap={0}>
+          <Stack mt={"5%"} gap={0}>
             <Flex style={{ ...styles.transportOptions, borderRadius: '12px 12px 0 0' }}>
               <TransportOption
                 type="sea"
@@ -123,7 +122,7 @@ const styles = {
   },
   overlayImage: {
     position: 'absolute',
-    top: '-100px',
+    top: '-80px',
     left: '75%',
     transform: 'translate(-50% , 10%)',
     width: '45%',
@@ -148,72 +147,3 @@ const styles = {
     borderRadius: '10px',
   },
 };
-
-
-
-// const styles = {
-//   heroContainer: {
-//     backgroundImage: `url(${Images.hero})`,
-//     backgroundRepeat: 'no-repeat',
-//     backgroundSize: 'cover',
-//     backgroundPosition: 'center',
-//     color: 'white',
-//     height: '100vh',
-//     position: 'relative',
-//     overflowY: 'hidden',
-//     top: 0,
-//     left: 0,
-//   },
-//   // overlayContainer: {
-//   //   position: 'relative',
-//   //   width: '100%',
-//   //   height: 'auto',
-//   //   display: 'flex',
-//   //   justifyContent: 'center',
-//   //   alignItems: 'center',
-//   // },
-//   overlayContainer: {
-//     position: 'absolute',
-//     top: '60%',
-//     left: '73%',
-//     transform: 'translate(-50%, -50%)',
-//     display: 'flex',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     width: '100%',
-//     height: 'auto',
-//   },
-
-//   overlayImage: {
-//     width: '55%',
-//     height: 'auto',
-//     objectFit: 'cover',
-//     zIndex: 1,
-//     backgroundRepeat: 'no-repeat',
-//     backgroundSize: 'cover',
-//     backgroundPosition: 'center',
-//   },
-//   // overlayImage: {
-//   //   width: '45%',
-//   //   height: 'auto',
-//   //   objectFit: 'cover',
-//   //   zIndex: 1,
-//   //   backgroundRepeat: 'no-repeat',
-//   //   backgroundSize: 'cover',
-//   //   backgroundPosition: 'center',
-//   // },
-//   transportOptions: {
-//     padding: '14px 16px',
-//     border: `1px solid ${COLORS.portColor}`,
-//     borderRadius: '12px',
-//     backgroundColor: COLORS.portColor,
-//     width: 'fit-content',
-//     borderRadius: '0 12px 12px 12px',
-//     gap: '12px'
-//   },
-//   groupstyle: {
-//     backgroundColor: COLORS.secondaryColor,
-//     padding: '10px 16px',
-//     borderRadius: '10px',
-//   },
-// };
