@@ -1,4 +1,4 @@
-import {Container, Grid, GridCol, Image, Text, Title} from '@mantine/core';
+import { Container, Grid, GridCol, Image, Text, Title } from '@mantine/core';
 import { client } from '../api/contentful';
 import { COLORS } from '../utils/COLORS';
 
@@ -10,7 +10,7 @@ const FeaturedNews = async () => {
 
   return (
     <Container fluid px={'7%'} py={'70px'}>
-      <Title tt={'uppercase'}>Featured in the News</Title>
+      <Title size={'lg'} tt={'uppercase'}>Featured in the News</Title>
       <Grid columns={3} gutter={'xl'} mt={30}>
         {res.items.map((item) => (
           <GridCol key={item.sys.id} span={1}>
@@ -18,19 +18,21 @@ const FeaturedNews = async () => {
             <Text
               c={COLORS.textColor}
               tt={'uppercase'}
-              size="16px"
+              size="sm"
               fw={500}
               mt={20}
             >
               {item.fields.title}
             </Text>
-            <Text mt={10}>{item.fields.description}</Text>
+            <Text size='smx' fw={600} mt={10}>{item.fields.description}</Text>
             <a
               href={item.fields.knowmore}
               style={{
                 marginTop: '20px',
                 color: COLORS.serviceColor,
                 textDecoration: 'underline',
+                cursor: 'pointer',
+                fontSize: '14px',
               }}
             >
               Read More

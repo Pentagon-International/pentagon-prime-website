@@ -1,11 +1,11 @@
 'use client';
 
-import {Title, Card, Image} from '@mantine/core';
-import React, {useEffect, useState} from 'react';
-import {COLORS} from '../utils/COLORS';
+import { Title, Card, Image } from '@mantine/core';
+import React, { useEffect, useState } from 'react';
+import { COLORS } from '../utils/COLORS';
 import Images from '../utils/image';
 
-const MilestoneTimeline = ({milestones}) => {
+const MilestoneTimeline = ({ milestones }) => {
   const [selectedMilestone, setSelectedMilestone] = useState(
     milestones[0] || null
   );
@@ -65,7 +65,7 @@ const MilestoneTimeline = ({milestones}) => {
       );
       yearText.setAttribute('x', position.x - 10);
       yearText.setAttribute('y', position.y - 30);
-      yearText.setAttribute('font-size', '20');
+      yearText.setAttribute('font-size', '24');
       yearText.setAttribute('fill', COLORS.textColor);
       yearText.setAttribute('font-weight', 600);
       yearText.setAttribute('dominant-baseline', 'middle');
@@ -103,7 +103,7 @@ const MilestoneTimeline = ({milestones}) => {
   }, [activeIndex, milestones]);
 
   return (
-    <div style={{position: 'relative'}}>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <svg
         width="1194"
         height="488"
@@ -121,21 +121,21 @@ const MilestoneTimeline = ({milestones}) => {
       {selectedMilestone && (
         <Card
           shadow="sm"
-          padding="lg"
+          padding="md"
           radius="md"
           bg={'#0EC9F21A'}
           style={{
             position: 'absolute',
-            bottom: 30,
+            top: 280,
             right: 20,
-            padding: '30px 50px',
+            padding: '20px 30px',
             width: '40%',
-            marginTop: '20px',
+            marginTop: '10px',
             borderRadius: '8px',
           }}
         >
-          <Title order={3}>{selectedMilestone.fields.year}</Title>
-          <ul style={{color: COLORS.textColor, marginTop: '20px'}}>
+          <Title size={'md'} order={3}>{selectedMilestone.fields.year}</Title>
+          <ul style={{ color: COLORS.textColor, marginTop: '20px' }}>
             {selectedMilestone.fields.description?.content.map(
               (item, index) => {
                 if (item.nodeType === 'unordered-list') {
@@ -145,7 +145,7 @@ const MilestoneTimeline = ({milestones}) => {
                         const text =
                           listItem.content[0]?.content[0]?.value ||
                           'No description available';
-                        return <li key={`${index}-${i}`}>{text}</li>;
+                        return <li style={{ fontSize: '16px' }} key={`${index}-${i}`}>{text}</li>;
                       })}
                     </ul>
                   );
@@ -162,7 +162,7 @@ const MilestoneTimeline = ({milestones}) => {
         w={20}
         h={20}
         alt="arrow"
-        style={{position: 'absolute', top: 160, right: -5}}
+        style={{ position: 'absolute', top: 265, right: -10 }}
       />
     </div>
   );

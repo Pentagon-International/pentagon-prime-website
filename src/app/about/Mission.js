@@ -1,12 +1,11 @@
-import {Box, Container, Flex, Text, Title} from '@mantine/core';
-import Images from '../utils/image';
+import { Box, Container, Flex, Text, Title } from '@mantine/core';
 import { COLORS } from '../utils/COLORS';
+import { client } from '../api/contentful';
 
-const Mission = () => {
+const Mission = async () => {
   const styles = {
     boxContainer: {
       width: '100%',
-      backgroundImage: `url(${Images.flight_blue})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       height: '350px',
@@ -25,43 +24,32 @@ const Mission = () => {
       backdropFilter: 'blur(5px)',
     },
   };
+
+  const res = await client.getEntries({
+    content_type: 'visionMission',
+  });
+
   return (
     <Container fluid px={'7%'} py={'50px'}>
       <Flex direction={'column'} gap={'xl'}>
-        <Box style={styles.boxContainer}>
-          <Box style={styles.testimonialBox}>
-            <Title fw={800} size={'32px'} tt={'uppercase'} c={COLORS.portColor}>
-              Our Mission
-            </Title>
-            <Text lh={'30px'} fw={400} tw="balance" w={'70%'} mt={20}>
-              To provide professionally managed one-stop true global logistics
-              solutions with reliability, transparency, and dedication to
-              maintain and enhance the quality of services at reasonable and
-              realistic costs under one roof with a prime focus on satisfied
-              customers.
-            </Text>
+        {res.items.map((item, index) => (
+          <Box
+            key={index}
+            style={{
+              ...styles.boxContainer,
+              backgroundImage: `url(${item.fields.image.fields.file.url})`,
+            }}
+          >
+            <Box style={styles.testimonialBox}>
+              <Title fw={800} size={'lg'} tt={'uppercase'} c={COLORS.portColor}>
+                {item.fields.title}
+              </Title>
+              <Text size='base' lh={'30px'} fw={400} tw="balance" w={'80%'} mt={20}>
+                {item.fields.content}
+              </Text>
+            </Box>
           </Box>
-        </Box>
-        <Box
-          style={{
-            ...styles.boxContainer,
-            backgroundImage: `url(${Images.flight_black})`,
-          }}
-        >
-          <Box style={styles.testimonialBox}>
-            <Title fw={800} size={'32px'} tt={'uppercase'} c={COLORS.portColor}>
-              {' '}
-              Our Vision
-            </Title>
-            <Text lh={'30px'} fw={400} tw="balance" w={'70%'} mt={20}>
-              To build a strong global footprint and productive international
-              partnerships to provide the best end-to-end freight forwarding and
-              logistics solutions, extending our expertise as a global company.
-              As a collective, our primary mission is to innovate in the
-              logistics arena.
-            </Text>
-          </Box>
-        </Box>
+        ))}
       </Flex>
     </Container>
   );

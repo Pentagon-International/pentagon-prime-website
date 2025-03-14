@@ -1,6 +1,6 @@
-import {Container, Flex, Grid, GridCol, Image, Text} from '@mantine/core';
-import {client} from '../api/contentful';
-import {COLORS} from '../utils/COLORS';
+import { Container, Flex, Grid, GridCol, Image, Text } from '@mantine/core';
+import { client } from '../api/contentful';
+import { COLORS } from '../utils/COLORS';
 
 const Resources = async () => {
   const res = await client.getEntries({
@@ -25,10 +25,10 @@ const Resources = async () => {
                 src={item.fields.image?.fields?.file?.url}
                 alt={item.name}
               />
-              <Text fw={700} c={COLORS.secondaryColor}>
+              <Text size={'sm'} fw={700} c={COLORS.secondaryColor}>
                 {item.fields.insurance_name}
               </Text>
-              <Text c={COLORS.textColor}>Read</Text>
+              <Text size={'smx'} td={'underline'} c={COLORS.textColor}>Read</Text>
             </Flex>
           </GridCol>
         ))}

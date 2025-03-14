@@ -1,6 +1,6 @@
 'use client';
-import {styles} from './Hero.styles';
-import {COLORS} from '@/app/utils/COLORS';
+import { useState } from 'react';
+import { COLORS } from '@/app/utils/COLORS';
 import Images from '@/app/utils/image';
 import {
   ActionIcon,
@@ -20,100 +20,76 @@ import {
   IconPlaneInflight,
   IconShip,
 } from '@tabler/icons-react';
-import {useState} from 'react';
+import { highlightText } from '../utils/highlightText';
 
-const Hero = () => {
+const TransportOption = ({ type, icon, activeTransport, onClick }) => (
+  <Group
+    style={type === activeTransport ? styles.groupstyle : { cursor: 'pointer' }}
+    onClick={() => onClick(type)}
+    gap={10}
+  >
+    {icon}
+    <Text size="sm" lh="xs" fw={500}>{type.charAt(0).toUpperCase() + type.slice(1)}</Text>
+  </Group>
+);
+
+const Hero = ({ title, content }) => {
   const [activeTransport, setActiveTransport] = useState('sea');
-
-  const handleTransportClick = (type) => {
-    setActiveTransport(type);
-  };
 
   return (
     <Box style={styles.heroContainer}>
-      <Container
-        fluid
-        px={'7%'}
-        mt={70}
-        py={'70px'}
-        style={{borderRadius: '10px'}}
-      >
+      <Container fluid px={{ base: '5%', md: '7%' }} mt={80} py="60px" style={{ height: '100vh', margin: '0 auto' }}>
         <Box style={styles.overlayContainer}>
-          <Image src={Images.vector_p} style={styles.overlayImage} />
-          <Image
-            src={Images.container}
-            style={{...styles.overlayImage, top: '-65px', zIndex: 2}}
-          />
+          <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} />
         </Box>
 
-        <Title order={1} size={'64px'} style={styles.title}>
-          Your end-to-end <span className="span-color"> supply chain,</span> all
-          in ONE PRIME platform
-        </Title>
-        <Text lh="33.6px" size="24px" mt={20} style={styles.text}>
-          We deliver operational excellence with enhanced trade value.
-        </Text>
+        <Stack h={'100%'} gap={0} justify="flex-start">
+          <Title c={COLORS.primaryColor} style={{ zIndex: 100 }} fw={900} order={1} lh="xl" tt="uppercase" size="50px">
+            {highlightText(title)}
+          </Title>
+          <Text lh="lgx" size="22px" maw={'40%'} fw={400} mt={15}>
+            {highlightText(content)}
+          </Text>
 
-        <Stack mt={30} gap={0} style={{position: 'relative', zIndex: 3}}>
-          <Flex
-            style={{...styles.transportOptions, borderRadius: '15px 15px 0 0 '}}
-          >
-            <Group
-              style={
-                activeTransport === 'sea'
-                  ? {...styles.groupstyle, cursor: 'pointer'}
-                  : {cursor: 'pointer'}
-              }
-              onClick={() => handleTransportClick('sea')}
-            >
-              <IconShip size={24} color={COLORS.primaryColor} />
-              <Text size={'20px'}>Sea</Text>
+          <Stack mt={"5%"} gap={0}>
+            <Flex style={{ ...styles.transportOptions, borderRadius: '12px 12px 0 0' }}>
+              <TransportOption
+                type="sea"
+                icon={<IconShip size={20} color={COLORS.primaryColor} />}
+                activeTransport={activeTransport}
+                onClick={setActiveTransport}
+              />
+              <TransportOption
+                type="air"
+                icon={<IconPlaneInflight size={20} color={COLORS.primaryColor} />}
+                activeTransport={activeTransport}
+                onClick={setActiveTransport}
+              />
+            </Flex>
+
+            <Group style={styles.transportOptions}>
+              <TextInput
+                color={COLORS.secondaryColor}
+                placeholder="Select Origin"
+                size="sm"
+                fw={500}
+                radius="md"
+                leftSection={<IconMapPin size={20} color={COLORS.secondaryColor} />}
+                classNames={{ input: 'custom-placeholder' }}
+              />
+              <ActionIcon variant="default" size={28} radius="xl" bg={COLORS.secondaryColor} style={{ borderColor: COLORS.secondaryColor }}>
+                <IconArrowsLeftRight size={18} color={COLORS.primaryColor} />
+              </ActionIcon>
+              <TextInput
+                color={COLORS.secondaryColor}
+                placeholder="Select Destination"
+                size="sm"
+                radius="md"
+                leftSection={<IconMapPin size={20} color={COLORS.secondaryColor} />}
+                classNames={{ input: 'custom-placeholder' }}
+              />
             </Group>
-            <Group
-              ml={20}
-              style={
-                activeTransport === 'air'
-                  ? {...styles.groupstyle, cursor: 'pointer'}
-                  : {cursor: 'pointer'}
-              }
-              onClick={() => handleTransportClick('air')}
-            >
-              <IconPlaneInflight size={24} color={COLORS.primaryColor} />
-              <Text size={'20px'}>Air</Text>
-            </Group>
-          </Flex>
-          <Group
-            style={{
-              ...styles.transportOptions,
-              borderRadius: '0 15px 15px 15px',
-            }}
-          >
-            <TextInput
-              color={COLORS.secondaryColor}
-              placeholder="Select Origin"
-              size="md"
-              radius={'md'}
-              leftSection={<IconMapPin color={COLORS.secondaryColor} />}
-              styles={{
-                '::placeholder': {color: `${COLORS.secondaryColor} !important`},
-              }}
-            />
-            <ActionIcon
-              variant="default"
-              size={42}
-              radius={'xl'}
-              style={styles.actionButton}
-            >
-              <IconArrowsLeftRight size={24} color={COLORS.primaryColor} />
-            </ActionIcon>
-            <TextInput
-              color={COLORS.secondaryColor}
-              placeholder="Select Destination"
-              size="md"
-              radius={'md'}
-              leftSection={<IconMapPin color={COLORS.secondaryColor} />}
-            />
-          </Group>
+          </Stack>
         </Stack>
       </Container>
     </Box>
@@ -121,3 +97,53 @@ const Hero = () => {
 };
 
 export default Hero;
+
+
+const styles = {
+  heroContainer: {
+    backgroundImage: `url(${Images.hero})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    color: 'white',
+    height: '100vh',
+    position: 'relative',
+    overflowY: 'hidden',
+    top: 0,
+    left: 0,
+  },
+  overlayContainer: {
+    position: 'relative',
+    width: '100%',
+    height: 'auto',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  overlayImage: {
+    position: 'absolute',
+    top: '-100px',
+    left: '75%',
+    transform: 'translate(-50% , 10%)',
+    width: '45%',
+    objectFit: 'cover',
+    zIndex: 1,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+  transportOptions: {
+    padding: '14px 16px',
+    border: `1px solid ${COLORS.portColor}`,
+    borderRadius: '12px',
+    backgroundColor: COLORS.portColor,
+    width: 'fit-content',
+    borderRadius: '0 12px 12px 12px',
+    gap: '12px'
+  },
+  groupstyle: {
+    backgroundColor: COLORS.secondaryColor,
+    padding: '10px 16px',
+    borderRadius: '10px',
+  },
+};

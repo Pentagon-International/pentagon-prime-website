@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 
 
 const styles = {
-    container: { fluid: true, px: '7%', py: '70px' },
+    container: { fluid: true,  py: '70px' },
     actionIcon: {
         size: 'lg',
         variant: 'default',
@@ -56,10 +56,10 @@ const CertificateList = ({ certificateItems }) => {
 
 
     return (
-        <Container {...styles.container}>
+        <Container {...styles.container} bg={COLORS.background}>
             <Stack spacing={'lg'}>
                 <Center>
-                    <Title tt={'uppercase'}>Our Certifications & Affiliations</Title>
+                    <Title size={'lg'} fw={800} tt={'uppercase'}>Our Certifications & Affiliations</Title>
                 </Center>
                 <Center>
                     <Flex mt={'xl'} align={'center'} justify={'center'} gap={'md'}>
@@ -70,6 +70,9 @@ const CertificateList = ({ certificateItems }) => {
                         >
                             <IconArrowLeft
                                 size={24}
+                                style={{
+                                    backgroundColor : COLORS.arrow_background,
+                                }}
                                 color={startIndex === 0 ? COLORS.textColor : COLORS.secondaryColor}
                             />
                         </ActionIcon>
@@ -101,6 +104,9 @@ const CertificateList = ({ certificateItems }) => {
                         >
                             <IconArrowRight
                                 size={24}
+                                style={{
+                                    backgroundColor : COLORS.arrow_background,
+                                }}
                                 color={
                                     startIndex + itemsPerPage >= certificateItems.length
                                         ? COLORS.textColor

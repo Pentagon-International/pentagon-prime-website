@@ -1,5 +1,5 @@
 'use client';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   ActionIcon,
   Container,
@@ -10,12 +10,12 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import {IconArrowLeft, IconArrowRight} from '@tabler/icons-react';
+import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import { COLORS } from '@/app/utils/COLORS';
 
 const ITEMS_PER_VIEW = 3;
 
-const NewsList = ({newsItems}) => {
+const NewsList = ({ newsItems }) => {
   const [startIndex, setStartIndex] = useState(0);
 
   const handlePrev = () => {
@@ -33,8 +33,8 @@ const NewsList = ({newsItems}) => {
   const currentItems = newsItems.slice(startIndex, startIndex + ITEMS_PER_VIEW);
 
   return (
-    <Container fluid px="7%">
-      <Title mb="xl" size="h2">
+    <Container fluid px="7%" py={'70px'}>
+      <Title mb="xl" size="lg" fw={800}>
         NEWS & EVENTS
       </Title>
 
@@ -42,38 +42,43 @@ const NewsList = ({newsItems}) => {
         columns={ITEMS_PER_VIEW}
         mt="xl"
         gutter="lg"
-        style={styles.slideContainer}
       >
-        {currentItems.map(({sys, fields}) => (
-          <GridCol span={1} key={sys.id}>
+        {currentItems.map(({ sys, fields }) => (
+          <GridCol  span={1} key={sys.id}>
             <Flex
-              gap={'md'}
               direction="column"
               h="100%"
               justify="space-between"
+              style={{
+                columnGap : '10px',
+                rowGap : '5px'
+              }}
             >
               <Image
                 src={fields.newsImage?.fields?.file?.url}
                 alt={fields.newsName || 'News image'}
                 fit="cover"
-                style={{borderRadius: '24px'}}
-                mah={'300px'}
-                mih={'300px'}
+                style={{ borderRadius: '24px' }}
+                mah={'250px'}
+                mih={'250px'}
               />
-              <Text color={COLORS.textColor} size="xs" tt="uppercase">
+              <Text c="#999" fw={700} size="xs" mt={10} tt="uppercase">
                 {fields.newsName}
               </Text>
-              <Text fw={600} size="md" style={styles.newsTitle}>
+              <Text fw={700} size="sm" maw={'72%'} c={COLORS.news_title}>
                 {fields.newsTitle}
               </Text>
-              <a
-                href={fields.knowmore}
-                style={styles.readMore}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Read More
-              </a>
+
+              {/* <Flex align="center" gap={4} style={{ display: 'inline-flex', alignItems: 'center' }}>
+                <a
+                  href={fields.knowmore}
+                  style={styles.readMore}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Read More
+                </a>
+              </Flex> */}
             </Flex>
           </GridCol>
         ))}
@@ -122,26 +127,27 @@ const NewsList = ({newsItems}) => {
 };
 
 const styles = {
-  newsTitle: {
-    minHeight: '50px',
+  sliderWrapper: {
+    overflow: 'hidden', 
+    width: '100%',
+    padding: '0 2%', 
   },
   readMore: {
     color: COLORS.serviceColor,
     fontWeight: 400,
-    paddingTop: '10px',
-    marginTop: 'auto',
-    fontSize: '16px',
-    display: 'inline-block',
+    fontSize: '14px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
     textDecoration: 'none',
+    cursor: 'pointer',
+    transition: 'color 0.3s ease',
   },
   paginationDot: {
     width: 8,
     height: 8,
     borderRadius: '50%',
     display: 'inline-block',
-  },
-  slideContainer: {
-    transition: 'transform 0.3s ease-in-out',
   },
 };
 

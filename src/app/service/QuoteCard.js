@@ -10,8 +10,8 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import {client} from '../api/contentful';
-import {COLORS} from '../utils/COLORS';
+import { client } from '../api/contentful';
+import { COLORS } from '../utils/COLORS';
 import Images from '../utils/image';
 
 const QuoteCard = async () => {
@@ -20,10 +20,22 @@ const QuoteCard = async () => {
     order: 'sys.createdAt',
   });
 
+  const quoteData = await client.getEntries({
+    content_type: 'quote',
+    order: 'sys.createdAt',
+  });
+
+  const {
+    quote,
+    authorName,
+    role,
+    companyName
+  } = quoteData.items[0].fields;
+
   return (
-    <Box mt={70} style={{backgroundColor: '#111F40'}}>
+    <Box mt={70} style={{ backgroundColor: '#111F40' }}>
       <Container fluid px="7%" py="lg">
-        <Stack px={'10%'} py={'7%'} c={COLORS.primaryColor}>
+        <Stack px={'10%'} py={'5%'} c={COLORS.primaryColor}>
           <Grid
             gutter={'10%'}
             columns={2}
@@ -31,20 +43,18 @@ const QuoteCard = async () => {
             justify={'space-between'}
           >
             <GridCol span={1}>
-              <Group>
-                <Text style={{textWrap: 'balance'}}>
-                  Flexport strategically places inventory close to our customer
-                  demand, allowing us to deliver our shoes in 3 days or less
-                  without our own operations team being involved. This has been
-                  an absolute game-changer for the Kizik business.
+              <Group gap={0}>
+                <div style={{ backgroundImage: `url(${Images.quote})`, backgroundSize: 'cover', backgroundPosition: 'center', width: '30px', height: '30px' }} />
+                <Text mt={20} style={{ textWrap: 'balance', fontSize: '20px' }}>
+                  {quote}
                 </Text>
-                <Flex w={'100%'} align={'center'} justify={'space-between'}>
+                <Flex w={'100%'} align={'flex-end'} justify={'space-between'}>
                   <Stack mt={20} gap={0}>
-                    <Text fw={700}>Jason Lee</Text>
-                    <Text>COO,Kizik</Text>
+                    <Text size={'base'} fw={700}>{authorName}</Text>
+                    <Text size={'sm'}>{role}</Text>
                   </Stack>
-                  <Box bg={COLORS.primaryColor} p={10}>
-                    <Text c={COLORS.secondaryColor}>Kizik</Text>
+                  <Box bg={COLORS.primaryColor} p={'5px 10px'}>
+                    <Text size={'sm'} c={COLORS.secondaryColor}>{companyName}</Text>
                   </Box>
                 </Flex>
               </Group>
@@ -56,11 +66,11 @@ const QuoteCard = async () => {
 
           <Flex mt={50} align={'center'} justify={'space-between'}>
             {res.items.map((item) => (
-              <Stack key={item.sys.id}>
-                <Title style={{textTransform: 'uppercase'}} tt={'uppercase'}>
+              <Stack gap={0} key={item.sys.id}>
+                <Title size={'lg'} tt={'uppercase'}>
                   {item.fields.tradeValue}
                 </Title>
-                <Text>{item.fields.tradeName}</Text>
+                <Text size={'sm'}>{item.fields.tradeName}</Text>
               </Stack>
             ))}
           </Flex>

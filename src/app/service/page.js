@@ -1,22 +1,18 @@
-import React from 'react';
-import Service from './Service';
-import Retail from './Retail';
-import Ship from './Ship';
-import QuoteCard from './QuoteCard';
-import BottomCard from '../component/common/BottomCard';
+import React from "react";
+import Service from "./Service";
+import { fetchEntries } from "../utils/fetchEntries";
 
-const page = () => {
-  const title = 'Want to GET PRIME experience?';
-  const text =
-    'Talk to a supply chain solutions expert and see the Prime Platform in action.';
-  const button = 'Reach us here';
+const page = async () => {
+  const [serviceData] = await Promise.all([fetchEntries("service")]);
   return (
     <>
-      <Service />
-      <Retail />
-      <Ship />
-      <QuoteCard />
-      <BottomCard title={title} text={text} button={button} />
+      <Service
+        title={serviceData.title}
+        icon={serviceData?.icon?.fields?.file?.url}
+        iconTitle={serviceData.iconTitle}
+        content={serviceData.content}
+        backgroundImage={serviceData?.backgroundImage?.fields?.file?.url}
+      />
     </>
   );
 };

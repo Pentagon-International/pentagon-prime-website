@@ -1,39 +1,65 @@
+'use client';
+
 import {
+  BackgroundImage,
   Box,
   Button,
   Center,
   Flex,
-  Group,
   Stack,
   Text,
   TextInput,
   Title,
 } from '@mantine/core';
-import {COLORS} from '../utils/COLORS';
+import { COLORS } from '../utils/COLORS';
+import { useRouter } from 'next/navigation';
+
+
 
 const HelpCenter = () => {
+
+  const router = useRouter();
   return (
-    <Box h={'100vh'} bg={'#111F40'}>
+    <Box
+      h={'100vh'}
+      w={'100%'}
+      style={{
+        backgroundImage: 'url(./question_mark.svg)',
+        backgroundSize: '100% 100%',
+        backgroundRepeat: 'no-repeat',
+        backgroundBlendMode: "overlay",
+        backgroundPosition: "110% calc(100% + 70px)",
+      }}
+    >
       <Center w={'100%'} h={'100%'}>
-        <Stack w={'45vw'} c={COLORS.primaryColor}>
-          <Text align={'center'}>Help Center</Text>
-          <Title size={'48px'} align={'center'} tt={'uppercase'}>
-            How Can We Help You?
+        <Stack w={'50vw'} c={COLORS.primaryColor}>
+          <Text size={'base'} align={'center'}>Help Center</Text>
+          <Title size={'xl'} align={'center'} tt={'uppercase'}>
+            How Can We Help You  ?
           </Title>
-          <Flex gap={'lg'}>
+          <Flex gap={10} w={'100%'} align={'center'} dir='row'>
             <TextInput
               size="lg"
               className="input"
               w={'80%'}
+              radius={'md'}
               bg={'inherit'}
-              placeholder="Search by term or phase ..."
+              placeholder="Search by term or phrase ..."
+              styles={{
+                input: {
+                  backgroundColor: 'transparent !important',
+                  borderColor: `${COLORS.primaryColor} !important`,
+                }
+              }}
             />
-            <Button size="lg" bg={COLORS.serviceColor}>
+            <Button fz={'sm'} size='lg' fw={600} bg={COLORS.serviceColor}
+              onClick={() => router.push('/contact')}
+            >
               Search
             </Button>
           </Flex>
-          <Text align={'center'}>
-            Already a pentagon prime client? Login for assistance
+          <Text size={'sm'} align={'center'}>
+            Already a Pentagon Prime client? Login for assistance
           </Text>
         </Stack>
       </Center>

@@ -1,11 +1,11 @@
-import {Flex, Text, Title, Container, Group, Box} from '@mantine/core';
+import { Flex, Text, Title, Container, Group, Box } from '@mantine/core';
 
-const TradeItem = ({tradeValue, tradeName}) => (
+const TradeItem = ({ tradeValue, tradeName }) => (
   <Flex justify="space-between" direction="column">
-    <Title size="40px" order={4}>
+    <Title size="lg" lh={'lgx2'} order={4}>
       {tradeValue}
     </Title>
-    <Text lh="27px">{tradeName}</Text>
+    <Text size='sm' lh="sm">{tradeName}</Text>
   </Flex>
 );
 
@@ -15,26 +15,27 @@ const getCardStyles = (background) => ({
   backgroundPosition: 'center',
   borderRadius: '20px',
   color: 'white',
-  padding: '40px',
+  padding: '25px',
 });
 
-const TradeCard = ({title = '', item = [], background = ''}) => {
+const TradeCard = ({ title = '', item = [], background = '' }) => {
   return (
     <Container fluid px="7%" py="50px">
       <Box style={getCardStyles(background)}>
-        <Flex align="center" justify="center" wrap="wrap" w="100%">
+        <Flex align="center" justify="space-between" wrap="wrap" w="100%">
           {title && (
             <Text
-              w="25%"
-              size="24px"
-              lh="33.6px"
-              style={{wordBreak: 'break-word'}}
+              w="30%"
+              size="md"
+              lh={'lgx'}
+              tw='balance'
+              style={{ wordBreak: 'break-word' }}
             >
               {title}
             </Text>
           )}
-          <Group ml={'10%'} gap="58px" wrap="wrap">
-            {item.map(({sys, fields}) => (
+          <Group gap={'50px'} ml={'5%'} wrap="wrap">
+            {item.map(({ sys, fields }) => (
               <TradeItem
                 key={sys.id}
                 tradeValue={fields.tradeValue}

@@ -2,12 +2,12 @@ const Images = {
   Icon: '/logo-pp.png',
   logo: '/images/logo.png',
   hero: '/images/hero_background.png',
-  vector_p: '/images/p.png',
+  vector_p: '/images/vector_p.png',
   container: '/images/container.png',
   vision: '/images/vision.png',
   prime_network: '/images/prime_network.png',
   flight_blue: '/images/flight_blue.png',
-  product_hero: '/images/Product_bg.png',
+  product_hero: '/images/product_bg.png',
   sea_freight: '/images/sea_freight.png',
   tradeCard_background: '/images/bg.png',
   pentagon: '/images/pentagon.png',
@@ -20,7 +20,14 @@ const Images = {
   service: '/images/service.png',
   ship: '/images/ship.png',
   newsRoom: '/images/newsRoom.png',
-  
+  quote: '/images/quote_img.svg',
+  pentagon_hero: '/images/pentagon_hero.png',
+  about_vector: 'images/about_vector.png',
+  contact_vector : 'images/contactUs_vector.png',
+  vessel: '/images/vessel.jpg',
+  port: '/images/port.jpg',
+  pentagon_freight: '/images/pentagon-freight.png',
+  pentagon_line: '/images/pentagon-line.png'
 };
 
 export default Images;

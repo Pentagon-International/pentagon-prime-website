@@ -9,8 +9,9 @@ import {
   ListItem,
   Title,
 } from '@mantine/core';
-import {COLORS} from '../utils/COLORS';
+import { COLORS } from '../utils/COLORS';
 import Images from '../utils/image';
+import { theme } from '../utils/theme';
 
 const ACinfo = () => {
   return (
@@ -19,25 +20,28 @@ const ACinfo = () => {
         <Grid columns={12}>
           <GridCol span={6}>
             <Group>
-              <Title tt={'uppercase'} textWrap="balance">
+              <Title size={'lgx'} fw={800} lh={'lgx2'} tt={'uppercase'} textWrap="balance">
                 Additional Contact Information
               </Title>
-              <List style={{color: COLORS.textColor, padding: '20px 50px'}}>
-                <ListItem>
+              <List c={COLORS.textColor} p={'20px 50px'} style={{
+                lineHeight: theme.lineHeights.lgx2,
+                fontSize: theme.fontSizes.sm
+              }}>
+                <ListItem >
                   For media inquiries please email{' '}
-                  <span style={{textDecoration: 'underline'}}>
+                  <span style={{ textDecoration: 'underline' }}>
                     press@pentagonprime.com
                   </span>
                 </ListItem>
                 <ListItem>
                   Interested in becoming a partner?{' '}
-                  <span style={{textDecoration: 'underline'}}>
+                  <span style={{ textDecoration: 'underline' }}>
                     Submit an inquiry.
                   </span>
                 </ListItem>
                 <ListItem>
                   Have a security issue?{' '}
-                  <span style={{textDecoration: 'underline'}}>
+                  <span style={{ textDecoration: 'underline' }}>
                     Tell us about it here.
                   </span>
                 </ListItem>

@@ -1,5 +1,5 @@
-import {Container, Grid, Title} from '@mantine/core';
-import {client} from '../api/contentful';
+import { Container, Grid, Title } from '@mantine/core';
+import { client } from '../api/contentful';
 import ServiceCard from '../component/common/ServiceCard';
 
 const Values = async () => {
@@ -9,9 +9,9 @@ const Values = async () => {
   });
 
   return (
-    <Container fluid px={'7%'}>
-      <Title style={{textTransform: 'uppercase'}}>
-        our <span style={{color: '#0E53F2'}}>values</span>{' '}
+    <Container fluid px={'7%'} my={90}>
+      <Title size={'xl'} fw={800} lh={'lgx2'} tt={'uppercase'}>
+        our <span style={{ color: '#0E53F2' }}>values</span>{' '}
       </Title>
       <Grid columns={9} mt="xl">
         {res.items?.map((item, index) => (
