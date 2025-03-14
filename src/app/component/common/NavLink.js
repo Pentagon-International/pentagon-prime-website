@@ -96,7 +96,7 @@ export const featuresMap = {
         {
             icon: IconBuildingWarehouse,
             title: 'Warehousing and Storage',
-            link: '/service/warehousing-and-storage'
+            link: 'service/warehousing-and-distribution'
         },
         {
             icon: IconPresentationAnalytics,

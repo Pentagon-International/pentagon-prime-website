@@ -1,21 +1,23 @@
-'use client';
+ 'use client'
 
 import {
   BackgroundImage,
+  Box,
   Button,
+  Flex,
   Group,
   Image,
   Stack,
   Text,
   Title,
 } from '@mantine/core';
-import { COLORS } from '../utils/COLORS';
-import { theme } from '../utils/theme';
-import { highlightText } from '../utils/highlightText';
 import Images from '../utils/image';
+import { COLORS } from '../utils/COLORS';
+import { highlightText } from '../utils/highlightText';
 import { useRouter } from 'next/navigation';
 
 export default function Service({ title, icon, iconTitle, content, backgroundImage }) {
+
   const router = useRouter();
   return (
     <div
@@ -23,37 +25,27 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
         height: '100vh',
         display: 'flex',
         flexDirection: 'row',
-        marginTop: '40px',
+        marginTop: '70px',
         backgroundColor: '#111F40',
         color: '#FFF',
       }}
     >
-      <div style={{ width: '50%', overflow : 'visible' , display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Stack p={100}>
-          <Group align='center' style={{ zIndex: 10 }} >
-            <Image radius={25} src={icon || Images.sea_freight} w={40} h={40} alt="sea freight" />
-            <Text size="sm" >
-              {highlightText(iconTitle)}
-            </Text>
+      <div style={{ width: '50%', overflowY: 'visible', display: 'flex', alignItems: 'center' }}>
+        <Stack px={'20%'} py={'100px'}>
+          <Group align='center'>
+            <Image src={icon || Images.sea_freight} alt="sea freight" w={35} h={35} radius={25} />
+            <Text w={'50vw'} style={{ overflowY: 'visible', zIndex: 10 }} size="sm">{highlightText(iconTitle)}</Text>
           </Group>
           <Title
-            style={{
-              zIndex: 10,
-              fontSize: theme.fontSizes.xxl,
-              fontWeight: 900,
-              boxSizing: 'border-box',
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
-            }}
-            lh={theme.lineHeights.xxl}
-            tt="uppercase"
+            style={{ overflowY: 'visible', zIndex: 10 }}
+            w={'55vw'}
             size={'lg'}
+            tt={'uppercase'}
+            textWrap="balance"
           >
             {highlightText(title)}
           </Title>
-
-
-          <Text tw='balance' size="sm" px={'auto'} lh={'sm'}>
+          <Text size="smx" maw={'55vw'} w={'30vw'} lh={'28px'}>
             {highlightText(content)}
           </Text>
           <Button size="xl" radius={12} mt={10} fz={'sm'} bg={COLORS.serviceColor} w={'fit-content'} onClick={() => router.push('/contact')}>
@@ -61,6 +53,7 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
           </Button>
         </Stack>
       </div>
+
       <div style={{ position: 'relative', width: '50%', height: '100vh' }}>
         <BackgroundImage
           src={backgroundImage || Images.service}
