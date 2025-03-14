@@ -38,7 +38,7 @@ const Hero = ({ title, content }) => {
 
   return (
     <Box style={styles.heroContainer}>
-      <Container fluid px={{ base: '5%', md: '7%' }} mt={60} py="60px" style={{ height: '100vh', margin: '0 auto' }}>
+      <Container fluid px={{ base: '5%', md: '7%' }} mt={140} py="60px" style={{ height: '100vh', margin: '0 auto' }}>
         <Box style={styles.overlayContainer}>
           <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} />
         </Box>
