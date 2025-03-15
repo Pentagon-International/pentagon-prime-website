@@ -23,10 +23,10 @@ import { useRouter } from "next/navigation";
 
 const navItems = [
   { label: "Home", links: "/", dropdown: false },
-  { label: "Products", links: "/product", dropdown: false },
+  // { label: "Products", links: "/product", dropdown: false },
   { label: "Solutions", links: "/service", dropdown: true },
   // { label: 'Tools', links: '/contact', dropdown: true },
-  { label: "About", links: "/about", dropdown: false },
+  { label: "About Us", links: "/about", dropdown: false },
   // { label: 'Company', links: '/help', dropdown: true },
 ];
 

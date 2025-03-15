@@ -17,7 +17,7 @@ const TeamMember = ({ image, title, description, reverse }) => {
   const imageUrl = image ? `https:${image}` : '/placeholder.jpg';
 
   return (
-    <Grid py={50} align="center">
+    <Grid py={50} align="center" w={'100%'}>
       {!reverse && (
         <GridCol px={'xl'} span={6}>
           <Box pos="relative" w="90%" h="280px">

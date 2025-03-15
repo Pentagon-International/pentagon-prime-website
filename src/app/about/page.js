@@ -23,7 +23,7 @@ const page = async () => {
     }}>
       <About title={aboutData.title} content={aboutData.content} />
       <Mission />
-      <Values />
+      {/* <Values /> */}
       <Milestone />
       <Members />
       <BottomCard title={title} text={text} button={button} />

@@ -10,18 +10,19 @@ import {
   Container,
   Anchor,
   Box,
+  Image,
   SimpleGrid,
   Divider,
 } from '@mantine/core';
 import {
   IconAt,
   IconBrandLinkedin,
-  IconBrandTwitterFilled,
   IconPhone,
   IconMapPin,
   IconBrandInstagram,
   IconBrandFacebook,
 } from '@tabler/icons-react';
+import Images from "@/app/utils/image";
 import React from 'react';
 
 const Footer = () => {
@@ -68,21 +69,18 @@ const Footer = () => {
           {/* Company Info */}
           <Box style={{ flex: 2 }}>
             <Flex align="center" gap="xs" mb={20}>
-              <BackgroundImage src="/logo-pp.png" w={50} h={55} alt="PentagonPrime Logo" />
-              <Title size={'md'} order={3} color="white">
-                PentagonPrime
-              </Title>
+              <Image src={Images.logo} alt="Logo" h={50} />
             </Flex>
             
-            <Text size="sm" color="white" lh={1.6} mb={20}>
+            <Text color="white" lh={1.6} mb={20} style={{ fontSize: 15 }}>
               Pentagon Prime, a unit of Pentagon Group, provides logistics and freight forwarding services.
               We enable our clients to enhance efficiency with cost-effective solutions, connecting them seamlessly with the world.
             </Text>
             
             <Group>
-              <Box 
+              <Box
+                style={{ cursor: 'pointer' }} 
                 sx={{ 
-                  cursor: 'pointer', 
                   transition: 'transform 0.3s ease',
                   '&:hover': { transform: 'translateY(-3px)', color: '#0E53F2' }
                 }}
@@ -91,8 +89,8 @@ const Footer = () => {
                 <IconBrandLinkedin size={22} />
               </Box>
               <Box 
+                style={{ cursor: 'pointer' }}
                 sx={{ 
-                  cursor: 'pointer', 
                   transition: 'transform 0.3s ease',
                   '&:hover': { transform: 'translateY(-3px)', color: '#0E53F2' }
                 }}
@@ -101,8 +99,8 @@ const Footer = () => {
                 <IconBrandInstagram size={22} />
               </Box>
               <Box 
+                style={{ cursor: 'pointer' }}
                 sx={{ 
-                  cursor: 'pointer', 
                   transition: 'transform 0.3s ease',
                   '&:hover': { transform: 'translateY(-3px)', color: '#0E53F2' }
                 }}
@@ -114,7 +112,7 @@ const Footer = () => {
           </Box>
 
           {/* Services - 3 Column Layout */}
-          <Box style={{ flex: 3 }}>
+          <Box style={{ flex: 3 }} pt={14}>
             <Text fw={700} size="smx" style={{ textTransform: 'uppercase', color: '#666' }} mb={15}>
               Services
             </Text>
@@ -135,10 +133,10 @@ const Footer = () => {
                       }}
                     >
                       <Text 
-                        size="sm" 
                         style={{ 
                           lineHeight: 1.2,
-                          margin: 0
+                          margin: 0,
+                          fontSize: 15,
                         }}
                       >
                         {item.title}
@@ -162,17 +160,18 @@ const Footer = () => {
           <Flex 
             direction="row" 
             gap="xl" 
-            align="center"
+            align="flex-start"
             wrap="wrap"
-            justify="flex-start"
+            justify="space-between"
             mb={20}
           >
             <Group 
               spacing="sm" 
+              align="flex-start"
               sx={{
                 transition: 'all 0.3s ease',
                 '&:hover': {
-                  '& svg': { color: '#0E53F2' }
+                  '& svg': { color: '#0EC9F2' }
                 },
                 maxWidth: 'none',
                 flexShrink: 1
@@ -180,13 +179,12 @@ const Footer = () => {
               onClick={() => window.open('https://maps.google.com/?q=Satellite Silver, Marol Naka, Andheri Kurla Road, Andheri East, Mumbai')}
               style={{ cursor: 'pointer' }}
             >
-              <IconMapPin size={18} color="#0E53F2" style={{ flexShrink: 0 }} />
+              <IconMapPin size={18} color="#0EC9F2" style={{ flexShrink: 0, marginTop: 4 }} />
               <Text 
-                size="sm" 
-                color="white"
-                style={{ whiteSpace: 'nowrap' }}
+                style={{ whiteSpace: 'nowrap', fontSize: 15 }}
               >
-                Unit No. 204, Satellite Silver, Marol Naka, Andheri Kurla Road, Andheri (East), Mumbai – 400059, India.
+                Unit No. 204, Satellite Silver, Marol Naka, Andheri Kurla Road,<br/>
+                Andheri (East), Mumbai – 400059, India.
               </Text>
             </Group>
             
@@ -198,13 +196,13 @@ const Footer = () => {
                 transition: 'all 0.3s ease',
                 '&:hover': {
                   transform: 'translateX(5px)',
-                  '& p': { color: '#0E53F2' }
+                  '& p': { color: '#0EC9F2' }
                 },
                 flexShrink: 0
               }}
             >
-              <IconPhone size={18} color="#0E53F2" />
-              <Text size="sm" color="white" style={{ transition: 'color 0.3s ease', whiteSpace: 'nowrap' }}>022 4596 6999</Text>
+              <IconPhone size={18} color="#0EC9F2" />
+              <Text style={{ fontSize: 15, transition: 'color 0.3s ease', whiteSpace: 'nowrap' }}>022 4596 6999</Text>
             </Group>
             
             <Group 
@@ -215,13 +213,13 @@ const Footer = () => {
                 transition: 'all 0.3s ease',
                 '&:hover': {
                   transform: 'translateX(5px)',
-                  '& p': { color: '#0E53F2' }
+                  '& p': { color: '#0EC9F2' }
                 },
                 flexShrink: 0
               }}
             >
-              <IconAt size={18} color="#0E53F2" />
-              <Text size="sm" color="white" style={{ transition: 'color 0.3s ease', whiteSpace: 'nowrap' }}>pentagon@pentagonindia.net</Text>
+              <IconAt size={18} color="#0EC9F2" />
+              <Text color="white" style={{ fontSize: 15, transition: 'color 0.3s ease', whiteSpace: 'nowrap' }}>pentagon@pentagonindia.net</Text>
             </Group>
           </Flex>
         </Box>

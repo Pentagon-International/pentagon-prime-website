@@ -38,6 +38,7 @@ import {
   IconTruck,
   IconWorldDollar,
 } from "@tabler/icons-react";
+import Link from "next/link";
 
 export const featuresMap = {
   Products: [
@@ -146,6 +147,8 @@ export const featuresMap = {
 const FeatureItem = ({ feature }) => {
   return (
     <UnstyledButton
+      component={Link}
+      href={feature.link}
       style={{
         display: "block",
         width: "100%",
@@ -173,7 +176,7 @@ const FeatureItem = ({ feature }) => {
           }}
         >
           <feature.icon 
-            size={12} 
+            size={16} 
             stroke={1.5} 
             color={COLORS.secondaryColor} 
             style={{ opacity: 0.9 }}
@@ -181,14 +184,15 @@ const FeatureItem = ({ feature }) => {
         </ThemeIcon>
 
         <Anchor
+          component={Text}
           underline="never"
           href={feature.link}
-          size="xs"
           fw={500}
           c={COLORS.secondaryColor}
           style={{
             letterSpacing: '0.1px',
-            lineHeight: 1.2
+            lineHeight: 1.2,
+            fontSize: 13,
           }}
         >
           {feature.title}
@@ -203,7 +207,7 @@ export const NavLink = ({ item }) => {
 
   return item.dropdown ? (
     <HoverCard
-      width={600}
+      width={760}
       position="bottom"
       radius="md"
       shadow="md"
@@ -241,7 +245,7 @@ export const NavLink = ({ item }) => {
           </Text>
         </Group>
         <Divider my="sm" />
-        <SimpleGrid cols={3} spacing={10}>
+        <SimpleGrid cols={3} spacing={6}>
           {featuresMap[item.label]?.map((feature) => (
             <FeatureItem key={feature.title} feature={feature} />
           ))}

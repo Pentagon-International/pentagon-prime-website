@@ -12,6 +12,7 @@ import {
 } from '@mantine/core';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import { COLORS } from '@/app/utils/COLORS';
+import Link from 'next/link';
 
 const ITEMS_PER_VIEW = 3;
 
@@ -44,7 +45,7 @@ const NewsList = ({ newsItems }) => {
         gutter="lg"
       >
         {currentItems.map(({ sys, fields }) => (
-          <GridCol  span={1} key={sys.id}>
+          <GridCol span={1} key={sys.id} component={Link} href={fields.knowmore} target="_blank">
             <Flex
               direction="column"
               h="100%"
@@ -69,16 +70,9 @@ const NewsList = ({ newsItems }) => {
                 {fields.newsTitle}
               </Text>
 
-              {/* <Flex align="center" gap={4} style={{ display: 'inline-flex', alignItems: 'center' }}>
-                <a
-                  href={fields.knowmore}
-                  style={styles.readMore}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Read More
-                </a>
-              </Flex> */}
+              <Flex align="center" gap={4} style={[styles.readMore, { display: 'inline-flex', alignItems: 'center' }]}>
+                Read more
+              </Flex>
             </Flex>
           </GridCol>
         ))}

@@ -19,7 +19,7 @@ const Mission = async () => {
       padding: '20px 30px',
       borderRadius: '10px',
       color: 'white',
-      maxWidth: '50%',
+      maxWidth: '60%',
       marginLeft: 'auto',
       backdropFilter: 'blur(5px)',
     },
