@@ -7,22 +7,23 @@ import Partner from './home/Partner';
 import PrimeNetwork from './home/PrimeNetwork';
 import Vision from './home/Vision';
 import { fetchEntries } from './utils/fetchEntries';
-
+import { fetchTradeData } from './utils/trade';
 
 
 const Page = async () => {
-  const [heroData, visionData, serviceData, teamData, partnerData] = await Promise.all([
+  const [heroData, visionData, serviceData, teamData, partnerData , tradeItems] = await Promise.all([
     fetchEntries("hero"),
     fetchEntries("vision"),
     fetchEntries("logistics_services"),
     fetchEntries('logistics_team'),
-    fetchEntries('logistics_partner')
+    fetchEntries('logistics_partner'),
+    fetchTradeData(),
   ]);
 
   return (
     <>
       <Hero title={heroData.title} content={heroData.content} />
-      <Vision title={visionData.title} content={visionData.content} />
+      <Vision title={visionData.title} content={visionData.content} tradeItems={tradeItems} />
       <LogisticsServices title={serviceData.title} />
       <LogisticsTeam title={teamData.title} content={teamData.content} />
       <Certificate />

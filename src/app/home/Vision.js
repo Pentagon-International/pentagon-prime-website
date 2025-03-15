@@ -72,7 +72,7 @@ const styles = {
   },
 };
 
-const Vision = ({ title, content }) => {
+const Vision = ({ title, content , tradeItems }) => {
   const router = useRouter();
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [embla, setEmbla] = useState(null);
@@ -137,7 +137,7 @@ const Vision = ({ title, content }) => {
       py="70px"
       style={styles.container}
     >
-      <Trade />
+      <Trade items={tradeItems} />
       <Flex
         direction={{ base: "column", md: "row" }}
         align="center"
