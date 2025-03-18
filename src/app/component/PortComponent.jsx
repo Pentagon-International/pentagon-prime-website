@@ -87,7 +87,10 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
   };
 
   return (
-    <Modal padding={'42px'} radius={'lg'} opened={modalOpened} centered onClose={() => setModalOpened(false)} title="You are just one step away!" size="xl" styles={{
+    <Modal padding={'42px'} radius={'lg'} opened={modalOpened} centered onClose={() => {
+      setModalOpened(false)
+      setErrors({})
+    }} title="You are just one step away!" size="xl" styles={{
       paddingBottom: '10px'
     }}>
       <Flex justify='space-between' align='center'>
