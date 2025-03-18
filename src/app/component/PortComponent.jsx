@@ -162,7 +162,6 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
           }}
         >
           <SegmentedControl
-            // mt={'md'}
             name="typeOfBooking"
             onChange={(val) => {
               formHook.setFieldValue('typeOfBooking', val);
@@ -170,16 +169,24 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
             fullWidth
             size="14px"
             radius={'md'}
-            color={COLORS.portColor}
+            color={'#CDF6FF'}
             defaultValue="FCL"
             data={segmantData}
+            styles={{
+              indicator: {
+                backgroundColor: '#CDF6FF',
+              },
+              innerLabel: {
+                color: COLORS.secondaryColor
+              }
+            }}
           />
 
           <Flex mt={'sm'} direction={'column'} >
             <Flex w={'100%'} align='center' gap={'30'} justify='space-between'>
               <TextInput
                 color={COLORS.portColor}
-                placeholder="Name"
+                placeholder="Enter Full Name"
                 size="lg"
                 w={'50%'}
                 label="Name"
@@ -201,11 +208,11 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
               />
               <TextInput
                 color={COLORS.portColor}
-                placeholder="Contact Number"
+                placeholder="Enter Mobile Number"
                 size="lg"
                 withAsterisk
                 w={'50%'}
-                label="Contact Number"
+                label="Mobile Number"
                 radius="md"
                 styles={{
                   input: {
@@ -224,7 +231,7 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
             </Flex>
             <TextInput
               color={COLORS.portColor}
-              placeholder="Email"
+              placeholder="Enter Email Address"
               size="lg"
               withAsterisk
               label="Email"

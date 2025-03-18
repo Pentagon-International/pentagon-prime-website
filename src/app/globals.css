@@ -48,6 +48,13 @@ a {
   font-weight: 500 ! important;
 }
 
+.autocomplete-input::placeholder {
+  color: white !important;
+  opacity: 1 ! important;
+  font-size: 15px ! important; 
+}
+
+
 .unstyled-button {
   color: rgba(58, 62, 119, 1);
   font-weight: 600;

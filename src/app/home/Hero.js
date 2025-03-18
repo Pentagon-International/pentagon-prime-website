@@ -139,7 +139,7 @@ const Hero = ({ title, content }) => {
           >
             {highlightText(title)}
           </Title>
-          <Text lh="lgx" size="22px" maw={'40%'} fw={400} mt={15}>
+          <Text lh="lgx" size="19px" maw={'40%'} fw={400} mt={15}>
             {highlightText(content)}
           </Text>
 
@@ -162,17 +162,66 @@ const Hero = ({ title, content }) => {
               <form>
                 <Flex w={'100%'} align='center' gap={'30'} justify='space-between'>
                   <Autocomplete
-                    placeholder="Search Origin"
+                    placeholder="Select Origin"
                     size="lg"
                     limit={5}
                     data={memoizedTransportData}
+                    className='custom-placeholder'
                     radius="md"
-                    label="Origin"
+                    // label="Origin"
                     styles={{
                       input: {
                         fontSize: '18px',
                         backgroundColor: '#ffffff45',
                         color: '#fff',
+                        "::placeholder": {
+                          color: "#fff",
+                          opacity: 1,
+                        },
+                      },
+                      option: {
+                        fontSize: '16px',
+                        color: '#000'
+                      },
+                      dropdown: {
+                        color: '#fff',
+                      },
+                      label: {
+                        fontSize: '16px',
+                        fontWeight: '600',
+                        color: '#fff',
+                      },
+                    }}
+                    classNames={{
+                      input: 'autocomplete-input', 
+                    }}
+                    autoComplete="off"
+                    leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
+                    {...formHook.getInputProps('origin')}
+                  />
+                  <ActionIcon
+                    variant="default"
+                    size={32}
+                    radius="xl"
+                    // mt={'35'}
+                    bg={COLORS.secondaryColor}
+                    style={{ borderColor: COLORS.secondaryColor }}
+                    onClick={swapOriginDestination}
+                  >
+                    <IconArrowsLeftRight size={20} color={COLORS.primaryColor} />
+                  </ActionIcon>
+
+                  <Autocomplete
+                    placeholder="Select Destination"
+                    size="lg"
+                    limit={5}
+                    data={memoizedTransportData}
+                    radius="md"
+                    styles={{
+                      input: {
+                        fontSize: '18px',
+                        backgroundColor: '#ffffff45',
+                        color: '#fff'
                       },
                       item: {
                         fontSize: '18px',
@@ -190,50 +239,8 @@ const Hero = ({ title, content }) => {
                         color: '#fff',
                       },
                     }}
-                    autoComplete="off"
-                    leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
-                    {...formHook.getInputProps('origin')}
-                  />
-                  <ActionIcon
-                    variant="default"
-                    size={28}
-                    radius="xl"
-                    mt={'35'}
-                    bg={COLORS.secondaryColor}
-                    style={{ borderColor: COLORS.secondaryColor }}
-                    onClick={swapOriginDestination}
-                  >
-                    <IconArrowsLeftRight size={18} color={COLORS.primaryColor} />
-                  </ActionIcon>
-
-                  <Autocomplete
-                    placeholder="Search Destination"
-                    size="lg"
-                    limit={5}
-                    label="Destination"
-                    data={memoizedTransportData}
-                    radius="md"
-                    styles={{
-                      input: {
-                        fontSize: '18px',
-                        backgroundColor: '#ffffff45',
-                        color: '#fff',
-                      },
-                      item: {
-                        fontSize: '18px',
-                      },
-                      option: {
-                        fontSize: '16px',
-                        color: '#000'
-                      },
-                      dropdown: {
-                        color: '#fff',
-                      },
-                      label: {
-                        fontSize: '16px',
-                        fontWeight: '600',
-                        color: '#fff',
-                      },
+                    classNames={{
+                      input: 'autocomplete-input', 
                     }}
                     autoComplete="off"
                     leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
@@ -245,17 +252,16 @@ const Hero = ({ title, content }) => {
                   mt={30}
                   size='lg'
                   fw={600}
-                  disabled={!isFormValid}
+                  // disabled={!isFormValid}
                   styles={{
                     label: {
                       fontSize: '16px',
 
                     },
                   }}
-                  bg={'#0e52f2a3'}
+                  bg={'##CDF6FF'}
                   c={COLORS.primaryColor}
                   onClick={() => isFormValid && setModalOpened(true)}
-                  rightSection={<IconArrowNarrowRight size={18} color={COLORS.primaryColor} />}
                 >
                   Get Quote
                 </Button>
@@ -313,7 +319,7 @@ const styles = {
     backgroundPosition: 'center',
   },
   transportOptions: {
-    padding: '20px',
+    padding: '25px',
     // border: `1px solid ${COLORS.secondaryColor}`,
     borderRadius: '24px',
     backgroundColor: `#0000004d`,
