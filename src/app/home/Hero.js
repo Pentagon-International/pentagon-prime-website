@@ -1,40 +1,124 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState, useMemo, memo, useCallback, useRef } from 'react';
 import { COLORS } from '@/app/utils/COLORS';
 import Images from '@/app/utils/image';
 import {
   ActionIcon,
+  Alert,
+  Autocomplete,
   Box,
+  Button,
   Container,
   Flex,
   Group,
   Image,
   Stack,
   Text,
-  TextInput,
   Title,
 } from '@mantine/core';
 import {
+  IconArrowNarrowRight,
   IconArrowsLeftRight,
   IconMapPin,
   IconPlaneInflight,
   IconShip,
 } from '@tabler/icons-react';
 import { highlightText } from '../utils/highlightText';
+import { useQuery } from '@tanstack/react-query';
+import { apiCallProtected } from '../api/api';
+import { useForm } from '@mantine/form';
+import PortComponent from '../component/PortComponent';
+import { notifications } from '@mantine/notifications';
 
-const TransportOption = ({ type, icon, activeTransport, onClick }) => (
+
+// Memoized TransportOption component to prevent re-renders
+const TransportOption = memo(({ type, icon, activeTransport, onClick }) => (
   <Group
     style={type === activeTransport ? styles.groupstyle : { cursor: 'pointer' }}
     onClick={() => onClick(type)}
     gap={10}
   >
     {icon}
-    <Text size="sm" lh="xs" fw={500}>{type.charAt(0).toUpperCase() + type.slice(1)}</Text>
+    <Text size="sm" lh="xs" fw={500}>
+      {type.charAt(0).toUpperCase() + type.slice(1)}
+    </Text>
   </Group>
-);
+));
 
 const Hero = ({ title, content }) => {
   const [activeTransport, setActiveTransport] = useState('sea');
+  const [transportData, setTransportData] = useState([]);
+  const [modalOpened, setModalOpened] = useState(false);
+
+  const formHook = useForm({
+    initialValues: {
+      origin: '',
+      destination: '',
+      name: '',
+      contact_number: '',
+      email: '',
+      typeOfBooking: 'FCL',
+    },
+  });
+
+  const { data } = useQuery({
+    queryKey: [`${activeTransport}PortData`],
+    queryFn: async () => {
+      const response = await apiCallProtected.get(`pentagon/${activeTransport}PortData`);
+      return response.data;
+    },
+    refetchOnWindowFocus: false,
+    select: (data) =>
+      data?.data?.map((item) => ({
+        label: item.name,
+        value: String(item.id),
+      })) || [],
+  });
+
+  // Memoize the transport data to avoid unnecessary re-renders
+  const memoizedTransportData = useMemo(() => data || [], [data]);
+
+  useEffect(() => {
+    if (data && transportData !== data) {
+      setTransportData(data);
+    }
+  }, [data]);
+
+
+  const notificationShownRef = useRef(false);
+
+  useEffect(() => {
+    if (
+      formHook.values.origin &&
+      formHook.values.destination &&
+      formHook.values.origin === formHook.values.destination &&
+      !notificationShownRef.current
+    ) {
+      notifications.show({
+        title: 'Error',
+        message: 'Origin and destination cannot be the same',
+        color: 'red',
+      });
+
+      notificationShownRef.current = true;
+      formHook.reset();
+
+      setTimeout(() => {
+        notificationShownRef.current = false;
+      }, 1000);
+    }
+  }, [formHook.values.origin, formHook.values.destination]);
+
+  // Optimized swap function
+  const swapOriginDestination = useCallback(() => {
+    formHook.setValues((prevValues) => ({
+      ...prevValues,
+      origin: prevValues.destination,
+      destination: prevValues.origin,
+    }));
+  }, []);
+
+  const isFormValid = formHook.values.origin && formHook.values.destination;
 
   return (
     <Box style={styles.heroContainer}>
@@ -44,15 +128,23 @@ const Hero = ({ title, content }) => {
         </Box>
 
         <Stack h={'100%'} gap={0} justify="flex-start">
-          <Title c={COLORS.primaryColor} style={{ zIndex: 100 }} fw={900} order={1} lh="xl" tt="uppercase" size="50px">
+          <Title
+            c={COLORS.primaryColor}
+            style={{ zIndex: 100 }}
+            fw={900}
+            order={1}
+            lh="xl"
+            tt="uppercase"
+            size="50px"
+          >
             {highlightText(title)}
           </Title>
           <Text lh="lgx" size="22px" maw={'40%'} fw={400} mt={15}>
             {highlightText(content)}
           </Text>
 
-          <Stack mt={"5%"} gap={0}>
-            <Flex style={{ ...styles.transportOptions, borderRadius: '12px 12px 0 0' }}>
+          <Stack mt={'5%'} gap={0} style={styles.transportOptions} >
+            <Flex gap={20} >
               <TransportOption
                 type="sea"
                 icon={<IconShip size={20} color={COLORS.primaryColor} />}
@@ -66,38 +158,126 @@ const Hero = ({ title, content }) => {
                 onClick={setActiveTransport}
               />
             </Flex>
+            <Flex direction="column">
+              <form>
+                <Flex w={'100%'} align='center' gap={'30'} justify='space-between'>
+                  <Autocomplete
+                    placeholder="Search Origin"
+                    size="lg"
+                    limit={5}
+                    data={memoizedTransportData}
+                    radius="md"
+                    label="Origin"
+                    styles={{
+                      input: {
+                        fontSize: '18px',
+                        backgroundColor: '#ffffff45',
+                        color: '#fff',
+                      },
+                      item: {
+                        fontSize: '18px',
+                      },
+                      option: {
+                        fontSize: '16px',
+                        color: '#000'
+                      },
+                      dropdown: {
+                        color: '#fff',
+                      },
+                      label: {
+                        fontSize: '16px',
+                        fontWeight: '600',
+                        color: '#fff',
+                      },
+                    }}
+                    autoComplete="off"
+                    leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
+                    {...formHook.getInputProps('origin')}
+                  />
+                  <ActionIcon
+                    variant="default"
+                    size={28}
+                    radius="xl"
+                    mt={'35'}
+                    bg={COLORS.secondaryColor}
+                    style={{ borderColor: COLORS.secondaryColor }}
+                    onClick={swapOriginDestination}
+                  >
+                    <IconArrowsLeftRight size={18} color={COLORS.primaryColor} />
+                  </ActionIcon>
 
-            <Group style={styles.transportOptions}>
-              <TextInput
-                color={COLORS.secondaryColor}
-                placeholder="Select Origin"
-                size="sm"
-                fw={500}
-                radius="md"
-                leftSection={<IconMapPin size={20} color={COLORS.secondaryColor} />}
-                classNames={{ input: 'custom-placeholder' }}
-              />
-              <ActionIcon variant="default" size={28} radius="xl" bg={COLORS.secondaryColor} style={{ borderColor: COLORS.secondaryColor }}>
-                <IconArrowsLeftRight size={18} color={COLORS.primaryColor} />
-              </ActionIcon>
-              <TextInput
-                color={COLORS.secondaryColor}
-                placeholder="Select Destination"
-                size="sm"
-                radius="md"
-                leftSection={<IconMapPin size={20} color={COLORS.secondaryColor} />}
-                classNames={{ input: 'custom-placeholder' }}
-              />
-            </Group>
+                  <Autocomplete
+                    placeholder="Search Destination"
+                    size="lg"
+                    limit={5}
+                    label="Destination"
+                    data={memoizedTransportData}
+                    radius="md"
+                    styles={{
+                      input: {
+                        fontSize: '18px',
+                        backgroundColor: '#ffffff45',
+                        color: '#fff',
+                      },
+                      item: {
+                        fontSize: '18px',
+                      },
+                      option: {
+                        fontSize: '16px',
+                        color: '#000'
+                      },
+                      dropdown: {
+                        color: '#fff',
+                      },
+                      label: {
+                        fontSize: '16px',
+                        fontWeight: '600',
+                        color: '#fff',
+                      },
+                    }}
+                    autoComplete="off"
+                    leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
+                    {...formHook.getInputProps('destination')}
+                  />
+                </Flex>
+                <Button
+                  fullWidth
+                  mt={30}
+                  size='lg'
+                  fw={600}
+                  disabled={!isFormValid}
+                  styles={{
+                    label: {
+                      fontSize: '16px',
+
+                    },
+                  }}
+                  bg={'#0e52f2a3'}
+                  c={COLORS.primaryColor}
+                  onClick={() => isFormValid && setModalOpened(true)}
+                  rightSection={<IconArrowNarrowRight size={18} color={COLORS.primaryColor} />}
+                >
+                  Get Quote
+                </Button>
+              </form>
+            </Flex>
+
           </Stack>
         </Stack>
       </Container>
+
+      {/* Port Modal Component */}
+      <PortComponent
+        transportData={memoizedTransportData}
+        modalOpened={modalOpened}
+        setModalOpened={setModalOpened}
+        formHook={formHook}
+      />
     </Box>
   );
 };
 
 export default Hero;
-
 
 const styles = {
   heroContainer: {
@@ -133,13 +313,12 @@ const styles = {
     backgroundPosition: 'center',
   },
   transportOptions: {
-    padding: '14px 16px',
-    border: `1px solid ${COLORS.portColor}`,
-    borderRadius: '12px',
-    backgroundColor: COLORS.portColor,
-    width: 'fit-content',
-    borderRadius: '0 12px 12px 12px',
-    gap: '12px'
+    padding: '20px',
+    // border: `1px solid ${COLORS.secondaryColor}`,
+    borderRadius: '24px',
+    backgroundColor: `#0000004d`,
+    width: '45%',
+    gap: '12px',
   },
   groupstyle: {
     backgroundColor: COLORS.secondaryColor,

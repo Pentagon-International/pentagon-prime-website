@@ -217,6 +217,11 @@ export const NavLink = ({ item }) => {
         <a
           href={item.links}
           style={{ display: "flex", alignItems: "center", gap: 5 }}
+          onClick={(e) => {
+            if (item.links === '/service') {
+              e.preventDefault(); // prevent the render of the page (service)
+            }
+          }}
           onMouseEnter={open}
           onMouseLeave={close}
         >
@@ -229,6 +234,7 @@ export const NavLink = ({ item }) => {
             <IconChevronDown size={16} color={COLORS.primaryColor} />
           )}
         </a>
+
       </HoverCardTarget>
 
       <HoverCardDropdown
