@@ -1,10 +1,10 @@
+
 import { Button, Container, Flex, Grid, Stack, Title } from "@mantine/core";
 import React from "react";
 import ServiceCard from "../component/common/ServiceCard";
 import { client } from "@/app/api/contentful";
 import { highlightText } from "../utils/highlightText";
 import { COLORS } from "../utils/COLORS";
-import { theme } from "../utils/theme";
 
 const styles = {
   container: { fluid: true, px: "7%", py: "100px" },
@@ -18,6 +18,7 @@ const styles = {
 };
 
 const LogisticsServices = async ({ title }) => {
+
   const res = await client.getEntries({
     content_type: "logisticsServices",
     order: "sys.createdAt",

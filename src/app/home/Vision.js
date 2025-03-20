@@ -25,6 +25,7 @@ import Images from "@/app/utils/image";
 import Trade from "../component/common/Trade";
 import { highlightText } from "../utils/highlightText";
 import { useRouter } from "next/navigation";
+import { useMediaQuery } from "@mantine/hooks";
 
 const styles = {
   container: {
@@ -34,15 +35,9 @@ const styles = {
     paddingLeft: "0",
   },
   imageWrapper: {
-    width: "40%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-  },
-  textContainer: {
-    width: "60%",
-    textAlign: "left",
-    padding: "0 2%",
   },
   highlightText: {
     color: COLORS.vision,
@@ -72,11 +67,14 @@ const styles = {
   },
 };
 
-const Vision = ({ title, content , tradeItems }) => {
+const Vision = ({ title, content, tradeItems }) => {
   const router = useRouter();
   const [videoModalOpen, setVideoModalOpen] = useState(false);
-  const [embla, setEmbla] = useState(null);
+  const [embla, setEmbla] = useState(null); 
   const videoRefs = useRef([]);
+
+
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const videos = [
     {
@@ -133,8 +131,8 @@ const Vision = ({ title, content , tradeItems }) => {
   return (
     <Container
       fluid
-      px={{ base: "5%", md: "7%" }}
-      py="70px"
+      px={"7%"}
+      py={isMobile ? "30px" : "70px"}
       style={styles.container}
     >
       <Trade items={tradeItems} />
@@ -145,19 +143,23 @@ const Vision = ({ title, content , tradeItems }) => {
         w={"100%"}
         gap="md"
       >
-        <Group style={styles.imageWrapper}>
+        <Group display={'flex'} align="center" justify="center" w={isMobile ? "90%" : "40%"}>
           <Image
             src={Images.vision}
-            w={"70%"}
+            w={isMobile ? "100%" : "70%"}
             alt="PentagonPrime Logo"
             style={{ width: "100%", objectFit: "contain" }}
           />
         </Group>
-        <Flex direction="column" style={styles.textContainer}>
-          <Title size={"xl"} tt={"uppercase"} lh={"xlx"} tw="balance" fw={900}>
+        <Flex direction="column" w={isMobile ? "100%" : "60%"}
+          ta={'left'}
+          p={'0 2%'}
+          mt={isMobile && 50}
+        >
+          <Title size={isMobile ? "lg" : "xl"} tt={"uppercase"} lh={isMobile ? "lgx2" : "xlx"} tw="balance" fw={900}>
             {highlightText(title)}
           </Title>
-          <Text mt="md" maw={"100%"} lh={"sm"} size="sm">
+          <Text mt="md" c={isMobile && COLORS.textColor} maw={"100%"} lh={"sm"} size="sm">
             {highlightText(content)}
           </Text>
           <Group mt="lg" gap={"xl"}>
@@ -246,7 +248,7 @@ const Vision = ({ title, content , tradeItems }) => {
           >
             <IconX size={24} />
           </ActionIcon>
-          
+
           <Carousel
             getEmblaApi={setEmbla}
             withControls
@@ -291,7 +293,7 @@ const Vision = ({ title, content , tradeItems }) => {
               </Carousel.Slide>
             ))}
           </Carousel>
-          
+
           <Text
             size="sm"
             c="white"

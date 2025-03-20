@@ -1,7 +1,8 @@
 import { Flex, Text, Title, Container, Group, Box } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 
 const TradeItem = ({ tradeValue, tradeName }) => (
-  <Flex justify="space-between" direction="column">
+  <Flex justify="space-between" direction="column" wrap={'wrap'}>
     <Title size="lg" lh={'lgx2'} order={4}>
       {tradeValue}
     </Title>
@@ -19,22 +20,27 @@ const getCardStyles = (background) => ({
 });
 
 const TradeCard = ({ title = '', item = [], background = '' }) => {
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
+
   return (
-    <Container fluid px="7%" py="50px">
+    <Container fluid px={isMobile ? '0' : "7%"} py={isMobile ? "30px" : "50px"}>
       <Box style={getCardStyles(background)}>
         <Flex align="center" justify="space-between" wrap="wrap" w="100%">
           {title && (
             <Text
-              w="30%"
-              size="md"
+              w={isMobile ? "100%" : "30%"}
+              size={isMobile ? "lgx" : "md"}
               lh={'lgx'}
               tw='balance'
+              ta={isMobile && "center"}
               style={{ wordBreak: 'break-word' }}
             >
               {title}
             </Text>
           )}
-          <Group gap={'50px'} ml={'5%'} wrap="wrap">
+          <Group gap={'50px'} mt={isMobile && 50} ml={'5%'} >
             {item.map(({ sys, fields }) => (
               <TradeItem
                 key={sys.id}

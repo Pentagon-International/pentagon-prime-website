@@ -18,6 +18,7 @@ import {
 } from '@mantine/core';
 import {
   IconArrowNarrowRight,
+  IconArrowsDownUp,
   IconArrowsLeftRight,
   IconMapPin,
   IconPlaneInflight,
@@ -29,6 +30,7 @@ import { apiCallProtected } from '../api/api';
 import { useForm } from '@mantine/form';
 import PortComponent from '../component/PortComponent';
 import { notifications } from '@mantine/notifications';
+import { useMediaQuery } from '@mantine/hooks';
 
 
 // Memoized TransportOption component to prevent re-renders
@@ -49,6 +51,10 @@ const Hero = ({ title, content }) => {
   const [activeTransport, setActiveTransport] = useState('sea');
   const [transportData, setTransportData] = useState([]);
   const [modalOpened, setModalOpened] = useState(false);
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
+  const Icon = isMobile ? IconArrowsDownUp : IconArrowsLeftRight
 
   const formHook = useForm({
     initialValues: {
@@ -122,28 +128,33 @@ const Hero = ({ title, content }) => {
 
   return (
     <Box style={styles.heroContainer}>
-      <Container fluid px={{ base: '5%', md: '7%' }} mt={80} py="60px" style={{ height: '100vh', margin: '0 auto' }}>
-        <Box style={styles.overlayContainer}>
-          <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} />
-        </Box>
-
+      <Container fluid px={'7%'} mt={80} py="60px" style={{ height: '100vh', margin: '0 auto' }}>
+        {
+          !isMobile && (
+            <Box style={styles.overlayContainer}>
+              <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} />
+            </Box>
+          )
+        }
         <Stack h={'100%'} gap={0} justify="flex-start">
           <Title
             c={COLORS.primaryColor}
             style={{ zIndex: 100 }}
             fw={900}
             order={1}
-            lh="xl"
+            lh={isMobile ? 'md' : 'xl'}
             tt="uppercase"
-            size="50px"
+            size={isMobile ? '32px' : '48px'}
           >
             {highlightText(title)}
           </Title>
-          <Text lh="lgx" size="19px" maw={'40%'} fw={400} mt={15}>
+          <Text lh="lgx" size={isMobile ? '16px' : '19px'} maw={isMobile ? '80%' : '40%'} fw={400} mt={15}>
             {highlightText(content)}
           </Text>
 
-          <Stack mt={'5%'} gap={0} style={styles.transportOptions} >
+          <Stack mt={'5%'} gap={0} w={isMobile ? '100%' : '45%'}
+            p={isMobile ? 20 : 25}
+            style={styles.transportOptions} >
             <Flex gap={20} >
               <TransportOption
                 type="sea"
@@ -160,15 +171,15 @@ const Hero = ({ title, content }) => {
             </Flex>
             <Flex direction="column">
               <form>
-                <Flex w={'100%'} align='center' gap={'30'} justify='space-between'>
+                <Flex direction={isMobile ? 'column' : 'row'} w={'100%'} align='center' gap={isMobile ? 0 : '30'} justify='space-between'>
                   <Autocomplete
                     placeholder="Select Origin"
                     size="lg"
+                    w={isMobile ? '100%' : '45%'}
                     limit={5}
                     data={memoizedTransportData}
                     className='custom-placeholder'
                     radius="md"
-                    // label="Origin"
                     styles={{
                       input: {
                         fontSize: '18px',
@@ -193,7 +204,7 @@ const Hero = ({ title, content }) => {
                       },
                     }}
                     classNames={{
-                      input: 'autocomplete-input', 
+                      input: 'autocomplete-input',
                     }}
                     autoComplete="off"
                     leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
@@ -203,12 +214,16 @@ const Hero = ({ title, content }) => {
                     variant="default"
                     size={32}
                     radius="xl"
-                    // mt={'35'}
                     bg={COLORS.secondaryColor}
                     style={{ borderColor: COLORS.secondaryColor }}
                     onClick={swapOriginDestination}
+                    styles={{
+                      root: {
+                        alignItems: isMobile ? 'center' : 'flex-end'
+                      }
+                    }}
                   >
-                    <IconArrowsLeftRight size={20} color={COLORS.primaryColor} />
+                    <Icon size={20} color={COLORS.primaryColor} />
                   </ActionIcon>
 
                   <Autocomplete
@@ -217,6 +232,7 @@ const Hero = ({ title, content }) => {
                     limit={5}
                     data={memoizedTransportData}
                     radius="md"
+                    w={isMobile ? '100%' : '45%'}
                     styles={{
                       input: {
                         fontSize: '18px',
@@ -240,7 +256,7 @@ const Hero = ({ title, content }) => {
                       },
                     }}
                     classNames={{
-                      input: 'autocomplete-input', 
+                      input: 'autocomplete-input',
                     }}
                     autoComplete="off"
                     leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
@@ -319,11 +335,8 @@ const styles = {
     backgroundPosition: 'center',
   },
   transportOptions: {
-    padding: '25px',
-    // border: `1px solid ${COLORS.secondaryColor}`,
     borderRadius: '24px',
     backgroundColor: `#0000004d`,
-    width: '45%',
     gap: '12px',
   },
   groupstyle: {

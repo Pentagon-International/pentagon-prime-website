@@ -181,9 +181,9 @@ const Footer = () => {
             >
               <IconMapPin size={18} color="#0EC9F2" style={{ flexShrink: 0, marginTop: 4 }} />
               <Text 
-                style={{ whiteSpace: 'nowrap', fontSize: 15 }}
+                style={{ fontSize: 15 }}
               >
-                Unit No. 204, Satellite Silver, Marol Naka, Andheri Kurla Road,<br/>
+                Unit No. 204, Satellite Silver, Marol Naka, Andheri Kurla Road,
                 Andheri (East), Mumbai – 400059, India.
               </Text>
             </Group>

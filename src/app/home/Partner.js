@@ -34,10 +34,10 @@ const Partner = ({ title, content }) => {
       <Flex style={styles.header}>
         <Stack>
           <Title size="lg" style={styles.title} fw={800}>
-            {title}
+            {highlightText(title)}
           </Title>
           <Text size="sm" fw={500}>
-            {content}
+            {highlightText(content)}
           </Text>
         </Stack>
         <Button fz={'sm'} variant="outline" size='lg' radius={'12px'} fw={600} c={COLORS.serviceColor}
