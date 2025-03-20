@@ -44,9 +44,10 @@ const Ship = ({ first_title, first_content, second_title, second_content }) => {
             {highlightText(first_content)}
           </Text>
           {isMobile ? (
-            <Carousel slideSize="90%" height={450} slideGap="md" loop>
+            <Grid>
+              <Carousel slideSize="80%" height={450} slideGap="md" loop>
               {serviceData.map((item) => (
-                <Stack my={'xs'} mx={'xs'} w={400}>
+                <GridCol key={item.sys.id} span={10} mt={'md'}>
                   <Image
                     src={item.fields.image?.fields?.file?.url}
                     alt={item.name}
@@ -57,9 +58,10 @@ const Ship = ({ first_title, first_content, second_title, second_content }) => {
                   <Text size='smx' mt={10} color="dimmed">
                     {item.fields.description}
                   </Text>
-                </Stack>
+                </GridCol>
               ))}
             </Carousel>
+            </Grid>
           ) : (
               <Grid columns={3} gutter={90} mt={60}>
                 {serviceData.map((item) => (
@@ -82,9 +84,29 @@ const Ship = ({ first_title, first_content, second_title, second_content }) => {
 
         <Flex direction={'column'}>
           <Title size={'lg'} tt={'uppercase'}>{highlightText(second_title)}</Title>
-          <Text size='sm' c={COLORS.textColor} w={'40vw'}>
+          <Text size='sm' c={COLORS.textColor} w={isMobile ? '100%' : '40vw'}>
             {highlightText(second_content)}
           </Text>
+          {isMobile ? (
+            <Grid>
+              <Carousel slideSize="100%" height={450} slideGap="md" loop>
+                {serviceData.map((item) => (
+                  <GridCol key={item.sys.id} span={10} mt={'md'}>
+                    <Image
+                      src={item.fields.image?.fields?.file?.url}
+                      alt={item.name}
+                    />
+                    <Text size="sm" fw={500} mt={20}>
+                      {item.fields.title}
+                    </Text>
+                    <Text mt={10} size='smx' color="dimmed">
+                      {item.fields.description}
+                    </Text>
+                  </GridCol>
+                ))}
+              </Carousel>
+            </Grid>
+          ) : (
           <Grid columns={3} gutter={90} mt={60}>
             {serviceData.map((item) => (
               <GridCol key={item.sys.id} span={1}>
@@ -101,6 +123,7 @@ const Ship = ({ first_title, first_content, second_title, second_content }) => {
               </GridCol>
             ))}
           </Grid>
+          )}
         </Flex>
       </Stack>
     </Container>
