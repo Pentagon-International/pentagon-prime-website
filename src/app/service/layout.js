@@ -20,8 +20,8 @@ export default async function ServiceLayout({ children }) {
     return (
         <>
             {children}
-            <Retail first_title={retailData.title} first_content={retailData.content} second_title={itData.title} second_content={itData.content} />
-            <Ship first_title={shipAnywhereData.title} first_content={shipAnywhereData.content} second_title={shipEverywhereData.title} second_content={shipEverywhereData.content} />
+        <Retail first_title={retailData.title} first_content={retailData.content} second_title={itData.title} second_content={itData.content} />
+        <Ship first_title={shipAnywhereData.title} first_content={shipAnywhereData.content} second_title={shipEverywhereData.title} second_content={shipEverywhereData.content} />
             <QuoteCard />
             {/* <FAQ /> */}
             <BottomCard title={title} text={text} button={button} />
