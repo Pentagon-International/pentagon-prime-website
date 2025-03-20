@@ -1,16 +1,14 @@
+'use client'
 import { Box, Container, Group, Image, Text, Title } from '@mantine/core';
 import Images from '../utils/image';
 import { highlightText } from '../utils/highlightText';
+import { useMediaQuery } from '@mantine/hooks';
 
 const About = ({ title, content }) => {
+
+  const isMobile = useMediaQuery('(max-width:768px)')
+
   const styles = {
-    heroContainer: {
-      height: '100vh',
-      position: 'relative',
-      overflow: 'hidden',
-      display: 'flex',
-      alignItems: 'center',
-    },
     overlayContainer: {
       position: 'absolute',
       width: '50%',
@@ -46,19 +44,27 @@ const About = ({ title, content }) => {
   };
 
   return (
-    <Box style={styles.heroContainer}>
+    <Box h={'100vh'} pos={'relative'}   style={{
+      overflow: 'hidden',
+      alignItems : 'center',
+      display : 'flex',
+    }}>
       <Container
         fluid
         px={'7%'}
         h="100%"
       >
-        <Box style={styles.contentWrapper}>
+        <Box w={'100%'} h={'100%'} pos={'relative'} style={{
+          display : 'flex',
+          alignItems : 'center',
+          zIndex : 2,
+        }}>
           <Box style={styles.textContainer}>
-            <Title 
-              size="40px" 
-              textWrap="balance" 
-              tt="uppercase" 
-              style={{ 
+            <Title
+              size="40px"
+              textWrap="balance"
+              tt="uppercase"
+              style={{
                 whiteSpace: 'pre-line',
                 lineHeight: 1.2,
                 color: '#000'
@@ -67,9 +73,9 @@ const About = ({ title, content }) => {
               {highlightText(title)}
             </Title>
 
-            <Text 
-              size='sm' 
-              style={{ 
+            <Text
+              size='sm'
+              style={{
                 lineHeight: 1.6,
                 maxWidth: '90%',
                 color: '#666'
@@ -80,8 +86,8 @@ const About = ({ title, content }) => {
           </Box>
 
           <Box style={styles.overlayContainer}>
-            <Image 
-              src={Images.pentagon_line} 
+            <Image
+              src={Images.pentagon_line}
               style={styles.overlayImage}
               fit="contain"
             />
