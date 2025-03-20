@@ -45,7 +45,7 @@ const Ship = ({ first_title, first_content, second_title, second_content }) => {
           </Text>
           {isMobile ? (
             <Grid>
-              <Carousel slideSize="80%" height={450} slideGap="md" loop>
+              <Carousel slideSize="80%" height={450} slideGap="md" loop withControls={false}>
               {serviceData.map((item) => (
                 <GridCol key={item.sys.id} span={10} mt={'md'}>
                   <Image
@@ -89,7 +89,7 @@ const Ship = ({ first_title, first_content, second_title, second_content }) => {
           </Text>
           {isMobile ? (
             <Grid>
-              <Carousel slideSize="100%" height={450} slideGap="md" loop>
+              <Carousel slideSize="100%" height={450} slideGap="md" loop withControls={false}>
                 {serviceData.map((item) => (
                   <GridCol key={item.sys.id} span={10} mt={'md'}>
                     <Image
