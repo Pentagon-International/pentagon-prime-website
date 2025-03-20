@@ -46,9 +46,9 @@ const Retail = ({ first_title, first_content, second_title, second_content }) =>
         <Text size='sm' c={COLORS.textColor}>
           {highlightText(second_content)}
         </Text>
-        <Grid mt="xl">
+        <Grid mt="xl" w={"100%"}>
           {isMobile ? (
-            <Carousel slideSize="70%" height={250} slideGap="xs" loop>
+            <Carousel slideSize="70%" height={250} w={'100%'} slideGap="xs" loop>
               {serviceData.map((item) => (
                 <Carousel.Slide key={item.sys.id}>
                   <ServiceCard item={item} backgroundColor={'#fff'} isMobile={isMobile} />
