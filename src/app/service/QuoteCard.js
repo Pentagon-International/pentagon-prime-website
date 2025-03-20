@@ -60,7 +60,7 @@ const QuoteCard = () => {
         {isMobile ? (
           <Box>
             <div style={{ backgroundImage: `url(${Images.quote})`, backgroundSize: 'cover', backgroundPosition: 'center', width: '30px', height: '30px' }} />
-            <Text mt={20} style={{ textWrap: 'balance', fontSize: '20px', color: "white" }}>
+            <Text mt={20} style={{ textWrap: 'balance', fontSize: isMobile ? '16px' : '20px', color: "white" }}>
               {quoteData?.quote}
             </Text>
             <Flex w={'100%'} align={'flex-end'} justify={'space-between'}>
@@ -72,7 +72,7 @@ const QuoteCard = () => {
                 <Text size={'sm'} c={COLORS.secondaryColor}>{quoteData?.companyName}</Text>
               </Box>
             </Flex>
-            <Image src={Images.ship} alt="ship" mt={'md'} />
+            <Image src={Images.ship} alt="ship" mt={isMobile ? 'xl' : 'md'} />
 
             <Flex mt={50} align={'center'} justify={'space-between'}>
               {serviceData.map((item) => (
@@ -115,9 +115,12 @@ const QuoteCard = () => {
                 </GridCol>
               </Grid>
 
-              <Flex mt={50} align={'center'} justify={'space-between'}>
+              {/* {isMobile ? (
+
+            ) : ( */}
+              <Flex mt={50} align={'center'} justify={'space-between'} >
                 {serviceData.map((item) => (
-                  <Stack gap={0} key={item.sys.id}>
+                  <Stack gap={0} key={item.sys.id} w={isMobile ? '50%' : ''}>
                     <Title size={'lg'} tt={'uppercase'}>
                       {item.fields.tradeValue}
                     </Title>
@@ -125,6 +128,7 @@ const QuoteCard = () => {
                   </Stack>
                 ))}
               </Flex>
+              {/* )} */}
             </Stack>
         )}
       </Container>

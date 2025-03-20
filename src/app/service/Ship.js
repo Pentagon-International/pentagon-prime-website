@@ -36,11 +36,11 @@ const Ship = ({ first_title, first_content, second_title, second_content }) => {
   }, []);
 
   return (
-    <Container fluid px={isMobile ? '6%' : '7%'} py={isMobile ? 0 : '10px'} mb={160}>
-      <Stack gap={100}>
+    <Container fluid px={isMobile ? '6%' : '7%'} py={isMobile ? 0 : '10px'} mb={isMobile ? 20 : 160}>
+      <Stack gap={isMobile ? 20 : 100}>
         <Flex direction={'column'}>
           <Title size={'lg'} tt={'uppercase'}>{highlightText(first_title)}</Title>
-          <Text size='sm' c={COLORS.textColor} w={isMobile ? '100%' : '40vw'}>
+          <Text size='sm' c={COLORS.textColor} lh={isMobile ? '20px' : ''} mt={'xs'} w={isMobile ? '100%' : '40vw'}>
             {highlightText(first_content)}
           </Text>
           {isMobile ? (
@@ -55,7 +55,7 @@ const Ship = ({ first_title, first_content, second_title, second_content }) => {
                   <Text size="sm" fw={500} mt={20}>
                     {item.fields.title}
                   </Text>
-                  <Text size='smx' mt={10} color="dimmed">
+                  <Text size='smx' mt={10} color="dimmed" lh={isMobile ? '20px' : ''}>
                     {item.fields.description}
                   </Text>
                 </GridCol>
@@ -84,7 +84,7 @@ const Ship = ({ first_title, first_content, second_title, second_content }) => {
 
         <Flex direction={'column'}>
           <Title size={'lg'} tt={'uppercase'}>{highlightText(second_title)}</Title>
-          <Text size='sm' c={COLORS.textColor} w={isMobile ? '100%' : '40vw'}>
+          <Text size='sm' c={COLORS.textColor} w={isMobile ? '100%' : '40vw'} lh={isMobile ? '20px' : ''}>
             {highlightText(second_content)}
           </Text>
           {isMobile ? (
@@ -99,7 +99,7 @@ const Ship = ({ first_title, first_content, second_title, second_content }) => {
                     <Text size="sm" fw={500} mt={20}>
                       {item.fields.title}
                     </Text>
-                    <Text mt={10} size='smx' color="dimmed">
+                    <Text mt={10} size='smx' color="dimmed" lh={isMobile ? '20px' : ''}>
                       {item.fields.description}
                     </Text>
                   </GridCol>

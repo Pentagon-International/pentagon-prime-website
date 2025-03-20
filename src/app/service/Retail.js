@@ -34,12 +34,12 @@ const Retail = ({ first_title, first_content, second_title, second_content }) =>
         <Title size={'lg'} fw={800} lh={'lgx2'} tt={'uppercase'} tw="balance">
           {highlightText(first_title)}
         </Title>
-        <Text size='sm' mt={10} c={COLORS.textColor} w={isMobile ? '100%' : '35vw'}>
+        <Text size='sm' mt={10} c={COLORS.textColor} w={isMobile ? '100%' : '35vw'} lh={isMobile ? '24px' : ''}>
           {highlightText(first_content)}
         </Text>
         <Image src={Images.prime_network} w={isMobile ? '100%' : '75%'} mx={'auto'} alt="prime_network" />
       </Group>
-      <Group mb={120} mt={isMobile ? 'xl' : 0} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
+      <Group mb={120} mt={isMobile ? '100px' : 0} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
         <Title size={'lg'} fw={800} mt={10} tt={'uppercase'} textWrap="balance">
           {highlightText(second_title)}
         </Title>
