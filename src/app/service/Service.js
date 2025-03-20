@@ -15,15 +15,17 @@ import Images from '../utils/image';
 import { COLORS } from '../utils/COLORS';
 import { highlightText } from '../utils/highlightText';
 import { useRouter } from 'next/navigation';
+import { useMediaQuery } from '@mantine/hooks';
 
 export default function Service({ title, icon, iconTitle, content, backgroundImage }) {
   const router = useRouter();
+  const isMobile = useMediaQuery("(max-width: 768px)");
   return (
     <div
       style={{
         minHeight: '100vh',
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: isMobile ? 'column' : 'row',
         marginTop: '60px',
         backgroundColor: '#111F40',
         color: '#FFF',
@@ -31,15 +33,15 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
       }}
     >
       <div style={{ 
-        width: '50%', 
+        width: isMobile ? '100%' : '50%', 
         display: 'flex', 
         alignItems: 'flex-start',
         paddingTop: '100px',
         paddingBottom: '100px'
       }}>
         <Stack 
-          px={'13%'} 
-          spacing="xl"
+          px={isMobile ? '6%' : '13%'} 
+          spacing={isMobile ? 'sm' : 'xl'}
         >
           <Group align='center'>
             <Image src={icon || Images.sea_freight} alt="sea freight" w={35} h={35} radius={25} />
@@ -60,7 +62,7 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
           </Title>
           <Text 
             size="smx" 
-            lh={'28px'}
+            lh={isMobile ? '28px' : '28px'}
             style={{ 
               maxWidth: '100%',
               whiteSpace: 'pre-wrap'
@@ -84,7 +86,7 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
       <div style={{ 
         position: 'sticky',
         top: '60px',
-        width: '50%',
+        width: isMobile ? '100%' : '50%',
         height: 'calc(100vh - 60px)',
         alignSelf: 'flex-start'
       }}>

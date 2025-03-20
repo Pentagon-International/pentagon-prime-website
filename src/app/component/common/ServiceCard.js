@@ -7,12 +7,13 @@ import {
   GridCol,
   Group,
   Image,
+  Stack,
   Text,
   Title,
 } from "@mantine/core";
 import React from "react";
 
-const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
+const ServiceCard = ({ item, backgroundColor, border, anchorText, isMobile }) => {
   return (
     <GridCol
       span={{ base: 12, md: 3 }}
@@ -24,11 +25,11 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
         direction={"column"}
         justify={"flex-start"}
         mih={"250px"}
-        p={"40px"}
+        p={isMobile ? '' : "40px"}
         radius={32}
       >
         <Flex
-          alignitems={"center"}
+          align={"center"}
           display={"flex"}
           mb={"10px"}
           w={"fit-content"}
@@ -45,11 +46,11 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
             alt={item.fields.service_title || item.fields.title}
           />
         </Flex>
-        <Group>
+        {isMobile ? <Stack w={"100%"}>
           <Title
             tw="balance"
             display={"flex"}
-            alignitems={"center"}
+            align={"center"}
             fw={700}
             size={theme.fontSizes.base}
             order={4}
@@ -66,7 +67,28 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
           >
             {item.fields.service_description || item.fields.description}
           </Text>
-        </Group>
+        </Stack> : <Group>
+          <Title
+            tw="balance"
+            display={"flex"}
+              align={"center"}
+            fw={700}
+            size={theme.fontSizes.base}
+            order={4}
+            mt={28}
+          >
+            {item.fields.service_title || item.fields.title}
+          </Title>
+          <Text
+            tw="balance"
+            c={COLORS.textColor}
+            lh={"sm"}
+            size="sm"
+            style={{ flexGrow: 1 }}
+          >
+            {item.fields.service_description || item.fields.description}
+          </Text>
+        </Group>}
         {/* {item.fields?.knowmore && (
           <Flex
             align="center"

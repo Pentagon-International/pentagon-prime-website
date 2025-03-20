@@ -1,29 +1,45 @@
-
+'use client'
 import { Container, Grid, Group, Image, Text, Title } from '@mantine/core';
 import { client } from '../api/contentful';
 import { COLORS } from '../utils/COLORS';
 import Images from '../utils/image';
 import ServiceCard from '../component/common/ServiceCard';
 import { highlightText } from '../utils/highlightText';
+import { useMediaQuery } from '@mantine/hooks';
+import { useEffect, useState } from 'react';
+import { Carousel } from '@mantine/carousel';
 
-const Retail = async ({ first_title, first_content, second_title, second_content }) => {
-  const res = await client.getEntries({
-    content_type: 'itworks',
-    order: 'sys.createdAt',
-  });
+const Retail = ({ first_title, first_content, second_title, second_content }) => {
+  const [serviceData, setServiceData] = useState([]);
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
+  useEffect(() => {
+    const fetchServiceData = async () => {
+      try {
+        const res = await client.getEntries({
+          content_type: 'itworks',
+          order: 'sys.createdAt',
+        });
+        setServiceData(res.items || []);
+      } catch (error) {
+        console.error("Error fetching service data:", error);
+      }
+    };
+    fetchServiceData();
+  }, []);
 
   return (
-    <Container fluid px={'7%'}>
-      <Group h={'90vh'} style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center'}}>
+    <Container fluid px={isMobile ? '6%' : '7%'}>
+      <Group h={isMobile ? '' : '90vh'} mt={isMobile ? 'xl' : 0} style={{ display: 'flex', flexDirection: isMobile ? 'row' : 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
         <Title size={'lg'} fw={800} lh={'lgx2'} tt={'uppercase'} tw="balance">
           {highlightText(first_title)}
         </Title>
-        <Text size='sm' mt={10} c={COLORS.textColor} w={'35vw'}>
+        <Text size='sm' mt={10} c={COLORS.textColor} w={isMobile ? '100%' : '35vw'}>
           {highlightText(first_content)}
         </Text>
-        <Image src={Images.prime_network} w={'75%'} mx={'auto'} alt="prime_network" />
+        <Image src={Images.prime_network} w={isMobile ? '100%' : '75%'} mx={'auto'} alt="prime_network" />
       </Group>
-      <Group mb={120} style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center'}}>
+      <Group mb={120} mt={isMobile ? 'xl' : 0} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
         <Title size={'lg'} fw={800} mt={10} tt={'uppercase'} textWrap="balance">
           {highlightText(second_title)}
         </Title>
@@ -31,9 +47,19 @@ const Retail = async ({ first_title, first_content, second_title, second_content
           {highlightText(second_content)}
         </Text>
         <Grid mt="xl">
-          {res.items.map((item) => (
-            <ServiceCard key={item.sys.id} item={item} backgroundColor={'#fff'} />
-          ))}
+          {isMobile ? (
+            <Carousel slideSize="70%" height={250} slideGap="xs" loop>
+              {serviceData.map((item) => (
+                <Carousel.Slide key={item.sys.id}>
+                  <ServiceCard item={item} backgroundColor={'#fff'} isMobile={isMobile} />
+                </Carousel.Slide>
+              ))}
+            </Carousel>
+          ) :
+            serviceData.map((item) => (
+              <ServiceCard key={item.sys.id} item={item} backgroundColor={'#fff'} />
+            ))
+          }
         </Grid>
       </Group>
     </Container>

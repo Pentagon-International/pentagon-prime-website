@@ -159,7 +159,7 @@ const Vision = ({ title, content, tradeItems }) => {
           <Title size={isMobile ? "lg" : "xl"} tt={"uppercase"} lh={isMobile ? "lgx2" : "xlx"} tw="balance" fw={900}>
             {highlightText(title)}
           </Title>
-          <Text mt="md" c={isMobile && COLORS.textColor} maw={"100%"} lh={"sm"} size="sm">
+          <Text mt="md" c={isMobile ? COLORS.textColor : ''} maw={"100%"} lh={"sm"} size="sm">
             {highlightText(content)}
           </Text>
           <Group mt="lg" gap={"xl"}>
