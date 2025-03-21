@@ -16,7 +16,7 @@ const BottomCard = ({ title, text, button }) => {
         backgroundImage: `url(${Images.tradeCard_background2})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        padding: '30px',
+        padding: isMobile ? '2px' : '30px',
       }}
     >
       <Container fluid px="7%" py="lg">

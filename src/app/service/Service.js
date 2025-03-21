@@ -37,7 +37,7 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
         display: 'flex', 
         alignItems: 'flex-start',
         paddingTop: '100px',
-        paddingBottom: '100px'
+        paddingBottom: isMobile ? '50px' : '100px'
       }}>
         <Stack 
           px={isMobile ? '6%' : '13%'} 
@@ -62,7 +62,7 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
           </Title>
           <Text 
             size="smx" 
-            lh={isMobile ? '28px' : '28px'}
+            lh={isMobile ? '20px' : '28px'}
             style={{ 
               maxWidth: '100%',
               whiteSpace: 'pre-wrap'
@@ -71,7 +71,7 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
             {highlightText(content)}
           </Text>
           <Button 
-            size="xl" 
+            size={isMobile ? "md" : "xl"}
             radius={12} 
             fz={'sm'} 
             bg={COLORS.serviceColor} 
@@ -85,9 +85,9 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
 
       <div style={{ 
         position: 'sticky',
-        top: '60px',
+        top: isMobile ? '60px' : '60px',
         width: isMobile ? '100%' : '50%',
-        height: 'calc(100vh - 60px)',
+        height: isMobile ? '60vw' : 'calc(100vh - 60px)',
         alignSelf: 'flex-start'
       }}>
         <BackgroundImage
@@ -99,7 +99,7 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
             right: 0,
             top: 0,
           }}
-          fit="cover"
+          fit={isMobile ? "cover" : "cover"}
           alt="sea freight"
         />
         <div
