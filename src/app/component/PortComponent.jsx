@@ -1,15 +1,20 @@
 import { ActionIcon, Autocomplete, Button, Center, Divider, Flex, Group, Modal, SegmentedControl, Stack, TextInput } from '@mantine/core';
-import { IconArrowsLeftRight, IconBox, IconMail, IconMapPin, IconPlane, IconSquareHalf } from '@tabler/icons-react';
+import { IconArrowsDownUp, IconArrowsLeftRight, IconBox, IconMail, IconMapPin, IconPlane, IconSquareHalf } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { COLORS } from '../utils/COLORS';
 import { sendEnquiryEmail } from '../../../lib/sendEmail';
 import { validation } from '../utils/validateInput';
 import { notifications } from '@mantine/notifications';
+import { useMediaQuery } from '@mantine/hooks';
 
 const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook }) => {
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({})
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const Icon = isMobile ? IconArrowsDownUp : IconArrowsLeftRight
+
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -87,30 +92,30 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
   };
 
   return (
-    <Modal padding={'42px'} radius={'lg'} opened={modalOpened} centered onClose={() => {
+    <Modal padding={isMobile ? '20px' : '42px'} radius={'lg'} opened={modalOpened} centered onClose={() => {
       setModalOpened(false)
       setErrors({})
     }} title="You are just one step away!" size="xl" styles={{
       paddingBottom: '10px'
     }}>
-      <Flex justify='space-between' align='center'>
+      <Flex direction={isMobile ? 'column' : 'row'} justify='space-between' align='center'>
         <Autocomplete
           color={COLORS.secondaryColor}
           placeholder="Select Origin"
-          size="lg"
-          w={'300px'}
-          label="Origin"
+          size={isMobile ? "md" : "lg"}
+          w={isMobile ? '100%' : '300px'}
+          // label="Origin"
           data={transportData}
           fw={500}
           styles={{
             input: {
-              fontSize: '16px',
+              fontSize: isMobile ? '14px' : '16px',
             },
             option: {
-              fontSize: '16px',
+              fontSize: isMobile ? '14px' : '16px',
             },
             label: {
-              fontSize: '16px',
+              fontSize: isMobile ? '14px' : '16px',
             }
           }}
           radius="md"
@@ -122,31 +127,30 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
           variant="default"
           size={28}
           radius="xl"
-          mt={'30'}
           bg={COLORS.secondaryColor}
           style={{ borderColor: COLORS.secondaryColor }}
           onClick={swapOriginDestination}
         >
-          <IconArrowsLeftRight size={18} color={COLORS.primaryColor} />
+          <Icon size={18} color={COLORS.primaryColor} />
         </ActionIcon>
 
         <Autocomplete
           color={COLORS.secondaryColor}
           placeholder="Select Destination"
-          size="lg"
-          label="Destination"
+          size={isMobile ? "md" : "lg"}
+          // label="Destination"
           data={transportData}
-          w={'300px'}
+          w={isMobile ? '100%' : '300px'}
           fw={500}
           styles={{
             input: {
-              fontSize: '16px',
+              fontSize: isMobile ? '14px' : '16px',
             },
             option: {
-              fontSize: '16px',
+              fontSize: isMobile ? '14px' : '16px',
             },
             label: {
-              fontSize: '16px',
+              fontSize: isMobile ? '14px' : '16px',
             }
           }}
           radius="md"
@@ -160,7 +164,7 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
           mt={'lg'}
           style={{
             border: `1px solid #ccc`,
-            padding: '20px',
+            padding: isMobile ? '10px' : '20px',
             borderRadius: '12px'
           }}
         >
@@ -170,7 +174,7 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
               formHook.setFieldValue('typeOfBooking', val);
             }}
             fullWidth
-            size="14px"
+            size={isMobile ? '12px' : "14px"}
             radius={'md'}
             color={'#CDF6FF'}
             defaultValue="FCL"
@@ -186,23 +190,23 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
           />
 
           <Flex mt={'sm'} direction={'column'} >
-            <Flex w={'100%'} align='center' gap={'30'} justify='space-between'>
+            <Flex w={'100%'} direction={isMobile ? 'column' : 'row'} align='center' gap={isMobile ? '10' : '30'} justify='space-between'>
               <TextInput
                 color={COLORS.portColor}
                 placeholder="Enter Full Name"
-                size="lg"
-                w={'50%'}
+                size={isMobile ? "md" : "lg"}
+                w={isMobile ? '100%' : '50%'}
                 label="Name"
                 withAsterisk
                 styles={{
                   input: {
-                    fontSize: '16px',
+                    fontSize: isMobile ? '14px' : '16px',
                   },
                   label: {
-                    fontSize: '16px',
+                    fontSize: isMobile ? '14px' : '16px',
                   },
                   error: {
-                    fontSize: '14px',
+                    fontSize: isMobile ? '12px' : '14px',
                   }
                 }}
                 radius="md"
@@ -212,20 +216,21 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
               <TextInput
                 color={COLORS.portColor}
                 placeholder="Enter Mobile Number"
-                size="lg"
+                size={isMobile ? "md" : "lg"}
                 withAsterisk
-                w={'50%'}
+                w={isMobile ? '100%' : '50%'}
                 label="Mobile Number"
                 radius="md"
                 styles={{
                   input: {
-                    fontSize: '16px',
+                    fontSize: isMobile ? '14px' : '16px',
                   },
                   label: {
-                    fontSize: '16px',
+                    fontSize: isMobile ? '14px' : '16px',
                   },
                   error: {
-                    fontSize: '14px',
+                    fontSize: isMobile ? '12px' : '14px',
+
                   }
                 }}
                 {...formHook.getInputProps('contact_number')}
@@ -235,19 +240,19 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
             <TextInput
               color={COLORS.portColor}
               placeholder="Enter Email Address"
-              size="lg"
+              size={isMobile ? "md" : "lg"}
               withAsterisk
               label="Email"
               radius="md"
               styles={{
                 input: {
-                  fontSize: '16px',
+                  fontSize: isMobile ? '14px' : '16px',
                 },
                 label: {
-                  fontSize: '16px',
+                  fontSize: isMobile ? '14px' : '16px',
                 },
                 error: {
-                  fontSize: '14px',
+                  fontSize: isMobile ? '12px' : '14px',
                 }
               }}
               {...formHook.getInputProps('email')}
@@ -276,7 +281,7 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
         </Button>
       </form>
 
-    </Modal >
+    </Modal>
   );
 };
 

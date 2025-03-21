@@ -109,6 +109,7 @@ const Header = () => {
             </Group>
             <Burger
               opened={drawerOpened}
+              color={COLORS.primaryColor}
               onClick={toggleDrawer}
               hiddenFrom="sm"
             />
@@ -131,7 +132,10 @@ const Header = () => {
                           <IconChevronDown
                             color={COLORS.secondaryColor}
                             stroke={1.5}
-                            onClick={() => setShowNav(!showNav)}
+                            onClick={(e) => {
+                              e.preventDefault()
+                              setShowNav(!showNav)
+                            }}
                           />
                         )}
                       </Text>

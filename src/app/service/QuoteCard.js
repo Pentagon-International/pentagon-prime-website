@@ -74,11 +74,11 @@ const QuoteCard = () => {
             </Flex>
             <Image src={Images.ship} alt="ship" mt={isMobile ? 'xl' : 'md'} />
 
-            <Grid mt={50} w={'100%'} justify='space-between' align={'center'}>
+            <Grid mt={30} mb={100} gutter={30} w={'100%'} justify='space-between' align={'center'}>
               {serviceData.map((item) => (
-                <Grid.Col  key={item.sys.id} span={6}>
-                  <Stack gap={0} align='center' key={item.sys.id}>
-                    <Title size={'md'} tt={'uppercase'} c={'white'}>
+                <Grid.Col key={item.sys.id} span={6}>
+                  <Stack gap={5} align='center' key={item.sys.id}>
+                    <Title size={'lg'} tt={'uppercase'} c={'white'}>
                       {item.fields.tradeValue}
                     </Title>
                     <Text size={'xs'} c={'white'}>{item.fields.tradeName}</Text>

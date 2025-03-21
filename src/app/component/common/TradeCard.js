@@ -40,7 +40,7 @@ const TradeCard = ({ title = '', item = [], background = '' }) => {
               {title}
             </Text>
           )}
-          <Group gap={'50px'} mt={isMobile && 50} ml={'5%'} >
+          <Group gap={'50px'} align='center' justify='space-between' mt={isMobile && 50} ml={isMobile ? 0 : '5%'} >
             {item.map(({ sys, fields }) => (
               <TradeItem
                 key={sys.id}
