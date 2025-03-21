@@ -1,15 +1,26 @@
 'use client';
 
-import { Title, Card, Image } from '@mantine/core';
+import { Title, Card, Button } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { COLORS } from '../utils/COLORS';
-import Images from '../utils/image';
+import { useMediaQuery } from '@mantine/hooks';
+import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 
 const MilestoneTimeline = ({ milestones }) => {
   const [selectedMilestone, setSelectedMilestone] = useState(
     milestones[0] || null
   );
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
+  // Ensure the first milestone is selected on initial load
+  useEffect(() => {
+    if (milestones.length > 0) {
+      setSelectedMilestone(milestones[0]);
+      setActiveIndex(0);
+    }
+  }, [milestones]);
 
   useEffect(() => {
     const svg = document.getElementById('timelineSvg');
@@ -102,22 +113,62 @@ const MilestoneTimeline = ({ milestones }) => {
     });
   }, [activeIndex, milestones]);
 
+  // Move to the next milestone
+  const handleNext = () => {
+    if (activeIndex < milestones.length - 1) {
+      setActiveIndex(activeIndex + 1);
+      setSelectedMilestone(milestones[activeIndex + 1]);
+    }
+  };
+
+  // Move to the previous milestone
+  const handlePrev = () => {
+    if (activeIndex > 0) {
+      setActiveIndex(activeIndex - 1);
+      setSelectedMilestone(milestones[activeIndex - 1]);
+    }
+  };
+
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <svg
-        width="1194"
-        height="488"
-        viewBox="0 0 1194 488"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        id="timelineSvg"
+    <div
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        alignItems: isMobile ? 'center' : 'flex-start',
+        justifyContent: 'center',
+      }}
+    >
+      <div
+        style={{
+          overflowX: isMobile ? 'scroll' : 'visible',
+          width: isMobile ? '100%' : 'auto',
+          marginBottom: isMobile ? '20px' : 0,
+          scrollbarWidth: 'none',
+        }}
       >
-        <path
-          d="M1.00025 486.603L73.9988 464.689L219.499 453.606L342.999 407.606L451.499 350.606L556.999 301.106L656.499 229.106L781.499 204.106L857.499 127.606L975.499 88.6057L1076 39.1056L1193 1.10559"
-          stroke="#ABABAB"
-          strokeDasharray="5 5"
-        />
-      </svg>
+        <svg
+          width={isMobile ? '1200' : '1194'}
+          height={isMobile ? '400' : '488'}
+          viewBox="0 0 1194 488"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          id="timelineSvg"
+          style={{
+            width: isMobile ? '1200px' : '100%',
+            height: 'auto',
+          }}
+        >
+          <path
+            d="M1.00025 486.603L73.9988 464.689L219.499 453.606L342.999 407.606L451.499 350.606L556.999 301.106L656.499 229.106L781.499 204.106L857.499 127.606L975.499 88.6057L1076 39.1056L1193 1.10559"
+            stroke="#ABABAB"
+            strokeDasharray="5 5"
+          />
+        </svg>
+      </div>
+
       {selectedMilestone && (
         <Card
           shadow="sm"
@@ -125,16 +176,37 @@ const MilestoneTimeline = ({ milestones }) => {
           radius="md"
           bg={'#0EC9F21A'}
           style={{
-            position: 'absolute',
-            top: 280,
-            right: 20,
+            width: isMobile ? '90%' : '40%',
+            marginTop: isMobile ? '20px' : 0,
             padding: '20px 30px',
-            width: '40%',
-            marginTop: '10px',
             borderRadius: '8px',
+            position: 'relative',
           }}
         >
-          <Title size={'md'} order={3}>{selectedMilestone.fields.year}</Title>
+          {isMobile && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '-40px',
+                transform: 'translateY(-50%)',
+              }}
+            >
+              <Button
+                variant="light"
+                radius="xl"
+                size="sm"
+                disabled={activeIndex === 0}
+                onClick={handlePrev}
+              >
+                <IconArrowLeft size={20} />
+              </Button>
+            </div>
+          )}
+
+          <Title size={'md'} order={3}>
+            {selectedMilestone.fields.year}
+          </Title>
           <ul style={{ color: COLORS.textColor, marginTop: '20px' }}>
             {selectedMilestone.fields.description?.content.map(
               (item, index) => {
@@ -145,7 +217,11 @@ const MilestoneTimeline = ({ milestones }) => {
                         const text =
                           listItem.content[0]?.content[0]?.value ||
                           'No description available';
-                        return <li style={{ fontSize: '16px' }} key={`${index}-${i}`}>{text}</li>;
+                        return (
+                          <li style={{ fontSize: '16px' }} key={`${index}-${i}`}>
+                            {text}
+                          </li>
+                        );
                       })}
                     </ul>
                   );
@@ -154,16 +230,29 @@ const MilestoneTimeline = ({ milestones }) => {
               }
             )}
           </ul>
+
+          {isMobile && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '50%',
+                right: '-40px',
+                transform: 'translateY(-50%)',
+              }}
+            >
+              <Button
+                variant="light"
+                radius="xl"
+                size="sm"
+                disabled={activeIndex === milestones.length - 1}
+                onClick={handleNext}
+              >
+                <IconArrowRight size={20} />
+              </Button>
+            </div>
+          )}
         </Card>
       )}
-
-      <Image
-        src={Images.arrow}
-        w={20}
-        h={20}
-        alt="arrow"
-        style={{ position: 'absolute', top: 265, right: -10 }}
-      />
     </div>
   );
 };

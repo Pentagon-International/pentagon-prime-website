@@ -8,46 +8,13 @@ const About = ({ title, content }) => {
 
   const isMobile = useMediaQuery('(max-width:768px)')
 
-  const styles = {
-    overlayContainer: {
-      position: 'absolute',
-      width: '50%',
-      height: '100%',
-      top: 0,
-      right: 0,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    overlayImage: {
-      width: '90%',
-      height: 'auto',
-      objectFit: 'contain',
-      position: 'relative',
-      marginRight: '-10%',
-    },
-    contentWrapper: {
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      alignItems: 'center',
-      position: 'relative',
-      zIndex: 2,
-    },
-    textContainer: {
-      width: '50%',
-      paddingRight: '5%',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '24px',
-    },
-  };
 
   return (
-    <Box h={'100vh'} pos={'relative'}   style={{
+    <Box h={'100vh'} pos={'relative'} style={{
       overflow: 'hidden',
-      alignItems : 'center',
-      display : 'flex',
+      alignItems: 'center',
+      display: 'flex',
+      flexDirection: isMobile ? 'column' : 'row'
     }}>
       <Container
         fluid
@@ -55,13 +22,18 @@ const About = ({ title, content }) => {
         h="100%"
       >
         <Box w={'100%'} h={'100%'} pos={'relative'} style={{
-          display : 'flex',
-          alignItems : 'center',
-          zIndex : 2,
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: isMobile ? 'column-reverse' : 'row',
+          zIndex: 2,
         }}>
-          <Box style={styles.textContainer}>
+          <Box w={isMobile ? '100%' : '50%'} pr={'5%'} style={{
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: '24px',
+          }}>
             <Title
-              size="40px"
+              size={isMobile ? '28px' : "40px"}
               textWrap="balance"
               tt="uppercase"
               style={{
@@ -72,12 +44,11 @@ const About = ({ title, content }) => {
             >
               {highlightText(title)}
             </Title>
-
             <Text
               size='sm'
               style={{
                 lineHeight: 1.6,
-                maxWidth: '90%',
+                maxWidth: isMobile ? '100%' : '90%',
                 color: '#666'
               }}
             >
@@ -85,10 +56,20 @@ const About = ({ title, content }) => {
             </Text>
           </Box>
 
-          <Box style={styles.overlayContainer}>
+          <Box pos={!isMobile && "absolute"} mt={isMobile && 50} top={0} right={0} h="100%" w={isMobile ? "100%" : "50%"}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+
+            }}>
             <Image
+              w={isMobile ? "100%" : "90%"}
+              h="auto"
+              alt="PentagonPrime Logo"
+              pos={'relative'}
+              mr={isMobile ? 0 : '-10%'}
               src={Images.pentagon_line}
-              style={styles.overlayImage}
               fit="contain"
             />
           </Box>

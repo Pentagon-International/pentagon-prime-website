@@ -18,7 +18,7 @@ import { usePathname } from "next/navigation";
 import { COLORS } from "@/app/utils/COLORS";
 import Images from "@/app/utils/image";
 import { featuresMap, NavLink } from "../common/NavLink";
-import { IconPhone } from "@tabler/icons-react";
+import { IconChevronDown, IconPhone } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 
 const navItems = [
@@ -36,6 +36,7 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const currentPath = usePathname();
   const router = useRouter();
+  const [showNav, setShowNav] = useState(false)
 
   const isAppliedBackground = ["/", "/contact", "/resource"].includes(
     currentPath
@@ -55,8 +56,8 @@ const Header = () => {
     backgroundColor: isScrolled
       ? "rgba(0, 0, 0, 0.7)"
       : !isAppliedBackground
-      ? "#111F40"
-      : "transparent",
+        ? "#111F40"
+        : "transparent",
     transition: "background-color 0.3s ease-in-out",
     backdropFilter: "blur(10px)",
     zIndex: 1000,
@@ -65,14 +66,16 @@ const Header = () => {
   };
 
   const FeatureItem = ({ feature }) => (
-    <Box>
-      <Text size="sm" fw={500} color={COLORS.secondaryColor}>
-        {feature.title}
-      </Text>
-      <Text size="xs" color="dimmed">
-        {feature.description}
-      </Text>
-    </Box>
+    showNav && (
+      <Box ml={'lg'} mt={20} >
+        <Text size="sm" fw={500} color={COLORS.secondaryColor}>
+          {feature.title}
+        </Text>
+        <Text size="xs" color="dimmed">
+          {feature.description}
+        </Text>
+      </Box>
+    )
   );
 
   return (
@@ -122,8 +125,15 @@ const Header = () => {
                 {navItems.map((item) => (
                   <Box key={item.label}>
                     <a href={item.links} onClick={closeDrawer}>
-                      <Text size="md" color={COLORS.serviceColor}>
+                      <Text size="md" w={'100%'} color={COLORS.secondaryColor} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         {item.label}
+                        {item?.dropdown && (
+                          <IconChevronDown
+                            color={COLORS.secondaryColor}
+                            stroke={1.5}
+                            onClick={() => setShowNav(!showNav)}
+                          />
+                        )}
                       </Text>
                     </a>
                     {item.dropdown &&
@@ -132,6 +142,7 @@ const Header = () => {
                       ))}
                   </Box>
                 ))}
+
                 <Divider my="sm" />
                 {/* <Anchor size="md" ta="center" style={{ color: COLORS.portColor, textDecoration: 'underline' }}>
                   Talk to an Expert
