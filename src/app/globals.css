@@ -108,3 +108,14 @@ a {
   top: 10px;
 
 }
+
+
+@media screen and (max-width: 768px) {
+  .mantine-Carousel-root .mantine-Carousel-controls {
+    display: none !important; /* Force hide on mobile */
+  }
+
+  .mantine-Carousel-root {
+    align-items: start !important;
+  }
+}

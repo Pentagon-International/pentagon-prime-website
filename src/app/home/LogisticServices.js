@@ -6,6 +6,7 @@ import { client } from "@/app/api/contentful";
 import { highlightText } from "../utils/highlightText";
 import { COLORS } from "../utils/COLORS";
 import { useMediaQuery } from "@mantine/hooks";
+import { Carousel } from "@mantine/carousel";
 
 const LogisticsServices = ({ title }) => {
 
@@ -49,15 +50,31 @@ const LogisticsServices = ({ title }) => {
           View All Services
         </Button> */}
       </Flex>
-      <Grid columns={9} mt="lg" gutter="lg">
-        {(serviceData || [])?.map((item, index) => (
-          <ServiceCard
-            key={index}
-            item={item}
-            backgroundColor="#F2F7FC"
-            anchorText={anchorText}
-          />
-        ))}
+      <Grid columns={9} mt="lg" gutter="lg" w={'100%'}>
+        {isMobile ? (
+          <Carousel  align={isMobile ? 'start' : 'center'} slideSize="70%" height={300} w={'100%'} slideGap="xs" loop dragFree>
+            {(serviceData || [])?.map((item, index) => (
+              <Carousel.Slide key={item.sys.id}>
+                <ServiceCard
+                  key={index}
+                  item={item}
+                  backgroundColor="#F2F7FC"
+                  anchorText={anchorText}
+                />
+              </Carousel.Slide>
+            ))}
+          </Carousel>
+        ) :
+          (
+            serviceData || [])?.map((item, index) => (
+              <ServiceCard
+                key={index}
+                item={item}
+                backgroundColor="#F2F7FC"
+                anchorText={anchorText}
+              />
+            ))
+        }
       </Grid>
     </Container>
   );

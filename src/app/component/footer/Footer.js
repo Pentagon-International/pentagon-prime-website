@@ -200,6 +200,7 @@ const Footer = () => {
                 },
                 flexShrink: 0
               }}
+              style={{ cursor: 'pointer' }}
             >
               <IconPhone size={18} color="#0EC9F2" />
               <Text style={{ fontSize: 15, transition: 'color 0.3s ease', whiteSpace: 'nowrap' }}>022 4596 6999</Text>
@@ -208,7 +209,7 @@ const Footer = () => {
             <Group 
               spacing="sm" 
               onClick={() => window.open('mailto:pentagon@pentagonindia.net')}
-              sx={{
+              styles={{
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
                 '&:hover': {
@@ -217,6 +218,7 @@ const Footer = () => {
                 },
                 flexShrink: 0
               }}
+              style={{ cursor: 'pointer' }}
             >
               <IconAt size={18} color="#0EC9F2" />
               <Text color="white" style={{ fontSize: 15, transition: 'color 0.3s ease', whiteSpace: 'nowrap' }}>pentagon@pentagonindia.net</Text>

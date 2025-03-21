@@ -34,19 +34,24 @@ const ACinfo = () => {
               }}>
                 <ListItem>
                   For media inquiries please email{' '}
-                  <span style={{ textDecoration: 'underline' }}>
+                  <span
+                    onClick={() => window.open('mailto:pentagon@pentagonindia.net')}
+                    style={{ textDecoration: 'underline', cursor: 'pointer' }}>
                     press@pentagonprime.com
                   </span>
                 </ListItem>
                 <ListItem>
                   Interested in becoming a partner?{' '}
-                  <span style={{ textDecoration: 'underline' }}>
-                    Submit an inquiry.
+                  <span style={{ textDecoration: 'underline' , cursor : 'pointer' }}>
+                    Submit an enquiry.
                   </span>
                 </ListItem>
                 <ListItem>
                   Have a security issue?{' '}
-                  <span style={{ textDecoration: 'underline' }}>
+                  <span
+                    onClick={() => window.open('mailto:pentagon@pentagonindia.net')}
+                    style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                  >
                     Tell us about it here.
                   </span>
                 </ListItem>

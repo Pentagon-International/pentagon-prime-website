@@ -6,6 +6,7 @@ const Images = {
   container: '/images/container.png',
   vision: '/images/vision.png',
   prime_network: '/images/prime_network.png',
+  mob_prime_network: '/images/mob_prime_network.png',
   flight_blue: '/images/flight_blue.png',
   product_hero: '/images/product_bg.png',
   sea_freight: '/images/sea_freight.png',
