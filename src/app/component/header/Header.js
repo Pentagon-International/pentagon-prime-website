@@ -67,17 +67,20 @@ const Header = () => {
 
   const FeatureItem = ({ feature }) => (
     showNav && (
-      <Box ml={'lg'} mt={20} >
-        <Text size="sm" fw={500} color={COLORS.secondaryColor}>
-          {feature.title}
-        </Text>
-        <Text size="xs" color="dimmed">
-          {feature.description}
-        </Text>
+      <Box ml="lg" mt={20}>
+        <a href={feature.link} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Text size="sm" fw={500} color={COLORS.secondaryColor}>
+            {feature.title}
+          </Text>
+          <Text size="xs" color="dimmed">
+            {feature.description}
+          </Text>
+        </a>
       </Box>
     )
   );
 
+  
   return (
     <Container fluid px="7%">
       <Box>
@@ -125,21 +128,29 @@ const Header = () => {
               <Flex direction="column" gap="md">
                 {navItems.map((item) => (
                   <Box key={item.label}>
-                    <a href={item.links} onClick={closeDrawer}>
-                      <Text size="md" w={'100%'} color={COLORS.secondaryColor} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        {item.label}
-                        {item?.dropdown && (
-                          <IconChevronDown
-                            color={COLORS.secondaryColor}
-                            stroke={1.5}
-                            onClick={(e) => {
-                              e.preventDefault()
-                              setShowNav(!showNav)
-                            }}
-                          />
-                        )}
-                      </Text>
-                    </a>
+                    <Text
+                      size="md"
+                      w="100%"
+                      color={COLORS.secondaryColor}
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
+                      onClick={(e) => {
+                        if (item.dropdown) {
+                          e.preventDefault();
+                          setShowNav(!showNav);
+                        } else {
+                          closeDrawer();
+                          window.location.href = item.links;
+                        }
+                      }}
+                    >
+                      {item.label}
+                      {item?.dropdown && (
+                        <IconChevronDown
+                          color={COLORS.secondaryColor}
+                          stroke={1.5}
+                        />
+                      )}
+                    </Text>
                     {item.dropdown &&
                       featuresMap[item.label]?.map((feature) => (
                         <FeatureItem key={feature.title} feature={feature} />
