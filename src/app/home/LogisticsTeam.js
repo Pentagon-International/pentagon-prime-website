@@ -81,11 +81,11 @@ const LogisticsTeam = ({ title, content }) => {
   }, []);
 
   return (
-    <Container fluid px={ '7%'} py={'70px'}>
+    <Container fluid px={ '7%'} py={'50px'}>
       <Title size={ isMobile ? '22px' : 'lg'} lh={  isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800}>
         {highlightText(title)}
       </Title>
-      <Text size={  isMobile ? "md" : "sm"} py={'sm'} maw={ isMobile ? '80%' : '55%'} fw={500} c={COLORS.textColor}>
+      <Text size={  isMobile ? "14px" : "sm"} lh={ isMobile ? "md" : "lgx2"} py={'sm'} maw={ isMobile ? '80%' : '55%'} fw={500} c={COLORS.textColor}>
         {highlightText(content)}
       </Text>
       <Flex  wrap="wrap" align="center" mt="30px" justify="center" gap="md">

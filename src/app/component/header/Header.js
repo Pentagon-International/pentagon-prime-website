@@ -164,7 +164,7 @@ const Header = () => {
                 </Anchor> */}
                 <Button
                   variant="outline"
-                  size="md"
+                  size="sm"
                   fullWidth
                   style={{
                     borderColor: COLORS.serviceColor,

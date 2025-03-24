@@ -27,6 +27,7 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText, isMobile }) =>
         mih={"250px"}
         p={isMobile ? '' : "40px"}
         radius={32}
+        h={"300px"}
       >
         <Flex
           align={"center"}
@@ -53,7 +54,7 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText, isMobile }) =>
             fw={700}
             size={theme.fontSizes.base}
             order={4}
-            mt={28}
+            mt={isMobile ? 0 : 28}
           >
             {item.fields.service_title || item.fields.title}
           </Title>

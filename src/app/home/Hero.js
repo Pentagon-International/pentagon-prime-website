@@ -167,11 +167,11 @@ const Hero = ({ title, content }) => {
           >
             {highlightText(title)}
           </Title>
-          <Text lh="lgx" size={isMobile ? '16px' : '19px'} maw={isMobile ? '80%' : '40%'} fw={400} mt={15}>
+          <Text lh="lgx" size={isMobile ? '15px' : '19px'} maw={isMobile ? '80%' : '40%'} fw={400} mt={15}>
             {highlightText(content)}
           </Text>
 
-          <Stack mt={'5%'} gap={0} w={isMobile ? '100%' : '45%'}
+          <Stack mt={'20%'} gap={0} w={isMobile ? '100%' : '45%'}
             p={isMobile ? 20 : 25}
             style={styles.transportOptions} >
             <Flex gap={20} >

@@ -64,7 +64,7 @@ const LogisticsServices = ({ title }) => {
             }}
           >
             {(serviceData || [])?.map((item, index) => (
-              <Carousel.Slide key={item.sys.id}>
+              <Carousel.Slide key={item.sys.id} w={'100%'}>
                 <ServiceCard
                   key={index}
                   item={item}
