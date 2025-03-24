@@ -44,25 +44,25 @@ const Ship = ({ first_title, first_content, second_title, second_content }) => {
             {highlightText(first_content)}
           </Text>
           {isMobile ? (
-            <Grid>
-              <Carousel align={'start'} slideSize="80%" height={450} slideGap="md" loop withControls={false}>
-                {serviceData.map((item) => (
-                  <Carousel.Slide key={item.sys.id}>
-                    <GridCol span={12} mt={'md'}>
-                      <Image
-                        src={item.fields.image?.fields?.file?.url}
-                        alt={item.name}
-                      />
-                      <Text size="sm" fw={500} mt={20}>
-                        {item.fields.title}
-                      </Text>
-                      <Text size='smx' mt={10} color="dimmed" lh={isMobile ? '20px' : ''}>
-                        {item.fields.description}
-                      </Text>
-                    </GridCol>
-                  </Carousel.Slide>
-                ))}
-              </Carousel>
+            <Grid w={'100%'}>
+              <Carousel slideSize="80%" w={'100%'} height={450} align={'start'} slideGap="md" loop withControls={false}>
+              {serviceData.map((item) => (
+                <Carousel.Slide key={item.sys.id} w={'100%'}>
+                <GridCol key={item.sys.id} span={15} mt={'md'}>
+                  <Image
+                    src={item.fields.image?.fields?.file?.url}
+                    alt={item.name}
+                  />
+                  <Text size="sm" fw={500} mt={20}>
+                    {item.fields.title}
+                  </Text>
+                  <Text size='smx' mt={10} color="dimmed" lh={isMobile ? '20px' : ''}>
+                    {item.fields.description}
+                  </Text>
+                </GridCol>
+                </Carousel.Slide>
+              ))}
+            </Carousel>
             </Grid>
           ) : (
             <Grid columns={3} gutter={90} mt={60}>
@@ -91,21 +91,21 @@ const Ship = ({ first_title, first_content, second_title, second_content }) => {
           </Text>
           {isMobile ? (
             <Grid>
-              <Carousel align={'start'} slideSize="80%" height={450} slideGap="md" loop withControls={false}>
+              <Carousel slideSize="80%" w={'100%'} height={450} align={'start'} slideGap="md" loop withControls={false}>
                 {serviceData.map((item) => (
-                  <Carousel.Slide key={item.sys.id}>
-                    <GridCol span={12} mt={'md'}>
-                      <Image
-                        src={item.fields.image?.fields?.file?.url}
-                        alt={item.name}
-                      />
-                      <Text size="sm" fw={500} mt={20}>
-                        {item.fields.title}
-                      </Text>
-                      <Text mt={10} size='smx' color="dimmed" lh={isMobile ? '20px' : ''}>
-                        {item.fields.description}
-                      </Text>
-                    </GridCol>
+                  <Carousel.Slide key={item.sys.id} w={'100%'}>
+                  <GridCol key={item.sys.id} span={15} mt={'md'}>
+                    <Image
+                      src={item.fields.image?.fields?.file?.url}
+                      alt={item.name}
+                    />
+                    <Text size="sm" fw={500} mt={20}>
+                      {item.fields.title}
+                    </Text>
+                    <Text mt={10} size='smx' color="dimmed" lh={isMobile ? '20px' : ''}>
+                      {item.fields.description}
+                    </Text>
+                  </GridCol>
                   </Carousel.Slide>
                 ))}
               </Carousel>

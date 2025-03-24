@@ -48,7 +48,7 @@ const Retail = ({ first_title, first_content, second_title, second_content }) =>
         </Text>
         <Grid mt="xl" w={"100%"}>
           {isMobile ? (
-            <Carousel slideSize="75%" height={250} w={'100%'} slideGap="xs" loop withControls={false}>
+            <Carousel slideSize="80%" height={250} w={'100%'} align={'start'} loop slideGap="md" withControls={false}>
               {serviceData.map((item) => (
                 <Carousel.Slide key={item.sys.id}>
                   <ServiceCard item={item} backgroundColor={'#fff'} isMobile={isMobile} />

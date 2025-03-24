@@ -50,7 +50,6 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText, isMobile }) =>
           <Title
             tw="balance"
             display={"flex"}
-            align={"center"}
             fw={700}
             size={theme.fontSizes.base}
             order={4}
