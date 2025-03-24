@@ -14,10 +14,59 @@ import { COLORS } from '../utils/COLORS';
 import Images from '../utils/image';
 import { theme } from '../utils/theme';
 import { useMediaQuery } from '@mantine/hooks';
+import { useForm } from '@mantine/form';
+import { useEffect, useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import PortComponent from '../component/PortComponent';
+import { apiCallProtected } from '../api/api';
 
 const ACinfo = () => {
 
   const isMobile = useMediaQuery('(max-width:768px)')
+  const [modalOpened, setModalOpened] = useState(false);
+  const [activeTransport, setActiveTransport] = useState('sea');
+  const [transportData, setTransportData] = useState([]);
+
+  const { data } = useQuery({
+    queryKey: [`${activeTransport}PortData`],
+    queryFn: async () => {
+      const response = await apiCallProtected.get(`pentagon/${activeTransport}PortData`);
+      return response.data;
+    },
+    refetchOnWindowFocus: false,
+    select: (data) =>
+      data?.data?.map((item) => ({
+        label: item.name,
+        value: String(item.id),
+      })) || [],
+  });
+
+  console.log(data);
+
+
+
+
+  // Memoize the transport data to avoid unnecessary re-renders
+  const memoizedTransportData = useMemo(() => data || [], [data]);
+
+  useEffect(() => {
+    if (data && transportData !== data) {
+      setTransportData(data);
+    }
+  }, [data]);
+
+
+
+  const formHook = useForm({
+    initialValues: {
+      origin: '',
+      destination: '',
+      name: '',
+      contact_number: '',
+      email: '',
+      typeOfBooking: 'FCL',
+    },
+  });
 
   return (
     <Box bg={'#E9EEF4'}>
@@ -42,7 +91,10 @@ const ACinfo = () => {
                 </ListItem>
                 <ListItem>
                   Interested in becoming a partner?{' '}
-                  <span style={{ textDecoration: 'underline' , cursor : 'pointer' }}>
+                  <span style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                    onClick={() => setModalOpened(true)}
+                  >
+
                     Submit an enquiry.
                   </span>
                 </ListItem>
@@ -63,6 +115,13 @@ const ACinfo = () => {
           </GridCol>
         </Grid>
       </Container>
+
+      <PortComponent
+        transportData={memoizedTransportData}
+        modalOpened={modalOpened}
+        setModalOpened={setModalOpened}
+        formHook={formHook}
+      />
     </Box>
   );
 };

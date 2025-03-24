@@ -71,6 +71,7 @@ const Vision = ({ title, content, tradeItems }) => {
   const router = useRouter();
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [embla, setEmbla] = useState(null); 
+  const [videoCount , setVideoCount] = useState(1);
   const videoRefs = useRef([]);
 
 
@@ -106,8 +107,10 @@ const Vision = ({ title, content, tradeItems }) => {
         if (video) video.pause();
       });
 
+      
       // Play the current video
       const currentIndex = embla.selectedScrollSnap();
+      setVideoCount(currentIndex + 1); // Update the video count
       const currentVideo = videoRefs.current[currentIndex];
       if (currentVideo) {
         currentVideo.currentTime = 0;
@@ -309,7 +312,7 @@ const Vision = ({ title, content, tradeItems }) => {
               borderRadius: "20px",
             }}
           >
-            {embla ? embla.selectedScrollSnap() + 1 : 1} / {videos.length}
+            {embla ? videoCount : 1} / {videos.length}
           </Text>
         </Box>
       </Modal>

@@ -109,13 +109,19 @@ a {
 
 }
 
-
-@media screen and (max-width: 768px) {
-  .mantine-Carousel-root .mantine-Carousel-controls {
-    display: none !important; /* Force hide on mobile */
-  }
-
-  .mantine-Carousel-root {
-    align-items: start !important;
-  }
+.custom-carousel .mantine-Carousel-control:first-child {
+  position: absolute;
+  top: 380px;
+  left: 240px;
+  z-index: 2;
 }
+
+.custom-carousel .mantine-Carousel-control:last-child {
+  position: absolute;
+  top: 380px;
+  right: 40px;
+  z-index: 2;
+}
+
+
+

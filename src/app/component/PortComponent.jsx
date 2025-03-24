@@ -1,6 +1,6 @@
 import { ActionIcon, Autocomplete, Button, Center, Divider, Flex, Group, Modal, SegmentedControl, Stack, TextInput } from '@mantine/core';
 import { IconArrowsDownUp, IconArrowsLeftRight, IconBox, IconMail, IconMapPin, IconPlane, IconSquareHalf } from '@tabler/icons-react';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { COLORS } from '../utils/COLORS';
 import { sendEnquiryEmail } from '../../../lib/sendEmail';
 import { validation } from '../utils/validateInput';
@@ -14,6 +14,30 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
 
   const isMobile = useMediaQuery('(max-width: 768px)');
   const Icon = isMobile ? IconArrowsDownUp : IconArrowsLeftRight
+
+    const notificationShownRef = useRef(false);
+  
+    useEffect(() => {
+      if (
+        formHook.values.origin &&
+        formHook.values.destination &&
+        formHook.values.origin === formHook.values.destination &&
+        !notificationShownRef.current
+      ) {
+        notifications.show({
+          title: 'Error',
+          message: 'Origin and destination cannot be the same',
+          color: 'red',
+        });
+  
+        notificationShownRef.current = true;
+        formHook.reset();
+  
+        setTimeout(() => {
+          notificationShownRef.current = false;
+        }, 1000);
+      }
+    }, [formHook.values.origin, formHook.values.destination]);
 
 
   const handleSubmit = async () => {

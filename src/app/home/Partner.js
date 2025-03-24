@@ -58,7 +58,11 @@ const Partner = ({ title, content }) => {
         </Button>
       </Flex>
 
-      <Box mt={50} pos={'relative'} p={isMobile ? 0 : 20} w={isMobile ? '100%' : '90%'} m={'0 auto'}>
+      <Box mt={50} pos={'relative'}
+        // p={isMobile ? 0 : 20}   
+        w={isMobile ? '100%' : '100%'}
+      // m={'0 auto'}
+      >
         <Carousel
           slideSize="100%"
           slideGap="xs"
@@ -67,6 +71,8 @@ const Partner = ({ title, content }) => {
           dragFree={false}
           containScroll="trimSnaps"
           align="start"
+          loop
+          className={ isMobile && 'custom-carousel'}
           nextControlIcon={<IconArrowNarrowRight style={{ backgroundColor: COLORS.primaryColor }} size={22} color={COLORS.secondaryColor} />}
           previousControlIcon={<IconArrowNarrowLeft style={{ backgroundColor: COLORS.primaryColor }} size={22} color={COLORS.secondaryColor} />}
         >
@@ -74,7 +80,7 @@ const Partner = ({ title, content }) => {
             <CarouselSlide key={index}>
               <Flex
                 w={'100%'}
-                h={isMobile ? '100%' : '350px'}
+                h={isMobile ? '100%' : '400px'}
                 align={'center'}
                 pos={'relative'}
                 direction={'column'}

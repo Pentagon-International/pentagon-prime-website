@@ -53,7 +53,16 @@ const Global = () => {
 
         {
           isMobile ? (
-            <Carousel mt={40} align={'start'} slideSize="80%" height={'auto'} w={'100%'} slideGap="xs" loop dragFree>
+            <Carousel mt={40} align={'start'} slideSize="80%" height={'auto'} w={'100%'} slideGap="xs" loop
+              styles={{
+                controls: {
+                  display: 'none',
+                  visibility: 'hidden',
+                  opacity: 0,
+                  pointerEvents: 'none',
+                }
+              }}
+            >
               {locationData.map((item) => (
                 <Carousel.Slide key={item.sys.id}>
                   <Card mih={'200px'} bg={'#F2F7FC'} radius={'32px'} p={30}>

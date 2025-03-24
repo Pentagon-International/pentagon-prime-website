@@ -102,7 +102,16 @@ const Members = () => {
       <Grid columns={3} px={isMobile ? 0 : 100}>
         {
           isMobile ? (
-            <Carousel align={'start'} slideSize="70%" height={'auto'} w={'100%'} slideGap="xs" loop dragFree>
+            <Carousel align={'start'} slideSize="70%" height={'auto'} w={'100%'} slideGap="xs" loop
+              styles={{
+                controls: {
+                  display: 'none',
+                  visibility: 'hidden',
+                  opacity: 0,
+                  pointerEvents: 'none',
+                }
+              }}
+            >
               {members.map((item) => (
                 <Carousel.Slide w={'100%'} key={item.sys.id}>
                   <GridCol w={'100%'} span={12}>

@@ -52,7 +52,17 @@ const LogisticsServices = ({ title }) => {
       </Flex>
       <Grid columns={9} mt="lg" gutter="lg" w={'100%'}>
         {isMobile ? (
-          <Carousel  align={isMobile ? 'start' : 'center'} slideSize="70%" height={300} w={'100%'} slideGap="xs" loop dragFree>
+          <Carousel
+            align={isMobile ? 'start' : 'center'} slideSize="70%" height={300} w={'100%'} slideGap="xs" loop
+            styles={{
+              controls: {
+                display: 'none',
+                visibility: 'hidden',
+                opacity: 0,
+                pointerEvents: 'none',
+              },
+            }}
+          >
             {(serviceData || [])?.map((item, index) => (
               <Carousel.Slide key={item.sys.id}>
                 <ServiceCard

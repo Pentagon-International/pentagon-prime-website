@@ -45,40 +45,48 @@ const NewsList = ({ newsItems }) => {
 
       {
         isMobile ? (
-          <>
-             <Carousel align={'start' } slideSize="80%" height={'auto'} w={'100%'} slideGap="xs" loop dragFree>
-                {currentItems.map(({ sys, fields }) => (
-                  <Carousel.Slide key={sys.id}>
-                    <Flex
-                      direction="column"
-                      h="100%"
-                      justify="space-between"
-                      style={{
-                        columnGap: '10px',
-                        rowGap: '5px'
-                      }}
-                    >
-                      <Image
-                        src={fields.newsImage?.fields?.file?.url}
-                        alt={fields.newsName || 'News image'}
-                        fit="cover"
-                        style={{ borderRadius: '24px' }}
-                        mah={'250px'}
-                        mih={'250px'}
-                      />
-                      <Text c="#999" fw={700} size="xs" mt={10} tt="uppercase">
-                        {fields.newsName}
-                      </Text>
-                      <Text fw={700} size="sm" maw={'72%'} c={COLORS.news_title}>
-                        {fields.newsTitle}
-                      </Text>
-                      <Text fw={700} size="xs" c={COLORS.news_title}>
-                        {fields.newsDate}
-                      </Text>
-                    </Flex>
-                  </Carousel.Slide>
-                ))}
-             </Carousel>
+          <>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <Carousel align={'start'} slideSize="80%" height={'auto'} w={'100%'} slideGap="xs" loop
+              styles={{
+                controls: {
+                  display: 'none',
+                  visibility: 'hidden',
+                  opacity: 0,
+                  pointerEvents: 'none',
+                },
+              }}
+            >
+              {currentItems.map(({ sys, fields }) => (
+                <Carousel.Slide key={sys.id}>
+                  <Flex
+                    direction="column"
+                    h="100%"
+                    justify="space-between"
+                    style={{
+                      columnGap: '10px',
+                      rowGap: '5px'
+                    }}
+                  >
+                    <Image
+                      src={fields.newsImage?.fields?.file?.url}
+                      alt={fields.newsName || 'News image'}
+                      fit="cover"
+                      style={{ borderRadius: '24px' }}
+                      mah={'250px'}
+                      mih={'250px'}
+                    />
+                    <Text c="#999" fw={700} size="xs" mt={10} tt="uppercase">
+                      {fields.newsName}
+                    </Text>
+                    <Text fw={700} size="sm" maw={'72%'} c={COLORS.news_title}>
+                      {fields.newsTitle}
+                    </Text>
+                    <Text fw={700} size="xs" c={COLORS.news_title}>
+                      {fields.newsDate}
+                    </Text>
+                  </Flex>
+                </Carousel.Slide>
+              ))}
+            </Carousel>
           </>
         )
           :
