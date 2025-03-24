@@ -6,8 +6,13 @@ import { sendEnquiryEmail } from '../../../lib/sendEmail';
 import { validation } from '../utils/validateInput';
 import { notifications } from '@mantine/notifications';
 import { useMediaQuery } from '@mantine/hooks';
+import useTransportStore from '../store/transportStore';
 
-const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook }) => {
+const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook, transport }) => {
+
+  const { airData } = useTransportStore();
+
+  const selectData = formHook?.values?.typeOfBooking === 'AIR' ? airData : transportData
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({})
@@ -15,29 +20,39 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
   const isMobile = useMediaQuery('(max-width: 768px)');
   const Icon = isMobile ? IconArrowsDownUp : IconArrowsLeftRight
 
-    const notificationShownRef = useRef(false);
-  
-    useEffect(() => {
-      if (
-        formHook.values.origin &&
-        formHook.values.destination &&
-        formHook.values.origin === formHook.values.destination &&
-        !notificationShownRef.current
-      ) {
-        notifications.show({
-          title: 'Error',
-          message: 'Origin and destination cannot be the same',
-          color: 'red',
-        });
-  
-        notificationShownRef.current = true;
-        formHook.reset();
-  
-        setTimeout(() => {
-          notificationShownRef.current = false;
-        }, 1000);
-      }
-    }, [formHook.values.origin, formHook.values.destination]);
+  const notificationShownRef = useRef(false);
+
+  useEffect(() => {
+    if (
+      formHook.values.origin &&
+      formHook.values.destination &&
+      formHook.values.origin === formHook.values.destination &&
+      !notificationShownRef.current
+    ) {
+      notifications.show({
+        title: 'Error',
+        message: 'Origin and destination cannot be the same',
+        color: 'red',
+      });
+
+      notificationShownRef.current = true;
+      formHook.reset();
+
+      setTimeout(() => {
+        notificationShownRef.current = false;
+      }, 1000);
+    }
+  }, [formHook.values.origin, formHook.values.destination]);
+
+  useEffect(() => {
+    if (transport === 'sea' && formHook?.values?.typeOfBooking === 'AIR') {
+      formHook.setValues({
+        ...formHook.values,
+        origin: '',
+        destination: '',
+      });
+    }
+  }, [formHook?.values?.typeOfBooking, transport])
 
 
   const handleSubmit = async () => {
@@ -128,8 +143,9 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
           placeholder="Select Origin"
           size={isMobile ? "md" : "lg"}
           w={isMobile ? '100%' : '300px'}
+          limit={5}
           // label="Origin"
-          data={transportData}
+          data={selectData}
           fw={500}
           styles={{
             input: {
@@ -163,7 +179,8 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook })
           placeholder="Select Destination"
           size={isMobile ? "md" : "lg"}
           // label="Destination"
-          data={transportData}
+          data={selectData}
+          limit={5}
           w={isMobile ? '100%' : '300px'}
           fw={500}
           styles={{

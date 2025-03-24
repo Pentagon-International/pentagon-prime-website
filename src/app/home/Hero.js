@@ -31,6 +31,7 @@ import { useForm } from '@mantine/form';
 import PortComponent from '../component/PortComponent';
 import { notifications } from '@mantine/notifications';
 import { useMediaQuery } from '@mantine/hooks';
+import useTransportStore from '../store/transportStore';
 
 
 // Memoized TransportOption component to prevent re-renders
@@ -67,10 +68,12 @@ const Hero = ({ title, content }) => {
     },
   });
 
-  const { data } = useQuery({
-    queryKey: [`${activeTransport}PortData`],
+  const { seaData, airData, setSeaData, setAirData } = useTransportStore();
+
+  const { data: seaPortData } = useQuery({
+    queryKey: [`seaPortData`],
     queryFn: async () => {
-      const response = await apiCallProtected.get(`pentagon/${activeTransport}PortData`);
+      const response = await apiCallProtected.get(`pentagon/seaPortData`);
       return response.data;
     },
     refetchOnWindowFocus: false,
@@ -81,14 +84,24 @@ const Hero = ({ title, content }) => {
       })) || [],
   });
 
-  // Memoize the transport data to avoid unnecessary re-renders
-  const memoizedTransportData = useMemo(() => data || [], [data]);
+  const { data: airPortData } = useQuery({
+    queryKey: [`airPortData`],
+    queryFn: async () => {
+      const response = await apiCallProtected.get(`pentagon/airPortData`);
+      return response.data;
+    },
+    refetchOnWindowFocus: false,
+    select: (data) =>
+      data?.data?.map((item) => ({
+        label: item.name,
+        value: String(item.id),
+      })) || [],
+  });
 
-  useEffect(() => {
-    if (data && transportData !== data) {
-      setTransportData(data);
-    }
-  }, [data]);
+  // Memoize transport data based on active transport
+  const memoizedTransportData = useMemo(() => {
+    return activeTransport === 'sea' ? seaData : airData;
+  }, [activeTransport, seaData, airData]);
 
 
   const notificationShownRef = useRef(false);
@@ -114,6 +127,12 @@ const Hero = ({ title, content }) => {
       }, 1000);
     }
   }, [formHook.values.origin, formHook.values.destination]);
+
+
+  useEffect(() => {
+    if (seaPortData) setSeaData(seaPortData || [])
+    if (airPortData) setAirData(airPortData || [])
+  }, [seaPortData , airPortData])
 
   // Optimized swap function
   const swapOriginDestination = useCallback(() => {
@@ -294,6 +313,7 @@ const Hero = ({ title, content }) => {
         modalOpened={modalOpened}
         setModalOpened={setModalOpened}
         formHook={formHook}
+        transport={activeTransport} 
       />
     </Box>
   );

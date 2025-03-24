@@ -19,43 +19,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import PortComponent from '../component/PortComponent';
 import { apiCallProtected } from '../api/api';
+import useTransportStore from '../store/transportStore';
 
 const ACinfo = () => {
 
   const isMobile = useMediaQuery('(max-width:768px)')
   const [modalOpened, setModalOpened] = useState(false);
-  const [activeTransport, setActiveTransport] = useState('sea');
-  const [transportData, setTransportData] = useState([]);
 
-  const { data } = useQuery({
-    queryKey: [`${activeTransport}PortData`],
-    queryFn: async () => {
-      const response = await apiCallProtected.get(`pentagon/${activeTransport}PortData`);
-      return response.data;
-    },
-    refetchOnWindowFocus: false,
-    select: (data) =>
-      data?.data?.map((item) => ({
-        label: item.name,
-        value: String(item.id),
-      })) || [],
-  });
-
-  console.log(data);
-
-
-
-
-  // Memoize the transport data to avoid unnecessary re-renders
-  const memoizedTransportData = useMemo(() => data || [], [data]);
-
-  useEffect(() => {
-    if (data && transportData !== data) {
-      setTransportData(data);
-    }
-  }, [data]);
-
-
+  const { seaData } = useTransportStore();
 
   const formHook = useForm({
     initialValues: {
@@ -117,10 +88,11 @@ const ACinfo = () => {
       </Container>
 
       <PortComponent
-        transportData={memoizedTransportData}
+        transportData={seaData}
         modalOpened={modalOpened}
         setModalOpened={setModalOpened}
         formHook={formHook}
+        transport={'sea'}
       />
     </Box>
   );
