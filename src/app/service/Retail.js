@@ -37,7 +37,7 @@ const Retail = ({ first_title, first_content, second_title, second_content }) =>
         <Text size='sm' mt={10} c={COLORS.textColor} w={isMobile ? '100%' : '35vw'} lh={isMobile ? '24px' : ''}>
           {highlightText(first_content)}
         </Text>
-        <Image src={Images.prime_network} w={isMobile ? '100%' : '75%'} mx={'auto'} alt="prime_network" />
+        <Image src={isMobile ? Images.mob_prime_network : Images.prime_network} w={isMobile ? '100%' : '75%'} mx={'auto'} alt="prime_network" />
       </Group>
       <Group mb={120} mt={isMobile ? '100px' : 0} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
         <Title size={'lg'} fw={800} mt={10} tt={'uppercase'} textWrap="balance">
@@ -48,7 +48,7 @@ const Retail = ({ first_title, first_content, second_title, second_content }) =>
         </Text>
         <Grid mt="xl" w={"100%"}>
           {isMobile ? (
-            <Carousel slideSize="70%" height={250} w={'100%'} slideGap="xs" loop withControls={false}>
+            <Carousel slideSize="75%" height={250} w={'100%'} slideGap="xs" loop withControls={false}>
               {serviceData.map((item) => (
                 <Carousel.Slide key={item.sys.id}>
                   <ServiceCard item={item} backgroundColor={'#fff'} isMobile={isMobile} />
