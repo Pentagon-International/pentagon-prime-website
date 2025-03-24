@@ -24,6 +24,7 @@ import {
 } from '@tabler/icons-react';
 import Images from "@/app/utils/image";
 import React from 'react';
+import { useMediaQuery } from '@mantine/hooks';
 
 const Footer = () => {
   // Reorganize services into 3 columns
@@ -56,13 +57,15 @@ const Footer = () => {
     }
   };
 
+  const isMobile = useMediaQuery('(max-width:768px)');
+
   return (
     <footer style={{ backgroundColor: '#111', color: 'white', padding: '50px 0' }}>
       <Container fluid px="7%">
         {/* Top Section: Services on left, Company info on right */}
-        <Flex 
-          direction={{ base: 'column', md: 'row' }} 
-          justify="space-between" 
+        <Flex
+          direction={{ base: 'column', md: 'row' }}
+          justify="space-between"
           gap={{ base: 40, md: 60 }}
           mb={50}
         >
@@ -71,16 +74,16 @@ const Footer = () => {
             <Flex align="center" gap="xs" mb={20}>
               <Image src={Images.logo} alt="Logo" h={50} />
             </Flex>
-            
-            <Text color="white" lh={1.6} mb={20} style={{ fontSize: 15 }}>
+
+            <Text color="white" lh={1.6} mb={20} style={{ fontSize: isMobile ? 12 : 15 }}>
               Pentagon Prime, a unit of Pentagon Group, provides logistics and freight forwarding services.
               We enable our clients to enhance efficiency with cost-effective solutions, connecting them seamlessly with the world.
             </Text>
-            
+
             <Group>
               <Box
-                style={{ cursor: 'pointer' }} 
-                sx={{ 
+                style={{ cursor: 'pointer' }}
+                sx={{
                   transition: 'transform 0.3s ease',
                   '&:hover': { transform: 'translateY(-3px)', color: '#0E53F2' }
                 }}
@@ -88,9 +91,9 @@ const Footer = () => {
               >
                 <IconBrandLinkedin size={22} />
               </Box>
-              <Box 
+              <Box
                 style={{ cursor: 'pointer' }}
-                sx={{ 
+                sx={{
                   transition: 'transform 0.3s ease',
                   '&:hover': { transform: 'translateY(-3px)', color: '#0E53F2' }
                 }}
@@ -98,9 +101,9 @@ const Footer = () => {
               >
                 <IconBrandInstagram size={22} />
               </Box>
-              <Box 
+              <Box
                 style={{ cursor: 'pointer' }}
-                sx={{ 
+                sx={{
                   transition: 'transform 0.3s ease',
                   '&:hover': { transform: 'translateY(-3px)', color: '#0E53F2' }
                 }}
@@ -113,39 +116,79 @@ const Footer = () => {
 
           {/* Services - 3 Column Layout */}
           <Box style={{ flex: 3 }} pt={14}>
-            <Text fw={700} size="smx" style={{ textTransform: 'uppercase', color: '#666' }} mb={15}>
-              Services
-            </Text>
-            
-            <SimpleGrid cols={3} spacing="xl" breakpoints={[{ maxWidth: 'md', cols: 2 }, { maxWidth: 'xs', cols: 1 }]}>
-              {services.map((column, colIndex) => (
-                <Stack key={colIndex} spacing={6}>
-                  {column.map((item, index) => (
-                    <Anchor
-                      key={index}
-                      href={`/service/${item.slug}`}
-                      style={{ color: COLORS.primaryColor }}
-                      underline={false}
-                      sx={{
-                        ...linkStyle,
-                        lineHeight: 1.2,
-                        padding: '2px 0',
-                      }}
-                    >
-                      <Text 
-                        style={{ 
+            <Group justify='space-between'>
+              <Text fw={700} size="smx" style={{ textTransform: 'uppercase', color: '#666', width: '47%' }} mb={15}>
+                Services
+              </Text>
+              <Text fw={700} size="smx" style={{ textTransform: 'uppercase', color: '#666', width: '47%' }} mb={15}>
+                Services
+              </Text>
+            </Group>
+
+            {isMobile ?
+              <SimpleGrid cols={2} spacing="md" breakpoints={[{ maxWidth: 'md', cols: 2 }, { maxWidth: 'xs', cols: 2 }]}>
+                {[[...services[0], services[1][0], services[1][1]], [services[1][2], services[1][3], ...services[2]]].map((column, colIndex) => (
+                  <Stack key={colIndex} spacing={6}>
+                    {column.map((item, index) => (
+                      <Anchor
+                        key={index}
+                        href={`/service/${item.slug}`}
+                        style={{ color: COLORS.primaryColor }}
+                        underline={false}
+                        sx={{
+                          ...linkStyle,
                           lineHeight: 1.2,
-                          margin: 0,
-                          fontSize: 15,
+                          padding: '2px 0',
+                          fontSize: 12,
                         }}
                       >
-                        {item.title}
-                      </Text>
-                    </Anchor>
-                  ))}
-                </Stack>
-              ))}
-            </SimpleGrid>
+                        <Text
+                          style={{
+                            lineHeight: 1.2,
+                            margin: 0,
+                            fontSize: 12,
+                          }}
+                          p={'0px'}
+                          m={'0px'}
+                        >
+                          {item.title}
+                        </Text>
+                      </Anchor>
+                    ))}
+                  </Stack>
+                ))}
+              </SimpleGrid>
+              :
+              <SimpleGrid cols={3} spacing="xl" breakpoints={[{ maxWidth: 'md', cols: 2 }, { maxWidth: 'xs', cols: 1 }]}>
+                {services.map((column, colIndex) => (
+                  <Stack key={colIndex} spacing={6}>
+                    {column.map((item, index) => (
+                      <Anchor
+                        key={index}
+                        href={`/service/${item.slug}`}
+                        style={{ color: COLORS.primaryColor }}
+                        underline={false}
+                        sx={{
+                          ...linkStyle,
+                          lineHeight: 1.2,
+                          padding: '2px 0',
+                        }}
+                      >
+                        <Text
+                          style={{
+                            lineHeight: 1.2,
+                            margin: 0,
+                            fontSize: 15,
+                          }}
+                        >
+                          {item.title}
+                        </Text>
+                      </Anchor>
+                    ))}
+                  </Stack>
+                ))}
+              </SimpleGrid>
+            }
           </Box>
         </Flex>
 
@@ -156,17 +199,17 @@ const Footer = () => {
           <Text fw={700} size="smx" style={{ textTransform: 'uppercase', color: '#666' }} mb={15}>
             Contact
           </Text>
-          
-          <Flex 
-            direction="row" 
-            gap="xl" 
+
+          <Flex
+            direction="row"
+            gap="xl"
             align="flex-start"
             wrap="wrap"
             justify="space-between"
             mb={20}
           >
-            <Group 
-              spacing="sm" 
+            <Group
+              spacing="sm"
               align="flex-start"
               sx={{
                 transition: 'all 0.3s ease',
@@ -180,16 +223,16 @@ const Footer = () => {
               style={{ cursor: 'pointer' }}
             >
               <IconMapPin size={18} color="#0EC9F2" style={{ flexShrink: 0, marginTop: 4 }} />
-              <Text 
-                style={{ fontSize: 15 }}
+              <Text
+                style={{ fontSize: isMobile ? 12 : 15 }}
               >
                 Unit No. 204, Satellite Silver, Marol Naka, Andheri Kurla Road,
                 Andheri (East), Mumbai – 400059, India.
               </Text>
             </Group>
-            
-            <Group 
-              spacing="sm" 
+
+            <Group
+              spacing="sm"
               onClick={() => window.open('tel:+912245966999')}
               sx={{
                 cursor: 'pointer',
@@ -203,11 +246,11 @@ const Footer = () => {
               style={{ cursor: 'pointer' }}
             >
               <IconPhone size={18} color="#0EC9F2" />
-              <Text style={{ fontSize: 15, transition: 'color 0.3s ease', whiteSpace: 'nowrap' }}>022 4596 6999</Text>
+              <Text style={{ fontSize: isMobile ? 12 : 15, transition: 'color 0.3s ease', whiteSpace: 'nowrap' }}>022 4596 6999</Text>
             </Group>
-            
-            <Group 
-              spacing="sm" 
+
+            <Group
+              spacing="sm"
               onClick={() => window.open('mailto:pentagon@pentagonindia.net')}
               styles={{
                 cursor: 'pointer',
@@ -221,7 +264,7 @@ const Footer = () => {
               style={{ cursor: 'pointer' }}
             >
               <IconAt size={18} color="#0EC9F2" />
-              <Text color="white" style={{ fontSize: 15, transition: 'color 0.3s ease', whiteSpace: 'nowrap' }}>pentagon@pentagonindia.net</Text>
+              <Text color="white" style={{ fontSize: isMobile ? 12 : 15, transition: 'color 0.3s ease', whiteSpace: 'nowrap' }}>pentagon@pentagonindia.net</Text>
             </Group>
           </Flex>
         </Box>
