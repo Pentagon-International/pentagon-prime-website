@@ -1,10 +1,11 @@
 'use client';
 
-import { Title, Card, Button } from '@mantine/core';
+import { Title, Card, Button, Group, Image } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { COLORS } from '../utils/COLORS';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+import Images from '../utils/image';
 
 const MilestoneTimeline = ({ milestones }) => {
   const [selectedMilestone, setSelectedMilestone] = useState(
@@ -26,6 +27,10 @@ const MilestoneTimeline = ({ milestones }) => {
     const svg = document.getElementById('timelineSvg');
     const path = svg.querySelector('path');
     const pathLength = path.getTotalLength();
+
+    while (svg.lastChild && svg.lastChild.tagName !== 'path') {
+      svg.removeChild(svg.lastChild);
+    }
 
     milestones.forEach((milestone, index) => {
       const adjustedIndex = index + 1;
@@ -74,9 +79,9 @@ const MilestoneTimeline = ({ milestones }) => {
         'http://www.w3.org/2000/svg',
         'text'
       );
-      yearText.setAttribute('x', position.x - 10);
+      yearText.setAttribute('x', position.x - 40);
       yearText.setAttribute('y', position.y - 30);
-      yearText.setAttribute('font-size', '24');
+      yearText.setAttribute('font-size', '20');
       yearText.setAttribute('fill', COLORS.textColor);
       yearText.setAttribute('font-weight', 600);
       yearText.setAttribute('dominant-baseline', 'middle');
@@ -131,17 +136,19 @@ const MilestoneTimeline = ({ milestones }) => {
 
   return (
     <div
+      // className='border-2 border-amber-300'
       style={{
         position: 'relative',
         width: '100%',
         height: '100%',
-        display: 'flex',
+        display: isMobile && 'flex',
         flexDirection: isMobile ? 'column' : 'row',
         alignItems: isMobile ? 'center' : 'flex-start',
         justifyContent: 'center',
       }}
     >
       <div
+        // className='border-2 border-red-300'
         style={{
           overflowX: isMobile ? 'scroll' : 'visible',
           width: isMobile ? '100%' : 'auto',
@@ -181,6 +188,7 @@ const MilestoneTimeline = ({ milestones }) => {
             padding: '20px 30px',
             borderRadius: '8px',
             position: 'relative',
+            right: isMobile ? 0 : -880,
           }}
         >
           {isMobile && (
@@ -218,7 +226,7 @@ const MilestoneTimeline = ({ milestones }) => {
                           listItem.content[0]?.content[0]?.value ||
                           'No description available';
                         return (
-                          <li style={{ fontSize: '16px' }} key={`${index}-${i}`}>
+                          <li style={{ fontSize: '16px', listStyleType: 'disc' }} key={`${index}-${i}`}>
                             {text}
                           </li>
                         );
@@ -247,12 +255,13 @@ const MilestoneTimeline = ({ milestones }) => {
                 disabled={activeIndex === milestones.length - 1}
                 onClick={handleNext}
               >
-                <IconArrowRight size={20} />
+                <IconArrowRight size={20} color={COLORS.secondaryColor} />
               </Button>
             </div>
           )}
         </Card>
       )}
+      {/* <Image src={Images.arrow} w={30} h={30} alt="arrow" pos={'absolute'} right={isMobile ? 0 : 50} bottom={140} /> */}
     </div>
   );
 };
