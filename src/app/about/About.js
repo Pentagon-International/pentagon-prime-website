@@ -29,7 +29,7 @@ const About = ({ title, content }) => {
         }}>
           <Box w={isMobile ? '100%' : '50%'} pr={'5%'} style={{
             display: 'flex',
-            flexDirection: isMobile ? 'column' : 'row',
+            flexDirection: 'column',
             gap: '24px',
           }}>
             <Title

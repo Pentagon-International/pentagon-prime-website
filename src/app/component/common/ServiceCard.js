@@ -11,9 +11,13 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import React from "react";
 
-const ServiceCard = ({ item, backgroundColor, border, anchorText, isMobile }) => {
+const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
+
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
   return (
     <GridCol
       span={{ base: 12, md: 3 }}
@@ -25,7 +29,7 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText, isMobile }) =>
         direction={"column"}
         justify={"flex-start"}
         mih={"250px"}
-        p={isMobile ? '' : "40px"}
+        p={isMobile ? '20px' : "40px"}
         radius={32}
         h={"300px"}
       >

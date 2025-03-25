@@ -60,11 +60,11 @@ const CertificateList = ({ certificateItems }) => {
                         ) :
                             <Carousel
                                 height={120}
-                                slideSize="16.6%" // 6 items per page
+                                slideSize="20%" // 5 items per page
                                 mt="lg"
                                 loop
-                                w={'90%'}
-                                slideGap="md"
+                                w={'95%'}
+                                slideGap="10px"
                                 align="start"
                                 controlSize={40}
                                 previousControlIcon={<IconArrowLeft size={20} />}
@@ -78,7 +78,7 @@ const CertificateList = ({ certificateItems }) => {
                                 ]}
                             >
                                 {certificateItems.map((item, index) => (
-                                    <Carousel.Slide key={index}>
+                                    <Carousel.Slide style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}  key={index}>
                                         <img
                                             src={item.fields.certificateImage.fields.file.url}
                                             alt={item.fields.certificateName}

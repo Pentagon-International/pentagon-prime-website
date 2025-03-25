@@ -30,22 +30,22 @@ const Contact = () => {
   return (
     <Container fluid px={'7%'}>
       <Flex
-        align={'center'}
+        align={isMobile ? 'flex-start' : 'center'}
         direction={isMobile ? 'column-reverse' : 'row'}
         px={'auto'}
-        justify={ !isMobile && 'space-between'}
+        justify={isMobile ? 'center' : 'space-between'}
         style={{
           color: 'white',
           height: '100vh',
         }}
       >
-        <Stack p={isMobile ? 0 : 15}>
+        <Stack p={isMobile ? 0 : 15} >
           <Title size={isMobile ? '26px' : '40px'} lh={'lgx2'} fw={800} tt={'uppercase'}>Contact Us</Title>
           <Text size={isMobile ? 'sm' : 'base'} lh={'28px'} tw='balance'>
             Ready to begin your journey with Pentagon Prime, have a question, or
             need assistance? We're here to help.
           </Text>
-          <Text size={ isMobile ? '18px' :  'base'} fw={700}>Headquarters</Text>
+          <Text size={isMobile ? '18px' : 'base'} fw={700}>Headquarters</Text>
           <Text size='sm' tw="balance" maw={isMobile ? '100%' : '70%'}>
             Unit No. 204 Satellite Silver, Marol Naka Andheri Kurla Road,
             Andheri (east) Mumbai, Maharashtra – 400059, India

@@ -170,7 +170,12 @@ const Header = () => {
                     borderColor: COLORS.serviceColor,
                     color: COLORS.serviceColor,
                   }}
-                  onClick={() => router.push("/contact")}
+                  onClick={
+                    () => {
+                      router.push("/contact")
+                      closeDrawer()
+                    }
+                  }
                 >
                   Talk to an Expert
                 </Button>

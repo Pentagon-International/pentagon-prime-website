@@ -15,6 +15,7 @@ const Mission = () => {
       try {
         const res = await client.getEntries({
           content_type: 'visionMission',
+          order: '-sys.createdAt',
         });
         setVisionData(res.items);
       } catch (error) {

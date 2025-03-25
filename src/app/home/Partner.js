@@ -114,6 +114,8 @@ const Partner = ({ title, content }) => {
                     zIndex: 1,
                     display: 'flex',
                     flexDirection: 'column',
+                    justifyContent: 'center',
+                    height: '100%',
                   }}
                 >
                   <Text size="16px" lh={'sm'} maw={'90%'} tw="balance">

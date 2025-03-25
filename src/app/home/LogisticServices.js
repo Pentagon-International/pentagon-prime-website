@@ -36,7 +36,7 @@ const LogisticsServices = ({ title }) => {
     <Container fluid px={"7%"} py={"70px"} >
       <Flex direction={'row'} align={'center'} gap={'lg'} justify={'space-between'}>
         <Stack>
-          <Title tt={"uppercase"} lh={"lgx2"} fw={800} size={isMobile ? "20px" : "34px"}>
+          <Title tt={"uppercase"} lh={  isMobile ? "md" : "lgx2"} fw={800} size={isMobile ? "20px" : "34px"}>
             {highlightText(title)}
           </Title>
         </Stack>
