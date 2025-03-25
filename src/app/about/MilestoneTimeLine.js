@@ -1,10 +1,10 @@
 'use client';
 
-import { Title, Card, Button, Group, Image } from '@mantine/core';
+import { Title, Card, Button, Group, Image, Box, ActionIcon } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { COLORS } from '../utils/COLORS';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+import { IconArrowLeft, IconArrowRight, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import Images from '../utils/image';
 
 const MilestoneTimeline = ({ milestones }) => {
@@ -136,7 +136,6 @@ const MilestoneTimeline = ({ milestones }) => {
 
   return (
     <div
-      // className='border-2 border-amber-300'
       style={{
         position: 'relative',
         width: '100%',
@@ -148,7 +147,6 @@ const MilestoneTimeline = ({ milestones }) => {
       }}
     >
       <div
-        // className='border-2 border-red-300'
         style={{
           overflowX: isMobile ? 'scroll' : 'visible',
           width: isMobile ? '100%' : 'auto',
@@ -183,6 +181,7 @@ const MilestoneTimeline = ({ milestones }) => {
           radius="md"
           bg={'#0EC9F21A'}
           style={{
+            overflow: "visible",
             width: isMobile ? '90%' : '40%',
             marginTop: isMobile ? '20px' : 0,
             padding: '20px 30px',
@@ -191,24 +190,29 @@ const MilestoneTimeline = ({ milestones }) => {
             right: isMobile ? 0 : -880,
           }}
         >
+
+          <Box style={{ width: 30, height: 30 }} pos={'absolute'} right={isMobile ? -30 : -30} top={-30}>
+            <Image src={Images.arrow} w={"100%"} h={"100%"} alt="arrow" />
+          </Box>
           {isMobile && (
             <div
               style={{
                 position: 'absolute',
                 top: '50%',
-                left: '-40px',
+                left: '-30px',
                 transform: 'translateY(-50%)',
+                backgroundColor: 'transparent',
               }}
             >
-              <Button
-                variant="light"
+              <ActionIcon
+                variant="outline"
                 radius="xl"
                 size="sm"
                 disabled={activeIndex === 0}
                 onClick={handlePrev}
               >
-                <IconArrowLeft size={20} />
-              </Button>
+                <IconChevronLeft size={20} />
+              </ActionIcon>
             </div>
           )}
 
@@ -244,24 +248,24 @@ const MilestoneTimeline = ({ milestones }) => {
               style={{
                 position: 'absolute',
                 top: '50%',
-                right: '-40px',
+                right: '-30px',
                 transform: 'translateY(-50%)',
+                backgroundColor: 'transparent',
               }}
             >
-              <Button
-                variant="light"
+              <ActionIcon
+                variant="outline"
                 radius="xl"
                 size="sm"
                 disabled={activeIndex === milestones.length - 1}
                 onClick={handleNext}
               >
-                <IconArrowRight size={20} color={COLORS.secondaryColor} />
-              </Button>
+                <IconChevronRight size={20} />
+              </ActionIcon>
             </div>
           )}
         </Card>
       )}
-      {/* <Image src={Images.arrow} w={30} h={30} alt="arrow" pos={'absolute'} right={isMobile ? 0 : 50} bottom={140} /> */}
     </div>
   );
 };
