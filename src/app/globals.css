@@ -54,7 +54,7 @@ a {
 .autocomplete-input::placeholder {
   color: white !important;
   opacity: 1 ! important;
-  font-size: 15px ! important; 
+  font-size: 15px ! important;
 }
 
 
@@ -78,7 +78,8 @@ a {
   transform: translateY(-50%);
   display: flex;
   width: 100%;
-  pointer-events: none; /* Ensures clicks only happen on buttons */
+  pointer-events: none;
+  /* Ensures clicks only happen on buttons */
 }
 
 .mantine-Carousel-control {
@@ -90,13 +91,14 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: all; /* Enables click events */
+  pointer-events: all;
+  /* Enables click events */
 }
 
 /* Left arrow */
 .mantine-Carousel-control:first-child {
   position: absolute;
-  left: -20px; 
+  left: -20px;
   top: 10px;
 }
 
@@ -104,7 +106,7 @@ a {
 /* Right arrow */
 .mantine-Carousel-control:last-child {
   position: absolute;
-  right: -20px; 
+  right: -20px;
   top: 10px;
 
 }
@@ -116,12 +118,20 @@ a {
   z-index: 2;
 }
 
+.mantine-Carousel-indicator {
+  width: 10px !important;
+  height: 10px !important;
+  transition: width 250ms ease, height 250ms ease;
+
+  &[data-active] {
+    width: 12px;
+    height: 12px;
+  }
+}
+
 .custom-carousel .mantine-Carousel-control:last-child {
   position: absolute;
   top: 380px;
   right: 40px;
   z-index: 2;
 }
-
-
-

@@ -6,4 +6,20 @@ export const fetchTradeData = async () => {
       order: 'sys.createdAt',
     });
     return res.items;
-  };
+};
+
+export const fetchTradecontent = async () => {
+  const res = await client.getEntries({
+    content_type: 'trade',
+    order: 'sys.createdAt',
+  });
+  return res.items;
+}
+
+export const fetchPrimeNetwork = async () => {
+  const res = await client.getEntries({
+    content_type: 'primeNetwork',
+    order: 'sys.createdAt',
+  });
+  return res.items;
+}

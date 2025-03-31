@@ -39,7 +39,8 @@ const Retail = ({ first_title, first_content, second_title, second_content }) =>
         </Text>
         <Image src={isMobile ? Images.mob_prime_network : Images.prime_network} w={isMobile ? '100%' : '75%'} mx={'auto'} alt="prime_network" />
       </Group>
-      <Group mb={120} mt={isMobile ? '100px' : 0} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
+      {/* commented due to chages said by CEO said to remove */}
+      {/* <Group mb={120} mt={isMobile ? '100px' : 0} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
         <Title size={'lg'} fw={800} mt={10} tt={'uppercase'} textWrap="balance">
           {highlightText(second_title)}
         </Title>
@@ -61,7 +62,7 @@ const Retail = ({ first_title, first_content, second_title, second_content }) =>
             ))
           }
         </Grid>
-      </Group>
+      </Group> */}
     </Container>
   );
 };

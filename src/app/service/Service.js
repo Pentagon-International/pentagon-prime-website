@@ -23,7 +23,7 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
   return (
     <div
       style={{
-        minHeight: '100vh',
+        maxHeight: '70vh',
         display: 'flex',
         flexDirection: isMobile ? 'column' : 'row',
         marginTop: '60px',
@@ -32,45 +32,47 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
         position: 'relative',
       }}
     >
-      <div style={{ 
-        width: isMobile ? '100%' : '50%', 
-        display: 'flex', 
+      <div style={{
+        width: isMobile ? '100%' : '50%',
+        display: 'flex',
         alignItems: 'flex-start',
         paddingTop: '100px',
         paddingBottom: isMobile ? '50px' : '100px'
       }}>
-        <Stack 
-          px={isMobile ? '6%' : '13%'} 
+        <Stack
+          px={isMobile ? '6%' : '13%'}
           spacing={isMobile ? 'sm' : 'xl'}
         >
           <Group align='center'>
-            <Image src={icon || Images.sea_freight} alt="sea freight" w={35} h={35} radius={25} />
-            <Text 
+            <Flex gap={'md'}>
+              <Image src={icon || Images.sea_freight} alt="sea freight" w={35} h={35} radius={25} />
+              <Title
+                size={'lg'}
+                tt={'uppercase'}
+                textWrap="balance"
+                style={{ maxWidth: '100%' }}
+              >
+                {highlightText(title)}
+              </Title>
+            </Flex>
+            <Text
               size="sm"
               style={{ maxWidth: '100%' }}
             >
               {highlightText(iconTitle)}
             </Text>
           </Group>
-          <Title
-            size={'lg'}
-            tt={'uppercase'}
-            textWrap="balance"
-            style={{ maxWidth: '100%' }}
-          >
-            {highlightText(title)}
-          </Title>
-          <Text 
-            size="smx" 
+          <Text
+            size="smx"
             lh={isMobile ? '20px' : '28px'}
-            style={{ 
+            style={{
               maxWidth: '100%',
               whiteSpace: 'pre-wrap'
             }}
           >
             {highlightText(content)}
           </Text>
-          <Button 
+          {/* <Button 
             size={isMobile ? "md" : "xl"}
             radius={12} 
             fz={'sm'} 
@@ -79,15 +81,15 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
             onClick={() => router.push('/contact')}
           >
             Join Now
-          </Button>
+          </Button> */}
         </Stack>
       </div>
 
-      <div style={{ 
+      <div style={{
         position: 'sticky',
         top: isMobile ? '60px' : '60px',
         width: isMobile ? '100%' : '50%',
-        height: isMobile ? '60vw' : 'calc(100vh - 60px)',
+        height: isMobile ? '60vw' : 'calc(70vh)',
         alignSelf: 'flex-start'
       }}>
         <BackgroundImage

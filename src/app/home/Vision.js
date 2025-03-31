@@ -67,11 +67,15 @@ const styles = {
   },
 };
 
-const Vision = ({ title, content, tradeItems }) => {
+const Vision = ({ title, content, tradeItems , tradeContent }) => {
   const router = useRouter();
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [embla, setEmbla] = useState(null); 
   const videoRefs = useRef([]);
+
+
+  console.log("<><><<><><" , tradeContent);
+  
 
 
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -135,7 +139,7 @@ const Vision = ({ title, content, tradeItems }) => {
       py={isMobile ? "30px" : "70px"}
       style={styles.container}
     >
-      <Trade items={tradeItems} />
+      <Trade items={tradeItems} content={tradeContent} />
       <Flex
         direction={{ base: "column", md: "row" }}
         align="center"
@@ -156,7 +160,7 @@ const Vision = ({ title, content, tradeItems }) => {
           p={'0 2%'}
           mt={isMobile && 50}
         >
-          <Title size={isMobile ? "lg" : "xl"} tt={"uppercase"} lh={isMobile ? "lgx2" : "xlx"} tw="balance" fw={900}>
+          <Title size={isMobile ? "lg" : "xl"} tt={"uppercase"} lh={isMobile ? "lgx2" : 0.7} tw="balance" fw={900}>
             {highlightText(title)}
           </Title>
           <Text mt="md" c={isMobile ? COLORS.textColor : ''} maw={"100%"} lh={"sm"} size="sm">
@@ -191,14 +195,14 @@ const Vision = ({ title, content, tradeItems }) => {
                 },
               }}
             >
-              <Flex align="center" gap={8} className="unstyled-button">
+              {/* <Flex align="center" gap={8} className="unstyled-button">
                 <IconBrandParsinta
                   size={18}
                   className="icon"
                   style={{ transition: "all 0.3s ease" }}
                 />
                 <span style={{ transition: "all 0.3s ease" }}>Watch Video</span>
-              </Flex>
+              </Flex> */}
             </UnstyledButton>
           </Group>
         </Flex>

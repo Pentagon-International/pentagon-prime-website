@@ -135,7 +135,7 @@ const Members = () => {
           ) :
 
             members.map((item) => (
-              <GridCol key={item.sys.id} span={1}>
+              <GridCol key={item.sys.id} span={1} mb={'xl'}>
                 <Image
                   radius={'lg'}
                   style={{ width: '80%', height: '80%', objectFit: 'cover' }}

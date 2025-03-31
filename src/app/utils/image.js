@@ -28,7 +28,8 @@ const Images = {
   vessel: '/images/vessel.jpg',
   port: '/images/port.jpg',
   pentagon_freight: '/images/pentagon-freight.png',
-  pentagon_line: '/images/pentagon-line.png'
+  pentagon_line: '/images/pentagon-line.png',
+  pentagon_zig_zag: '/images/zig_zag.png',
 };
 
 export default Images;

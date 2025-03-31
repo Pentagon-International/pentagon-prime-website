@@ -56,7 +56,7 @@ const About = ({ title, content }) => {
             </Text>
           </Box>
 
-          <Box pos={!isMobile && "absolute"} mt={isMobile && 50} top={0} right={0} h="100%" w={isMobile ? "100%" : "50%"}
+          <Box pos={!isMobile && "absolute"} mt={isMobile && 50} top={'60px'} right={0} h="100%" w={isMobile ? "100%" : "60%"}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -64,11 +64,11 @@ const About = ({ title, content }) => {
 
             }}>
             <Image
-              w={isMobile ? "100%" : "90%"}
+              w={isMobile ? "100%" : "100%"}
               h="auto"
               alt="PentagonPrime Logo"
               pos={'relative'}
-              mr={isMobile ? 0 : '-10%'}
+              mr={isMobile ? 0 : '-16%'}
               src={Images.pentagon_line}
               fit="contain"
             />

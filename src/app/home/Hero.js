@@ -132,7 +132,7 @@ const Hero = ({ title, content }) => {
   useEffect(() => {
     if (seaPortData) setSeaData(seaPortData || [])
     if (airPortData) setAirData(airPortData || [])
-  }, [seaPortData , airPortData])
+  }, [seaPortData, airPortData])
 
   // Optimized swap function
   const swapOriginDestination = useCallback(() => {
@@ -151,7 +151,7 @@ const Hero = ({ title, content }) => {
         {
           !isMobile && (
             <Box style={styles.overlayContainer}>
-              <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} />
+              <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} h={745}/>
             </Box>
           )
         }
@@ -167,143 +167,146 @@ const Hero = ({ title, content }) => {
           >
             {highlightText(title)}
           </Title>
-          <Text lh={ isMobile ? "md" : "lgx"} size={isMobile ? '15px' : '19px'} maw={isMobile ? '80%' : '40%'} fw={400} mt={15}>
+          <Text lh={isMobile ? "md" : "lgx"} size={isMobile ? '15px' : '19px'} maw={isMobile ? '80%' : '40%'} fw={400} mt={15}>
             {highlightText(content)}
           </Text>
-
-          <Stack mt={ isMobile ? '15%' :  '7%'} gap={0} w={isMobile ? '100%' : '45%'}
-            p={isMobile ? 20 : 25}
-            style={styles.transportOptions} >
-            <Flex gap={20} >
-              <TransportOption
-                type="sea"
-                icon={<IconShip size={20} color={COLORS.primaryColor} />}
-                activeTransport={activeTransport}
-                onClick={setActiveTransport}
-              />
-              <TransportOption
-                type="air"
-                icon={<IconPlaneInflight size={20} color={COLORS.primaryColor} />}
-                activeTransport={activeTransport}
-                onClick={setActiveTransport}
-              />
-            </Flex>
-            <Flex direction="column">
-              <form>
-                <Flex direction={isMobile ? 'column' : 'row'} w={'100%'} align='center' gap={isMobile ? 0 : '30'} justify='space-between'>
-                  <Autocomplete
-                    placeholder="Select Origin"
-                    size="lg"
-                    w={isMobile ? '100%' : '45%'}
-                    limit={5}
-                    data={memoizedTransportData}
-                    className='custom-placeholder'
-                    radius="md"
-                    styles={{
-                      input: {
-                        fontSize: '18px',
-                        backgroundColor: '#ffffff45',
-                        color: '#fff',
-                        "::placeholder": {
-                          color: "#fff",
-                          opacity: 1,
+          <Box h={'100%'}>
+            {/* <Flex align={'flex-end'} h={'100%'} bg={'red'}> */}
+            <Stack mt={isMobile ? '15%' : '4.25%'} gap={0} w={isMobile ? '100%' : '45%'} 
+              p={isMobile ? 20 : 25}
+              // bg={'red'}
+              style={styles.transportOptions} >
+              <Flex gap={20} >
+                <TransportOption
+                  type="sea"
+                  icon={<IconShip size={20} color={COLORS.primaryColor} />}
+                  activeTransport={activeTransport}
+                  onClick={setActiveTransport}
+                />
+                <TransportOption
+                  type="air"
+                  icon={<IconPlaneInflight size={20} color={COLORS.primaryColor} />}
+                  activeTransport={activeTransport}
+                  onClick={setActiveTransport}
+                />
+              </Flex>
+              <Flex direction="column">
+                <form>
+                  <Flex direction={isMobile ? 'column' : 'row'} w={'100%'} align='center' gap={isMobile ? 0 : '30'} justify='space-between'>
+                    <Autocomplete
+                      placeholder="Select Origin"
+                      size="lg"
+                      w={isMobile ? '100%' : '45%'}
+                      limit={5}
+                      data={memoizedTransportData}
+                      className='custom-placeholder'
+                      radius="md"
+                      styles={{
+                        input: {
+                          fontSize: '18px',
+                          backgroundColor: '#ffffff45',
+                          color: '#fff',
+                          "::placeholder": {
+                            color: "#fff",
+                            opacity: 1,
+                          },
                         },
-                      },
-                      option: {
-                        fontSize: '16px',
-                        color: '#000'
-                      },
-                      dropdown: {
-                        color: '#fff',
-                      },
+                        option: {
+                          fontSize: '16px',
+                          color: '#000'
+                        },
+                        dropdown: {
+                          color: '#fff',
+                        },
+                        label: {
+                          fontSize: '16px',
+                          fontWeight: '600',
+                          color: '#fff',
+                        },
+                      }}
+                      classNames={{
+                        input: 'autocomplete-input',
+                      }}
+                      autoComplete="off"
+                      leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
+                      {...formHook.getInputProps('origin')}
+                    />
+                    <ActionIcon
+                      variant="default"
+                      size={32}
+                      radius="xl"
+                      bg={COLORS.secondaryColor}
+                      style={{ borderColor: COLORS.secondaryColor }}
+                      onClick={swapOriginDestination}
+                      styles={{
+                        root: {
+                          alignItems: isMobile ? 'center' : 'flex-end'
+                        }
+                      }}
+                    >
+                      <Icon size={20} color={COLORS.primaryColor} />
+                    </ActionIcon>
+
+                    <Autocomplete
+                      placeholder="Select Destination"
+                      size="lg"
+                      limit={5}
+                      data={memoizedTransportData}
+                      radius="md"
+                      w={isMobile ? '100%' : '45%'}
+                      styles={{
+                        input: {
+                          fontSize: '18px',
+                          backgroundColor: '#ffffff45',
+                          color: '#fff'
+                        },
+                        item: {
+                          fontSize: '18px',
+                        },
+                        option: {
+                          fontSize: '16px',
+                          color: '#000'
+                        },
+                        dropdown: {
+                          color: '#fff',
+                        },
+                        label: {
+                          fontSize: '16px',
+                          fontWeight: '600',
+                          color: '#fff',
+                        },
+                      }}
+                      classNames={{
+                        input: 'autocomplete-input',
+                      }}
+                      autoComplete="off"
+                      leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
+                      {...formHook.getInputProps('destination')}
+                    />
+                  </Flex>
+                  <Button
+                    fullWidth
+                    mt={30}
+                    size='lg'
+                    fw={600}
+                    // disabled={!isFormValid}
+                    styles={{
                       label: {
                         fontSize: '16px',
-                        fontWeight: '600',
-                        color: '#fff',
+
                       },
                     }}
-                    classNames={{
-                      input: 'autocomplete-input',
-                    }}
-                    autoComplete="off"
-                    leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
-                    {...formHook.getInputProps('origin')}
-                  />
-                  <ActionIcon
-                    variant="default"
-                    size={32}
-                    radius="xl"
-                    bg={COLORS.secondaryColor}
-                    style={{ borderColor: COLORS.secondaryColor }}
-                    onClick={swapOriginDestination}
-                    styles={{
-                      root: {
-                        alignItems: isMobile ? 'center' : 'flex-end'
-                      }
-                    }}
+                    bg={'##CDF6FF'}
+                    c={COLORS.primaryColor}
+                    onClick={() => isFormValid && setModalOpened(true)}
                   >
-                    <Icon size={20} color={COLORS.primaryColor} />
-                  </ActionIcon>
-
-                  <Autocomplete
-                    placeholder="Select Destination"
-                    size="lg"
-                    limit={5}
-                    data={memoizedTransportData}
-                    radius="md"
-                    w={isMobile ? '100%' : '45%'}
-                    styles={{
-                      input: {
-                        fontSize: '18px',
-                        backgroundColor: '#ffffff45',
-                        color: '#fff'
-                      },
-                      item: {
-                        fontSize: '18px',
-                      },
-                      option: {
-                        fontSize: '16px',
-                        color: '#000'
-                      },
-                      dropdown: {
-                        color: '#fff',
-                      },
-                      label: {
-                        fontSize: '16px',
-                        fontWeight: '600',
-                        color: '#fff',
-                      },
-                    }}
-                    classNames={{
-                      input: 'autocomplete-input',
-                    }}
-                    autoComplete="off"
-                    leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
-                    {...formHook.getInputProps('destination')}
-                  />
-                </Flex>
-                <Button
-                  fullWidth
-                  mt={30}
-                  size='lg'
-                  fw={600}
-                  // disabled={!isFormValid}
-                  styles={{
-                    label: {
-                      fontSize: '16px',
-
-                    },
-                  }}
-                  bg={'##CDF6FF'}
-                  c={COLORS.primaryColor}
-                  onClick={() => isFormValid && setModalOpened(true)}
-                >
-                  Get Quote
-                </Button>
-              </form>
-            </Flex>
-
-          </Stack>
+                    Get Quote
+                  </Button>
+                </form>
+              </Flex>
+            </Stack>
+            {/* </Flex> */}
+          </Box>
         </Stack>
       </Container>
 
@@ -313,7 +316,7 @@ const Hero = ({ title, content }) => {
         modalOpened={modalOpened}
         setModalOpened={setModalOpened}
         formHook={formHook}
-        transport={activeTransport} 
+        transport={activeTransport}
       />
     </Box>
   );
@@ -328,7 +331,7 @@ const styles = {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     color: 'white',
-    height: '100vh',
+    minHeight: '100vh',
     position: 'relative',
     overflowY: 'hidden',
     top: 0,
@@ -348,7 +351,7 @@ const styles = {
     left: '75%',
     transform: 'translate(-50% , 10%)',
     width: '45%',
-    objectFit: 'cover',
+    objectFit: 'contain',
     zIndex: 1,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',

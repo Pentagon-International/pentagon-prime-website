@@ -7,10 +7,15 @@ import { COLORS } from '../utils/COLORS';
 import { highlightText } from '../utils/highlightText';
 import { useMediaQuery } from '@mantine/hooks';
 
-const desc = highlightText("Automation, AI, and real-time tracking optimize efficiency, reducing costs and delays.")
-const desc2 = highlightText("The Prime Network ensures fast, scalable, and reliable international shipping.")
+// const desc = highlightText("Automation, AI, and real-time tracking optimize efficiency, reducing costs and delays.")
+// const desc2 = highlightText("As a logistics tech company, the Prime Network ensures fast, scalable, and reliable international shipping leveraging innovative solutions that redefine the logistics landscape.")
 
-const PrimeNetwork = () => {
+// Automation, AI, and real-time tracking seamlessly drive efficiency, lowering costs and reducing delays. As a logistics tech company, the Prime Network ensures fast, scalable, and reliable international shipping leveraging innovative solutions that redefine the logistics landscape.
+
+const PrimeNetwork = ({content}) => {
+
+  const title = content[0]?.fields?.title
+  const description = content[0]?.fields?.description
 
   const isMobile = useMediaQuery('(max-width:768px)');
 
@@ -19,25 +24,24 @@ const PrimeNetwork = () => {
       <Flex gap="md" wrap="nowrap" direction={'column'}>
         <Flex direction={'column'}>
           <Title tt="uppercase" tw="balance" fw={800}>
-            SHIP OVER OUR <span style={{ color: COLORS.serviceColor }}>PRIME NETWORK</span>
+          {highlightText(title)}
           </Title>
           <Text c={COLORS.textColor} size="base" lh="sm" maw={ isMobile ? '100%' : '35%'} mt={14}>
-            {desc}<br/>
-            {desc2}
+          {highlightText(description)}
           </Text>
         </Flex>
 
         <Image
-          src={ isMobile ? Images.mob_prime_network : Images.prime_network}
+          src={ isMobile ? Images.mob_prime_network : Images.pentagon_zig_zag}
           alt="PentagonPrime Logo"
           h="auto"
           mt={isMobile ? 70 : 0}
           style={{
             position: 'relative',
-            transform: 'translateY(-25%)',
+            transform: 'translateY(-50%)',
             // top: '10px',
-            // maxWidth: '100%',
-            // height: 'auto',
+            maxWidth: '50%',
+            // height: '10%',
           }}
         />
       </Flex>

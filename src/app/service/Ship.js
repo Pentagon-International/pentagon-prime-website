@@ -83,8 +83,8 @@ const Ship = ({ first_title, first_content, second_title, second_content }) => {
             </Grid>
           )}
         </Flex>
-
-        <Flex direction={'column'}>
+        {/* commented due to chages said by CEO said to remove*/}
+        {/* <Flex direction={'column'}>
           <Title size={'lg'} tt={'uppercase'}>{highlightText(second_title)}</Title>
           <Text size='sm' c={COLORS.textColor} w={isMobile ? '100%' : '40vw'} lh={isMobile ? '20px' : ''}>
             {highlightText(second_content)}
@@ -128,7 +128,7 @@ const Ship = ({ first_title, first_content, second_title, second_content }) => {
               ))}
             </Grid>
           )}
-        </Flex>
+        </Flex> */}
       </Stack>
     </Container>
   );

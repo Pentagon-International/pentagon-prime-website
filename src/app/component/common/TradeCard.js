@@ -25,13 +25,15 @@ const TradeCard = ({ title = '', item = [], background = '' }) => {
 
 
   return (
-    <Container fluid px={isMobile ? '0' : "7%"} py={isMobile ? "30px" : "50px"}>
+    <Container fluid
+      px={isMobile && '0'}
+      py={isMobile ? "30px" : "50px"}>
       <Box style={getCardStyles(background)}>
         <Flex align="center" justify="space-between" wrap="wrap" w="100%">
           {title && (
             <Text
-              w={isMobile ? "100%" : "30%"}
-              size={isMobile ? "lgx" : "md"}
+              w={"100%"}
+              size={isMobile ? "lgx" : "lg"}
               lh={'lgx'}
               tw='balance'
               ta={isMobile && "center"}
@@ -40,7 +42,7 @@ const TradeCard = ({ title = '', item = [], background = '' }) => {
               {title}
             </Text>
           )}
-          <Group gap={'50px'} align='center' justify='space-between' mt={isMobile && 50} ml={isMobile ? 0 : '5%'} >
+          <Group w={"100%"} align='center' justify='space-between' mt={50} ml={isMobile && 0} >
             {item.map(({ sys, fields }) => (
               <TradeItem
                 key={sys.id}

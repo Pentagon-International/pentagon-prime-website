@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { COLORS } from '@/app/utils/COLORS';
 import { Carousel, CarouselSlide } from '@mantine/carousel';
 import { Box, Button, Container, Flex, Stack, Text, Title } from '@mantine/core';
@@ -9,10 +9,12 @@ import { useRouter } from 'next/navigation';
 import { client } from '../api/contentful';
 import { highlightText } from '../utils/highlightText';
 import { useMediaQuery } from '@mantine/hooks';
+import Autoplay from 'embla-carousel-autoplay';
 
 const Partner = ({ title, content }) => {
   const [partners, setPartners] = useState([]);
   const router = useRouter();
+  const autoplay = useRef(Autoplay({ delay: 2000 }));
 
   const isMobile = useMediaQuery('(max-width:768px)');
 
@@ -72,9 +74,12 @@ const Partner = ({ title, content }) => {
           containScroll="trimSnaps"
           align="start"
           loop
-          className={ isMobile && 'custom-carousel'}
-          nextControlIcon={<IconArrowNarrowRight style={{ backgroundColor: COLORS.primaryColor }} size={22} color={COLORS.secondaryColor} />}
-          previousControlIcon={<IconArrowNarrowLeft style={{ backgroundColor: COLORS.primaryColor }} size={22} color={COLORS.secondaryColor} />}
+          className={ isMobile && 'custom-carousel , indicator'}  
+          withIndicators
+          plugins={[autoplay.current]}
+          onMouseEnter={autoplay.current.stop}
+          onMouseLeave={autoplay.current.reset}
+          withControls={false}
         >
           {partners.map((item, index) => (
             <CarouselSlide key={index}>

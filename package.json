@@ -19,6 +19,7 @@
     "@tanstack/react-query": "^5.68.0",
     "axios": "^1.8.3",
     "contentful": "^11.4.6",
+    "embla-carousel-autoplay": "^7.1.0",
     "gsap": "^3.12.7",
     "lodash": "^4.17.21",
     "next": "^15.1.7",
