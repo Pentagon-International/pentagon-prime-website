@@ -54,6 +54,7 @@ const Ship = ({ first_title, first_content, serviceData }) => {
                 ?.sort((a, b) => (a.fields.order || 0) - (b.fields.order || 0)).map((item) => (
                   <GridCol key={item.sys.id} span={1}>
                     <Image
+                     h={225}
                       src={item.fields.image?.fields?.file?.url}
                       alt={item.name}
                     />

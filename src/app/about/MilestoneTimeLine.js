@@ -1,7 +1,7 @@
 'use client';
 
 import { Title, Card, Button, Group, Image, Box, ActionIcon } from '@mantine/core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { COLORS } from '../utils/COLORS';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconArrowLeft, IconArrowRight, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
@@ -12,10 +12,12 @@ const MilestoneTimeline = ({ milestones }) => {
     milestones[0] || null
   );
   const [activeIndex, setActiveIndex] = useState(0);
+  const timelineSvgRef = useRef(null);
+  const cardRef = useRef(null);
+  const timelineContainerRef = useRef(null);
 
   const isMobile = useMediaQuery('(max-width: 768px)');
 
-  // Ensure the first milestone is selected on initial load
   useEffect(() => {
     if (milestones.length > 0) {
       setSelectedMilestone(milestones[0]);
@@ -25,7 +27,11 @@ const MilestoneTimeline = ({ milestones }) => {
 
   useEffect(() => {
     const svg = document.getElementById('timelineSvg');
+    if (!svg) return;
+    
     const path = svg.querySelector('path');
+    if (!path) return;
+    
     const pathLength = path.getTotalLength();
 
     while (svg.lastChild && svg.lastChild.tagName !== 'path') {
@@ -39,7 +45,6 @@ const MilestoneTimeline = ({ milestones }) => {
         (pathLength / totalMilestones) * adjustedIndex
       );
 
-      // Active background circle
       const activeCircle = document.createElementNS(
         'http://www.w3.org/2000/svg',
         'circle'
@@ -55,7 +60,6 @@ const MilestoneTimeline = ({ milestones }) => {
       activeCircle.setAttribute('class', `active-circle-${index}`);
       svg.appendChild(activeCircle);
 
-      // Main milestone circle
       const circle = document.createElementNS(
         'http://www.w3.org/2000/svg',
         'circle'
@@ -63,6 +67,7 @@ const MilestoneTimeline = ({ milestones }) => {
       circle.setAttribute('cx', position.x);
       circle.setAttribute('cy', position.y);
       circle.setAttribute('r', 6);
+      circle.setAttribute('class', `milestone-circle-${index}`);
       circle.setAttribute(
         'fill',
         index === activeIndex ? '#0EC9F2' : '#5F62E9'
@@ -74,7 +79,6 @@ const MilestoneTimeline = ({ milestones }) => {
       });
       svg.appendChild(circle);
 
-      // Milestone title
       const yearText = document.createElementNS(
         'http://www.w3.org/2000/svg',
         'text'
@@ -86,6 +90,7 @@ const MilestoneTimeline = ({ milestones }) => {
       yearText.setAttribute('font-weight', 600);
       yearText.setAttribute('dominant-baseline', 'middle');
       yearText.setAttribute('text-anchor', 'start');
+      yearText.setAttribute('class', `year-text-${index}`);
       yearText.textContent = milestone.fields.year;
       yearText.style.cursor = 'pointer';
       yearText.addEventListener('click', () => {
@@ -97,7 +102,6 @@ const MilestoneTimeline = ({ milestones }) => {
   }, [milestones, activeIndex]);
 
   useEffect(() => {
-    // Update active circle border and color
     milestones.forEach((_, index) => {
       const activeCircle = document.querySelector(`.active-circle-${index}`);
       if (activeCircle) {
@@ -106,9 +110,7 @@ const MilestoneTimeline = ({ milestones }) => {
           index === activeIndex ? '#0EC9F2' : '#5F62E9'
         );
       }
-      const circle = document.querySelector(
-        `.active-circle-${index}`
-      ).nextSibling;
+      const circle = document.querySelector(`.milestone-circle-${index}`);
       if (circle) {
         circle.setAttribute(
           'fill',
@@ -116,9 +118,22 @@ const MilestoneTimeline = ({ milestones }) => {
         );
       }
     });
-  }, [activeIndex, milestones]);
 
-  // Move to the next milestone
+    if (isMobile && timelineContainerRef.current) {
+      const activeCircle = document.querySelector(`.active-circle-${activeIndex}`);
+      if (activeCircle) {
+        const circleX = parseFloat(activeCircle.getAttribute('cx'));
+        const containerWidth = timelineContainerRef.current.clientWidth;
+        const scrollPosition = circleX - containerWidth / 2;
+        
+        timelineContainerRef.current.scrollTo({
+          left: scrollPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [activeIndex, milestones, isMobile]);
+
   const handleNext = () => {
     if (activeIndex < milestones.length - 1) {
       setActiveIndex(activeIndex + 1);
@@ -126,7 +141,6 @@ const MilestoneTimeline = ({ milestones }) => {
     }
   };
 
-  // Move to the previous milestone
   const handlePrev = () => {
     if (activeIndex > 0) {
       setActiveIndex(activeIndex - 1);
@@ -140,18 +154,24 @@ const MilestoneTimeline = ({ milestones }) => {
         position: 'relative',
         width: '100%',
         height: '100%',
-        display: isMobile && 'flex',
+        minHeight: '60vh',
+        display: 'flex',
         flexDirection: isMobile ? 'column' : 'row',
-        alignItems: isMobile ? 'center' : 'flex-start',
-        justifyContent: 'center',
+        alignItems: isMobile ? 'center' : 'center',
+        justifyContent: 'space-between',
+        gap: '20px'
       }}
     >
       <div
+        ref={timelineContainerRef}
         style={{
-          overflowX: isMobile ? 'scroll' : 'visible',
-          width: isMobile ? '100%' : 'auto',
+          overflowX: isMobile ? 'auto' : 'visible',
+          width: isMobile ? '100%' : '100%',
           marginBottom: isMobile ? '20px' : 0,
           scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          WebkitOverflowScrolling: 'touch',
+          height: '100%'
         }}
       >
         <svg
@@ -161,9 +181,11 @@ const MilestoneTimeline = ({ milestones }) => {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           id="timelineSvg"
+          ref={timelineSvgRef}
           style={{
             width: isMobile ? '1200px' : '100%',
             height: 'auto',
+            minHeight: '600px',
           }}
         >
           <path
@@ -180,6 +202,7 @@ const MilestoneTimeline = ({ milestones }) => {
           padding="md"
           radius="md"
           bg={'#0EC9F21A'}
+          ref={cardRef}
           style={{
             overflow: "visible",
             width: isMobile ? '90%' : '40%',
@@ -187,10 +210,10 @@ const MilestoneTimeline = ({ milestones }) => {
             padding: '20px 30px',
             borderRadius: '8px',
             position: 'relative',
-            right: isMobile ? 0 : -880,
+            right: isMobile ? 0 : 0,
+            display: 'block'
           }}
         >
-
           <Box style={{ width: 30, height: 30 }} pos={'absolute'} right={isMobile ? -30 : -30} top={-30}>
             <Image src={Images.arrow} w={"100%"} h={"100%"} alt="arrow" />
           </Box>
@@ -202,6 +225,7 @@ const MilestoneTimeline = ({ milestones }) => {
                 left: '-30px',
                 transform: 'translateY(-50%)',
                 backgroundColor: 'transparent',
+                zIndex: 10,
               }}
             >
               <ActionIcon
@@ -219,18 +243,18 @@ const MilestoneTimeline = ({ milestones }) => {
           <Title size={'md'} order={3}>
             {selectedMilestone.fields.year}
           </Title>
-          <ul style={{ color: COLORS.textColor, marginTop: '20px' }}>
+          <div style={{ color: COLORS.textColor, marginTop: '20px' }}>
             {selectedMilestone.fields.description?.content.map(
               (item, index) => {
                 if (item.nodeType === 'unordered-list') {
                   return (
-                    <ul key={index}>
+                    <ul key={index} style={{ paddingLeft: '20px', margin: '10px 0' }}>
                       {item.content.map((listItem, i) => {
                         const text =
                           listItem.content[0]?.content[0]?.value ||
                           'No description available';
                         return (
-                          <li style={{ fontSize: '16px', listStyleType: 'disc' }} key={`${index}-${i}`}>
+                          <li style={{ fontSize: '16px', listStyleType: 'disc', marginBottom: '8px' }} key={`${index}-${i}`}>
                             {text}
                           </li>
                         );
@@ -238,11 +262,17 @@ const MilestoneTimeline = ({ milestones }) => {
                     </ul>
                   );
                 }
+                if (item.nodeType === 'paragraph') {
+                  return (
+                    <p key={index} style={{ fontSize: '16px', marginBottom: '10px' }}>
+                      {item.content[0]?.value || ''}
+                    </p>
+                  );
+                }
                 return null;
               }
             )}
-          </ul>
-
+          </div>
           {isMobile && (
             <div
               style={{
@@ -251,6 +281,7 @@ const MilestoneTimeline = ({ milestones }) => {
                 right: '-30px',
                 transform: 'translateY(-50%)',
                 backgroundColor: 'transparent',
+                zIndex: 10,
               }}
             >
               <ActionIcon

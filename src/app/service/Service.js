@@ -35,7 +35,7 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
       <div style={{ 
         width: isMobile ? '100%' : '50%', 
         display: 'flex', 
-        alignItems: 'flex-start',
+        alignItems: 'center',
         paddingTop: '100px',
         paddingBottom: isMobile ? '50px' : '100px'
       }}>
