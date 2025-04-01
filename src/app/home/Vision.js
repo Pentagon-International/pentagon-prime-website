@@ -74,7 +74,6 @@ const Vision = ({ title, content, tradeItems , tradeContent }) => {
   const videoRefs = useRef([]);
 
 
-  console.log("<><><<><><" , tradeContent);
   
 
 

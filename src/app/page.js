@@ -21,10 +21,7 @@ const Page = async () => {
     fetchTradecontent(),
     fetchPrimeNetwork()
   ]);
-  
-
-  console.log(fetchPrimeNetwork());
-  
+    
 
   return (
     <>
