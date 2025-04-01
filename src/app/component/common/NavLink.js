@@ -16,6 +16,7 @@ import { useDisclosure } from "@mantine/hooks";
 import {
   IconArrowDown,
   IconBook,
+  IconBox,
   IconBuildingWarehouse,
   IconCaretDownFilled,
   IconCaretUpFilled,
@@ -28,13 +29,19 @@ import {
   IconFingerprint,
   IconListCheck,
   IconMapPin2,
+  IconNews,
   IconNotification,
+  IconPackage,
   IconPackageExport,
   IconPackages,
+  IconPlane,
   IconPlaneArrival,
   IconPresentationAnalytics,
+  IconSettings,
   IconShip,
+  IconSpeakerphone,
   IconSpeedboat,
+  IconTool,
   IconTruck,
   IconWorldDollar,
 } from "@tabler/icons-react";
@@ -118,16 +125,39 @@ export const featuresMap = {
       link: "/service/first-and-last-mile-delivery",
     },
   ],
-  Tools: [
+  Resources: [
     {
-      icon: IconChartPie3,
-      title: "Analytics",
-      description: "Powerful tools to analyze your business",
+      icon: IconNews,
+      title: "Blogs",
+      link: '/news'
     },
     {
-      icon: IconNotification,
-      title: "Alerts",
-      description: "Real-time notifications and updates",
+      icon: IconTool,
+      title: "Tools",
+      link: '/'
+    },
+    {
+      icon: IconSpeakerphone,
+      title: "Announcements",
+      link: '/'
+    },
+    {
+      icon: IconPackage,
+      title: "Inco Terms",
+      link: '/'
+    }, {
+      icon: IconBox,
+      title: "Shipping Terms",
+      link: '/'
+    }, {
+      icon: IconShip,
+      title: "Shipping Lines",
+      link: '/'
+    },
+    {
+      icon: IconPlane,
+      title: "Air lines",
+      link: '/'
     },
   ],
   Company: [
@@ -166,19 +196,19 @@ const FeatureItem = ({ feature }) => {
       }}
     >
       <Group wrap="nowrap" gap={8} align="center">
-        <ThemeIcon 
-          size={22} 
-          variant="light" 
+        <ThemeIcon
+          size={22}
+          variant="light"
           radius="sm"
           style={{
             backgroundColor: '#F8F9FA',
             border: `1px solid ${COLORS.secondaryColor}15`
           }}
         >
-          <feature.icon 
-            size={16} 
-            stroke={1.5} 
-            color={COLORS.secondaryColor} 
+          <feature.icon
+            size={16}
+            stroke={1.5}
+            color={COLORS.secondaryColor}
             style={{ opacity: 0.9 }}
           />
         </ThemeIcon>
