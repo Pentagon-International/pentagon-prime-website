@@ -21,12 +21,12 @@ const PrimeNetwork = ({content}) => {
 
   return (
     <Container fluid px="7%" py="70px" my={40} pb={0} mb={0}>
-      <Flex gap="md" wrap="nowrap" direction={'column'}>
+      <Flex gap="md" wrap="nowrap" direction={isMobile ? 'column' : 'row'}>
         <Flex direction={'column'}>
           <Title tt="uppercase" tw="balance" fw={800}>
           {highlightText(title)}
           </Title>
-          <Text c={COLORS.textColor} size="base" lh="sm" maw={ isMobile ? '100%' : '35%'} mt={14}>
+          <Text c={COLORS.textColor} size="base" lh="sm" maw={ isMobile ? '100%' : '80%'} mt={14}>
           {highlightText(description)}
           </Text>
         </Flex>
@@ -34,13 +34,13 @@ const PrimeNetwork = ({content}) => {
         <Image
           src={ isMobile ? Images.mob_prime_network : Images.pentagon_zig_zag}
           alt="PentagonPrime Logo"
-          h="auto"
+          h={isMobile ? "auto" :"350"}
           mt={isMobile ? 70 : 0}
           style={{
             position: 'relative',
-            transform: 'translateY(-50%)',
+            // transform: 'translateY(-50%)',
             // top: '10px',
-            maxWidth: '50%',
+            maxWidth: !isMobile && '50%',
             // height: '10%',
           }}
         />

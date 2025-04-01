@@ -151,7 +151,7 @@ const Hero = ({ title, content }) => {
         {
           !isMobile && (
             <Box style={styles.overlayContainer}>
-              <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} h={745}/>
+              <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} h={!isMobile && 745}/>
             </Box>
           )
         }
@@ -167,14 +167,12 @@ const Hero = ({ title, content }) => {
           >
             {highlightText(title)}
           </Title>
-          <Text lh={isMobile ? "md" : "lgx"} size={isMobile ? '15px' : '19px'} maw={isMobile ? '80%' : '40%'} fw={400} mt={15}>
+          <Text lh={ isMobile ? "md" : "lgx"} size={isMobile ? '15px' : '19px'} maw={isMobile ? '80%' : '40%'} fw={400} mt={15}>
             {highlightText(content)}
           </Text>
           <Box h={'100%'}>
-            {/* <Flex align={'flex-end'} h={'100%'} bg={'red'}> */}
-            <Stack mt={isMobile ? '15%' : '4.25%'} gap={0} w={isMobile ? '100%' : '45%'} 
+            <Stack mt={isMobile ? '15%' : '4.25%'} gap={0} w={isMobile ? '100%' : '45%'}
               p={isMobile ? 20 : 25}
-              // bg={'red'}
               style={styles.transportOptions} >
               <Flex gap={20} >
                 <TransportOption
@@ -305,7 +303,6 @@ const Hero = ({ title, content }) => {
                 </form>
               </Flex>
             </Stack>
-            {/* </Flex> */}
           </Box>
         </Stack>
       </Container>

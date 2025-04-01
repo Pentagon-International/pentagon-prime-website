@@ -56,7 +56,7 @@ const About = ({ title, content }) => {
             </Text>
           </Box>
 
-          <Box pos={!isMobile && "absolute"} mt={isMobile && 50} top={'60px'} right={0} h="100%" w={isMobile ? "100%" : "60%"}
+          <Box pos={!isMobile && "absolute"} mt={isMobile && 50} top={isMobile ? 0 :'60px'} right={0} h="100%" w={isMobile ? "100%" : "60%"}
             style={{
               display: 'flex',
               alignItems: 'center',
