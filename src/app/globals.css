@@ -121,6 +121,7 @@ a {
 .mantine-Carousel-indicator {
   width: 10px !important;
   height: 10px !important;
+  background-color: #fff !important;
   transition: width 250ms ease, height 250ms ease;
 
   &[data-active] {
