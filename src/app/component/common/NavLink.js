@@ -75,6 +75,11 @@ export const featuresMap = {
       link: "/service/multimodal-transport",
     },
     {
+      icon: IconCrane,
+      title: "ODC Project Cargo",
+      link: "/service/odc-project-cargo",
+    },
+    {
       icon: IconWorldDollar,
       title: "Cross Country Trade",
       link: "/service/cross-country-trade",
@@ -98,11 +103,6 @@ export const featuresMap = {
       icon: IconPackageExport,
       title: "Break Bulk Cargo Services",
       link: "/service/break-bulk-cargo",
-    },
-    {
-      icon: IconCrane,
-      title: "ODC Project Cargo",
-      link: "/service/odc-project-cargo",
     },
     {
       icon: IconBuildingWarehouse,

@@ -79,7 +79,7 @@ const Members = () => {
                   <br /> Pentagon Group of Companies
                 </Text>
               </Stack>
-              <Stack spacing="sm">
+              <Stack spacing="md" mt={'md'}>
                 <Text size="base" fw={700}>
                   Message from the Chairman
                 </Text>
