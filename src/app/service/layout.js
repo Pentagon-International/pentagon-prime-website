@@ -14,7 +14,7 @@ export default async function ServiceLayout({ children }) {
     return (
         <>
             {children}
-            <QuoteCard />
+            {/* <QuoteCard /> */}
             {/* <FAQ /> */}
             <BottomCard title={title} text={text} button={button} />
         </>

@@ -69,21 +69,21 @@ const Members = () => {
                 />
               </CardSection>
             </GridCol>
-            <GridCol span={isMobile ? 12 : 6}>
+            <GridCol span={isMobile ? 12 : 6} pl={0}>
               <Stack spacing="md">
-                <Text size="base" fw={700}>
+                <Text size="md" fw={700}>
                   Mr. Paresh Bhanushali
                 </Text>
-                <Text size="sm" c={COLORS.textColor}>
+                <Text size="sm" mt={-10} c={COLORS.textColor}>
                   Chairman and Managing Director
                   <br /> Pentagon Group of Companies
                 </Text>
               </Stack>
-              <Stack spacing="md" mt={'md'}>
-                <Text size="base" fw={700}>
+              <Stack spacing="md" mt={'xl'}>
+                <Text size="md" fw={700}>
                   Message from the Chairman
                 </Text>
-                <Text size="sm" tw='balance' c={COLORS.textColor}>
+                <Text size="sm" mt={-10} tw='balance' c={COLORS.textColor}>
                   “It is about the strive to keep growing… Once you get hold of
                   that feeling, never let it go and just keep moving forward!”
                 </Text>

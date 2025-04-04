@@ -48,32 +48,38 @@ const ACinfo = () => {
               <Title size={isMobile ? 'lg' : 'lgx'} fw={800} lh={'lgx2'} tt={'uppercase'} textWrap="balance">
                 Additional Contact Information
               </Title>
-              <List c={COLORS.textColor} p={isMobile ? '10px 20px' : '20px 50px'} style={{
+              <List c={COLORS.textColor} p={isMobile ? '10px 20px' : '0px 0px'} style={{
                 lineHeight: theme.lineHeights.lgx2,
                 fontSize: theme.fontSizes.sm
               }}>
-                <ListItem>
+                <ListItem lh={'28px'}>
                   For media inquiries please email{' '}
                   <span
                     onClick={() => window.open('mailto:pentagon@pentagonindia.net')}
-                    style={{ textDecoration: 'underline', cursor: 'pointer' }}>
+                    style={{
+                      textDecoration: 'underline', cursor: 'pointer', color: COLORS.serviceColor
+                    }}>
                     press@pentagonprime.com
                   </span>
                 </ListItem>
-                <ListItem>
+                <ListItem lh={'28px'}>
                   Interested in becoming a partner?{' '}
-                  <span style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                  <span style={{
+                    textDecoration: 'underline', cursor: 'pointer', color: COLORS.serviceColor
+                  }}
                     onClick={() => setModalOpened(true)}
                   >
 
                     Submit an enquiry.
                   </span>
                 </ListItem>
-                <ListItem>
+                <ListItem lh={'28px'}>
                   Have a security issue?{' '}
                   <span
                     onClick={() => window.open('mailto:pentagon@pentagonindia.net')}
-                    style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                    style={{
+                      textDecoration: 'underline', cursor: 'pointer', color: COLORS.serviceColor
+                    }}
                   >
                     Tell us about it here.
                   </span>

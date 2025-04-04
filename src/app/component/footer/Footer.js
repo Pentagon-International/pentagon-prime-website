@@ -120,9 +120,9 @@ const Footer = () => {
               <Text fw={700} size="smx" style={{ textTransform: 'uppercase', color: '#666', width: '47%' }} mb={15}>
                 Services
               </Text>
-              <Text fw={700} size="smx" style={{ textTransform: 'uppercase', color: '#666', width: '47%' }} mb={15}>
+              {/* <Text fw={700} size="smx" style={{ textTransform: 'uppercase', color: '#666', width: '47%' }} mb={15}>
                 Services
-              </Text>
+              </Text> */}
             </Group>
 
             {isMobile ?
