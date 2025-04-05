@@ -2,11 +2,7 @@ import { Container, Grid, GridCol, Image, Text, Title } from '@mantine/core';
 import { client } from '../api/contentful';
 import { COLORS } from '../utils/COLORS';
 
-const FeaturedNews = async () => {
-  const res = await client.getEntries({
-    content_type: 'featuredNews',
-    order: 'sys.createdAt',
-  });
+const FeaturedNews = ({res}) => {
 
   return (
     <Container fluid px={'7%'} py={'70px'}>

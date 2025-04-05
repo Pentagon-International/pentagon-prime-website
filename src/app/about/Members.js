@@ -45,6 +45,11 @@ const Members = () => {
 
   return (
     <Container fluid px={'7%'} py={'lg'} my={90}>
+      <Flex justify="center" my={50}>
+        <Title size={isMobile ? '30px' : '40px'} fw={800} tt={'uppercase'} lh={'lgx2'}>
+          Message from the chairman
+        </Title>
+      </Flex>
       <Flex direction={isMobile ? 'column' : 'row'} justify="center" align="center" style={{ width: '100%' }}>
         <Card
           bg={'#F2F7FC'}
@@ -56,7 +61,7 @@ const Members = () => {
           }}
         >
           <Grid gutter="60" dir={isMobile ? 'column' : 'row'} align="center">
-            <GridCol span={isMobile ? 12 : 6}>
+            <GridCol span={isMobile ? 12 : 6} pr={0}>
               <CardSection>
                 <Image
                   src={Images.chairman}
@@ -69,25 +74,25 @@ const Members = () => {
                 />
               </CardSection>
             </GridCol>
-            <GridCol span={isMobile ? 12 : 6} pl={0}>
+            <GridCol span={isMobile ? 12 : 6} pl={0} pr={70} >
               <Stack spacing="md">
-                <Text size="md" fw={700}>
-                  Mr. Paresh Bhanushali
-                </Text>
-                <Text size="sm" mt={-10} c={COLORS.textColor}>
-                  Chairman and Managing Director
-                  <br /> Pentagon Group of Companies
-                </Text>
-              </Stack>
-              <Stack spacing="md" mt={'xl'}>
-                <Text size="md" fw={700}>
-                  Message from the Chairman
-                </Text>
-                <Text size="sm" mt={-10} tw='balance' c={COLORS.textColor}>
-                  “It is about the strive to keep growing… Once you get hold of
+                <Text size="md" mt={-10} tw='balance' fs={'italic'}  c={COLORS.textColor}>
+                  “It is about the strive to keep growing. Once you get hold of
                   that feeling, never let it go and just keep moving forward!”
                 </Text>
               </Stack>
+              <Flex justify={'flex-end'}>
+                <Stack spacing="md" mt={'sm'}>
+                  <Text size="md" fw={700} >
+                    Mr. Paresh Bhanushali
+                  </Text>
+                    <Text size="sm" mt={-15} c={COLORS.textColor}>
+                      Chairman and Managing Director
+                      <br />Pentagon Group of Companies
+                    </Text>
+                </Stack>
+              </Flex>
+
             </GridCol>
           </Grid>
         </Card>
@@ -95,7 +100,7 @@ const Members = () => {
 
       <Flex justify="center" my={50}>
         <Title size={isMobile ? '30px' : '40px'} fw={800} tt={'uppercase'} lh={'lgx2'}>
-          Management Team
+          OUR Team
         </Title>
       </Flex>
 

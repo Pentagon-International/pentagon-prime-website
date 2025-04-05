@@ -25,7 +25,7 @@ const navItems = [
   { label: "Home", links: "/", dropdown: false },
   // { label: "Products", links: "/product", dropdown: false },
   { label: "Solutions", links: "/service", dropdown: true },
-  // { label: "Resources", links: "/", dropdown: true },
+  { label: "Resources", links: "/", dropdown: true },
   { label: "About Us", links: "/about", dropdown: false },
   // { label: 'Company', links: '/help', dropdown: true },
 ];

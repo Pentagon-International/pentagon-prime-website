@@ -1,0 +1,22 @@
+.chevron {
+  margin: 0;
+  margin-left: 4px;
+  &[data-rotate] {
+    transform: rotate(45deg);
+  }
+}
+.control {
+  justify-content: center;
+  background-color: light-dark(var(--mantine-color-white), var(--mantine-color-black));
+}
+
+.label {
+  padding: 4px;
+  font-size: 14px;
+}
+.item {
+  padding: 0;
+}
+.content {
+  padding: 0;
+}

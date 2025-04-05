@@ -11,8 +11,6 @@ const About = ({ title, content }) => {
 
   return (
     <Box h={'100vh'} pos={'relative'} style={{
-      overflow: 'hidden',
-      alignItems: 'center',
       display: 'flex',
       flexDirection: isMobile ? 'column' : 'row'
     }}>

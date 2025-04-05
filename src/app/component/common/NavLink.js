@@ -129,35 +129,35 @@ export const featuresMap = {
     {
       icon: IconNews,
       title: "Blogs",
-      link: '/news'
+      link: '/blog'
     },
     {
       icon: IconTool,
       title: "Tools",
-      link: '/'
+      link: '/tools'
     },
     {
       icon: IconSpeakerphone,
       title: "Announcements",
-      link: '/'
+      link: '/news'
     },
     {
       icon: IconPackage,
       title: "Inco Terms",
-      link: '/'
+      link: '/inco-terms'
     }, {
       icon: IconBox,
       title: "Shipping Terms",
-      link: '/'
+      link: '/shipping-terms'
     }, {
       icon: IconShip,
       title: "Shipping Lines",
-      link: '/'
+      link: '/shipping-lines'
     },
     {
       icon: IconPlane,
       title: "Air lines",
-      link: '/'
+      link: '/air-lines'
     },
   ],
   Company: [

@@ -1,9 +1,8 @@
-import React from 'react';
-import NewsRoom from './NewsRoom';
-import BottomCard from '../component/common/BottomCard';
-import FeaturedNews from './FeaturedNews';
-import { fetchEntries } from '../utils/fetchEntries';
-import { client } from '../api/contentful';
+import { client } from "../api/contentful";
+import BottomCard from "../component/common/BottomCard";
+import FeaturedNews from "../news/FeaturedNews";
+import NewsRoom from "../news/NewsRoom";
+import { fetchEntries } from "../utils/fetchEntries";
 
 const page = async () => {
   const title = 'Ready to get started?';
@@ -11,9 +10,9 @@ const page = async () => {
     'Talk to a supply chain solutions expert and see the Prime Platform in action.';
   const button = 'Get Started';
 
-  const [newsData] = await Promise.all([fetchEntries('newsroom-and-resources')]);
+  const [newsData] = await Promise.all([fetchEntries('blog')]);
 
-  const newsContents = await client.getEntries({
+  const bolgs = await client.getEntries({
     content_type: 'featuredNews',
     order: 'sys.createdAt',
   });
@@ -21,7 +20,7 @@ const page = async () => {
   return (
     <>
       <NewsRoom title={newsData.title} content={newsData.content} />
-      <FeaturedNews res={newsContents}/>
+      <FeaturedNews res={bolgs}/>
       <BottomCard title={title} text={text} button={button} />
     </>
   );
