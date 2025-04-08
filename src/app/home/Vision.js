@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useState, useRef, useEffect } from "react";
 import {
   Button,
@@ -12,6 +12,10 @@ import {
   Modal,
   Box,
   ActionIcon,
+  Card,
+  GridCol,
+  Grid,
+  Stack,
 } from "@mantine/core";
 import { Carousel, Embla } from "@mantine/carousel";
 import {
@@ -26,6 +30,7 @@ import Trade from "../component/common/Trade";
 import { highlightText } from "../utils/highlightText";
 import { useRouter } from "next/navigation";
 import { useMediaQuery } from "@mantine/hooks";
+import { client } from "../api/contentful";
 
 const styles = {
   container: {
@@ -67,15 +72,29 @@ const styles = {
   },
 };
 
-const Vision = ({ title, content, tradeItems , tradeContent }) => {
+const Vision = ({ title, content, tradeItems, tradeContent }) => {
   const router = useRouter();
   const [videoModalOpen, setVideoModalOpen] = useState(false);
-  const [embla, setEmbla] = useState(null); 
+  const [embla, setEmbla] = useState(null);
   const videoRefs = useRef([]);
 
+  const [visionData, setVisionData] = useState([]);
 
-  
+  useEffect(() => {
+    const fetchVisionData = async () => {
+      try {
+        const res = await client.getEntries({
+          content_type: "visionServices",
+          order: "sys.createdAt",
+        });
+        setVisionData(res.items || []);
+      } catch (error) {
+        console.error("Error fetching vision data:", error);
+      }
+    };
 
+    fetchVisionData();
+  }, []);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -159,13 +178,236 @@ const Vision = ({ title, content, tradeItems , tradeContent }) => {
           p={'0 2%'}
           mt={isMobile && 50}
         >
-          <Title size={isMobile ? "lg" : "xl"} tt={"uppercase"} lh={isMobile ? "lgx2" : 0.7} tw="balance" fw={900}>
+          <Title tt={"uppercase"} fw={800} size={isMobile ? "20px" : "34px"} lh={1}>
             {highlightText(title)}
           </Title>
-          <Text mt="md" c={isMobile ? COLORS.textColor : ''} maw={"100%"} lh={"sm"} size="sm">
+          <Text mt={'lg'} c={isMobile ? COLORS.textColor : ''} ta={'justify'} maw={"100%"} lh={"sm"} size="sm">
             {highlightText(content)}
           </Text>
-          <Group mt="lg" gap={"xl"}>
+          <Grid w={'100%'} mt={'lg'}>
+            {isMobile ? (
+              <Carousel
+                align={isMobile ? 'start' : 'center'} slideSize="70%" height={220} w={'100%'} slideGap="xs" loop
+                styles={{
+                  controls: {
+                    display: 'none',
+                    visibility: 'hidden',
+                    opacity: 0,
+                    pointerEvents: 'none',
+                  },
+                }}
+              >
+                {(
+                  visionData ||
+                  [])?.map((item, index) => (
+                    <Carousel.Slide key={item.sys.id} w={'100%'}>
+                      <GridCol
+                        span={{ base: 12, md: 4 }}
+                        key={item.sys.id}
+                      >
+                        <Card
+                          bg={'#F2F7FC'}
+                          display={"flex"}
+                          direction={"column"}
+                          justify={"flex-start"}
+                          mih={"150"}
+                          p={isMobile ? '20px' : "20px"}
+                          radius={32}
+                          h={"200px"}
+                        >
+                          <Flex
+                            align={"center"}
+                            display={"flex"}
+                            mb={"10px"}
+                            w={"fit-content"}
+                            style={{ border: "none", borderRadius: "12px" }}
+                          >
+                            <Image
+                              src={
+                                item?.fields?.visionIcon?.fields?.file?.url ||
+                                item?.fields.image?.fields?.file?.url
+                              }
+                              width={45}
+                              height={45}
+                              mah={45}
+                            // alt={item.fields.vision_title || item.fields.title}
+                            />
+                          </Flex>
+                          {isMobile ? <Stack w={"100%"}>
+                            {/* <Title
+                      tw="balance"
+                      display={"flex"}
+                      fw={700}
+                      size={theme.fontSizes.base}
+                      order={4}
+                      mt={isMobile ? 0 : 28}
+                    >
+                      {item.fields.vision_title || item.fields.title}
+                    </Title> */}
+                            <Text
+                              tw="balance"
+                              c={COLORS.textColor}
+                              lh={"sm"}
+                              size="sm"
+                              style={{ flexGrow: 1 }}
+                            >
+                              {item.fields.visionDescription || item.fields.description}
+                            </Text>
+                          </Stack> : <Group>
+                            {/* <Title
+                      tw="balance"
+                      display={"flex"}
+                      align={"center"}
+                      fw={700}
+                      size={theme.fontSizes.base}
+                      order={4}
+                      mt={28}
+                    >
+                      {item.fields.vision_title || item.fields.title}
+                    </Title> */}
+                            <Text
+                              tw="balance"
+                              c={COLORS.textColor}
+                              lh={"sm"}
+                              size="sm"
+                              style={{ flexGrow: 1 }}
+                            >
+                              {item.fields.visionDescription || item.fields.description}
+                            </Text>
+                          </Group>}
+                          {/* {item.fields?.knowmore && (
+          <Flex
+            align="center"
+            gap={4}
+            style={{ display: "inline-flex", alignItems: "center" }}
+          >
+            <Anchor
+              href={item.fields.knowmore}
+              target="_blank"
+              c={COLORS.serviceColor}
+              fw={500}
+              pt={"10px"}
+              mt={"auto"}
+              display={"flex"}
+              alignitems={"center"}
+              size="xs"
+              underline="hover"
+            >
+              {anchorText}
+            </Anchor>
+          </Flex>
+        )} */}
+                        </Card>
+                      </GridCol>
+                    </Carousel.Slide>
+
+                  ))}
+              </Carousel>)
+              : <>
+                {(
+                  visionData ||
+                  [])?.map((item, index) => (
+                    <GridCol
+                      span={{ base: 12, md: 4 }}
+                      key={item.sys.id}
+                    >
+                      <Card
+                        bg={'#F2F7FC'}
+                        display={"flex"}
+                        direction={"column"}
+                        justify={"flex-start"}
+                        mih={"150"}
+                        p={isMobile ? '20px' : "20px"}
+                        radius={32}
+                        h={"200px"}
+                      >
+                        <Flex
+                          align={"center"}
+                          display={"flex"}
+                          mb={"10px"}
+                          w={"fit-content"}
+                          style={{ border: "none", borderRadius: "12px" }}
+                        >
+                          <Image
+                            src={
+                              item?.fields?.visionIcon?.fields?.file?.url ||
+                              item?.fields.image?.fields?.file?.url
+                            }
+                            width={45}
+                            height={45}
+                            mah={45}
+                          // alt={item.fields.vision_title || item.fields.title}
+                          />
+                        </Flex>
+                        {isMobile ? <Stack w={"100%"}>
+                          {/* <Title
+                      tw="balance"
+                      display={"flex"}
+                      fw={700}
+                      size={theme.fontSizes.base}
+                      order={4}
+                      mt={isMobile ? 0 : 28}
+                    >
+                      {item.fields.vision_title || item.fields.title}
+                    </Title> */}
+                          <Text
+                            tw="balance"
+                            c={COLORS.textColor}
+                            lh={"sm"}
+                            size="sm"
+                            style={{ flexGrow: 1 }}
+                          >
+                            {item.fields.visionDescription || item.fields.description}
+                          </Text>
+                        </Stack> : <Group>
+                          {/* <Title
+                      tw="balance"
+                      display={"flex"}
+                      align={"center"}
+                      fw={700}
+                      size={theme.fontSizes.base}
+                      order={4}
+                      mt={28}
+                    >
+                      {item.fields.vision_title || item.fields.title}
+                    </Title> */}
+                          <Text
+                            tw="balance"
+                            c={COLORS.textColor}
+                            lh={"sm"}
+                            size="sm"
+                            style={{ flexGrow: 1 }}
+                          >
+                            {item.fields.visionDescription || item.fields.description}
+                          </Text>
+                        </Group>}
+                        {/* {item.fields?.knowmore && (
+          <Flex
+            align="center"
+            gap={4}
+            style={{ display: "inline-flex", alignItems: "center" }}
+          >
+            <Anchor
+              href={item.fields.knowmore}
+              target="_blank"
+              c={COLORS.serviceColor}
+              fw={500}
+              pt={"10px"}
+              mt={"auto"}
+              display={"flex"}
+              alignitems={"center"}
+              size="xs"
+              underline="hover"
+            >
+              {anchorText}
+            </Anchor>
+          </Flex>
+        )} */}
+                      </Card>
+                    </GridCol>
+                  ))}
+              </>}
+          <Group mt="md" gap={"xl"}>
             <Button
               variant="filled"
               bg={COLORS.portColor}
@@ -173,7 +415,7 @@ const Vision = ({ title, content, tradeItems , tradeContent }) => {
               size="lg"
               fz={"sm"}
               lh={"sm"}
-              p={"18px 32px"}
+              p={"12px 32px"}
               fw={700}
               onClick={() => router.push("/contact")}
             >
@@ -204,6 +446,8 @@ const Vision = ({ title, content, tradeItems , tradeContent }) => {
               </Flex> */}
             </UnstyledButton>
           </Group>
+          </Grid>
+
         </Flex>
       </Flex>
 

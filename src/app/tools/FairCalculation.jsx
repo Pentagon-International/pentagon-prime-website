@@ -33,9 +33,7 @@ const FairCalculation = () => {
   return (
     <Grid>
       <Grid.Col span={5}>
-        <Title size={"sm"} ml={"sm"} mt={"sm"}>
-          Fare Calculation
-        </Title>
+        <Title mb="lg">Fare Calculation</Title>
 
         <Box
           bg={"gray.0"}

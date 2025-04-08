@@ -325,6 +325,7 @@ const CbmCalc = () => {
                 mt="lg"
                 fullWidth
                 onClick={calculateCBM}
+                color={COLORS.contactBackground}
               >
                 {showCalc ? "Hide Calculate" : "Show Calculate"}
               </Button>
@@ -340,7 +341,7 @@ const CbmCalc = () => {
                 }}
               >
               </Box>
-              <Card shadow="sm" padding="lg" radius="md" withBorder style={{ backgroundColor: COLORS.secondaryColor }}>
+              <Card shadow="sm" padding="lg" radius="md" withBorder style={{ backgroundColor: COLORS.contactBackground }}>
                 <h2 mb="lg" style={{ color: COLORS.primaryColor }}>CBM Calculations</h2>
                 <Text size="lg" weight={700} mb="xs" c={COLORS.primaryColor}>
                   Volume
@@ -401,7 +402,7 @@ const CbmCalc = () => {
         <>
           <Grid>
             <Grid.Col span={6}>
-              <h2 mb="lg">Chargeable Weight Calculator</h2>
+              <Title mb="lg">Chargeable Weight Calculator</Title>
               <Container mt={40}>
                 <Grid>
                   <GridCol span={4}>
@@ -473,14 +474,18 @@ const CbmCalc = () => {
                       onChange={setSelectedCharges}
                       clearable
                       searchable
+                      hidePickedOption
                     />
                   </Grid.Col>
                 </Grid>
                 <Grid mt={12}>
                   <Grid.Col span={12}>
                     <Button
-                      onClick={calculateChargeableWeight}
-                      fullWidth
+                      // onClick={calculateChargeableWeight}
+                      // fullWidth
+                      // color={COLORS.contactBackground}
+                      mt={isMobile && '20px'} fz={'sm'} size='lg' fw={600} bg={COLORS.serviceColor}
+                      onClick={calculateChargeableWeight} fullWidth
                     >
                       {showCalc ? "Hide Calculate" : "Show Calculate"}
                     </Button>
@@ -502,7 +507,7 @@ const CbmCalc = () => {
                   padding="lg"
                   radius="md"
                   withBorder
-                  style={{ backgroundColor: COLORS.secondaryColor }}
+                  style={{ backgroundColor: COLORS.contactBackground }}
                 >
                   <h2 mb="lg" style={{ color: COLORS.primaryColor }}>
                     Chargeable Weight
@@ -524,7 +529,7 @@ const CbmCalc = () => {
         </>
       }
       {
-        tools == 'Fare Calculation' && 
+        tools == 'Fare Calculation' &&
         <FairCalculation />
       }
     </Container>

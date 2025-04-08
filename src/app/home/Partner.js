@@ -45,7 +45,7 @@ const Partner = ({ title, content }) => {
             {highlightText(content)}
           </Text>
         </Stack>
-        <Button
+        {/* <Button
           fz={'sm'}
           variant="outline"
           size="lg"
@@ -57,7 +57,7 @@ const Partner = ({ title, content }) => {
           onClick={() => router.push('/contact')}
         >
           Get In Touch
-        </Button>
+        </Button> */}
       </Flex>
 
       <Box mt={50} pos={'relative'}

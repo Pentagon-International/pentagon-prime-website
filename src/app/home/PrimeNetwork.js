@@ -34,8 +34,10 @@ const PrimeNetwork = ({content}) => {
         <Image
           src={ isMobile ? Images.mob_prime_network : Images.pentagon_zig_zag}
           alt="PentagonPrime Logo"
-          h={isMobile ? "auto" :"350"}
+          h={isMobile ? "auto" : "auto"}
+          w={isMobile ? "100%" : "40%"}
           mt={isMobile ? 70 : 0}
+          fit={'contain'}
           style={{
             position: 'relative',
             // transform: 'translateY(-50%)',

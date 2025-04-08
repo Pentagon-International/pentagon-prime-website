@@ -214,7 +214,7 @@ const CertificateList = ({ certificateItems }) => {
                                                 style={{
                                                     height: "120px",
                                                     maxWidth: "200px",
-                                                    objectFit: "cover",
+                                                    objectFit: "contain",
                                                     borderRadius: "10px",
                                                     marginRight: `100px`, // Ensures spacing
                                                 }}

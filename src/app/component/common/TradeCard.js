@@ -1,3 +1,4 @@
+import { highlightText } from '@/app/utils/highlightText';
 import { Flex, Text, Title, Container, Group, Box } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 
@@ -31,16 +32,9 @@ const TradeCard = ({ title = '', item = [], background = '' }) => {
       <Box style={getCardStyles(background)}>
         <Flex align="center" justify="space-between" wrap="wrap" w="100%">
           {title && (
-            <Text
-              w={"100%"}
-              size={isMobile ? "lgx" : "lg"}
-              lh={'lgx'}
-              tw='balance'
-              ta={isMobile && "center"}
-              style={{ wordBreak: 'break-word' }}
-            >
-              {title}
-            </Text>
+            <Title tt={"uppercase"} lh={isMobile ? "md" : "lgx2"} fw={800} size={isMobile ? "20px" : "34px"}>
+              {highlightText(title)}
+            </Title>
           )}
           <Group w={"100%"} align='center' justify='space-between' mt={50} ml={isMobile && 0} >
             {item.map(({ sys, fields }) => (

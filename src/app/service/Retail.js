@@ -42,12 +42,12 @@ const Retail = ({ first_title, first_content, second_title, second_content }) =>
     //     <Image src={isMobile ? Images.mob_prime_network : Images.pentagon_zig_zag} w={isMobile ? '100%' : '50%'} mx={'auto'} alt="prime_network" />
     //   </Group>
     <Container fluid px="7%" py="70px" my={40} pb={0} mb={"70px"}>
-      <Flex gap="md" wrap="nowrap" direction={isMobile ? 'column' : 'row'}>
-        <Flex direction={'column'}>
-          <Title tt="uppercase" tw="balance" fw={800}>
+      <Flex gap="md" wrap="nowrap" direction={isMobile ? 'column' : 'row'} >
+        <Flex direction={'column'} >
+          <Title tt="uppercase" fw={800}>
             {highlightText(first_title)}
           </Title>
-          <Text c={COLORS.textColor} size="base" lh="sm" maw={isMobile ? '100%' : '80%'} mt={14}>
+          <Text size='sm' c={COLORS.textColor} lh={isMobile ? '20px' : ''} mt={'xs'} w={isMobile ? '100%' : '40vw'}>
             {highlightText(first_content)}
           </Text>
         </Flex>

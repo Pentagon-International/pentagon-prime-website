@@ -167,7 +167,7 @@ const FairContainer = ({
 
   useEffect(() => {
     submitCallback(containerList);
-  });
+  },[]);
 
   return (
     <div>

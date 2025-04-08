@@ -23,7 +23,8 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
   return (
     <div
       style={{
-        maxHeight: isMobile ? '100vh' : '60vh',
+        minHeight: isMobile ? '100vh' : '80vh',
+        maxHeight: isMobile ? '100vh' : '80vh',
         display: 'flex',
         flexDirection: isMobile ? 'column' : 'row',
         marginTop: '60px',
@@ -32,43 +33,41 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
         position: 'relative',
       }}
     >
-      <div style={{ 
-        width: isMobile ? '100%' : '50%', 
-        display: 'flex', 
+      <div style={{
+        width: isMobile ? '100%' : '50%',
+        display: 'flex',
         alignItems: 'center',
         paddingTop: '100px',
         paddingBottom: isMobile ? '50px' : '100px'
       }}>
-        <Stack 
-          px={isMobile ? '6%' : '13%'} 
+        <Stack
+          px={isMobile ? '6%' : '13%'}
           spacing={isMobile ? 'sm' : 'xl'}
         >
           <Group align='center'>
             <Flex gap={'md'} align={'center'}>
               <Image src={icon || Images.sea_freight} alt="sea freight" w={35} h={35} radius={25} />
-              <Title
-                size={'base'}
-                tt={'uppercase'}
-                textWrap="balance"
-                style={{ maxWidth: '100%' }}
-              >
+              <Title tt="uppercase" size={'39px'} fw={800} lh={'lgx2'}>
                 {highlightText(title)}
               </Title>
             </Flex>
             <Text
-              size="sm"
+              // ta={'justify'}
+              size="md"
               style={{ maxWidth: '100%' }}
             >
               {highlightText(iconTitle)}
             </Text>
           </Group>
-          <Text 
-            size="smx" 
+          <Text
+            fs={'italic'}
+            size="sm"
             lh={isMobile ? '20px' : '28px'}
-            style={{ 
+            style={{
               maxWidth: '100%',
               whiteSpace: 'pre-wrap'
             }}
+            // ta={'justify'}
           >
             {highlightText(content)}
           </Text>
@@ -85,11 +84,11 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
         </Stack>
       </div>
 
-      <div style={{ 
+      <div style={{
         position: 'sticky',
         top: isMobile ? '60px' : '60px',
         width: isMobile ? '100%' : '50%',
-        height: isMobile ? '60vw' : 'calc(60vh)',
+        height: isMobile ? '60vw' : 'calc(80vh)',
         alignSelf: 'flex-start'
       }}>
         <BackgroundImage
