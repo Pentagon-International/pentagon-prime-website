@@ -18,10 +18,11 @@ import {
   Flex,
   MultiSelect,
 } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { COLORS } from "../utils/COLORS";
 import { useMediaQuery } from "@mantine/hooks";
 import FairCalculation from "./FairCalculation";
+import { theme } from "../utils/theme";
 
 const CbmCalc = () => {
   const [state, setState] = useState({
@@ -64,10 +65,10 @@ const CbmCalc = () => {
   const calculateCBM = () => {
     const { length, width, height, quantity, grossWeight, unit } = state;
 
-    if (length <= 0 || width <= 0 || height <= 0) {
-      alert("Please enter valid dimensions (length, width, height).");
-      return;
-    }
+    // if (length <= 0 || width <= 0 || height <= 0) {
+    //   alert("Please enter valid dimensions (length, width, height).");
+    //   return;
+    // }
 
     const conversionFactor =
       unit === "cm" ? 0.01 : unit === "inch" ? 0.0254 : 1;
@@ -171,6 +172,16 @@ const CbmCalc = () => {
     { chargeType: "Dimensional Surcharge", seaFreight: 0, airFreight: 0 },
   ];
 
+  useEffect(() => {
+    calculateCBM()
+  },
+    [volumeUnit, unit, length, width, height, grossWeight, quantity])
+
+  useEffect(() => {
+    calculateChargeableWeight()
+  },
+    [formData.length, formData.width, formData.height, formData.quantity, formData.actualWeight, selectedCharges])
+
   const calculateChargeableWeight = () => {
     const { length, width, height, quantity, actualWeight } = formData;
 
@@ -229,98 +240,100 @@ const CbmCalc = () => {
                 setTools(v)
               }}
               value={tools}
-              data={['Fare Calculation', 'CBM', 'CWC']} />
+              data={[
+                // 'Fare Calculation',
+                 'CBM', 'CWC']} />
           </Flex>
         </Grid.Col>
       </Grid>
       {tools == 'CBM' &&
-        <Grid>
-          <Grid.Col span={6} px={"lg"}>
-            <Title mb="lg">CBM Calculator</Title>
-            <Box>
-              <Radio.Group
-                value={volumeUnit}
-                onChange={(value) => handleChange("volumeUnit", value)}
-                label="Unit of Volume"
-                color={COLORS.primaryColor}
-                mb="lg"
-              >
-                <Group mt={"md"}>
-                  <Radio value="cubicMeter" label="Cubic Meter" />
-                  <Radio value="cubicFeet" label="Cubic Feet" />
-                </Group>
-              </Radio.Group>
-            </Box>
+        <>
+          <Title mb="lg" mt={'xl'}>Cubic Meter Calculator</Title>
+          <Grid mb={theme?.lineHeights.lg}>
+            <Grid.Col span={7}>
+              <Box mb={'md'}>
+                <Radio.Group
+                  value={volumeUnit}
+                  onChange={(value) => handleChange("volumeUnit", value)}
+                  label="Unit of Volume"
+                  color={COLORS.primaryColor}
+                >
+                  <Group mt={'sm'}>
+                    <Radio value="cubicMeter" label="Cubic Meter" />
+                    <Radio value="cubicFeet" label="Cubic Feet" />
+                  </Group>
+                </Radio.Group>
+              </Box>
 
-            <Container mt={40}>
-              <Select
-                label="Unit of Measurement"
-                value={unit}
-                onChange={(value) => handleChange("unit", value)}
-                data={["cm", "inch", "meter"]}
-                placeholder="Select unit"
-                mb="sm"
-                hideControls
-              />
+              <Container p={0} mt={40}>
+                <Select
+                  label="Unit of Measurement"
+                  value={unit}
+                  onChange={(value) => handleChange("unit", value)}
+                  data={["cm", "inch", "meter"]}
+                  placeholder="Select unit"
+                  mb="sm"
+                  hideControls
+                />
 
-              <Grid>
-                <GridCol span={4}>
-                  <NumberInput
-                    label="Length"
-                    placeholder="Enter length"
-                    value={length}
-                    onChange={(value) => handleChange("length", value)}
-                    min={0}
-                    mb="sm"
-                    hideControls
-                  />
-                </GridCol>
-                <GridCol span={4}>
-                  <NumberInput
-                    label="Width"
-                    placeholder="Enter width"
-                    value={width}
-                    onChange={(value) => handleChange("width", value)}
-                    min={0}
-                    mb="sm"
-                    hideControls
-                  />
-                </GridCol>
-                <GridCol span={4}>
-                  <NumberInput
-                    label="Height"
-                    placeholder="Enter height"
-                    value={height}
-                    onChange={(value) => handleChange("height", value)}
-                    min={0}
-                    mb="sm"
-                    hideControls
-                  />
-                </GridCol>
-              </Grid>
+                <Grid>
+                  <GridCol span={4}>
+                    <NumberInput
+                      label="Length"
+                      placeholder="Enter length"
+                      value={length}
+                      onChange={(value) => handleChange("length", value)}
+                      min={0}
+                      mb="sm"
+                      hideControls
+                    />
+                  </GridCol>
+                  <GridCol span={4}>
+                    <NumberInput
+                      label="Width"
+                      placeholder="Enter width"
+                      value={width}
+                      onChange={(value) => handleChange("width", value)}
+                      min={0}
+                      mb="sm"
+                      hideControls
+                    />
+                  </GridCol>
+                  <GridCol span={4}>
+                    <NumberInput
+                      label="Height"
+                      placeholder="Enter height"
+                      value={height}
+                      onChange={(value) => handleChange("height", value)}
+                      min={0}
+                      mb="sm"
+                      hideControls
+                    />
+                  </GridCol>
+                </Grid>
 
-              <Grid>
-                <Grid.Col span={6}>
-                  <NumberInput
-                    label="Gross Weight"
-                    value={grossWeight}
-                    onChange={(value) => handleChange("grossWeight", value)}
-                    mb="sm"
-                    hideControls
-                  />
-                </Grid.Col>
-                <Grid.Col span={6}>
-                  <NumberInput
-                    label="Quantity"
-                    value={quantity}
-                    onChange={(value) => handleChange("quantity", value)}
-                    mb="sm"
-                    hideControls
-                  />
-                </Grid.Col>
-              </Grid>
+                <Grid>
+                  <Grid.Col span={6}>
+                    <NumberInput
+                      label="Gross Weight"
+                      value={grossWeight}
+                      placeholder="Enter gross weight"
+                      onChange={(value) => handleChange("grossWeight", value)}
+                      hideControls
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                    <NumberInput
+                      label="Quantity"
+                      placeholder="Enter quantity"
+                      value={quantity}
+                      onChange={(value) => handleChange("quantity", value)}
+                      hideControls
+                    />
+                  </Grid.Col>
+                </Grid>
 
-              <Button
+                {/* <Button
                 mb={'md'}
                 mt="lg"
                 fullWidth
@@ -328,83 +341,120 @@ const CbmCalc = () => {
                 color={COLORS.contactBackground}
               >
                 {showCalc ? "Hide Calculate" : "Show Calculate"}
-              </Button>
-            </Container>
-          </Grid.Col>
-          {
-            showCalc && <Grid.Col span={6}>
+              </Button> */}
+              </Container>
+            </Grid.Col>
+            <Grid.Col span={5}>
               <Box
                 style={{
-                  height: "10vh",
                   display: "flex",
                   flexDirection: "column",
                 }}
               >
               </Box>
-              <Card shadow="sm" padding="lg" radius="md" withBorder style={{ backgroundColor: COLORS.contactBackground }}>
-                <h2 mb="lg" style={{ color: COLORS.primaryColor }}>CBM Calculations</h2>
-                <Text size="lg" weight={700} mb="xs" c={COLORS.primaryColor}>
-                  Volume
+              <Card shadow="sm" padding="lg" radius="md" withBorder style={{ backgroundColor: COLORS.contactBackground }} ta={'center'}>
+                {/* <h2 mb="lg" style={{ color: COLORS.primaryColor }}>CBM Calculations</h2> */}
+                <Text mb="md" size="lg" style={{ color: COLORS.primaryColor }}>
+                  Cubic Meter
                 </Text>
-                <Grid>
-                  <Grid.Col span={6}>
-                    <Text size="sm" c={COLORS.primaryColor}> {volumeCbm} m³</Text>
-                  </Grid.Col>
-                  <Grid.Col span={6}>
-                    <Text size="sm" c={COLORS.primaryColor}>{volumeCft} ft³</Text>
-                  </Grid.Col>
-                </Grid>
+                <Group direction="column" spacing="xs" mt={'sm'} align="center" justify={'center'}>
+                  <Text c={COLORS.primaryColor} size="sm" w={'100%'}>
+                    Volume
+                  </Text>
+                  <Grid w={'80%'}>
+                    <Grid.Col span={6}>
+                      <Text c={COLORS.primaryColor}> {volumeCbm} m³</Text>
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <Text c={COLORS.primaryColor}>{volumeCft} ft³</Text>
+                    </Grid.Col>
+                  </Grid>
 
-                <Divider my="lg" style={{ borderColor: COLORS.primaryColor }} />
+                  <Text c={COLORS.primaryColor} size="sm" w={'100%'} mt={'xs'}>
+                    Weight
+                  </Text>
+                  <Grid w={'80%'}>
+                    <Grid.Col span={6}>
+                      <Text c={COLORS.primaryColor}>{weightKg} Kg</Text>
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <Text c={COLORS.primaryColor}>{weightLb} Lb</Text>
+                    </Grid.Col>
+                  </Grid>
 
-                <Text size="lg" weight={700} mb="xs" c={COLORS.primaryColor}>
-                  Weight
-                </Text>
-                <Grid>
-                  <Grid.Col span={6}>
-                    <Text size="sm" c={COLORS.primaryColor}>{weightKg} Kg</Text>
-                  </Grid.Col>
-                  <Grid.Col span={6}>
-                    <Text size="sm" c={COLORS.primaryColor}>{weightLb} Lb</Text>
-                  </Grid.Col>
-                </Grid>
+                  <Text c={COLORS.primaryColor} size="sm" w={'100%'} mt={'xs'}>
+                    Volumetric Weight
+                  </Text>
+                  <Grid w={'80%'}>
+                    <Grid.Col span={6}>
+                      <Text c={COLORS.primaryColor}>{volumetricWeightSea} Kg (Sea)</Text>
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <Text c={COLORS.primaryColor}>{volumetricWeightAir} Kg (Air)</Text>
+                    </Grid.Col>
+                  </Grid>
 
-                <Divider my="lg" style={{ borderColor: COLORS.primaryColor }} />
-
-                <Text size="lg" weight={700} mb="xs" c={COLORS.primaryColor}>
-                  Volumetric Weight
-                </Text>
-                <Grid>
-                  <Grid.Col span={6}>
-                    <Text size="sm" c={COLORS.primaryColor}>{volumetricWeightSea} Kg (Sea)</Text>
-                  </Grid.Col>
-                  <Grid.Col span={6}>
-                    <Text size="sm" c={COLORS.primaryColor}>{volumetricWeightAir} Kg (Air)</Text>
-                  </Grid.Col>
-                </Grid>
-
-                <Divider my="lg" style={{ borderColor: COLORS.primaryColor }} />
-
-                <Text size="lg" weight={700} mb="xs" c={COLORS.primaryColor}>
-                  Container Capacities
-                </Text>
-                <Text size="sm" c={COLORS.primaryColor}>20 Feet Container: {container20ft} items</Text>
-                <Text size="sm" c={COLORS.primaryColor}>40 Feet Container: {container40ft} items</Text>
-                <Text size="sm" c={COLORS.primaryColor}>40 Feet HC Container: {container40ftHC} items</Text>
+                  <Text c={COLORS.primaryColor} size="sm" w={'100%'} mt={'xs'}>
+                    Container Capacities
+                  </Text>
+                  <Grid w={'80%'}>
+                    <Grid.Col span={6}>
+                      <Grid m={0} p={0}>
+                        <Grid.Col span={8} px={0}>
+                          <Text c={COLORS.primaryColor}>20 Feet </Text>
+                        </Grid.Col>
+                        <Grid.Col span={4} px={0}>
+                          <Text c={COLORS.primaryColor} ta={'right'}>:</Text>
+                        </Grid.Col>
+                      </Grid>
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <Text c={COLORS.primaryColor} ta={'right'}>{container20ft == 'Infinity' ? 0 : container20ft} items</Text>
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <Grid m={0} p={0}>
+                        <Grid.Col span={8} px={0}>
+                          <Text c={COLORS.primaryColor}>40 Feet </Text>
+                        </Grid.Col>
+                        <Grid.Col span={4} px={0}>
+                          <Text c={COLORS.primaryColor} ta={'right'}>:</Text>
+                        </Grid.Col>
+                      </Grid>
+                      {/* <Text c={COLORS.primaryColor} ta={'right'} >40 Feet </Text> */}
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      {console.log("container40ft : ",container40ft)}
+                      <Text c={COLORS.primaryColor} ta={'right'} >{container40ft == 'Infinity' ? 0 : container40ft} items</Text>
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <Grid m={0} p={0}>
+                        <Grid.Col span={10} px={0}>
+                          <Text c={COLORS.primaryColor}>40 Feet HC</Text>
+                        </Grid.Col>
+                        <Grid.Col span={2} px={0}>
+                          <Text c={COLORS.primaryColor} ta={'right'}>:</Text>
+                        </Grid.Col>
+                      </Grid>
+                      {/* <Text c={COLORS.primaryColor} ta={'left'}>40 Feet HC</Text> */}
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <Text c={COLORS.primaryColor} ta={'right'}>{container40ftHC == 'Infinity' ? 0 : container40ftHC} items</Text>
+                    </Grid.Col>
+                  </Grid>
+                </Group>
               </Card>
 
             </Grid.Col>
-          }
-
-        </Grid>
+          </Grid>
+        </>
       }
       {tools == 'CWC' &&
-        <>
-          <Grid>
-            <Grid.Col span={6}>
-              <Title mb="lg">Chargeable Weight Calculator</Title>
-              <Container mt={40}>
-                <Grid>
+        <Box h={'100%'}>
+          <Title mb="lg" mt={'xl'}>Chargeable Weight Calculator</Title>
+          <Grid mt={'xl'} align="center" justify={'flex-start'} >
+            <Grid.Col span={7}>
+              <Container >
+                <Grid justify={'flex-start'} >
                   <GridCol span={4}>
                     <NumberInput
                       label="Length (cm)"
@@ -441,7 +491,7 @@ const CbmCalc = () => {
                 </Grid>
 
                 <Grid mt={12}>
-                  <Grid.Col span={4}>
+                  <Grid.Col span={6}>
                     <NumberInput
                       label="Quantity"
                       value={formData.quantity}
@@ -452,7 +502,7 @@ const CbmCalc = () => {
                     />
                   </Grid.Col>
 
-                  <Grid.Col span={4}>
+                  <Grid.Col span={6}>
                     <NumberInput
                       label="Actual Weight (Kg)"
                       value={formData.actualWeight}
@@ -463,7 +513,7 @@ const CbmCalc = () => {
                     />
                   </Grid.Col>
 
-                  <Grid.Col span={4}>
+                  <Grid.Col span={12}>
                     <MultiSelect
                       data={additionalCharges.map((charge) => ({
                         value: charge.chargeType,
@@ -480,7 +530,7 @@ const CbmCalc = () => {
                 </Grid>
                 <Grid mt={12}>
                   <Grid.Col span={12}>
-                    <Button
+                    {/* <Button
                       // onClick={calculateChargeableWeight}
                       // fullWidth
                       // color={COLORS.contactBackground}
@@ -488,45 +538,49 @@ const CbmCalc = () => {
                       onClick={calculateChargeableWeight} fullWidth
                     >
                       {showCalc ? "Hide Calculate" : "Show Calculate"}
-                    </Button>
+                    </Button> */}
                   </Grid.Col>
                 </Grid>
               </Container>
             </Grid.Col>
-            {showCalc && (
-              <Grid.Col span={6}>
-                <Box
-                  style={{
-                    height: "10vh",
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                ></Box>
-                <Card
-                  shadow="sm"
-                  padding="lg"
-                  radius="md"
-                  withBorder
-                  style={{ backgroundColor: COLORS.contactBackground }}
-                >
-                  <h2 mb="lg" style={{ color: COLORS.primaryColor }}>
-                    Chargeable Weight
-                  </h2>
-                  <Group direction="column" spacing="xs" mt={"xl"} align="center">
-                    <Text size="lg" c={COLORS.primaryColor}>
-                      Chargeable Weight for Sea Freight: {chargeableWeightSea} kg -
-                      {ratePerItem[0].Symbol} {chargeSeaAmt}
-                    </Text>
-                    <Text size="lg" c={COLORS.primaryColor}>
-                      Chargeable Weight for Air Freight: {chargeableWeightAir} kg -
-                      {ratePerItem[1].Symbol} {chargeAirAmt}
-                    </Text>
-                  </Group>
-                </Card>
-              </Grid.Col>
-            )}
+            {/* {showCalc && ( */}
+            <Grid.Col span={5}>
+              <Box
+                style={{
+                  // height: "10vh",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              ></Box>
+              <Card
+                shadow="sm"
+                padding="lg"
+                radius="md"
+                withBorder
+                style={{ backgroundColor: COLORS.contactBackground, display: 'flex', alignItems: 'center' }}
+              >
+                <Text mb="md" size="lg" style={{ color: COLORS.primaryColor }}>
+                  Chargeable Weight
+                </Text>
+                <Group direction="column" spacing="xs" mt={'sm'} align="center" justify={'center'}>
+                  <Text c={COLORS.primaryColor} size="sm" w={'100%'} ta={'center'}>
+                    Chargeable Weight for Sea Freight
+                  </Text>
+                  <Text c={COLORS.primaryColor} w={'100%'} ta={'center'}>
+                    {chargeableWeightSea} kg - {ratePerItem[0].Symbol} {chargeSeaAmt}
+                  </Text>
+                  <Text c={COLORS.primaryColor} size="sm" mt={'xs'} w={'100%'} ta={'center'}>
+                    Chargeable Weight for Air Freight
+                  </Text>
+                  <Text c={COLORS.primaryColor} >
+                    {chargeableWeightAir} kg -  {ratePerItem[1].Symbol} {chargeAirAmt}
+                  </Text>
+                </Group>
+              </Card>
+            </Grid.Col>
+            {/* )} */}
           </Grid>
-        </>
+        </Box>
       }
       {
         tools == 'Fare Calculation' &&

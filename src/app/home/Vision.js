@@ -408,7 +408,7 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
                   ))}
               </>}
           <Group mt="md" gap={"xl"}>
-            <Button
+            {/* <Button
               variant="filled"
               bg={COLORS.portColor}
               radius="md"
@@ -420,7 +420,7 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
               onClick={() => router.push("/contact")}
             >
               Get in touch
-            </Button>
+            </Button> */}
             <UnstyledButton
               size={"sm"}
               className="unstyled-button"

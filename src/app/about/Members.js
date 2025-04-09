@@ -18,6 +18,7 @@ import { COLORS } from '../utils/COLORS';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from '@mantine/hooks';
 import { Carousel } from '@mantine/carousel';
+import { theme } from '../utils/theme';
 
 const Members = () => {
 
@@ -56,12 +57,12 @@ const Members = () => {
           padding="lg"
           radius="lg"
           style={{
-            maxWidth: '800px',
+            maxWidth: '1000px',
             width: '100%',
           }}
         >
           <Grid gutter="60" dir={isMobile ? 'column' : 'row'} align="center">
-            <GridCol span={isMobile ? 12 : 6} pr={0}>
+            <GridCol span={isMobile ? 12 : 5} pr={0}>
               <CardSection>
                 <Image
                   src={Images.chairman}
@@ -74,22 +75,43 @@ const Members = () => {
                 />
               </CardSection>
             </GridCol>
-            <GridCol span={isMobile ? 12 : 6} pl={0} pr={70} >
+            <GridCol span={isMobile ? 12 : 7} pl={0} pr={65} >
               <Stack spacing="md">
-                <Text size="md" mt={-10} tw='balance' fs={'italic'}  c={COLORS.textColor}>
+                <Text size={theme?.fontSizes?.lgx} lh={'md'} mt={-10} tw='balance' fs={'italic'} c={COLORS.textColor} ta={'justify'}>
                   “It is about the strive to keep growing. Once you get hold of
                   that feeling, never let it go and just keep moving forward!”
                 </Text>
               </Stack>
-              <Flex justify={'flex-end'}>
-                <Stack spacing="md" mt={'sm'}>
-                  <Text size="md" fw={700} >
+              <Flex>
+                {/* <Grid mt={'md'}>
+                <Grid.Col span={4} p={0}>
+                  <Text size="md" fw={700} ta={'right'}>
+                    -
+                  </Text>
+                </Grid.Col>
+                <Grid.Col span={8} p={0}>
+                  <Text size="md" fw={700} ta={'right'}>
                     Mr. Paresh Bhanushali
                   </Text>
-                    <Text size="sm" mt={-15} c={COLORS.textColor}>
-                      Chairman and Managing Director
-                      <br />Pentagon Group of Companies
-                    </Text>
+                </Grid.Col>
+                <Grid.Col span={4} p={0}>
+                  <></>
+                </Grid.Col>
+                <Grid.Col span={8} p={0} mt={'xs'}>
+                  <Text size="sm" c={COLORS.textColor}>
+                    Chairman and Managing Director
+                    <br />Pentagon Group of Companies
+                  </Text>
+                </Grid.Col>
+              </Grid> */}
+                <Stack spacing="md" mt={'xl'}>
+                  <Text size={theme?.fontSizes?.lgx} fw={600} >
+                    Paresh Bhanushali
+                  </Text>
+                  <Text size={theme?.fontSizes?.md} mt={-10} c={COLORS.textColor} lh={1.5}>
+                    Chairman and Managing Director
+                    <br />Pentagon Group of Companies
+                  </Text>
                 </Stack>
               </Flex>
 

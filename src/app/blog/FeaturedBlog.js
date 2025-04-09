@@ -1,29 +1,35 @@
 import { Container, Grid, GridCol, Image, Text, Title } from '@mantine/core';
 import { COLORS } from '../utils/COLORS';
 
-const FeaturedNews = ({res}) => {
+const FeaturedBlog = ({ res }) => {
 
   return (
     <Container fluid px={'7%'} py={'70px'}>
       <Title size={'lg'} tt={'uppercase'}>Featured in the News</Title>
       <Grid columns={3} gutter={'xl'} mt={30}>
-        {res.items.map((item) => (
+        {res?.length && res?.map((item) => (
           <GridCol key={item.sys.id} span={1}>
-            <Image src={item.fields.image?.fields?.file?.url} alt={item.name} />
-            <Text
-              c={COLORS.textColor}
-              tt={'uppercase'}
-              size="sm"
-              fw={500}
-              mt={20}
-            >
-              {item.fields.title}
+            <Image src={item.fields.newsImage?.fields?.file?.url} alt={item.name}
+              fit="cover"
+              // style={{ borderRadius: '24px' }}
+              mah={'250px'}
+              mih={'250px'}
+            />
+            <Text c="#999" fw={700} size="xs" mt={20} tt="uppercase">
+              {item.fields.newsName}
             </Text>
-            <Text size='smx' fw={600} mt={10}>{item.fields.description}</Text>
+            <Text
+              c={COLORS.news_title}
+              tt={'uppercase'}
+              fw={700} size="sm" maw={'100%'}
+            >
+              {item.fields.newsTitle}
+            </Text>
+            {/* <Text size='smx' fw={600} mt={10}>{item.fields.description}</Text> */}
             <a
               href={item.fields.knowmore}
               style={{
-                marginTop: '20px',
+                marginTop: '0px',
                 color: COLORS.serviceColor,
                 textDecoration: 'underline',
                 cursor: 'pointer',
@@ -39,4 +45,4 @@ const FeaturedNews = ({res}) => {
   );
 };
 
-export default FeaturedNews;
+export default FeaturedBlog;

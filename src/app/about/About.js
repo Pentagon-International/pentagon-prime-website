@@ -62,11 +62,12 @@ const About = ({ title, content }) => {
 
             }}>
             <Image
-              w={isMobile ? "100%" : "100%"}
+              w={isMobile ? "100%" : "90%"}
               h="auto"
               alt="PentagonPrime Logo"
               pos={'relative'}
-              mr={isMobile ? 0 : '-16%'}
+              mt={20}
+              mr={isMobile ? 0 : '-20%'}
               src={Images.pentagon_line}
               fit="contain"
             />

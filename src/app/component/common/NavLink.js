@@ -141,24 +141,24 @@ export const featuresMap = {
       title: "Announcements",
       link: '/news'
     },
-    {
-      icon: IconPackage,
-      title: "Inco Terms",
-      link: '/inco-terms'
-    }, {
-      icon: IconBox,
-      title: "Shipping Terms",
-      link: '/shipping-terms'
-    }, {
-      icon: IconShip,
-      title: "Shipping Lines",
-      link: '/shipping-lines'
-    },
-    {
-      icon: IconPlane,
-      title: "Air lines",
-      link: '/air-lines'
-    },
+    // {
+    //   icon: IconPackage,
+    //   title: "Inco Terms",
+    //   link: '/inco-terms'
+    // }, {
+    //   icon: IconBox,
+    //   title: "Shipping Terms",
+    //   link: '/shipping-terms'
+    // }, {
+    //   icon: IconShip,
+    //   title: "Shipping Lines",
+    //   link: '/shipping-lines'
+    // },
+    // {
+    //   icon: IconPlane,
+    //   title: "Air lines",
+    //   link: '/air-lines'
+    // },
   ],
   Company: [
     {
