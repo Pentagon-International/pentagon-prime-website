@@ -38,7 +38,7 @@ const ServicePage = async ({ params }) => {
         backgroundImage={resData?.backgroundImage?.fields?.file?.url || resData?.backgroundImageUrl}
       />
 
-      <Retail first_title={retailData.title} first_content={retailData.content} />
+      <Retail first_title={retailData.title} first_content={resData.subTitle} />
       <Ship first_title={shipAnywhereData.title} first_content={shipAnywhereData.content} serviceData={shippingData} />
     </>
   );

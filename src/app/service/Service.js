@@ -47,7 +47,7 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
           <Group align='center'>
             <Flex gap={'md'} align={'center'}>
               <Image src={icon || Images.sea_freight} alt="sea freight" w={35} h={35} radius={25} />
-              <Title tt="uppercase" size={'39px'} fw={800} lh={'lgx2'}>
+              <Title tt="uppercase" size={'28px'} fw={800} lh={'lgx2'}>
                 {highlightText(title)}
               </Title>
             </Flex>

@@ -41,13 +41,13 @@ const Retail = ({ first_title, first_content, second_title, second_content }) =>
     //     </Flex>
     //     <Image src={isMobile ? Images.mob_prime_network : Images.pentagon_zig_zag} w={isMobile ? '100%' : '50%'} mx={'auto'} alt="prime_network" />
     //   </Group>
-    <Container fluid px="7%" py="70px" my={40} pb={0} mb={"70px"}>
+    <Container fluid px="7%" py="70px" my={40} pb={0} >
       <Flex gap="md" wrap="nowrap" direction={isMobile ? 'column' : 'row'} >
         <Flex direction={'column'} >
           <Title tt="uppercase" fw={800}>
             {highlightText(first_title)}
           </Title>
-          <Text size='sm' c={COLORS.textColor} lh={isMobile ? '20px' : ''} mt={'xs'} w={isMobile ? '100%' : '40vw'}>
+          <Text size="base" c={COLORS.textColor} lh="sm" maw={ isMobile ? '100%' : '80%'} mt={14} >
             {highlightText(first_content)}
           </Text>
         </Flex>
@@ -55,13 +55,15 @@ const Retail = ({ first_title, first_content, second_title, second_content }) =>
         <Image
           src={isMobile ? Images.mob_prime_network : Images.pentagon_zig_zag}
           alt="prime_network"
-          h={isMobile ? "auto" : "350"}
+          h={isMobile ? "auto" : "auto"}
+          w={isMobile ? "100%" : "40%"}
           mt={isMobile ? 70 : 0}
+          fit={'contain'}
           style={{
             position: 'relative',
             // transform: 'translateY(-50%)',
             // top: '10px',
-            maxWidth: isMobile ? '100%' : '50%',
+            maxWidth: !isMobile && '50%',
             // height: '10%',
           }}
         />
