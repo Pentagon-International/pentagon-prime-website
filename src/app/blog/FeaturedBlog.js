@@ -5,7 +5,7 @@ const FeaturedBlog = ({ res }) => {
 
   return (
     <Container fluid px={'7%'} py={'70px'}>
-      <Title size={'lg'} tt={'uppercase'}>Featured in the News</Title>
+      <Title size={'lg'} tt={'uppercase'}>Featured in the Blog</Title>
       <Grid columns={3} gutter={'xl'} mt={30}>
         {res?.length && res?.map((item) => (
           <GridCol key={item.sys.id} span={1}>

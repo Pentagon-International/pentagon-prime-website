@@ -401,10 +401,10 @@ const CbmCalc = () => {
                     <Grid.Col span={6}>
                       <Grid m={0} p={0}>
                         <Grid.Col span={8} px={0}>
-                          <Text c={COLORS.primaryColor}>20 Feet </Text>
+                          <Text c={COLORS.primaryColor} ta={'left'}>20 Feet </Text>
                         </Grid.Col>
                         <Grid.Col span={4} px={0}>
-                          <Text c={COLORS.primaryColor} ta={'right'}>:</Text>
+                          <Text c={COLORS.primaryColor} ta={'right'}>~</Text>
                         </Grid.Col>
                       </Grid>
                     </Grid.Col>
@@ -414,10 +414,10 @@ const CbmCalc = () => {
                     <Grid.Col span={6}>
                       <Grid m={0} p={0}>
                         <Grid.Col span={8} px={0}>
-                          <Text c={COLORS.primaryColor}>40 Feet </Text>
+                          <Text c={COLORS.primaryColor} ta={'left'}>40 Feet </Text>
                         </Grid.Col>
                         <Grid.Col span={4} px={0}>
-                          <Text c={COLORS.primaryColor} ta={'right'}>:</Text>
+                          <Text c={COLORS.primaryColor} ta={'right'}>~</Text>
                         </Grid.Col>
                       </Grid>
                       {/* <Text c={COLORS.primaryColor} ta={'right'} >40 Feet </Text> */}
@@ -429,10 +429,10 @@ const CbmCalc = () => {
                     <Grid.Col span={6}>
                       <Grid m={0} p={0}>
                         <Grid.Col span={10} px={0}>
-                          <Text c={COLORS.primaryColor}>40 Feet HC</Text>
+                          <Text c={COLORS.primaryColor} ta={'left'}>40 Feet HC</Text>
                         </Grid.Col>
                         <Grid.Col span={2} px={0}>
-                          <Text c={COLORS.primaryColor} ta={'right'}>:</Text>
+                          <Text c={COLORS.primaryColor} ta={'right'}>~</Text>
                         </Grid.Col>
                       </Grid>
                       {/* <Text c={COLORS.primaryColor} ta={'left'}>40 Feet HC</Text> */}

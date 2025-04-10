@@ -2,6 +2,7 @@ import {
   Accordion,
   ActionIcon,
   Button,
+  Card,
   Flex,
   Grid,
   GridCol,
@@ -250,7 +251,7 @@ function AccordionControl({ actionCallback, list, data, disabled, ...props }) {
   );
 }
 
-export const SummarySection = ({ accordion, includeTax, avarageAmount, disabled }) => {
+export const SummarySection = ({ accordion, includeTax, avarageAmount, disabled, quoteData, chargesList, chargesMasterList, gstIncluded, setAvarageAmount, loading }) => {
   // console.log("Avg amt:", avarageAmount);
 
   const estimateStore = useEstimationStore(
@@ -339,49 +340,62 @@ export const SummarySection = ({ accordion, includeTax, avarageAmount, disabled 
   }, [totalCharges, avarageAmount]);
 
   return (
-    <Table>
-      <Table.Tbody>
-        {includeTax && (
-          <>
-            <Table.Tr>
-              <Table.Td align="right" px={4}>
-                <Text size="xs" fw={600}>
-                  Sub Total
-                </Text>
-              </Table.Td>
-              <Table.Td align="right" w={120} px={4}>
-                <TextInput
-                  size="xs"
-                  readOnly
-                  value={currencyFormat(
-                    parseInt(estimateStore.summary?.total_amount) || 0
-                  )}
-                  leftSection={<Text size="xs">₹</Text>}
-                  styles={{ input: { textAlign: "right" } }}
-                />
-              </Table.Td>
-              <Table.Td px={4} w={30}></Table.Td>
-            </Table.Tr>
-            {estimateStore.summary?.tax?.map((item, i) => (
-              <Table.Tr key={i}>
-                <Table.Td align="right" px={4}>
-                  <Text size="xs" fw={600}>
-                    GST {item?.tax_percent}%
-                  </Text>
-                </Table.Td>
-                <Table.Td align="right" w={120} px={4}>
-                  <TextInput
-                    size="xs"
-                    readOnly
-                    value={currencyFormat(parseInt(item?.tax_amount || 0))}
-                    leftSection={<Text size="xs">₹</Text>}
-                    styles={{ input: { textAlign: "right" } }}
-                  />
-                </Table.Td>
-                <Table.Td px={4} w={30}></Table.Td>
-              </Table.Tr>
-            ))}
-            {/* <Table.Tr>
+    <Card shadow="sm" padding="lg" radius="md"  style={{ backgroundColor: COLORS.contactBackground }} ta={'center'}>
+      <Grid>
+        <Grid.Col>
+          <EstimateFormCalculation
+            quoteData={quoteData}
+            chargesList={chargesList}
+            chargesMasterList={chargesMasterList}
+            gstIncluded={gstIncluded}
+            accordion={accordion}
+            setAvarageAmount={setAvarageAmount}
+            loading={loading}
+          />
+        </Grid.Col>
+        <Grid.Col>
+          <Table withRowBorders={false}>
+            <Table.Tbody>
+              {includeTax && (
+                <>
+                  <Table.Tr>
+                    <Table.Td align="right" px={4}>
+                      <Text c={COLORS.primaryColor} size="sm" w={'100%'}>
+                        Sub Total
+                      </Text>
+                    </Table.Td>
+                    <Table.Td align="right" w={120} px={4}>
+                      <TextInput
+                        readOnly
+                        value={currencyFormat(
+                          parseInt(estimateStore.summary?.total_amount) || 0
+                        )}
+                        leftSection={<Text size="xs">₹</Text>}
+                        styles={{ input: { textAlign: "right" } }}
+                      />
+                    </Table.Td>
+                    <Table.Td px={4} w={30}></Table.Td>
+                  </Table.Tr>
+                  {estimateStore.summary?.tax?.map((item, i) => (
+                    <Table.Tr key={i}>
+                      <Table.Td align="right" px={4}>
+                        <Text size="xs" fw={600}>
+                          GST {item?.tax_percent}%
+                        </Text>
+                      </Table.Td>
+                      <Table.Td align="right" w={120} px={4}>
+                        <TextInput
+                          size="xs"
+                          readOnly
+                          value={currencyFormat(parseInt(item?.tax_amount || 0))}
+                          leftSection={<Text size="xs">₹</Text>}
+                          styles={{ input: { textAlign: "right" } }}
+                        />
+                      </Table.Td>
+                      <Table.Td px={4} w={30}></Table.Td>
+                    </Table.Tr>
+                  ))}
+                  {/* <Table.Tr>
               <Table.Td align="right" px={4}>
                 <Text size="xs" fw={600}>
                   GST Total
@@ -400,65 +414,69 @@ export const SummarySection = ({ accordion, includeTax, avarageAmount, disabled 
               </Table.Td>
               <Table.Td px={4} w={30}></Table.Td>
             </Table.Tr> */}
-          </>
-        )}
-        <Table.Tr>
-          <Table.Td align="right" px={4}>
-            <Text size="xs" fw={600}>
-              Total Amount
-            </Text>
-          </Table.Td>
-          <Table.Td align="right" w={120} px={4}>
-            <TextInput
-              size="xs"
-              readOnly
-              disabled={disabled}
-              value={
-                !accordion
-                  ? 0
-                  : currencyFormat(
-                    parseInt(
-                      includeTax
-                        ? estimateStore.summary?.total_with_tax
-                        : estimateStore.summary?.total_amount
-                    ) || 0
-                  )
-              }
-              leftSection={<Text size="xs">₹</Text>}
-              styles={{ input: { textAlign: "right" } }}
-            />
-          </Table.Td>
-          <Table.Td px={4} w={30}></Table.Td>
-        </Table.Tr>
-        {avarageAmount &&
-          typeof avarageAmount === "object" &&
-          !Array.isArray(avarageAmount) &&
-          Object.entries(avarageAmount).map(([size, amount]) => (
-            <Table.Tr key={size}>
-              <Table.Td align="right" px={4}>
-                <Text size="xs" fw={600}>
-                  Per Container Charges for {size}
-                </Text>
-              </Table.Td>
-              <Table.Td align="right" w={120} px={4}>
-                <TextInput
-                  size="xs"
-                  disabled={disabled}
-                  leftSection={<Text size="xs">₹</Text>}
-                  //value={!accordion ? currencyFormat(amount || 0) : currencyFormat(0)}
-                  value={
-                    !accordion
-                      ? 0
-                      : currencyFormat(parseFloat(amount.unitprice) || 0)
-                  }
-                  readOnly
-                  styles={{ input: { textAlign: "right" } }}
-                />
-              </Table.Td>
-            </Table.Tr>
-          ))}
-      </Table.Tbody>
-    </Table>
+                </>
+              )}
+              <Table.Tr>
+                <Table.Td align="right" px={4}>
+                  <Text c={COLORS.primaryColor} size="sm" w={'100%'}>
+                    Total Amount
+                  </Text>
+                </Table.Td>
+                <Table.Td align="right" w={120} px={4}>
+                  <TextInput
+                    // size="xs"
+                    readOnly
+                    disabled={disabled}
+                    value={
+                      !accordion
+                        ? 0
+                        : currencyFormat(
+                          parseInt(
+                            includeTax
+                              ? estimateStore.summary?.total_with_tax
+                              : estimateStore.summary?.total_amount
+                          ) || 0
+                        )
+                    }
+                    leftSection={<Text size="xs">₹</Text>}
+                    styles={{ input: { textAlign: "right" } }}
+                  />
+                </Table.Td>
+                <Table.Td px={4} w={30}></Table.Td>
+              </Table.Tr>
+              {avarageAmount &&
+                typeof avarageAmount === "object" &&
+                !Array.isArray(avarageAmount) &&
+                Object.entries(avarageAmount).map(([size, amount]) => (
+                  <Table.Tr key={size}>
+                    <Table.Td align="right" px={4}>
+                      <Text size="xs" fw={600}>
+                        Per Container Charges for {size}
+                      </Text>
+                    </Table.Td>
+                    <Table.Td align="right" w={120} px={4}>
+                      <TextInput
+                        size="xs"
+                        disabled={disabled}
+                        leftSection={<Text size="xs">₹</Text>}
+                        //value={!accordion ? currencyFormat(amount || 0) : currencyFormat(0)}
+                        value={
+                          !accordion
+                            ? 0
+                            : currencyFormat(parseFloat(amount.unitprice) || 0)
+                        }
+                        readOnly
+                        styles={{ input: { textAlign: "right" } }}
+                      />
+                    </Table.Td>
+                  </Table.Tr>
+                ))}
+            </Table.Tbody>
+          </Table>
+        </Grid.Col>
+      </Grid>
+    </Card>
+
   );
 };
 
@@ -586,9 +604,8 @@ const ChargesTable = ({
                 </Table.Td>
                 <Table.Td>
                   <Text size="xs">
-                    {`₹ ${currencyFormat(item?.unit_price || 0)} / ${
-                      item?.charge_unit
-                    }`}
+                    {`₹ ${currencyFormat(item?.unit_price || 0)} / ${item?.charge_unit
+                      }`}
                   </Text>
                 </Table.Td>
                 <Table.Td px={4} w={68}>
@@ -647,7 +664,7 @@ const ChargesTable = ({
                   <ActionIcon
                     color="red"
                     variant="light"
-                    size={"xs"}
+                    // size={"xs"}
                     onClick={() => {
                       handleDelete(item?.id);
                     }}
@@ -729,29 +746,29 @@ export const EstimateFormCalculation = ({
 
   return (
     <Grid>
-      <GridCol bg={"teal.0"} mt={4} style={{ borderRadius: 8 }}>
-        <Table>
+      <GridCol bg={COLORS.contactBackground} style={{ borderRadius: 8 }} c={'white'} h={'50vh'}>
+        <Table withRowBorders={false}>
           <Table.Thead>
             <Table.Tr>
               <Table.Th px={4} py={0}>
-                <Text size="xs" fw={600}>
+                <Text size="sm" fw={600}>
                   Charges
                 </Text>
               </Table.Th>
               <Table.Th px={4} py={0} w={62}>
-                <Text size="xs" fw={600}>
+                <Text size="sm" fw={600}>
                   Units
                 </Text>
               </Table.Th>
               {gstIncluded && (
                 <Table.Th px={4} py={0} w={68}>
-                  <Text size="xs" fw={600}>
+                  <Text size="sm" fw={600}>
                     Tax %
                   </Text>
                 </Table.Th>
               )}
               <Table.Th px={4} py={0} w={120}>
-                <Text size="xs" fw={600}>
+                <Text size="sm" fw={600}>
                   Price
                 </Text>
               </Table.Th>

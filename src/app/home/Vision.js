@@ -333,9 +333,10 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
                               item?.fields?.visionIcon?.fields?.file?.url ||
                               item?.fields.image?.fields?.file?.url
                             }
-                            width={45}
-                            height={45}
-                            mah={45}
+                            style={{scale: 1.3}}
+                            width={60}
+                            height={60}
+                            mah={60}
                           // alt={item.fields.vision_title || item.fields.title}
                           />
                         </Flex>

@@ -7,7 +7,7 @@ const Header = ({ title, content, top }) => {
     <Box
       mt={60}
       style={{
-        height: '85vh',
+        height: '80vh',
         backgroundColor: '#111F40',
         display: 'flex',
         alignItems: 'center',

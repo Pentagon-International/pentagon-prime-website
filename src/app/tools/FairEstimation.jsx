@@ -6,7 +6,6 @@ import {
   Button,
   Checkbox,
   Grid,
-  GridCol,
   Group,
   Text,
 } from "@mantine/core";
@@ -48,14 +47,10 @@ const FairEstimation = ({ data, formHook, accordion, setAccordion }) => {
 
   return (
     <Grid px={20}>
-      <GridCol mt={"56px"}>
+      <Grid.Col>
         <Group justify="flex-end">
           <Checkbox
-            label={
-              <Text size="xs" fw={600} mb={5} c={"gray"}>
-                Include GST
-              </Text>
-            }
+            label="Include GST"
             checked={formHook.values.gstIncluded}
             labelPosition="left"
             onChange={(e) => {
@@ -64,8 +59,6 @@ const FairEstimation = ({ data, formHook, accordion, setAccordion }) => {
           />
           <Button
             variant="outline"
-            color={COLORS.primaryColor}
-            leftSection={<IconRefresh />}
             onClick={() => refetchAPi()}
             style={{
               border: "none",
@@ -73,11 +66,11 @@ const FairEstimation = ({ data, formHook, accordion, setAccordion }) => {
                 border: "none",
               },
             }}
-          />
+          ><IconRefresh /></Button>
         </Group>
-      </GridCol>
+      </Grid.Col>
 
-      <GridCol bg={"teal.0"} mt={4} style={{ borderRadius: 8 }}>
+      {/* <Grid.Col bg={COLORS?.contactBackground} style={{ borderRadius: 8 }}>
         <EstimateFormCalculation
           quoteData={data}
           chargesList={pricingTypeQuery.data || []}
@@ -87,15 +80,21 @@ const FairEstimation = ({ data, formHook, accordion, setAccordion }) => {
           setAvarageAmount={setAvarageAmount}
           loading={pricingTypeQuery.isLoading}
         />
-      </GridCol>
+      </Grid.Col> */}
 
-      <GridCol bg={"teal.0"} mt={4} style={{ borderRadius: 8 }}>
+      <Grid.Col bg={COLORS?.contactBackground} style={{ borderRadius: 8 }} c={'white'}>
         <SummarySection
           accordion={accordion}
           includeTax={formHook.values.gstIncluded}
           avarageAmount={avarageAmount}
+          quoteData={data}
+          chargesList={pricingTypeQuery.data || []}
+          chargesMasterList={pricingTypeQuery.data || []}
+          gstIncluded={formHook.values.gstIncluded}
+          setAvarageAmount={setAvarageAmount}
+          loading={pricingTypeQuery.isLoading}
         />
-      </GridCol>
+      </Grid.Col>
     </Grid>
   );
 };

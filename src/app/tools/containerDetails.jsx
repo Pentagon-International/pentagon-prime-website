@@ -184,14 +184,12 @@ export const ContainerTypePill = ({ name = "GC", onClick, isActive }) => {
       onClick={onClick}
       align={"center"}
       justify={"center"}
-      m={4}
       p={8}
       style={{
-        border: "1px solid",
-        borderColor: COLORS.lightColor,
+        border: "1px solid lightgray",
         borderRadius: 4,
-        width: 75,
-        backgroundColor: isActive ? COLORS.primaryColor : COLORS.white,
+        width: 85,
+        backgroundColor: isActive ? COLORS.portColor : COLORS.white,
         cursor: "pointer",
       }}
     >

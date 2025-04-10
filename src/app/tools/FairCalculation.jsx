@@ -4,6 +4,7 @@ import FairQuotation from "./FairQuotaion";
 import FairEstimation from "./FairEstimation";
 import { sumByCountSize } from "./sumByCountSize";
 import { useForm } from "@mantine/form";
+import { theme } from "../utils/theme";
 
 const FairCalculation = () => {
   const [quotationData, setQuotationData] = useState(null);
@@ -31,46 +32,36 @@ const FairCalculation = () => {
 
 
   return (
-    <Grid>
-      <Grid.Col span={5}>
-        <Title mb="lg">Fare Calculation</Title>
+    <>
+      <Title mb="lg" mt={'xl'}>Fare Calculation</Title>
+      <Grid mb={theme?.lineHeights.lg}>
+        <Grid.Col span={6}>
+            <FairQuotation
+              onSubmit={handleQuotationSubmit}
+              formHook={formHook}
+              accordion={accordion}
+              setAccordion={setAccordion}
+            />
+        </Grid.Col>
 
-        <Box
-          bg={"gray.0"}
-          style={{
-            borderRadius: 8,
-            border: "1px dashed #E2E8F0",
-            height: "90vh",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <FairQuotation
-            onSubmit={handleQuotationSubmit}
-            formHook={formHook}
-            accordion={accordion}
-            setAccordion={setAccordion}
-          />
-        </Box>
-      </Grid.Col>
-
-      <Grid.Col span={7}>
-        <Box
-          style={{
-            height: "90vh",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <FairEstimation
-            data={quotationData}
-            formHook={formHook}
-            accordion={accordion}
-            setAccordion={setAccordion}
-          />
-        </Box>
-      </Grid.Col>
-    </Grid>
+        <Grid.Col span={6}>
+          <Box
+            style={{
+              height: "90vh",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <FairEstimation
+              data={quotationData}
+              formHook={formHook}
+              accordion={accordion}
+              setAccordion={setAccordion}
+            />
+          </Box>
+        </Grid.Col>
+      </Grid>
+    </>
   );
 };
 

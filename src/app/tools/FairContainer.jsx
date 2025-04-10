@@ -4,6 +4,7 @@ import {
   Button,
   Checkbox,
   Flex,
+  Grid,
   NumberInput,
   Select,
   Text,
@@ -167,24 +168,36 @@ const FairContainer = ({
 
   useEffect(() => {
     submitCallback(containerList);
-  },[]);
+  }, []);
 
   return (
-    <div>
-      <Flex>
-        {options.map((item, i) => {
-          return (
-            <ContainerTypePill
-              key={i}
-              isActive={item === activeType}
-              onClick={() => {
-                setActiveType(item);
-              }}
-              name={item}
-            />
-          );
-        })}
-      </Flex>
+    <Grid>
+      <Grid.Col span={8}>
+        <Select
+          name={"Cargo Type"}
+          placeholder="Choose cargo type"
+          required
+          onChange={(v) => {
+            setActiveType(v)
+          }}
+          searchable
+          label="Cargo Type"
+          data={options || []}
+        />
+        {/* {options.map((item, i) => {
+            return (
+              <ContainerTypePill
+                key={i}
+                isActive={item === activeType}
+                onClick={() => {
+                  setActiveType(item);
+                }}
+                name={item}
+              />
+            );
+          })} */}
+      </Grid.Col>
+
 
       {/* {dimension?.isVisible.includes(activeType) ? (
         <>
@@ -204,13 +217,25 @@ const FairContainer = ({
           </Flex>
         </>
       ) : null} */}
-
-      <Flex justify={"flex-end"}>
+      <Grid.Col span={4}>
+        <Flex align={'flex-end'} h={'100%'}>
+          {selectedSize.length - 1 < contSize.length && (
+            <Button
+              variant="subtle"
+              // size="xs"
+              justify="flex-end"
+              onClick={addNewContainer}
+              leftSection={<IconPlus />}
+            > Add Container
+            </Button>
+          )}
+        </Flex>
+      </Grid.Col>
+      {/* <Flex justify={"flex-end"}>
         {selectedSize.length - 1 < contSize.length && (
           <Button
-            color={COLORS.primaryColor}
-            mt={20}
-            variant="transparent"
+            // color={COLORS.primaryColor}
+            variant="lig"
             size="xs"
             onClick={addNewContainer}
             leftSection={<IconPlus />}
@@ -218,24 +243,23 @@ const FairContainer = ({
             Add Container
           </Button>
         )}
-      </Flex>
+      </Flex> */}
 
       {containerList?.list?.map((item, i) => {
         if (!item) return null;
         return (
-          <Box p={"xs"} mx={-10} bg={i % 2 ? "#f9f9f9" : COLORS.white} key={i}>
+          <Box p={"xs"} bg={i % 2 ? "#f9f9f9" : COLORS.white} key={i}>
             <Flex
               wrap={"nowrap"}
               direction={"row"}
               justify={"space-between"}
               align={"center"}
             >
-              <Text size="sm" fw={500} mr={4} mt={20} ml={-4}>
-                {i + 1}.
+              <Text size="sm" fw={500} mr={20} mt={20} ml={-4}>
+                {i + 1}
               </Text>
               <Select
                 label={"Container Size"}
-                size="xs"
                 w={'auto'}
                 mr={20}
                 data={contSize}
@@ -262,7 +286,6 @@ const FairContainer = ({
                   return (
                     <NumberInput
                       key={j}
-                      size="xs"
                       w={inputSize}
                       mr={20}
                       hideControls
@@ -327,7 +350,7 @@ const FairContainer = ({
           </Box>
         );
       })}
-    </div>
+    </Grid>
   );
 };
 

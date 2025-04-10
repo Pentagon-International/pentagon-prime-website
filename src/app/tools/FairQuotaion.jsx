@@ -162,52 +162,51 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
   return (
     <Box style={{ maxHeight: "100vh" }}>
       <form onSubmit={handleSubmit}>
-        <Grid gutter={"xl"} px={20} justify="center" align="center">
+        <Grid>
           <Grid.Col span={12}>
             <Text fw={500} mt={"md"} size="sm">
               Type of Booking
             </Text>
-            <Flex align="center" justify="space-between" gap={10}>
-              <SegmentedControl
-                name="typeOfBooking"
-                onChange={(val) => setFieldValue("typeOfBooking", val)}
-                w={"65%"}
-                size="sm"
-                color={COLORS.primaryColor}
-                defaultValue="FCL"
-                value={values.typeOfBooking}
-                data={[
-                  {
-                    value: "FCL",
-                    label: (
-                      <Center style={{ gap: 10 }}>
-                        <IconBox size={18} stroke={1.5} />
-                        <span>FCL</span>
-                      </Center>
-                    ),
-                  },
-                  {
-                    value: "LCL",
-                    label: (
-                      <Center style={{ gap: 10 }}>
-                        <IconSquareHalf size={18} stroke={1.5} />
-                        <span>LCL</span>
-                      </Center>
-                    ),
-                  },
-                  {
-                    value: "AIR",
-                    label: (
-                      <Center style={{ gap: 10 }}>
-                        <IconPlane size={18} stroke={1.5} />
-                        <span>Air</span>
-                      </Center>
-                    ),
-                  },
-                ]}
-              />
+            {/* <Flex align="center" justify="space-between" gap={10}> */}
+            <SegmentedControl
+              name="typeOfBooking"
+              onChange={(val) => setFieldValue("typeOfBooking", val)}
+              w={"100%"}
+              size="sm"
+              defaultValue="FCL"
+              value={values.typeOfBooking}
+              data={[
+                {
+                  value: "FCL",
+                  label: (
+                    <Center style={{ gap: 10 }}>
+                      <IconBox size={18} stroke={1.5} />
+                      <span>FCL</span>
+                    </Center>
+                  ),
+                },
+                {
+                  value: "LCL",
+                  label: (
+                    <Center style={{ gap: 10 }}>
+                      <IconSquareHalf size={18} stroke={1.5} />
+                      <span>LCL</span>
+                    </Center>
+                  ),
+                },
+                {
+                  value: "AIR",
+                  label: (
+                    <Center style={{ gap: 10 }}>
+                      <IconPlane size={18} stroke={1.5} />
+                      <span>AIR</span>
+                    </Center>
+                  ),
+                },
+              ]}
+            />
 
-              {shipmentTypesQuery.isLoading ? (
+            {/* {shipmentTypesQuery.isLoading ? (
                 <InputLoader />
               ) : (
                 <Select
@@ -223,10 +222,10 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
                   comboboxProps={{ shadow: "sm" }}
                   data={shipmentTypesQuery?.data}
                 />
-              )}
-            </Flex>
+              )} */}
+            {/* </Flex> */}
 
-            <Group mt={"sm"}>
+            {/* <Group mt={"sm"}>
               <Flex
                 w={"100%"}
                 gap={10}
@@ -256,7 +255,7 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
                     mt={"xs"}
                     clearable
                     searchable
-                    label="Origin Port / City"
+                    label="Origin"
                     comboboxProps={{ shadow: "md" }}
                     data={portQuery.data || []}
                   />
@@ -266,7 +265,7 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
                 ) : (
                   <Select
                     name={"destinationPlace"}
-                    placeholder="Choose Destination Port / City"
+                    placeholder="Choose destination"
                     required
                     onChange={(v, opt) => {
                       setFieldValue("destination", opt.label);
@@ -274,13 +273,9 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
                       setFieldValue("destinationCode", opt.code);
                       setFieldValue("destinationCountryCode", opt.country_code);
                     }}
-                    size="sm"
                     clearable
-                    w={"50%"}
-                    mt={"xs"}
                     searchable
-                    label="Destination Port / City"
-                    comboboxProps={{ shadow: "md" }}
+                    label="Destination"
                     data={portQuery.data || []}
                   />
                 )}
@@ -333,10 +328,66 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
               size="sm"
               mt={"sm"}
               fullWidth
-              color={COLORS.primaryColor}
             >
               Fare Calculate
-            </Button>
+            </Button> */}
+          </Grid.Col>
+          <Grid.Col >
+            <Select
+              clearable
+              searchable
+              required={true}
+              onChange={(v) => setFieldValue("shipmentType", v)}
+              name={"shipmentType"}
+              label={'Shipping Terms'}
+              placeholder="Type of Shipment"
+              comboboxProps={{ shadow: "sm" }}
+              data={shipmentTypesQuery?.data}
+            />
+          </Grid.Col>
+          <Grid.Col span={6}>
+            <Select
+              name={"originPlace"}
+              placeholder="Choose origin port / city"
+              required
+              onChange={(v, opt) => {
+                setFieldValue("origin", opt.label);
+                setFieldValue(
+                  "originCountry",
+                  opt?.country_id || opt?.Country?.id
+                );
+                setFieldValue("originPort", v);
+                setFieldValue("originCode", opt.code);
+                setFieldValue("originCountryCode", opt.country_code);
+              }}
+              clearable
+              searchable
+              label="Origin"
+              data={portQuery.data || []}
+            />
+          </Grid.Col>
+          <Grid.Col span={6}>
+            <Select
+              name={"destinationPlace"}
+              placeholder="Choose destination"
+              required
+              onChange={(v, opt) => {
+                setFieldValue("destination", opt.label);
+                setFieldValue("destinationPort", v);
+                setFieldValue("destinationCode", opt.code);
+                setFieldValue("destinationCountryCode", opt.country_code);
+              }}
+              clearable
+              searchable
+              label="Destination"
+              data={portQuery.data || []}
+            />
+          </Grid.Col>
+          <Grid.Col span={12}>
+              <FairContainer
+                data={values?.containers}
+                submitCallback={addContainerCallback}
+              />
           </Grid.Col>
         </Grid>
       </form>

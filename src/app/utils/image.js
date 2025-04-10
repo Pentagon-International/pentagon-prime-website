@@ -30,6 +30,7 @@ const Images = {
   pentagon_freight: '/images/pentagon-freight.png',
   pentagon_line: '/images/pentagon-line.png',
   pentagon_zig_zag: '/images/zig_zag.png',
+  incoterms_handshake: '/images/incoterms_handshake.png',
 };
 
 export default Images;

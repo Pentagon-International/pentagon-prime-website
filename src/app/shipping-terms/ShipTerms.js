@@ -16,12 +16,13 @@ const dummyData = [
   { id: 9, name: 'Shipline 9', logo: 'https://static.vecteezy.com/system/resources/previews/043/196/158/non_2x/shipping-company-logo-template-free-vector.jpg' },
 ];
 
-const ShipLines = () => {
+const ShipTerms = () => {
 
-  const shipmentLinesQuery = useQuery({
+
+  const shipmentTermsQuery = useQuery({
     queryKey: ["shipment-types"],
     queryFn: async () => {
-      const response = await apiCallProtected.get("/pentagon/shippingLInes");
+      const response = await apiCallProtected.get("/pentagon/incoTerms");
       return response.data;
     },
     select: ({ data }) => {
@@ -38,10 +39,10 @@ const ShipLines = () => {
   return (
     <Container fluid px="7%" py="70px">
       <Title size="lg" tt="uppercase" ta="center">
-        SHIPPING LINES
+        SHIPPING TERMS
       </Title>
       <Text mt={10} size="sm" ta="center" c="dimmed">
-        shipping lines, Track shipment, view rates, get schedules
+        Shipping terms, Track shipment, view rates, get schedules
       </Text>
 
       <SimpleGrid
@@ -49,14 +50,13 @@ const ShipLines = () => {
         cols={{ base: 1, sm: 2, md: 3, lg: 3 }}
         spacing={{ base: 'sm', sm: 'md', md: 'lg', lg: 'xl' }}
       >
-        {shipmentLinesQuery?.data?.map((item) => (
+        {shipmentTermsQuery?.data?.map((item) => (
           <Box
             key={item.id}
             p="md"
             bg="#F2F7FC"
             style={{ borderRadius: 8 }}
           >
-            {/* <Group align="center" justify="flex-start"> */}
             <Grid>
               <Grid.Col span={2}>
                 <Image
@@ -79,8 +79,6 @@ const ShipLines = () => {
                 </Flex>
               </Grid.Col>
             </Grid>
-
-            {/* </Group> */}
           </Box>
         ))}
       </SimpleGrid>
@@ -88,4 +86,4 @@ const ShipLines = () => {
   );
 };
 
-export default ShipLines;
+export default ShipTerms;
