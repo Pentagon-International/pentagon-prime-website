@@ -5,7 +5,10 @@ import {
   Checkbox,
   Flex,
   Grid,
+  GridCol,
+  Group,
   NumberInput,
+  Radio,
   Select,
   Text,
 } from "@mantine/core";
@@ -248,29 +251,22 @@ const FairContainer = ({
       {containerList?.list?.map((item, i) => {
         if (!item) return null;
         return (
-          <Box p={"xs"} bg={i % 2 ? "#f9f9f9" : COLORS.white} key={i}>
-            <Flex
-              wrap={"nowrap"}
-              direction={"row"}
-              justify={"space-between"}
-              align={"center"}
-            >
-              <Text size="sm" fw={500} mr={20} mt={20} ml={-4}>
-                {i + 1}
-              </Text>
+          <Grid w={'100%'} p={'xs'}>
+            <Grid.Col span={3}>
               <Select
                 label={"Container Size"}
                 w={'auto'}
-                mr={20}
                 data={contSize}
                 value={item.size}
                 onChange={(v) => handleSizeChange(i, v)}
                 required
               />
-              {item?.fields?.map((field, j, arr) => {
-                const inputSize = arr.length > 2 ? 'auto' : "auto";
-                if (field.type === types.DROPDOWN) {
-                  return (
+            </Grid.Col>
+            {item?.fields?.map((field, j, arr) => {
+              const inputSize = arr.length > 2 ? 'auto' : "auto";
+              if (field.type === types.DROPDOWN) {
+                return (
+                  <Grid.Col span={3}>
                     <Select
                       key={j}
                       size="xs"
@@ -280,77 +276,195 @@ const FairContainer = ({
                       onChange={handleFields(i, j)}
                       {...(field.options || {})}
                     />
-                  );
-                }
-                if (field.type === types.NUMBER) {
-                  return (
+                  </Grid.Col>
+                );
+              }
+              if (field.type === types.NUMBER) {
+                return (
+                  <Grid.Col span={3}>
                     <NumberInput
                       key={j}
                       w={inputSize}
-                      mr={20}
                       hideControls
                       label={field.label}
                       value={field.value}
                       onChange={handleFields(i, j)}
                       {...(field.options || {})}
                     />
-                  );
-                }
-                if (field.type === types.CHECKBOX) {
-                  return (
-                    <Checkbox
-                      size="xs"
-                      ml={5}
-                      mt={20}
-                      key={j}
-                      label={field.label}
-                      checked={field.checked}
-                      onChange={handleFields(i, j)}
-                    />
-                  );
-                }
-                if (field.type === types.OPTIONS) {
-                  return (
-                    <Flex key={field.label} direction={"column"} mt={"sm"}>
-                      <Text size="xs">{field.label}</Text>
-                      <Flex>
-                        {field.options?.map((option) => (
-                          <ContainerTypePill
-                            key={option.value}
-                            isActive={option.value === field.value}
-                            name={option.label}
-                            onClick={() => handleFields(i, j)(option.value)}
-                          />
-                        ))}
-                      </Flex>
+                  </Grid.Col>
+                );
+              }
+              if (field.type === types.CHECKBOX) {
+                return (
+                  <Grid.Col span={3}>
+                    <Flex h={'100%'} align={'center'}>
+                      <Checkbox
+                        size="sm"
+                        key={j}
+                        label={field.label}
+                        checked={field.checked}
+                        onChange={handleFields(i, j)}
+                      />
                     </Flex>
-                  );
-                }
-              })}
-
-              {/* {i > 0 ? ( */}
-              <ActionIcon
-                variant="light"
-                size={"md"}
-                mt={20}
-                color={"red"}
-                onClick={() => removeContainer(i)}
-              >
-                <IconTrash stroke={1.5} size={20} />
-              </ActionIcon>
-              {/* ) : (
+                  </Grid.Col>
+                );
+              }
+              if (field.type === types.OPTIONS) {
+                return (
+                  // <Flex key={field.label} direction={"column"} mt={"sm"}>
+                  //   <Text size="xs">{field.label}</Text>
+                  //   <Flex>
+                  //     {field.options?.map((option) => (
+                  //       <ContainerTypePill
+                  //         key={option.value}
+                  //         isActive={option.value === field.value}
+                  //         name={option.label}
+                  //         onClick={() => handleFields(i, j)(option.value)}
+                  //       />
+                  //     ))}
+                  //   </Flex>
+                  // </Flex>
+                  <Grid.Col span={3}>
+                    <Radio.Group
+                      // value={volumeUnit}
+                      onChange={(value) => handleFields(value)}
+                      label="Unit of Volume"
+                      color={COLORS.primaryColor}
+                    >
+                      <Group justify={'space-between'} p={'sm'}>
+                        {field.options?.map((option) => (
+                          // <ContainerTypePill
+                          //   key={option.value}
+                          //   isActive={option.value === field.value}
+                          //   name={option.label}
+                          //   onClick={() => handleFields(i, j)(option.value)}
+                          // />
+                          <Radio value={option.value} label={option.label} />
+                        ))}
+                      </Group>
+                    </Radio.Group>
+                  </Grid.Col>
+                );
+              }
+            })}
+            <Grid.Col span={1}>
+              <Flex align={'center'} mt={40}>
                 <ActionIcon
-                  variant="light"
-                  size={"lg"}
-                  mt={20}
-                  color="teal"
-                ></ActionIcon>
-              )} */}
-            </Flex>
-          </Box>
+                  color={"red"}
+                  onClick={() => {
+                      removeContainer(i)
+                  }}
+                >
+                  <IconTrash stroke={1.5} size={20} />
+                </ActionIcon>
+              </Flex>
+
+            </Grid.Col>
+          </Grid>
+          // <Box p={"xs"} bg={i % 2 ? "#f9f9f9" : COLORS.white} key={i}>
+          //   <Flex
+          //     wrap={"nowrap"}
+          //     direction={"row"}
+          //     justify={"space-between"}
+          //     align={"center"}
+          //   >
+          //     <Text size="sm" fw={500} mr={20} mt={20} ml={-4}>
+          //       {i + 1}
+          //     </Text>
+          //     <Select
+          //       label={"Container Size"}
+          //       w={'auto'}
+          //       mr={20}
+          //       data={contSize}
+          //       value={item.size}
+          //       onChange={(v) => handleSizeChange(i, v)}
+          //       required
+          //     />
+          //     {item?.fields?.map((field, j, arr) => {
+          //       const inputSize = arr.length > 2 ? 'auto' : "auto";
+          //       if (field.type === types.DROPDOWN) {
+          //         return (
+          //           <Select
+          //             key={j}
+          //             size="xs"
+          //             w={inputSize}
+          //             label={field.label}
+          //             value={field.value}
+          //             onChange={handleFields(i, j)}
+          //             {...(field.options || {})}
+          //           />
+          //         );
+          //       }
+          //       if (field.type === types.NUMBER) {
+          //         return (
+          //           <NumberInput
+          //             key={j}
+          //             w={inputSize}
+          //             mr={20}
+          //             hideControls
+          //             label={field.label}
+          //             value={field.value}
+          //             onChange={handleFields(i, j)}
+          //             {...(field.options || {})}
+          //           />
+          //         );
+          //       }
+          //       if (field.type === types.CHECKBOX) {
+          //         return (
+          //           <Checkbox
+          //             size="xs"
+          //             ml={5}
+          //             mt={20}
+          //             key={j}
+          //             label={field.label}
+          //             checked={field.checked}
+          //             onChange={handleFields(i, j)}
+          //           />
+          //         );
+          //       }
+          //       if (field.type === types.OPTIONS) {
+          //         return (
+          //           <Flex key={field.label} direction={"column"} mt={"sm"}>
+          //             <Text size="xs">{field.label}</Text>
+          //             <Flex>
+          //               {field.options?.map((option) => (
+          //                 <ContainerTypePill
+          //                   key={option.value}
+          //                   isActive={option.value === field.value}
+          //                   name={option.label}
+          //                   onClick={() => handleFields(i, j)(option.value)}
+          //                 />
+          //               ))}
+          //             </Flex>
+          //           </Flex>
+          //         );
+          //       }
+          //     })}
+
+          //     {/* {i > 0 ? ( */}
+          //     <ActionIcon
+          //       variant="light"
+          //       size={"md"}
+          //       mt={20}
+          //       color={"red"}
+          //       onClick={() => removeContainer(i)}
+          //     >
+          //       <IconTrash stroke={1.5} size={20} />
+          //     </ActionIcon>
+          //     {/* ) : (
+          //       <ActionIcon
+          //         variant="light"
+          //         size={"lg"}
+          //         mt={20}
+          //         color="teal"
+          //       >
+          // </ActionIcon>
+          //     )} */}
+          //   </Flex>
+          // </Box>
         );
       })}
-    </Grid>
+    </Grid >
   );
 };
 

@@ -141,11 +141,11 @@ export const featuresMap = {
       title: "Announcements",
       link: '/news'
     },
-    // {
-    //   icon: IconPackage,
-    //   title: "Inco Terms",
-    //   link: '/inco-terms'
-    // }, 
+    {
+      icon: IconPackage,
+      title: "Inco Terms",
+      link: '/inco-terms'
+    }, 
     {
       icon: IconBox,
       title: "Shipping Terms",

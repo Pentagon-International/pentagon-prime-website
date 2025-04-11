@@ -107,20 +107,20 @@ const getContainerFields = (type, dimension) => {
     case "REEF":
       return [
         {
-          label: "Weight(mt)",
+          label: "Weight (mt)",
           type: types.NUMBER,
           options: weightInputOptions,
         },
         {
-          label: "Temp(°C)",
+          label: "Temp (°C)",
           type: types.NUMBER,
         },
         {
-          label: "Humidity(%)",
+          label: "Humidity (%)",
           type: types.NUMBER,
         },
         {
-          label: "Cargo Values($)",
+          label: "Cargo Values ($)",
           type: types.NUMBER,
         },
         {

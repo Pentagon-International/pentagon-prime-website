@@ -11,7 +11,7 @@ import {
   GridCol,
 } from "@mantine/core";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { COLORS } from "../utils/COLORS";
 import {
   IconPlane,
@@ -24,10 +24,21 @@ import { useQuery } from "@tanstack/react-query";
 import { apiCallProtected } from "../api/api";
 import InputLoader from "./InputLoader";
 import FairContainer from "./FairContainer";
+import useTransportStore from "../store/transportStore";
 
 const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [chargesList, setChargesList] = useState([]);
+  const [activeTransport, setActiveTransport] = useState('sea');
+
+  const { seaData, airData, setSeaData, setAirData } = useTransportStore();
+
+
+  // Memoize transport data based on active transport
+  const memoizedTransportData = useMemo(() => {
+    return activeTransport === 'sea' ? seaData : airData;
+  }, [activeTransport, seaData, airData]);
+
 
   const {
     values,
@@ -101,13 +112,13 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
   const shipmentTypesQuery = useQuery({
     queryKey: ["shipment-types"],
     queryFn: async () => {
-      const response = await apiCallProtected.get("/pentagon/incoTermsx");
+      const response = await apiCallProtected.get("/pentagon/incoTerms");
       return response.data;
     },
     select: ({ data }) =>
       data?.map((item) => ({
         label: item.name,
-        value: `${item.code}`,
+        value: `${item.id}`,
       })),
     onSuccess: ({ data }) => {
       console.log("shipment types >>", data);
@@ -117,27 +128,27 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
     },
   });
 
-  const portQuery = useQuery({
-    queryKey: ["ports", values.typeOfBooking],
-    queryFn: () => {
-      return apiCallProtected.get("/flow/seaports");
-    },
-    cacheTime: 1000 * 60 * 60 * 24,
-    select: (data) => {
-      return data.data?.data?.map((item) => ({
-        label: `${item.port_name} (${item.code}), ${item.city_name}, ${item.country_name}`,
-        code: item.code,
-        value: `${item.id}`,
-        country_code: item.Country?.code,
-      }));
-    },
-    onSuccess: (data) => {
-      console.table(data.data);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  // const portQuery = useQuery({
+  //   queryKey: ["ports", values.typeOfBooking],
+  //   queryFn: () => {
+  //     return apiCallProtected.get("/flow/seaports");
+  //   },
+  //   cacheTime: 1000 * 60 * 60 * 24,
+  //   select: (data) => {
+  //     return data.data?.data?.map((item) => ({
+  //       label: `${item.port_name} (${item.code}), ${item.city_name}, ${item.country_name}`,
+  //       code: item.code,
+  //       value: `${item.id}`,
+  //       country_code: item.Country?.code,
+  //     }));
+  //   },
+  //   onSuccess: (data) => {
+  //     console.table(data.data);
+  //   },
+  //   onError: (error) => {
+  //     console.log(error);
+  //   },
+  // });
 
   const shippingQuery = useQuery({
     queryKey: ["shippingLine", values?.originPort, values?.destinationPort],
@@ -154,6 +165,7 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
       }));
     },
   });
+
   const addContainerCallback = (containerValues) => {
     setFieldValue("containers", containerValues);
     close();
@@ -170,7 +182,15 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
             {/* <Flex align="center" justify="space-between" gap={10}> */}
             <SegmentedControl
               name="typeOfBooking"
-              onChange={(val) => setFieldValue("typeOfBooking", val)}
+              onChange={(val) => {
+                if (val == 'AIR') {
+                  setActiveTransport('air')
+                }
+                else {
+                  setActiveTransport('sea')
+                }
+                setFieldValue("typeOfBooking", val)
+              }}
               w={"100%"}
               size="sm"
               defaultValue="FCL"
@@ -292,33 +312,6 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
               />
             </Flex>
 
-            <GridCol>
-              {shippingQuery.isLoading ? (
-                <InputLoader label={"Shipping Line"} />
-              ) : (
-                <Select
-                  mt={"md"}
-                  size="sm"
-                  clearable
-                  searchable
-                  required
-                  name={"shipper"}
-                  label={
-                    <Text size="xs" fw={600} c={"gray"}>
-                      Shipping Line
-                    </Text>
-                  }
-                  key={formHook.key("shippingLine")}
-                  data={shippingQuery.data || []}
-                  value={formHook.values.shippingLine?.value}
-                  onChange={(_, option) => {
-                    formHook.setFieldValue("shippingLine", option);
-                    setChargesList([]);
-                    // handlePricevalues(option?.value);
-                  }}
-                />
-              )}
-            </GridCol>
             <Button
               type="submit"
               onClick={() => {
@@ -332,8 +325,36 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
               Fare Calculate
             </Button> */}
           </Grid.Col>
+          <GridCol>
+            {shippingQuery.isLoading ? (
+              <InputLoader label={"Shipping Line"} />
+            ) : (
+              <Select
+                mt={"md"}
+                size="sm"
+                clearable
+                searchable
+                required
+                name={"shipper"}
+                label={
+                  <Text size="xs" fw={600} c={"gray"}>
+                    Shipping Line
+                  </Text>
+                }
+                key={formHook.key("shippingLine")}
+                data={shippingQuery.data || []}
+                value={formHook.values.shippingLine?.value}
+                onChange={(_, option) => {
+                  formHook.setFieldValue("shippingLine", option);
+                  setChargesList([]);
+                  // handlePricevalues(option?.value);
+                }}
+              />
+            )}
+          </GridCol>
+          {console.log("shipmentTypesQuery : ", shipmentTypesQuery?.data)}
           <Grid.Col >
-            <Select
+            {/* <Select
               clearable
               searchable
               required={true}
@@ -342,8 +363,8 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
               label={'Shipping Terms'}
               placeholder="Type of Shipment"
               comboboxProps={{ shadow: "sm" }}
-              data={shipmentTypesQuery?.data}
-            />
+              data={shipmentTypesQuery || []}
+            /> */}
           </Grid.Col>
           <Grid.Col span={6}>
             <Select
@@ -363,7 +384,8 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
               clearable
               searchable
               label="Origin"
-              data={portQuery.data || []}
+              // data={portQuery.data || []}
+              data={memoizedTransportData}
             />
           </Grid.Col>
           <Grid.Col span={6}>
@@ -380,14 +402,15 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
               clearable
               searchable
               label="Destination"
-              data={portQuery.data || []}
+              // data={portQuery.data || []}
+              data={memoizedTransportData}
             />
           </Grid.Col>
           <Grid.Col span={12}>
-              <FairContainer
-                data={values?.containers}
-                submitCallback={addContainerCallback}
-              />
+            <FairContainer
+              data={values?.containers}
+              submitCallback={addContainerCallback}
+            />
           </Grid.Col>
         </Grid>
       </form>
