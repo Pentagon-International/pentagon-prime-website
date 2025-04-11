@@ -65,6 +65,7 @@ const FairContainer = ({
 
   useEffect(() => {
     if (TypesWithContainers.includes(activeType)) {
+      console.log("HII : ",activeType)
       if (containerList.type !== activeType) {
         const d = getContainerFields(activeType, activeDimension);
         setContainerList((ct) => ({
@@ -171,7 +172,7 @@ const FairContainer = ({
 
   useEffect(() => {
     submitCallback(containerList);
-  }, []);
+  }, [containerList]);
 
   return (
     <Grid>
@@ -181,6 +182,7 @@ const FairContainer = ({
           placeholder="Choose cargo type"
           required
           onChange={(v) => {
+            console.log("ITEM : ", v)
             setActiveType(v)
           }}
           searchable

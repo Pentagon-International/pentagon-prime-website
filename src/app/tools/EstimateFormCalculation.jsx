@@ -340,7 +340,7 @@ export const SummarySection = ({ accordion, includeTax, avarageAmount, disabled,
   }, [totalCharges, avarageAmount]);
 
   return (
-    <Card shadow="sm" padding="lg" radius="md"  style={{ backgroundColor: COLORS.contactBackground }} ta={'center'}>
+    <Card shadow="sm" padding="lg" radius="md" style={{ backgroundColor: COLORS.contactBackground }} ta={'center'}>
       <Grid>
         <Grid.Col>
           <EstimateFormCalculation
@@ -494,6 +494,8 @@ const ChargesTable = ({
     saveList: st.saveList,
   }));
 
+  console.log("estimateStore?.list : ", estimateStore?.list)
+
   const list = estimateStore?.list?.filter((charge) => {
     return charge.size === size;
   });
@@ -567,6 +569,7 @@ const ChargesTable = ({
       );
 
       estimateStore.saveList(summedData);
+      console.log("summedData : ", summedData)
     }
   }, []);
 
@@ -586,7 +589,7 @@ const ChargesTable = ({
         {uniqueList?.length === 0 ? (
           <Table.Tr>
             <Table.Td colSpan={5} align="center">
-              <Title size="md">No Carrier charge data</Title>
+              <Title size="md">no carrier charge data</Title>
             </Table.Td>
           </Table.Tr>
         ) : (
@@ -706,11 +709,18 @@ export const EstimateFormCalculation = ({
     refetchOnWindowFocus: false,
   });
 
+  console.log('>< quotation', quoteData)
+
   const quotationData = quoteData?.container_details?.list
     ? quoteData?.container_details?.list
     : quoteData?.list;
 
   useEffect(() => {
+    console.log("quotationData : ", quotationData)
+    console.log('>>', chargesList?.length);
+    console.log(frightData?.data?.data?.length > 0);
+
+
     // debugger;
     if (
       quotationData &&

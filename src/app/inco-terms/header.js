@@ -1,8 +1,12 @@
+'use client'
 import { Box, Container, Grid, GridCol, Text, Title } from '@mantine/core';
 import { COLORS } from '../utils/COLORS';
 import { highlightText } from '../utils/highlightText';
+import { useMediaQuery } from '@mantine/hooks';
 
 const Header = ({ title, content, top }) => {
+    const isMobile = useMediaQuery('(max-width:768px)');
+
     return (
         <Box
             mt={60}
@@ -37,7 +41,7 @@ const Header = ({ title, content, top }) => {
                         <Title tt="uppercase" size="39px" fw={800} lh="lgx2">
                             {highlightText(title)}
                         </Title>
-                        <Box w={'42%'}>
+                        <Box w={isMobile ? '100%' : '42%'}>
                             <Text mt={20} size="base">
                                 {highlightText(content)}
                             </Text>

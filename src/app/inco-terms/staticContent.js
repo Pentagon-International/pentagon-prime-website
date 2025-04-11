@@ -3,7 +3,7 @@ import { Box, Card, Container, Grid, Group, Image, SimpleGrid, Text, Title } fro
 import { COLORS } from "../utils/COLORS";
 import { useMediaQuery } from "@mantine/hooks";
 import Images from "../utils/image";
-import { IconCheck } from "@tabler/icons-react";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { apiCallProtected } from "../api/api";
 
@@ -33,8 +33,8 @@ const StaticContents = () => {
     const isMobile = useMediaQuery('(max-width:768px)');
     return (
         <Container fluid px="7%" py="70px">
-            <Grid>
-                <Grid.Col span={6} p={'xl'}>
+            <Grid align="center" justify="space-between" >
+                <Grid.Col span={isMobile ? 12 : 6} p={'xl'}>
                     <Image
                         src={Images?.incoterms_handshake}
                         alt="Incoterms"
@@ -51,29 +51,29 @@ const StaticContents = () => {
                     // }}
                     />
                 </Grid.Col>
-                <Grid.Col span={6} p={'xl'}>
+                <Grid.Col span={isMobile ? 12 : 6} p={isMobile ? '20px' : 'xl'}>
                     <Grid>
                         <Grid.Col span={12}>
-                            <Title tt="uppercase" tw="balance" fw={800}>
+                            <Title size={isMobile ? '25px' : '20px'} tt="uppercase" className="tw-balance" fw={800}>
                                 What do incoterms means?
                             </Title>
                         </Grid.Col>
                         <Grid.Col span={12}>
-                            <Text c={COLORS.textColor} size="base" lh="sm" maw={isMobile ? '100%' : '80%'} mt={14}>
+                            <Text ta={isMobile ? 'justify' : 'left'} c={COLORS.textColor} size="base" lh="sm" maw={isMobile ? '100%' : '80%'} mt={14}>
                                 Incoterms, created by the International Chamber of Commerce, are globally recognized rules that define the roles and responsibilities of buyers and sellers in international trade. They act as the universal language of commerce, helping businesses navigate shipping, risk, and costs with clarity and confidence.
                             </Text>
                         </Grid.Col>
                     </Grid>
                 </Grid.Col>
                 <Grid.Col span={12} mb={'md'} mt={'xl'}>
-                    <Title tt="uppercase" tw="balance" fw={800} mt={'xl'}>
+                    <Title size={"25px"} tt="uppercase" tw="balance" fw={800} mt={'xl'}>
                         What Incoterms do and don’t cover
                     </Title>
-                    <Text c={COLORS.textColor} size="base" lh="sm" maw={isMobile ? '100%' : '80%'}>
+                    <Text c={COLORS.textColor} size="base" lh="sm" maw={isMobile ? '100%' : '80%'} mt={isMobile ? 14 : 0}>
                         Incoterms move the goods, not the deals
                     </Text>
                 </Grid.Col>
-                <Grid.Col span={6}>
+                <Grid.Col span={isMobile ? 12 : 6}>
                     <Card
                         bg={'#F2F7FC'}
                         display={"flex"}
@@ -86,12 +86,25 @@ const StaticContents = () => {
                     >
                         <Grid>
                             <Grid.Col span={12} mb={'md'}>
-                                <Text fw={800} size={'md'} tt="uppercase" lh="sm" maw={isMobile ? '100%' : '80%'}>
+                                <Text fw={800} size={'20px'} tt="uppercase" lh="sm" maw={isMobile ? '100%' : '80%'}>
                                     What Incoterms do cover
                                 </Text>
                             </Grid.Col>
                             <Grid.Col span={2}>
-                                <IconCheck></IconCheck>
+                                  <Grid.Col span={2}>
+                                <Box
+                                    style={{
+                                        backgroundColor: '#228be6', // Mantine blue[6]
+                                        borderRadius: '50%',
+                                        padding: '3px',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <IconCheck color="white" size={16} />
+                                </Box>
+                            </Grid.Col>
                             </Grid.Col>
                             <Grid.Col span={10}>
                                 <Text c={COLORS.textColor} size="base" lh="sm" maw={isMobile ? '100%' : '80%'}>
@@ -99,7 +112,20 @@ const StaticContents = () => {
                                 </Text>
                             </Grid.Col>
                             <Grid.Col span={2}>
-                                <IconCheck></IconCheck>
+                                  <Grid.Col span={2}>
+                                <Box
+                                    style={{
+                                        backgroundColor: '#228be6', // Mantine blue[6]
+                                        borderRadius: '50%',
+                                        padding: '3px',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <IconCheck color="white" size={16} />
+                                </Box>
+                            </Grid.Col>
                             </Grid.Col>
                             <Grid.Col span={10}>
                                 <Text c={COLORS.textColor} size="base" lh="sm" maw={isMobile ? '100%' : '80%'}>
@@ -109,7 +135,7 @@ const StaticContents = () => {
                         </Grid>
                     </Card>
                 </Grid.Col>
-                <Grid.Col span={6}>
+                <Grid.Col span={isMobile ? 12 : 6}>
                     <Card
                         bg={'#F2F7FC'}
                         display={"flex"}
@@ -122,12 +148,23 @@ const StaticContents = () => {
                     >
                         <Grid>
                             <Grid.Col span={12} mb={'md'}>
-                                <Text fw={800} size={'md'} tt="uppercase" lh="sm" maw={isMobile ? '100%' : '80%'}>
+                                <Text fw={800} size={'20px'} tt="uppercase" lh="sm" maw={isMobile ? '100%' : '80%'}>
                                     What Incoterms don't cover
                                 </Text>
                             </Grid.Col>
                             <Grid.Col span={2}>
-                                <IconCheck></IconCheck>
+                                <Box
+                                    style={{
+                                        backgroundColor: '#228be6', // Mantine blue[6]
+                                        borderRadius: '50%',
+                                        padding: '3px',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <IconX color="white" size={16} />
+                                </Box>
                             </Grid.Col>
                             <Grid.Col span={10}>
                                 <Text c={COLORS.textColor} size="base" lh="sm" maw={isMobile ? '100%' : '80%'}>
@@ -135,7 +172,18 @@ const StaticContents = () => {
                                 </Text>
                             </Grid.Col>
                             <Grid.Col span={2}>
-                                <IconCheck></IconCheck>
+                                <Box
+                                    style={{
+                                        backgroundColor: '#228be6', // Mantine blue[6]
+                                        borderRadius: '50%',
+                                        padding: '3px',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <IconX color="white" size={16} />
+                                </Box>
                             </Grid.Col>
                             <Grid.Col span={10}>
                                 <Text c={COLORS.textColor} size="base" lh="sm" maw={isMobile ? '100%' : '80%'}>
@@ -143,7 +191,18 @@ const StaticContents = () => {
                                 </Text>
                             </Grid.Col>
                             <Grid.Col span={2}>
-                                <IconCheck></IconCheck>
+                                <Box
+                                    style={{
+                                        backgroundColor: '#228be6', // Mantine blue[6]
+                                        borderRadius: '50%',
+                                        padding: '3px',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <IconX color="white" size={16} />
+                                </Box>
                             </Grid.Col>
                             <Grid.Col span={10}>
                                 <Text c={COLORS.textColor} size="base" lh="sm" maw={isMobile ? '100%' : '80%'}>
@@ -154,7 +213,7 @@ const StaticContents = () => {
                     </Card>
                 </Grid.Col>
                 <Grid.Col span={12} mt={'xl'}>
-                    <Title tt="uppercase" tw="balance" fw={800}>
+                    <Title size={"25px"} tt="uppercase" tw="balance" fw={800}>
                         What are the most common Incoterms?
                     </Title>
                     <Text c={COLORS.textColor} size="base" lh="sm" maw={isMobile ? '100%' : '80%'}>

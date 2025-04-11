@@ -57,6 +57,7 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
     validateOnChange: false,
     validateOnBlur: true,
     onSubmit: (values) => {
+      console.log("👽👽👽")
       console.log("values -->", values);
 
       const body = {
@@ -312,46 +313,7 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
               />
             </Flex>
 
-            <Button
-              type="submit"
-              onClick={() => {
-                setAccordion(true);
-              }}
-              disabled={formHook.values.shippingLine?.value ? false : true}
-              size="sm"
-              mt={"sm"}
-              fullWidth
-            >
-              Fare Calculate
-            </Button> */}
           </Grid.Col>
-          <GridCol>
-            {shippingQuery.isLoading ? (
-              <InputLoader label={"Shipping Line"} />
-            ) : (
-              <Select
-                mt={"md"}
-                size="sm"
-                clearable
-                searchable
-                required
-                name={"shipper"}
-                label={
-                  <Text size="xs" fw={600} c={"gray"}>
-                    Shipping Line
-                  </Text>
-                }
-                key={formHook.key("shippingLine")}
-                data={shippingQuery.data || []}
-                value={formHook.values.shippingLine?.value}
-                onChange={(_, option) => {
-                  formHook.setFieldValue("shippingLine", option);
-                  setChargesList([]);
-                  // handlePricevalues(option?.value);
-                }}
-              />
-            )}
-          </GridCol>
           {console.log("shipmentTypesQuery : ", shipmentTypesQuery?.data)}
           <Grid.Col >
             {/* <Select
@@ -412,6 +374,45 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
               submitCallback={addContainerCallback}
             />
           </Grid.Col>
+          <GridCol>
+            {shippingQuery.isLoading ? (
+              <InputLoader label={"Shipping Line"} />
+            ) : (
+              <Select
+                mt={"md"}
+                size="sm"
+                clearable
+                searchable
+                required
+                name={"shipper"}
+                label={
+                  <Text size="xs" fw={600} c={"gray"}>
+                    Shipping Line
+                  </Text>
+                }
+                key={formHook.key("shippingLine")}
+                data={shippingQuery.data || []}
+                value={formHook.values.shippingLine?.value}
+                onChange={(_, option) => {
+                  formHook.setFieldValue("shippingLine", option);
+                  setChargesList([]);
+                  // handlePricevalues(option?.value);
+                }}
+              />
+            )}
+          </GridCol>
+          <Button
+            type="submit"
+            onClick={() => {
+              setAccordion(true);
+            }}
+            disabled={formHook.values.shippingLine?.value ? false : true}
+            size="sm"
+            mt={"sm"}
+            fullWidth
+          >
+            Fare Calculate
+          </Button>
         </Grid>
       </form>
     </Box>
