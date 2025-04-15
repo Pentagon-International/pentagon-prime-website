@@ -17,10 +17,10 @@ const NewsRoom = ({ title, content }) => {
               maxHeight: '80vh',
             }}
           >
-            <Title tt="uppercase" size={'39px'} fw={800} lh={'lgx2'}>
+            {/* <Title tt="uppercase" size={'39px'} fw={800} lh={'lgx2'}>
               {highlightText(title)}
-            </Title>
-            <Text mt={20} size="base" >
+            </Title> */}
+            <Text mt={20} size="md" >
               {highlightText(content)}
             </Text>
           </GridCol>

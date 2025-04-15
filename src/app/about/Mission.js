@@ -57,10 +57,12 @@ const Mission = () => {
                 flexDirection: 'column'
               }}
             >
-              <Title fw={800} size={'lg'} tt={'uppercase'} c={COLORS.portColor}>
+              <Title tt={"uppercase"} lh={isMobile ? "md" : "lgx2"} fw={800} size={isMobile ? "20px" : "34px"} c={COLORS.portColor}>
+                {/* <Title fw={800} size={'lg'} tt={'uppercase'} c={COLORS.portColor}> */}
                 {item.fields.title}
               </Title>
-              <Text size="base" lh={'30px'} fw={400} tw="balance" w={isMobile ? '100%' : '80%'} mt={20}>
+              <Text size="base" lh={'30px'} maw={isMobile ? '100%' : '80%'} mt={14}>
+                {/* <Text size="base" lh={'30px'} tw="balance" w={isMobile ? '100%' : '80%'} mt={20}> */}
                 {item.fields.content}
               </Text>
             </Box>

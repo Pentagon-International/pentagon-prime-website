@@ -20,8 +20,8 @@ const TeamMember = ({ image, title, description, reverse }) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
-    <Grid py={ isMobile ? 30 : 50} align="center" w={'100%'} gutter="xl">
-      <GridCol px={ !isMobile && 'xl'} span={isMobile ? 12 : 6} order={!isMobile && reverse ? 2 : 1}>
+    <Grid py={isMobile ? 30 : 50} align="center" w={'100%'} gutter="xl">
+      <GridCol px={!isMobile && 'xl'} span={isMobile ? 12 : 6} order={!isMobile && reverse ? 2 : 1}>
         <Box pos="relative" w={isMobile ? "100%" : "90%"} h="280px">
           <Box
             w={'100%'}
@@ -47,11 +47,11 @@ const TeamMember = ({ image, title, description, reverse }) => {
           />
         </Box>
       </GridCol>
-      <GridCol px={ !isMobile && 'xl'} span={isMobile ? 12 : 6} order={reverse ? 1 : 2}>
+      <GridCol px={!isMobile && 'xl'} span={isMobile ? 12 : 6} order={reverse ? 1 : 2}>
         <Title tt="uppercase" fw={800} lh={isMobile ? "md" : "lgx2"} size={isMobile ? "md" : "lg"} style={{ color: 'black' }}>
           {highlightText(title)}
         </Title>
-        <Text mt={10} c={COLORS.textColor} maw={  isMobile ? '100%' : '80%'} size="base" lh="sm">
+        <Text mt={10} c={COLORS.textColor} maw={isMobile ? '100%' : '80%'} size="base" lh="sm">
           {highlightText(description)}
         </Text>
       </GridCol>
@@ -81,30 +81,30 @@ const LogisticsTeam = ({ title, content }) => {
   }, []);
 
   return (
-    <Container fluid px={ '7%'} py={'50px'}>
-      <Title size={ isMobile ? '22px' : 'lg'} lh={  isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800}>
+    <Container fluid px={'7%'} py={'50px'}>
+      <Title size={isMobile ? '22px' : 'lg'} lh={isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800}>
         {highlightText(title)}
       </Title>
-      <Text size={  isMobile ? "14px" : "sm"} lh={ isMobile ? "md" : "lgx"} py={'sm'} maw={ isMobile ? '80%' : '55%'} fw={500} c={COLORS.textColor}>
-        {highlightText(content)}
-      </Text>
-      <Flex  wrap="wrap" align="center" mt="30px" justify="center" gap="md">
-        {teamData?.map((item, index) => {
-          const fields = item?.fields || {};
-          const imageUrl =
-            fields.logisticsTeamImage?.fields?.file?.url || fields.imageUrl || null;
+        <Text size={isMobile ? "14px" : "sm"} lh={isMobile ? "md" : "sm"} py={'sm'} maw={isMobile ? '80%' : '55%'} c={COLORS.textColor}>
+          {highlightText(content)}
+        </Text>
+        <Flex wrap="wrap" align="center" mt="30px" justify="center" gap="md">
+          {teamData?.map((item, index) => {
+            const fields = item?.fields || {};
+            const imageUrl =
+              fields.logisticsTeamImage?.fields?.file?.url || fields.imageUrl || null;
 
-          return (
-            <TeamMember
-              key={index}
-              image={imageUrl}
-              title={fields.teamTitle}
-              description={fields.teamDescription}
-              reverse={index % 2 !== 0}
-            />
-          );
-        })}
-      </Flex>
+            return (
+              <TeamMember
+                key={index}
+                image={imageUrl}
+                title={fields.teamTitle}
+                description={fields.teamDescription}
+                reverse={index % 2 !== 0}
+              />
+            );
+          })}
+        </Flex>
     </Container>
   );
 };

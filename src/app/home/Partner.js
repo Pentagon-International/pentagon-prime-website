@@ -41,13 +41,14 @@ const Partner = ({ title, content }) => {
           <Title size="lg" tt={'uppercase'} fw={800}>
             {highlightText(title)}
           </Title>
-          <Text size="sm" fw={500}>
+          <Text c={COLORS.textColor} size="base" lh="sm">
+            {/* <Text size="sm" fw={500}> */}
             {highlightText(content)}
           </Text>
         </Stack>
         {/* <Button
           fz={'sm'}
-          variant="outline"
+        variant="outline"
           size="lg"
           radius={'12px'}
           fw={600}
@@ -74,7 +75,7 @@ const Partner = ({ title, content }) => {
           containScroll="trimSnaps"
           align="start"
           loop
-          className={ isMobile && 'custom-carousel , indicator'}  
+          className={isMobile && 'custom-carousel , indicator'}
           withIndicators
           plugins={[autoplay.current]}
           onMouseEnter={autoplay.current.stop}
@@ -122,13 +123,14 @@ const Partner = ({ title, content }) => {
                     justifyContent: 'center',
                     height: '100%',
                   }}
-                >
-                  <Text size="16px" lh={'sm'} maw={'90%'} tw="balance">
-                    {highlightText(item.fields.content)}
-                  </Text>
-                  <Text size="base" fw={700} c={COLORS.portColor} mt={20}>
-                    {highlightText(item.fields.shortvalue)}
-                  </Text>
+                >                  
+                  <Text  size="base" lh="sm" maw={'90%'} tw="balance" >
+                    {/* <Text size="16px" lh={'sm'} maw={'90%'} tw="balance"> */}
+                      {highlightText(item.fields.content)}
+                    </Text>
+                    <Text size="base" fw={700} c={COLORS.portColor} mt={20}>
+                      {highlightText(item.fields.shortvalue)}
+                    </Text>
                 </Box>
               </Flex>
 

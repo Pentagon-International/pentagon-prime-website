@@ -136,11 +136,11 @@ export const featuresMap = {
       title: "Tools",
       link: '/tools'
     },
-    {
-      icon: IconSpeakerphone,
-      title: "Announcements",
-      link: '/news'
-    },
+    // {
+    //   icon: IconSpeakerphone,
+    //   title: "Announcements",
+    //   link: '/news'
+    // },
     {
       icon: IconPackage,
       title: "Inco Terms",

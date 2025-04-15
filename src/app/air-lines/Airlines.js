@@ -1,5 +1,7 @@
 import { Container, Title, Text, SimpleGrid, Image, Box, Group } from '@mantine/core';
 import React from 'react';
+import { COLORS } from '../utils/COLORS';
+import { useMediaQuery } from '@mantine/hooks';
 
 const dummyData = [
   { id: 1, name: 'Airline 1', logo: 'https://icon2.cleanpng.com/20180330/qhw/avco3de5b.webp' },
@@ -13,14 +15,17 @@ const dummyData = [
   { id: 9, name: 'Airline 9', logo: 'https://icon2.cleanpng.com/20180330/qhw/avco3de5b.webp' },
 ];
 
+  const isMobile = useMediaQuery('(max-width:768px)')
+
 const Airlines = () => {
   return (
     <Container fluid px="7%" py="70px">
-      <Title size="lg" tt="uppercase" ta="center">
+      {/* <Title size="lg" tt="uppercase" ta="center"> */}
+      <Title size={isMobile ? '22px' : 'lg'} lh={isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800} ta="center">
         AIR LINES
       </Title>
-      <Text mt={10} size="sm" ta="center" c="dimmed">
-        Air lines, Track shipment, view rates, get schedules
+      <Text mt={10} size="sm" ta="center" c={COLORS.textColor}>
+        Air lines, Track shipment, View rates, Get schedules
       </Text>
 
       <SimpleGrid

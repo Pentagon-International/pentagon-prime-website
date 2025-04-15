@@ -3,6 +3,8 @@ import { Container, Title, Text, SimpleGrid, Image, Box, Group, Grid, Flex } fro
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { apiCallProtected } from '../api/api';
+import { COLORS } from '../utils/COLORS';
+import { useMediaQuery } from '@mantine/hooks';
 
 const dummyData = [
   { id: 1, name: 'Shipline 1', logo: 'https://static.vecteezy.com/system/resources/previews/043/196/158/non_2x/shipping-company-logo-template-free-vector.jpg' },
@@ -36,13 +38,16 @@ const ShipTerms = () => {
     },
   });
 
+  const isMobile = useMediaQuery('(max-width:768px)')
+
   return (
     <Container fluid px="7%" py="70px">
-      <Title size="lg" tt="uppercase" ta="center">
+      <Title size={isMobile ? '22px' : 'lg'} lh={isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800} ta="center">
+        {/* <Title size="lg" tt="uppercase" ta="center"> */}
         SHIPPING TERMS
       </Title>
-      <Text mt={10} size="sm" ta="center" c="dimmed">
-        Shipping terms, Track shipment, view rates, get schedules
+      <Text mt={10} size="sm" ta="center" c={COLORS.textColor}>
+        Shipping terms, Track shipment, View rates, Get schedules
       </Text>
 
       <SimpleGrid
@@ -73,7 +78,12 @@ const ShipTerms = () => {
               </Grid.Col>
               <Grid.Col span={10} >
                 <Flex align={'center'} h={'100%'}>
-                  <Text size="xs" fw={500}>
+                  <Text tw="balance"
+                    c={COLORS.textColor}
+                    lh={"sm"}
+                    size="sm"
+                    style={{ flexGrow: 1 }}>
+                    {/* <Text size="xs" fw={500}> */}
                     {item.label}
                   </Text>
                 </Flex>
@@ -82,7 +92,7 @@ const ShipTerms = () => {
           </Box>
         ))}
       </SimpleGrid>
-    </Container>
+    </Container >
   );
 };
 

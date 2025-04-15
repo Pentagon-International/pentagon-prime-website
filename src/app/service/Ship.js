@@ -22,8 +22,8 @@ const Ship = ({ first_title, first_content, serviceData }) => {
     <Container fluid px={'7%'} py={isMobile ? 0 : '10px'} mb={isMobile ? 20 : 160}>
       <Stack gap={isMobile ? 20 : 100}>
         <Flex direction={'column'}>
-          <Title size={'lg'} tt={'uppercase'}>{highlightText(first_title)}</Title>
-          <Text size='sm' c={COLORS.textColor} lh={isMobile ? '20px' : ''} mt={'xs'} w={isMobile ? '100%' : '40vw'}>
+          <Title fw={800} tt={'uppercase'}>{highlightText(first_title)}</Title>
+          <Text size='sm' c={COLORS.textColor} lh={isMobile ? '20px' : ''} mt={'lg'} w={isMobile ? '100%' : '100%'}>
             {highlightText(first_content)}
           </Text>
           {isMobile ? (
@@ -40,7 +40,7 @@ const Ship = ({ first_title, first_content, serviceData }) => {
                       <Text size="sm" fw={500} mt={20}>
                         {item.fields.title}
                       </Text>
-                      <Text size='smx' mt={10} color="dimmed" lh={isMobile ? '20px' : ''}>
+                      <Text size='smx' mt={10} c={COLORS.textColor} lh={'20px'}>
                         {item.fields.description}
                       </Text>
                     </GridCol>
@@ -61,7 +61,7 @@ const Ship = ({ first_title, first_content, serviceData }) => {
                     <Text size="md" fw={500} mt={20}>
                       {item.fields.title}
                     </Text>
-                    <Text size='sm' mt={10} color="dimmed">
+                    <Text size='sm' mt={10} c={COLORS.textColor}>
                       {item.fields.description}
                     </Text>
                   </GridCol>

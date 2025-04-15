@@ -46,8 +46,8 @@ const Retail = ({ first_title, first_content, second_title, second_content }) =>
         <Flex direction={'column'} >
           <Title tt="uppercase" fw={800}>
             {highlightText(first_title)}
-          </Title>
-          <Text size="base" c={COLORS.textColor} lh="sm" maw={ isMobile ? '100%' : '80%'} mt={14} >
+          </Title>          
+          <Text size="sm" c={COLORS.textColor} lh="sm"  maw={ isMobile ? '100%' : '80%'} mt={'lg'} >
             {highlightText(first_content)}
           </Text>
         </Flex>

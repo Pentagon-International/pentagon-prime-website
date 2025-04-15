@@ -45,9 +45,10 @@ const Members = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
-    <Container fluid px={'7%'} py={'lg'} my={90}>
+    <Container fluid px={'7%'} pb={'lg'} my={0}>
       <Flex justify="center" my={50}>
-        <Title size={isMobile ? '30px' : '40px'} fw={800} tt={'uppercase'} lh={'lgx2'}>
+      <Title tt={'uppercase'} fw={800} lh={'lgx2'} size={  isMobile ? '28px' : '40px'}>
+        {/* <Title size={isMobile ? '30px' : '40px'} fw={800} tt={'uppercase'} lh={'lgx2'}> */}
           Message from the chairman
         </Title>
       </Flex>

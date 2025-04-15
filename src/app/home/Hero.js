@@ -192,7 +192,7 @@ const Hero = ({ title, content }) => {
                 <form>
                   <Flex direction={isMobile ? 'column' : 'row'} w={'100%'} align='center' gap={isMobile ? 0 : '30'} justify='space-between'>
                     <Autocomplete
-                      placeholder="Select Origin"
+                      placeholder="Origin"
                       size="lg"
                       w={isMobile ? '100%' : '45%'}
                       limit={5}
@@ -246,7 +246,7 @@ const Hero = ({ title, content }) => {
                     </ActionIcon>
 
                     <Autocomplete
-                      placeholder="Select Destination"
+                      placeholder="Destination"
                       size="lg"
                       limit={5}
                       data={memoizedTransportData}

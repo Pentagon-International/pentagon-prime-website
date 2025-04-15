@@ -1,11 +1,13 @@
-import { Container, Grid, GridCol, Image, Text, Title } from '@mantine/core';
+import { Container, Flex, Grid, GridCol, Image, Text, Title } from '@mantine/core';
 import { COLORS } from '../utils/COLORS';
 
 const FeaturedBlog = ({ res }) => {
 
   return (
     <Container fluid px={'7%'} py={'70px'}>
-      <Title size={'lg'} tt={'uppercase'}>Featured in the Blog</Title>
+      <Title tt="uppercase" tw="balance" fw={800}>
+        {/* <Title size={'lg'} tt={'uppercase'}> */}
+        Featured articles</Title>
       <Grid columns={3} gutter={'xl'} mt={30}>
         {res?.length && res?.map((item) => (
           <GridCol key={item.sys.id} span={1}>
@@ -26,18 +28,20 @@ const FeaturedBlog = ({ res }) => {
               {item.fields.newsTitle}
             </Text>
             {/* <Text size='smx' fw={600} mt={10}>{item.fields.description}</Text> */}
-            <a
-              href={item.fields.knowmore}
-              style={{
-                marginTop: '0px',
-                color: COLORS.serviceColor,
-                textDecoration: 'underline',
-                cursor: 'pointer',
-                fontSize: '14px',
-              }}
-            >
-              Read More
-            </a>
+            <Flex w={'100%'} justify={'flex-end'}>
+              <a
+                href={item.fields.knowmore}
+                style={{
+                  marginTop: '0px',
+                  color: COLORS.serviceColor,
+                  // textDecoration: 'underline',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                }}
+              >
+                Read More
+              </a>
+            </Flex>
           </GridCol>
         ))}
       </Grid>

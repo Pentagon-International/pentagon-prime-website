@@ -1,6 +1,7 @@
 import {
   Accordion,
   ActionIcon,
+  Box,
   Button,
   Card,
   Flex,
@@ -8,6 +9,7 @@ import {
   GridCol,
   Loader,
   Popover,
+  ScrollArea,
   Select,
   Table,
   Text,
@@ -364,22 +366,27 @@ export const SummarySection = ({ accordion, includeTax, avarageAmount, disabled,
                         Sub Total
                       </Text>
                     </Table.Td>
-                    <Table.Td align="right" w={120} px={4}>
-                      <TextInput
-                        readOnly
-                        value={currencyFormat(
-                          parseInt(estimateStore.summary?.total_amount) || 0
-                        )}
-                        leftSection={<Text size="xs">₹</Text>}
-                        styles={{ input: { textAlign: "right" } }}
-                      />
+                    <Table.Td w={120} px={4}>
+                      <Grid>
+                        <Grid.Col span={6}>
+                          <TextInput
+                            readOnly
+                            value={currencyFormat(
+                              parseInt(estimateStore.summary?.total_amount) || 0
+                            )}
+                            leftSection={<Text size="xs">₹</Text>}
+                            styles={{ input: { textAlign: "right" } }}
+                          />
+                        </Grid.Col>
+                      </Grid>
+
                     </Table.Td>
                     <Table.Td px={4} w={30}></Table.Td>
                   </Table.Tr>
                   {estimateStore.summary?.tax?.map((item, i) => (
                     <Table.Tr key={i}>
                       <Table.Td align="right" px={4}>
-                        <Text size="xs" fw={600}>
+                        <Text size="xs" fw={600} c={'white'}>
                           GST {item?.tax_percent}%
                         </Text>
                       </Table.Td>
@@ -450,7 +457,7 @@ export const SummarySection = ({ accordion, includeTax, avarageAmount, disabled,
                 Object.entries(avarageAmount).map(([size, amount]) => (
                   <Table.Tr key={size}>
                     <Table.Td align="right" px={4}>
-                      <Text size="xs" fw={600}>
+                      <Text size="xs" fw={600} c={'white'}>
                         Per Container Charges for {size}
                       </Text>
                     </Table.Td>
@@ -584,7 +591,9 @@ const ChargesTable = ({
   }, []);
 
   return (
-    <Table>
+    <Table
+      withRowBorders={false}
+    >
       <Table.Tbody>
         {uniqueList?.length === 0 ? (
           <Table.Tr>
@@ -603,10 +612,10 @@ const ChargesTable = ({
             return (
               <Table.Tr key={item?.id}>
                 <Table.Td>
-                  <Text size="xs">{item?.charge_name}</Text>
+                  <Text size="xs" ta={'left'}>{item?.charge_name}</Text>
                 </Table.Td>
                 <Table.Td>
-                  <Text size="xs">
+                  <Text size="xs" ta={'left'}>
                     {`₹ ${currencyFormat(item?.unit_price || 0)} / ${item?.charge_unit
                       }`}
                   </Text>
@@ -696,6 +705,9 @@ export const EstimateFormCalculation = ({
   setAvarageAmount,
   loading,
 }) => {
+
+  console.log("chargesMasterList : ", chargesMasterList);
+
   const estimateCallback = useEstimationStore((st) => ({
     list: st.list,
     saveList: st.saveList,
@@ -705,7 +717,7 @@ export const EstimateFormCalculation = ({
 
   const { data: frightData = [] } = useQuery({
     queryKey: ["chargeTable"],
-    queryFn: () => apiCallProtected.get("/master/estimate/chargeTable"),
+    queryFn: () => apiCallProtected.get("/pentagon/estimate/chargeTable"),
     refetchOnWindowFocus: false,
   });
 
@@ -760,7 +772,7 @@ export const EstimateFormCalculation = ({
         <Table withRowBorders={false}>
           <Table.Thead>
             <Table.Tr>
-              <Table.Th px={4} py={0}>
+              <Table.Th px={4} py={10}>
                 <Text size="sm" fw={600}>
                   Charges
                 </Text>
@@ -805,10 +817,10 @@ export const EstimateFormCalculation = ({
               <Accordion.Item value={`item-${size}`}>
                 <AccordionControl
                   data={item}
-                  list={chargesMasterList?.map((item) => ({
+                  list={chargesMasterList?.map((item, i) => ({
                     ...item,
                     label: item.charge_name,
-                    value: item.charge_name,
+                    value: i.toString(),
                   }))}
                   actionCallback={(selectedChargeItem) => {
                     estimateCallback.saveList([
@@ -829,20 +841,22 @@ export const EstimateFormCalculation = ({
                   {item?.size} x {totalCount?.value}
                 </AccordionControl>
 
-                <Accordion.Panel>
+                <Accordion.Panel p={20}>
                   {loading ? (
-                    <Loader size={"lg"} color={COLORS.primaryColor} />
+                    <Loader size={"lg"} />
                   ) : accordion ? (
-                    <ChargesTable
-                      size={size}
-                      chargesMasterList={chargesMasterList}
-                      containerList={quotationData}
-                      includeTax={gstIncluded}
-                      frightData={frightData?.data}
-                      accordion={accordion}
-                      totalCount={totalCount?.value}
-                      disabled={disabled}
-                    />
+                    <ScrollArea h={320}>
+                      <ChargesTable
+                        size={size}
+                        chargesMasterList={chargesMasterList}
+                        containerList={quotationData}
+                        includeTax={gstIncluded}
+                        frightData={frightData?.data}
+                        accordion={accordion}
+                        totalCount={totalCount?.value}
+                        disabled={disabled}
+                      />
+                    </ScrollArea>
                   ) : null}
                 </Accordion.Panel>
               </Accordion.Item>

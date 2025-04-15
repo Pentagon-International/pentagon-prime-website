@@ -25,7 +25,7 @@ const About = ({ title, content }) => {
           flexDirection: isMobile ? 'column-reverse' : 'row',
           zIndex: 2,
         }}>
-          <Box w={isMobile ? '100%' : '50%'} pr={'5%'} style={{
+          <Box w={isMobile ? '100%' : '55%'} pr={'5%'} style={{
             display: 'flex',
             flexDirection: 'column',
             gap: '24px',

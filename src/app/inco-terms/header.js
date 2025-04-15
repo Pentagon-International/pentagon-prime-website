@@ -38,11 +38,11 @@ const Header = ({ title, content, top }) => {
                         <Text size="sm" mb={10}>
                             {highlightText(top)}
                         </Text>
-                        <Title tt="uppercase" size="39px" fw={800} lh="lgx2">
+                        <Title tt="uppercase" size="40px" fw={800} lh="lgx2">
                             {highlightText(title)}
                         </Title>
-                        <Box w={isMobile ? '100%' : '42%'}>
-                            <Text mt={20} size="base">
+                        <Box w={isMobile ? '100%' : '80%'}>
+                            <Text mt={20} size="md">
                                 {highlightText(content)}
                             </Text>
                         </Box>

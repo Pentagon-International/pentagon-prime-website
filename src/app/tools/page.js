@@ -233,15 +233,15 @@ const CbmCalc = () => {
   return (
     <Container fluid px="7%" h="100%" >
       <Grid mt={60}>
-        <Grid.Col span={12} px={'lg'} py={'lg'} mt={'md'}>
-          <Flex justify={'flex-end'}>
+        <Grid.Col span={12} px={0} py={'lg'} mt={'md'}>
+          <Flex justify={'flex-start'}>
             <SegmentedControl
               onChange={(v) => {
                 setTools(v)
               }}
               value={tools}
               data={[
-                // 'Fare Calculation',
+                'Fare Calculation',
                  'CBM', 'CWC']} />
           </Flex>
         </Grid.Col>
