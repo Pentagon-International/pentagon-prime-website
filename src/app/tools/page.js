@@ -573,13 +573,13 @@ const CbmCalc = () => {
                     <Text c={COLORS.primaryColor} size="sm" w={'100%'} ta={'left'} fw={800}>
                       Chargeable Weight for Sea Freight
                     </Text>
-                    <Text c={COLORS.primaryColor} w={'100%'} ta={'center'} size="sm">
+                    <Text c={COLORS.primaryColor} w={'100%'}  size="sm" ta={'left'}>
                       {chargeableWeightSea} kg - {ratePerItem[0].Symbol} {chargeSeaAmt}
                     </Text>
                     <Text c={COLORS.primaryColor} size="sm" mt={'xl'} w={'100%'} ta={'left'} fw={800}>
                       Chargeable Weight for Air Freight
                     </Text>
-                    <Text c={COLORS.primaryColor} size="sm">
+                    <Text c={COLORS.primaryColor} size="sm" ta={'left'} w={'100%'}>
                       {chargeableWeightAir} kg -  {ratePerItem[1].Symbol} {chargeAirAmt}
                     </Text>
                   </Group>
