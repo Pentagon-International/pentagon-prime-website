@@ -241,16 +241,16 @@ const CbmCalc = () => {
               }}
               value={tools}
               data={[
-                'Fare Calculation',
-                 'CBM', 'CWC']} />
+                // 'Fare Calculation',
+                'CBM', 'CWC']} />
           </Flex>
         </Grid.Col>
       </Grid>
       {tools == 'CBM' &&
         <>
-          <Title mb="lg" mt={'xl'}>Cubic Meter Calculator</Title>
           <Grid mb={theme?.lineHeights.lg}>
             <Grid.Col span={7}>
+              <Title mb="lg" mt={'xl'}>Cubic Meter Calculator</Title>
               <Box mb={'md'}>
                 <Radio.Group
                   value={volumeUnit}
@@ -265,7 +265,7 @@ const CbmCalc = () => {
                 </Radio.Group>
               </Box>
 
-              <Container p={0} mt={40}>
+              <Container p={0} mt={0}>
                 <Select
                   label="Unit of Measurement"
                   value={unit}
@@ -352,93 +352,95 @@ const CbmCalc = () => {
                 }}
               >
               </Box>
-              <Card shadow="sm" padding="lg" radius="md" withBorder style={{ backgroundColor: COLORS.contactBackground }} ta={'center'}>
+              <Card shadow="sm" py="md" px={'xl'} radius="md" withBorder style={{ backgroundColor: COLORS.contactBackground }} ta={'center'} mt={'xl'}>
                 {/* <h2 mb="lg" style={{ color: COLORS.primaryColor }}>CBM Calculations</h2> */}
-                <Text mb="md" size="lg" style={{ color: COLORS.primaryColor }}>
+                {/* <Text mb="md" size="lg" style={{ color: COLORS.primaryColor }}>
                   Cubic Meter
-                </Text>
+                </Text> */}
                 <Group direction="column" spacing="xs" mt={'sm'} align="center" justify={'center'}>
-                  <Text c={COLORS.primaryColor} size="sm" w={'100%'}>
+                  <Text c={COLORS.primaryColor} size="sm" w={'100%'} ta={'left'}>
                     Volume
                   </Text>
                   <Grid w={'80%'}>
                     <Grid.Col span={6}>
-                      <Text c={COLORS.primaryColor}> {volumeCbm} m³</Text>
+                      <Text c={COLORS.primaryColor} size={'sm'}> {volumeCbm} m³</Text>
                     </Grid.Col>
                     <Grid.Col span={6}>
-                      <Text c={COLORS.primaryColor}>{volumeCft} ft³</Text>
+                      <Text c={COLORS.primaryColor} size={'sm'}>{volumeCft} ft³</Text>
                     </Grid.Col>
                   </Grid>
 
-                  <Text c={COLORS.primaryColor} size="sm" w={'100%'} mt={'xs'}>
+                  <Text c={COLORS.primaryColor} size="sm" w={'100%'} ta={'left'} mt={'xs'}>
                     Weight
                   </Text>
                   <Grid w={'80%'}>
-                    <Grid.Col span={6}>
-                      <Text c={COLORS.primaryColor}>{weightKg} Kg</Text>
+                    <Grid.Col span={6} size={'sm'}>
+                      <Text c={COLORS.primaryColor} size={'sm'}>{weightKg} Kg</Text>
                     </Grid.Col>
                     <Grid.Col span={6}>
-                      <Text c={COLORS.primaryColor}>{weightLb} Lb</Text>
+                      <Text c={COLORS.primaryColor} size={'sm'}>{weightLb} Lb</Text>
                     </Grid.Col>
                   </Grid>
 
-                  <Text c={COLORS.primaryColor} size="sm" w={'100%'} mt={'xs'}>
+                  <Text c={COLORS.primaryColor} size="sm" w={'100%'} ta={'left'} mt={'xs'}>
                     Volumetric Weight
                   </Text>
                   <Grid w={'80%'}>
                     <Grid.Col span={6}>
-                      <Text c={COLORS.primaryColor}>{volumetricWeightSea} Kg (Sea)</Text>
+                      <Text c={COLORS.primaryColor} size={'sm'}>Sea</Text>
+                      <Text c={COLORS.primaryColor} size={'sm'}>{volumetricWeightSea} Kg</Text>
                     </Grid.Col>
                     <Grid.Col span={6}>
-                      <Text c={COLORS.primaryColor}>{volumetricWeightAir} Kg (Air)</Text>
+                    <Text c={COLORS.primaryColor} size={'sm'}>Air</Text>
+                      <Text c={COLORS.primaryColor} size={'sm'}>{volumetricWeightAir} Kg </Text>
                     </Grid.Col>
                   </Grid>
 
-                  <Text c={COLORS.primaryColor} size="sm" w={'100%'} mt={'xs'}>
+                  <Text c={COLORS.primaryColor} size="sm" w={'100%'} ta={'left'} >
                     Container Capacities
                   </Text>
                   <Grid w={'80%'}>
                     <Grid.Col span={6}>
                       <Grid m={0} p={0}>
                         <Grid.Col span={8} px={0}>
-                          <Text c={COLORS.primaryColor} ta={'left'}>20 Feet </Text>
+                          <Text c={COLORS.primaryColor} ta={'left'} size={'sm'}>20 Feet </Text>
                         </Grid.Col>
                         <Grid.Col span={4} px={0}>
-                          <Text c={COLORS.primaryColor} ta={'right'}>~</Text>
+                          <Text c={COLORS.primaryColor} ta={'right'} size={'sm'}>:</Text>
                         </Grid.Col>
                       </Grid>
                     </Grid.Col>
                     <Grid.Col span={6}>
-                      <Text c={COLORS.primaryColor} ta={'right'}>{container20ft == 'Infinity' ? 0 : container20ft} items</Text>
+                      <Text c={COLORS.primaryColor} ta={'right'} size={'sm'}>{container20ft == 'Infinity' ? 0 : container20ft} items</Text>
                     </Grid.Col>
                     <Grid.Col span={6}>
                       <Grid m={0} p={0}>
                         <Grid.Col span={8} px={0}>
-                          <Text c={COLORS.primaryColor} ta={'left'}>40 Feet </Text>
+                          <Text c={COLORS.primaryColor} ta={'left'} size={'sm'}>40 Feet </Text>
                         </Grid.Col>
                         <Grid.Col span={4} px={0}>
-                          <Text c={COLORS.primaryColor} ta={'right'}>~</Text>
+                          <Text c={COLORS.primaryColor} ta={'right'} size={'sm'}>:</Text>
                         </Grid.Col>
                       </Grid>
                       {/* <Text c={COLORS.primaryColor} ta={'right'} >40 Feet </Text> */}
                     </Grid.Col>
                     <Grid.Col span={6}>
-                      {console.log("container40ft : ",container40ft)}
-                      <Text c={COLORS.primaryColor} ta={'right'} >{container40ft == 'Infinity' ? 0 : container40ft} items</Text>
+                      {console.log("container40ft : ", container40ft)}
+                      <Text c={COLORS.primaryColor} ta={'right'} size={'sm'}>{container40ft == 'Infinity' ? 0 : container40ft} items</Text>
                     </Grid.Col>
                     <Grid.Col span={6}>
                       <Grid m={0} p={0}>
                         <Grid.Col span={10} px={0}>
-                          <Text c={COLORS.primaryColor} ta={'left'}>40 Feet HC</Text>
+                          <Text c={COLORS.primaryColor} ta={'left'} size={'sm'}>40 Feet HC</Text>
                         </Grid.Col>
                         <Grid.Col span={2} px={0}>
-                          <Text c={COLORS.primaryColor} ta={'right'}>~</Text>
+                          <Text c={COLORS.primaryColor} ta={'right'} size={'sm'}>:</Text>
                         </Grid.Col>
                       </Grid>
                       {/* <Text c={COLORS.primaryColor} ta={'left'}>40 Feet HC</Text> */}
                     </Grid.Col>
                     <Grid.Col span={6}>
-                      <Text c={COLORS.primaryColor} ta={'right'}>{container40ftHC == 'Infinity' ? 0 : container40ftHC} items</Text>
+                      <Text c={COLORS.primaryColor} ta={'right'} size={'sm'}>{container40ftHC == 'Infinity' ? 0 : container40ftHC} items</Text>
                     </Grid.Col>
                   </Grid>
                 </Group>
@@ -453,7 +455,7 @@ const CbmCalc = () => {
           <Title mb="lg" mt={'xl'}>Chargeable Weight Calculator</Title>
           <Grid mt={'xl'} align="center" justify={'flex-start'} >
             <Grid.Col span={7}>
-              <Container >
+              {/* <Container > */}
                 <Grid justify={'flex-start'} >
                   <GridCol span={4}>
                     <NumberInput
@@ -541,10 +543,10 @@ const CbmCalc = () => {
                     </Button> */}
                   </Grid.Col>
                 </Grid>
-              </Container>
+              {/* </Container> */}
             </Grid.Col>
             {/* {showCalc && ( */}
-            <Grid.Col span={5}>
+            <Grid.Col span={5} pb={0}>
               <Box
                 style={{
                   // height: "10vh",
@@ -554,25 +556,25 @@ const CbmCalc = () => {
               ></Box>
               <Card
                 shadow="sm"
-                padding="lg"
+                padding="xl"
                 radius="md"
                 withBorder
                 style={{ backgroundColor: COLORS.contactBackground, display: 'flex', alignItems: 'center' }}
               >
-                <Text mb="md" size="lg" style={{ color: COLORS.primaryColor }}>
+                {/* <Text mb="md" size="lg" style={{ color: COLORS.primaryColor }}>
                   Chargeable Weight
-                </Text>
+                </Text> */}
                 <Group direction="column" spacing="xs" mt={'sm'} align="center" justify={'center'}>
-                  <Text c={COLORS.primaryColor} size="sm" w={'100%'} ta={'center'}>
+                  <Text c={COLORS.primaryColor} size="sm" w={'100%'} ta={'left'}>
                     Chargeable Weight for Sea Freight
                   </Text>
-                  <Text c={COLORS.primaryColor} w={'100%'} ta={'center'}>
+                  <Text c={COLORS.primaryColor} w={'100%'} ta={'center'} size="sm">
                     {chargeableWeightSea} kg - {ratePerItem[0].Symbol} {chargeSeaAmt}
                   </Text>
-                  <Text c={COLORS.primaryColor} size="sm" mt={'xs'} w={'100%'} ta={'center'}>
+                  <Text c={COLORS.primaryColor} size="sm" mt={'xs'} w={'100%'} ta={'left'} >
                     Chargeable Weight for Air Freight
                   </Text>
-                  <Text c={COLORS.primaryColor} >
+                  <Text c={COLORS.primaryColor} size="sm">
                     {chargeableWeightAir} kg -  {ratePerItem[1].Symbol} {chargeAirAmt}
                   </Text>
                 </Group>

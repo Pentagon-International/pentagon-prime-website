@@ -379,17 +379,13 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
               <InputLoader label={"Shipping Line"} />
             ) : (
               <Select
-                mt={"md"}
+                // mt={"md"}
                 size="sm"
                 clearable
                 searchable
                 required
                 name={"shipper"}
-                label={
-                  <Text size="xs" fw={600} c={"gray"}>
-                    Shipping Line
-                  </Text>
-                }
+                label='Shipping Line'
                 key={formHook.key("shippingLine")}
                 data={shippingQuery.data || []}
                 value={formHook.values.shippingLine?.value}
@@ -401,18 +397,55 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
               />
             )}
           </GridCol>
-          <Button
-            type="submit"
-            onClick={() => {
-              setAccordion(true);
-            }}
-            disabled={formHook.values.shippingLine?.value ? false : true}
-            size="sm"
-            mt={"sm"}
-            fullWidth
-          >
-            Fare Calculate
-          </Button>
+          {/* <Button
+                  variant="outline"
+                  size="sm"
+                  fullWidth
+                  style={{
+                    borderColor: COLORS.serviceColor,
+                    color: COLORS.serviceColor,
+                  }}
+                  onClick={
+                    () => {
+                      router.push("/contact")
+                      closeDrawer()
+                    }
+                  }
+                >
+                  Talk to an Expert
+                </Button> */}
+          {/* <Flex justify={'flex-end'} w={'100%'}> */}
+    
+            <Button
+              mx={8}
+              // variant="outline"
+              size="sm"
+              fullWidth
+              // style={{
+              //   borderColor: COLORS.serviceColor,
+              //   color: COLORS.serviceColor,
+              // }}
+              c={COLORS.contactBackground}
+              mt={"xl"}
+              type="submit"
+              onClick={() => {
+                setAccordion(true);
+              }}
+              disabled={formHook.values.shippingLine?.value ? false : true}
+
+
+            // type="submit"
+            // onClick={() => {
+            //   setAccordion(true);
+            // }}
+            // disabled={formHook.values.shippingLine?.value ? false : true}
+            // size="sm"
+            // mt={"xl"}
+            // fullWidth
+            >
+              Calculate Fare
+            </Button>
+          {/* </Flex> */}
         </Grid>
       </form>
     </Box>

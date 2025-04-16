@@ -65,7 +65,6 @@ const FairContainer = ({
 
   useEffect(() => {
     if (TypesWithContainers.includes(activeType)) {
-      console.log("HII : ",activeType)
       if (containerList.type !== activeType) {
         const d = getContainerFields(activeType, activeDimension);
         setContainerList((ct) => ({
@@ -226,11 +225,10 @@ const FairContainer = ({
         <Flex align={'flex-end'} h={'100%'}>
           {selectedSize.length - 1 < contSize.length && (
             <Button
+              w={'100%'}
               variant="subtle"
-              // size="xs"
-              justify="flex-end"
               onClick={addNewContainer}
-              leftSection={<IconPlus />}
+              leftSection={<IconPlus size={20} />}
             > Add Container
             </Button>
           )}
@@ -352,12 +350,13 @@ const FairContainer = ({
             <Grid.Col span={1}>
               <Flex align={'center'} mt={40}>
                 <ActionIcon
+                  variant={'subtle'}
                   color={"red"}
                   onClick={() => {
-                      removeContainer(i)
+                    removeContainer(i)
                   }}
                 >
-                  <IconTrash stroke={1.5} size={20} />
+                  <IconTrash stroke={1.5} size={30} />
                 </ActionIcon>
               </Flex>
 

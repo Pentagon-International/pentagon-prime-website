@@ -1,3 +1,4 @@
+'use client'
 import { Container, Title, Text, SimpleGrid, Image, Box, Group } from '@mantine/core';
 import React from 'react';
 import { COLORS } from '../utils/COLORS';
@@ -15,9 +16,9 @@ const dummyData = [
   { id: 9, name: 'Airline 9', logo: 'https://icon2.cleanpng.com/20180330/qhw/avco3de5b.webp' },
 ];
 
-  const isMobile = useMediaQuery('(max-width:768px)')
 
 const Airlines = () => {
+  const isMobile = useMediaQuery('(max-width:768px)')
   return (
     <Container fluid px="7%" py="70px">
       {/* <Title size="lg" tt="uppercase" ta="center"> */}
