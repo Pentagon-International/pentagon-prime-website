@@ -885,7 +885,7 @@ export const EstimateFormCalculation = ({
 
               <Accordion.Panel styles={{ panel: { zIndex: 99999999 } }}>
                 {loading ? (
-                  <Loader size={"lg"} />
+                  <Loader size={"sm"} />
                 ) : accordion ? (
                   <ScrollArea h={210} type="always">
                     <ChargesTable
