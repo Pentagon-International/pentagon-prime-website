@@ -75,7 +75,7 @@ const getContainerFields = (type, dimension) => {
           options: lengthInputOptions,
         },
         {
-          label: `Weight(mt)`,
+          label: `Weight (mt)`,
           type: types.NUMBER,
           options: weightInputOptions,
         },
@@ -99,7 +99,7 @@ const getContainerFields = (type, dimension) => {
           options: lengthInputOptions,
         },
         {
-          label: `Weight(mt)`,
+          label: `Weight (mt)`,
           type: types.NUMBER,
           options: weightInputOptions,
         },
@@ -151,7 +151,7 @@ const getContainerFields = (type, dimension) => {
           options: lengthInputOptions,
         },
         {
-          label: `Weight(mt)`,
+          label: `Weight (mt)`,
           type: types.NUMBER,
           options: weightInputOptions,
         },

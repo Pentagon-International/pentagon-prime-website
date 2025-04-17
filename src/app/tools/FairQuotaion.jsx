@@ -177,7 +177,7 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
       <form onSubmit={handleSubmit}>
         <Grid>
           <Grid.Col span={12}>
-            <Text fw={500} mt={"md"} size="sm">
+            <Text fw={500} size="sm">
               Type of Booking
             </Text>
             {/* <Flex align="center" justify="space-between" gap={10}> */}
@@ -425,8 +425,9 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
               //   borderColor: COLORS.serviceColor,
               //   color: COLORS.serviceColor,
               // }}
-              c={COLORS.contactBackground}
-              mt={"xl"}
+              // c={COLORS.contactBackground}
+              color={COLORS.contactBackground}
+              mt={"lg"}
               type="submit"
               onClick={() => {
                 setAccordion(true);

@@ -241,7 +241,7 @@ const CbmCalc = () => {
               }}
               value={tools}
               data={[
-                // 'Fare Calculation',
+                'Fare Calculation',
                 'CBM', 'CWC']} />
           </Flex>
         </Grid.Col>

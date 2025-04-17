@@ -219,12 +219,12 @@ function AccordionControl({ actionCallback, list, data, disabled, ...props }) {
         <Popover width={200} trapFocus position="left" withArrow shadow="md">
           <Popover.Target>
             <Button
-            h={'100%'}
               w={120}
-              size="compact-xs"
+              // size="compact-xs"
               variant="subtle"
               onClick={actionCallback}
               leftSection={<IconPlus size={14} />}
+              mx={'xs'}
             >
               Add
             </Button>
@@ -346,18 +346,18 @@ export const SummarySection = ({ accordion, includeTax, avarageAmount, disabled,
   return (
     <Card shadow="sm" padding="lg" radius="md" style={{ backgroundColor: COLORS.contactBackground }} ta={'center'}>
       <Grid>
-        <Grid.Col>
-          <EstimateFormCalculation
-            quoteData={quoteData}
-            chargesList={chargesList}
-            chargesMasterList={chargesMasterList}
-            gstIncluded={gstIncluded}
-            accordion={accordion}
-            setAvarageAmount={setAvarageAmount}
-            loading={loading}
-          />
-        </Grid.Col>
-        <Grid.Col>
+        {/* <Grid.Col span={12}> */}
+        <EstimateFormCalculation
+          quoteData={quoteData}
+          chargesList={chargesList}
+          chargesMasterList={chargesMasterList}
+          gstIncluded={gstIncluded}
+          accordion={accordion}
+          setAvarageAmount={setAvarageAmount}
+          loading={loading}
+        />
+        {/* </Grid.Col> */}
+        <Grid.Col span={12}>
           <Table withRowBorders={false}>
             <Table.Tbody>
               {includeTax && (
@@ -367,8 +367,8 @@ export const SummarySection = ({ accordion, includeTax, avarageAmount, disabled,
                     <Table.Td ></Table.Td>
                     {gstIncluded && (<Table.Td ></Table.Td>)}
                     <Table.Td ta={'right'}>
-                      <Text c={COLORS.primaryColor} size="sm" w={'100%'}>
-                        Sub total
+                      <Text c={COLORS.primaryColor} size="sm" w={'100%'} fw={800}>
+                        Sub Total
                       </Text>
                     </Table.Td>
                     <Table.Td w={120}>
@@ -388,7 +388,7 @@ export const SummarySection = ({ accordion, includeTax, avarageAmount, disabled,
                       <Table.Td ></Table.Td>
                       {gstIncluded && (<Table.Td ></Table.Td>)}
                       <Table.Td ta={'right'}>
-                        <Text size="xs" fw={600} c={'white'}>
+                        <Text size="sm" c={'white'} fw={800}>
                           GST {item?.tax_percent}%
                         </Text>
                       </Table.Td>
@@ -429,8 +429,8 @@ export const SummarySection = ({ accordion, includeTax, avarageAmount, disabled,
                 <Table.Td ></Table.Td>
                 {gstIncluded && (<Table.Td ></Table.Td>)}
                 <Table.Td ta={'right'}>
-                  <Text c={COLORS.primaryColor} size="sm">
-                    Total amount
+                  <Text c={COLORS.primaryColor} size="sm" fw={800}>
+                    Total Amount
                   </Text>
                 </Table.Td>
                 <Table.Td w={'25%'}>
@@ -454,7 +454,7 @@ export const SummarySection = ({ accordion, includeTax, avarageAmount, disabled,
                   />
                 </Table.Td>
               </Table.Tr>
-              {avarageAmount &&
+              {/* {avarageAmount &&
                 typeof avarageAmount === "object" &&
                 !Array.isArray(avarageAmount) &&
                 Object.entries(avarageAmount).map(([size, amount]) => (
@@ -462,9 +462,9 @@ export const SummarySection = ({ accordion, includeTax, avarageAmount, disabled,
                     <Table.Td ></Table.Td>
                     <Table.Td ></Table.Td>
                     {gstIncluded && (<Table.Td ></Table.Td>)}
-                    <Table.Td align="right" px={4}>
-                      <Text size="sm" c={'white'}>
-                        Per container charges for {size}
+                    <Table.Td align="right" px={4} >
+                      <Text size="sm" c={'white'} fw={800}>
+                        Per Container Charges For {size}
                       </Text>
                     </Table.Td>
                     <Table.Td align="right" w={120}>
@@ -483,7 +483,7 @@ export const SummarySection = ({ accordion, includeTax, avarageAmount, disabled,
                       />
                     </Table.Td>
                   </Table.Tr>
-                ))}
+                ))} */}
             </Table.Tbody>
           </Table>
         </Grid.Col>
@@ -603,8 +603,10 @@ const ChargesTable = ({
       <Table.Tbody>
         {uniqueList?.length === 0 ? (
           <Table.Tr >
-            <Table.Td colSpan={5} align="center" h={'100%'}>
-              <Text size="sm">No carrier charge data</Text>
+            <Table.Td colSpan={5} align="center" rowSpan={5}>
+              <Flex justify={'center'} align={'center'}>
+                <Text size="sm">No carrier charge data</Text>
+              </Flex>
             </Table.Td>
           </Table.Tr>
         ) : (
@@ -678,7 +680,7 @@ const ChargesTable = ({
                     }}
                   />
                 </Table.Td>
-                <Table.Td align="right" px={4} valign="bottom">
+                <Table.Td align="right" px={4} valign="center">
                   <ActionIcon
                     color="red"
                     variant="light"
@@ -774,107 +776,141 @@ export const EstimateFormCalculation = ({
   ]);
 
   return (
-    <Grid>
-      <GridCol bg={COLORS.contactBackground} style={{ borderRadius: 8 }} c={'white'} h={'50vh'}>
-        <Table withRowBorders={false}>
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th px={4} py={10}>
-                <Text size="sm">
-                  Charges
+    // <Grid>
+    <GridCol bg={COLORS.contactBackground} style={{ borderRadius: 8 }} c={'white'} mih={358}>
+      <Table withRowBorders={false}>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th px={20} py={10} colSpan={2}>
+              <Text size="sm" fw={800} w={140}>
+                Charges
+              </Text>
+            </Table.Th>
+            <Table.Th>
+              <Text size="sm" fw={800} w={50}>
+                Units
+              </Text>
+            </Table.Th>
+            {gstIncluded && (
+              <Table.Th>
+                <Text size="sm" fw={800} w={50}>
+                  Tax %
                 </Text>
               </Table.Th>
-              <Table.Th px={4} py={0} w={295}></Table.Th>
-              <Table.Th px={4} py={0}>
-                <Text size="sm">
-                  Units
-                </Text>
-              </Table.Th>
-              {gstIncluded && (
-                <Table.Th px={4} py={0} w={110}>
-                  <Text size="sm">
-                    Tax (%)
-                  </Text>
-                </Table.Th>
-              )}
-              <Table.Th px={4} py={0} w={265}>
-                <Text size="sm">
-                  Price
-                </Text>
-              </Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-        </Table>
-
-        {quotationData?.map((item) => {
+            )}
+            <Table.Th w={200} px={0} >
+              <Text size="sm" fw={800} w={200}>
+                Price
+              </Text>
+            </Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+      </Table>
+      {!quotationData?.length && (
+        <Flex justify={'center'} align={'center'} h={'100%'}>
+          <Text size="sm" mb={'sm'}>No data yet</Text>
+        </Flex>
+      )}
+      {/* <ScrollArea h={350} offsetScrollbars scrollbars="y" type="always"> */}
+      <Accordion
+        // mt={'xs'}
+        // bg={'red'}
+        // key={size}
+        // chevron={<IconPlus size={12} />}
+        // chevronPosition="left"
+        // classNames={classes}
+        // styles={{
+        //   itemTitle: {
+        //     '&:hover': {
+        //       backgroundColor: '#ebfbee', // Change this to your desired hover color
+        //     },
+        //   }
+        // }}
+        styles={{
+          item: {
+            backgroundColor: '#ffffff', // light background for each item
+            border: '1px solid #ccc',
+            borderRadius: 4,
+          },
+          control: {
+            // backgroundColor: '#f0f0ff', // light background for each item
+            // border: '1px solid #ccc',
+            borderRadius: 4,
+            // color: '#2c3e50', // text color
+            fontWeight: 600,
+          },
+          content: {
+            borderRadius: 4,
+            backgroundColor: '#ffffff',
+            color: '#333',
+          },
+        }}
+      >
+        {quotationData?.length && quotationData?.map((item) => {
           const size = item?.size;
           const totalCount =
             item?.fields?.find(
               (field) =>
                 field.label === "Count" || field.label === "Container Count"
             ) || {};
-
           return (
-            <Accordion
-              key={size}
-              // chevron={<IconPlus size={12} />}
-              chevronPosition="left"
-              classNames={classes}
-            >
-              <Accordion.Item value={`item-${size}`}>
-                <AccordionControl
-                  data={item}
-                  list={chargesMasterList?.map((item, i) => ({
-                    ...item,
-                    label: item.charge_name,
-                    value: i.toString(),
-                  }))}
-                  actionCallback={(selectedChargeItem) => {
-                    estimateCallback.saveList([
-                      ...estimateCallback.list,
-                      {
-                        ...selectedChargeItem,
-                        size: item?.size,
-                        count: totalCount?.value,
-                        total_amount:
-                          parseInt(totalCount?.value || 0) *
-                          parseInt(
-                            selectedChargeItem?.[`s${size.toLowerCase()}`] || 0
-                          ),
-                      },
-                    ]);
-                  }}
-                >
+            <Accordion.Item value={`item-${size}`} mb={'sm'}>
+              <AccordionControl
+                data={item}
+                list={chargesMasterList?.map((item, i) => ({
+                  ...item,
+                  label: item.charge_name,
+                  value: i.toString(),
+                }))}
+                actionCallback={(selectedChargeItem) => {
+                  estimateCallback.saveList([
+                    ...estimateCallback.list,
+                    {
+                      ...selectedChargeItem,
+                      size: item?.size,
+                      count: totalCount?.value,
+                      total_amount:
+                        parseInt(totalCount?.value || 0) *
+                        parseInt(
+                          selectedChargeItem?.[`s${size.toLowerCase()}`] || 0
+                        ),
+                    },
+                  ]);
+                }}
+              >
+                <Text size="sm">
                   {item?.size} x {totalCount?.value}
-                </AccordionControl>
+                </Text>
+              </AccordionControl>
 
-                <Accordion.Panel>
-                  {loading ? (
-                    <Loader size={"lg"} />
-                  ) : accordion ? (
-                    <ScrollArea h={350} mt={'md'}>
-                      <ChargesTable
-                        size={size}
-                        chargesMasterList={chargesMasterList}
-                        containerList={quotationData}
-                        includeTax={gstIncluded}
-                        frightData={frightData?.data}
-                        accordion={accordion}
-                        totalCount={totalCount?.value}
-                        disabled={disabled}
-                      />
-                    </ScrollArea>
-                  ) : null}
-                </Accordion.Panel>
-              </Accordion.Item>
-            </Accordion>
+              <Accordion.Panel styles={{ panel: { zIndex: 99999999 } }}>
+                {loading ? (
+                  <Loader size={"lg"} />
+                ) : accordion ? (
+                  <ScrollArea h={210} type="always">
+                    <ChargesTable
+                      size={size}
+                      chargesMasterList={chargesMasterList}
+                      containerList={quotationData}
+                      includeTax={gstIncluded}
+                      frightData={frightData?.data}
+                      accordion={accordion}
+                      totalCount={totalCount?.value}
+                      disabled={disabled}
+                    />
+                  </ScrollArea>
+                ) : null}
+              </Accordion.Panel>
+            </Accordion.Item>
           );
         })}
+      </Accordion>
+      {/* </ScrollArea> */}
 
-        {/* <Modal opened={opened} onClose={close} title="Add Charges">
+      {/* <Modal opened={opened} onClose={close} title="Add Charges">
         
-      </Modal> */}
-      </GridCol>
-    </Grid>
+        </Modal> */}
+    </GridCol>
+    // </Grid>
   );
 };

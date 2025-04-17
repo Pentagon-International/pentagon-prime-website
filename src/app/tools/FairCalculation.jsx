@@ -33,15 +33,15 @@ const FairCalculation = () => {
 
   return (
     <>
-      <Title mb="lg" mt={'xl'}>Fare Calculation</Title>
       <Grid mb={theme?.lineHeights.lg}>
         <Grid.Col span={6}>
-            <FairQuotation
-              onSubmit={handleQuotationSubmit}
-              formHook={formHook}
-              accordion={accordion}
-              setAccordion={setAccordion}
-            />
+          <Title mb="lg" mt={'xl'}>Fare Calculation</Title>
+          <FairQuotation
+            onSubmit={handleQuotationSubmit}
+            formHook={formHook}
+            accordion={accordion}
+            setAccordion={setAccordion}
+          />
         </Grid.Col>
 
         <Grid.Col span={6}>

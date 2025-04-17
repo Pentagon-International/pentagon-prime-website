@@ -82,7 +82,7 @@ const FairEstimation = ({ data, formHook, accordion, setAccordion }) => {
         />
       </Grid.Col> */}
 
-      <Grid.Col bg={COLORS?.contactBackground} style={{ borderRadius: 8 }} c={'white'}>
+      <Grid.Col style={{ borderRadius: 4 }} c={'white'}>
         <SummarySection
           accordion={accordion}
           includeTax={formHook.values.gstIncluded}
