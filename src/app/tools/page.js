@@ -120,7 +120,7 @@ const CbmCalc = () => {
     container40ftHC,
   } = state;
 
-  const [tools, setTools] = useState('CBM')
+  const [tools, setTools] = useState('Fare Calculation')
   const isMobile = useMediaQuery('(max-width:768px)')
 
   const [formData, setFormData] = useState({
