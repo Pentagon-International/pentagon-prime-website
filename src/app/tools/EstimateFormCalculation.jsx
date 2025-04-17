@@ -782,18 +782,18 @@ export const EstimateFormCalculation = ({
         <Table.Thead>
           <Table.Tr>
             <Table.Th px={20} py={10} colSpan={2}>
-              <Text size="sm" fw={800} w={140}>
+              <Text size="sm" fw={800} w={160}>
                 Charges
               </Text>
             </Table.Th>
             <Table.Th>
-              <Text size="sm" fw={800} w={50}>
+              <Text size="sm" fw={800} w={40}>
                 Units
               </Text>
             </Table.Th>
             {gstIncluded && (
               <Table.Th>
-                <Text size="sm" fw={800} w={50}>
+                <Text size="sm" fw={800} w={60}>
                   Tax %
                 </Text>
               </Table.Th>
