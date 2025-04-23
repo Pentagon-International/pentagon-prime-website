@@ -47,7 +47,7 @@ const Global = () => {
           Our <span style={{ color: COLORS.serviceColor }}> Global</span> Presence
         </Title>
       </Center>
-      <Image src={Images.global} alt="global" />
+      <Image src={Images.map} alt="global" />
 
       <Grid columns={12} align={'center'} justify="center">
 

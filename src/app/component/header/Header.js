@@ -53,12 +53,14 @@ const Header = () => {
     top: 0,
     left: 0,
     width: "100%",
-    backgroundColor: isScrolled
-      ? "rgba(0, 0, 0, 0.7)"
-      : !isAppliedBackground
-        ? "#111F40"
-        : "transparent",
-    transition: "background-color 0.3s ease-in-out",
+    backgroundColor: "#111F40",
+
+    // isScrolled
+    //   ? "rgba(0, 0, 0, 0.7)"
+    //   : !isAppliedBackground
+    //     ? "#111F40"
+    //     : "transparent",
+    // transition: "background-color 0.3s ease-in-out",
     backdropFilter: "blur(10px)",
     zIndex: 1000,
     padding: "8px 7%",

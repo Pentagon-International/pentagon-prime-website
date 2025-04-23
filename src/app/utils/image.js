@@ -17,6 +17,7 @@ const Images = {
   arrow: '/images/arrow.png',
   chairman: '/images/chairman.png',
   global: '/images/global.png',
+  map: '/images/map.png',
   contact: '/images/contact.png',
   service: '/images/service.png',
   ship: '/images/ship.png',
