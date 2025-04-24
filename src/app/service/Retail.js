@@ -9,7 +9,7 @@ import { useMediaQuery } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { Carousel } from '@mantine/carousel';
 
-const Retail = ({ first_title, first_content, second_title, second_content }) => {
+const Retail = ({ first_title, first_content, second_title, second_content, illustration }) => {
   const [serviceData, setServiceData] = useState([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -53,7 +53,7 @@ const Retail = ({ first_title, first_content, second_title, second_content }) =>
         </Flex>
 
         <Image
-          src={isMobile ? Images.mob_prime_network : Images.pentagon_zig_zag}
+          src={isMobile ? Images.mob_prime_network : illustration}
           alt="prime_network"
           h={isMobile ? "auto" : "auto"}
           w={isMobile ? "100%" : "40%"}
