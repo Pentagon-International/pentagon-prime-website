@@ -29,8 +29,8 @@ const rootToWhatsApp = () => {
 
   // console.log("Is Android:", isAndroid);
   const whatsappURL = isAndroid
-    ? `intent://send/?phone=917400424940#Intent;scheme=smsto;package=com.whatsapp;end`
-    : `https://wa.me/917400424940`;
+    ? `intent://send/?phone=917400425960#Intent;scheme=smsto;package=com.whatsapp;end`
+    : `https://wa.me/917400425960`;
 
   // window.location.href = whatsappURL;
     window.open(whatsappURL, '_blank');
