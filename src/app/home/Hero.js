@@ -12,6 +12,7 @@ import {
   Flex,
   Group,
   Image,
+  Select,
   Stack,
   Text,
   Title,
@@ -32,6 +33,9 @@ import PortComponent from '../component/PortComponent';
 import { notifications } from '@mantine/notifications';
 import { useMediaQuery } from '@mantine/hooks';
 import useTransportStore from '../store/transportStore';
+import { useRouter } from 'next/navigation';
+import useCustomerRequestStore from '../store/customerRequestStore';
+import { values } from 'lodash';
 
 
 // Memoized TransportOption component to prevent re-renders
@@ -49,26 +53,15 @@ const TransportOption = memo(({ type, icon, activeTransport, onClick }) => (
 ));
 
 const Hero = ({ title, content }) => {
-  const [activeTransport, setActiveTransport] = useState('sea');
-  const [transportData, setTransportData] = useState([]);
-  const [modalOpened, setModalOpened] = useState(false);
+  const { seaData, airData, setSeaData, setAirData } = useTransportStore();
+  const { setFormValues } = useCustomerRequestStore()
+  const router = useRouter();
+  const [formValue, setFormValue] = useState({ typeOfBooking: 'FCL', origin: '', destination: '', activeTransport: 'sea', transportData: [], memoizedTransportData: seaData });
 
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const Icon = isMobile ? IconArrowsDownUp : IconArrowsLeftRight
 
-  const formHook = useForm({
-    initialValues: {
-      origin: '',
-      destination: '',
-      name: '',
-      contact_number: '',
-      email: '',
-      typeOfBooking: 'FCL',
-    },
-  });
-
-  const { seaData, airData, setSeaData, setAirData } = useTransportStore();
 
   const { data: seaPortData } = useQuery({
     queryKey: [`seaPortData`],
@@ -91,26 +84,27 @@ const Hero = ({ title, content }) => {
       return response.data;
     },
     refetchOnWindowFocus: false,
-    select: (data) =>
-      data?.data?.map((item) => ({
+    select: (data) => {
+      console.log("data : ", data)
+      return data?.data?.map((item) => ({
         label: item.name,
         value: String(item.id),
-      })) || [],
+      })) || []
+    }
   });
 
-  // Memoize transport data based on active transport
-  const memoizedTransportData = useMemo(() => {
-    return activeTransport === 'sea' ? seaData : airData;
-  }, [activeTransport, seaData, airData]);
+  useEffect(() => {
+    setFormValue((prev) => ({ ...prev, memoizedTransportData: formValue?.activeTransport == 'sea' ? seaData : airData }))
+  }, [formValue?.activeTransport, seaData, airData])
 
 
   const notificationShownRef = useRef(false);
 
   useEffect(() => {
     if (
-      formHook.values.origin &&
-      formHook.values.destination &&
-      formHook.values.origin === formHook.values.destination &&
+      formValue?.origin &&
+      formValue?.destination &&
+      formValue?.origin === formValue?.destination &&
       !notificationShownRef.current
     ) {
       notifications.show({
@@ -120,13 +114,13 @@ const Hero = ({ title, content }) => {
       });
 
       notificationShownRef.current = true;
-      formHook.reset();
+      // formHook.reset();
 
       setTimeout(() => {
         notificationShownRef.current = false;
       }, 1000);
     }
-  }, [formHook.values.origin, formHook.values.destination]);
+  }, [formValue?.origin, formValue?.destination]);
 
 
   useEffect(() => {
@@ -136,14 +130,23 @@ const Hero = ({ title, content }) => {
 
   // Optimized swap function
   const swapOriginDestination = useCallback(() => {
-    formHook.setValues((prevValues) => ({
+    setFormValue(prevValues => ({
       ...prevValues,
-      origin: prevValues.destination,
-      destination: prevValues.origin,
+      origin: {
+        ...prevValues.destination,
+        origin: prevValues.destination.destination,
+      },
+      destination: {
+        ...prevValues.origin,
+        destination: prevValues.origin.origin
+      },
     }));
   }, []);
 
-  const isFormValid = formHook.values.origin && formHook.values.destination;
+  const handleGetQuote = () => {
+    setFormValues(formValue);
+    router.push('/customer-request-form');
+  };
 
   return (
     <Box style={styles.heroContainer}>
@@ -151,7 +154,7 @@ const Hero = ({ title, content }) => {
         {
           !isMobile && (
             <Box style={styles.overlayContainer}>
-              <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} h={!isMobile && 745}/>
+              <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} h={!isMobile && 745} />
             </Box>
           )
         }
@@ -167,7 +170,7 @@ const Hero = ({ title, content }) => {
           >
             {highlightText(title)}
           </Title>
-          <Text lh={ isMobile ? "md" : "lgx"} size={isMobile ? '15px' : '19px'} maw={isMobile ? '80%' : '40%'} fw={400} mt={15}>
+          <Text lh={isMobile ? "md" : "lgx"} size={isMobile ? '15px' : '19px'} maw={isMobile ? '80%' : '40%'} fw={400} mt={15}>
             {highlightText(content)}
           </Text>
           <Box h={'100%'}>
@@ -178,25 +181,31 @@ const Hero = ({ title, content }) => {
                 <TransportOption
                   type="sea"
                   icon={<IconShip size={20} color={COLORS.primaryColor} />}
-                  activeTransport={activeTransport}
-                  onClick={setActiveTransport}
+                  activeTransport={formValue?.activeTransport}
+                  onClick={() => setFormValue(prev => ({
+                    ...prev,
+                    activeTransport: 'sea',
+                  }))}
                 />
                 <TransportOption
                   type="air"
                   icon={<IconPlaneInflight size={20} color={COLORS.primaryColor} />}
-                  activeTransport={activeTransport}
-                  onClick={setActiveTransport}
+                  activeTransport={formValue?.activeTransport}
+                  onClick={() => setFormValue(prev => ({
+                    ...prev,
+                    activeTransport: 'air',
+                  }))}
                 />
               </Flex>
               <Flex direction="column">
                 <form>
                   <Flex direction={isMobile ? 'column' : 'row'} w={'100%'} align='center' gap={isMobile ? 0 : '30'} justify='space-between'>
-                    <Autocomplete
+                    <Select
                       placeholder="Origin"
                       size="lg"
                       w={isMobile ? '100%' : '45%'}
                       limit={5}
-                      data={memoizedTransportData}
+                      data={formValue?.memoizedTransportData}
                       className='custom-placeholder'
                       radius="md"
                       styles={{
@@ -227,7 +236,18 @@ const Hero = ({ title, content }) => {
                       }}
                       autoComplete="off"
                       leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
-                      {...formHook.getInputProps('origin')}
+                      value={formValue?.origin?.origin}
+                      onChange={(value, opt) => {
+                        setFormValue(prev => ({
+                          ...prev,
+                          origin: {
+                            origin: opt?.value, 
+                            port: opt?.value,
+                            name: opt?.label,
+                          }
+                        }))
+                      }
+                      }
                     />
                     <ActionIcon
                       variant="default"
@@ -245,11 +265,11 @@ const Hero = ({ title, content }) => {
                       <Icon size={20} color={COLORS.primaryColor} />
                     </ActionIcon>
 
-                    <Autocomplete
+                    <Select
                       placeholder="Destination"
                       size="lg"
                       limit={5}
-                      data={memoizedTransportData}
+                      data={formValue?.memoizedTransportData}
                       radius="md"
                       w={isMobile ? '100%' : '45%'}
                       styles={{
@@ -279,7 +299,15 @@ const Hero = ({ title, content }) => {
                       }}
                       autoComplete="off"
                       leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
-                      {...formHook.getInputProps('destination')}
+                      value={formValue?.destination?.destination}
+                      onChange={(value, opt) => setFormValue(prev => ({
+                        ...prev,
+                        destination: {
+                          destination: opt.value,
+                          port: opt?.value,
+                          name: opt?.label,
+                        },
+                      }))}
                     />
                   </Flex>
                   <Button
@@ -296,7 +324,7 @@ const Hero = ({ title, content }) => {
                     }}
                     bg={'##CDF6FF'}
                     c={COLORS.primaryColor}
-                    onClick={() => isFormValid && setModalOpened(true)}
+                    onClick={handleGetQuote}
                   >
                     Get Quote
                   </Button>
@@ -308,13 +336,13 @@ const Hero = ({ title, content }) => {
       </Container>
 
       {/* Port Modal Component */}
-      <PortComponent
+      {/* <PortComponent
         transportData={memoizedTransportData}
         modalOpened={modalOpened}
         setModalOpened={setModalOpened}
         formHook={formHook}
         transport={activeTransport}
-      />
+      /> */}
     </Box>
   );
 };

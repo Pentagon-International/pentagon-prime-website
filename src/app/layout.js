@@ -8,6 +8,7 @@ import { kumbhSans, theme } from './utils/theme';
 import QueryProvider from './api/QueryProvider';
 import { Notifications } from "@mantine/notifications";
 import '@mantine/notifications/styles.css';
+import '@mantine/dates/styles.css';
 
 
 export const metadata = {

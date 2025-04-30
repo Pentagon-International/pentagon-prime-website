@@ -9,7 +9,6 @@ import Vision from './home/Vision';
 import { fetchEntries } from './utils/fetchEntries';
 import { fetchPrimeNetwork, fetchTradecontent, fetchTradeData } from './utils/trade';
 
-
 const Page = async () => {
   const [heroData, visionData, serviceData, teamData, partnerData , tradeItems , tradeContent, primeNetwork] = await Promise.all([
     fetchEntries("hero"),

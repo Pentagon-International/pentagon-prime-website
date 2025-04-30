@@ -21,28 +21,30 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook, t
   const Icon = isMobile ? IconArrowsDownUp : IconArrowsLeftRight
 
   const notificationShownRef = useRef(false);
+  const [isOriginDestinationSelected, setIsOriginDestinationSelected] = useState(false);
 
   useEffect(() => {
-    if (
-      formHook.values.origin &&
-      formHook.values.destination &&
-      formHook.values.origin === formHook.values.destination &&
-      !notificationShownRef.current
-    ) {
+    if(formHook.values.destination && formHook.values.origin){
+      setIsOriginDestinationSelected(true);
+    }
+  },[formHook.values.origin, formHook.values.destination])
+
+  useEffect(() => {
+    if (isOriginDestinationSelected) {
+      notificationShownRef.current = true;
       notifications.show({
         title: 'Error',
         message: 'Origin and destination cannot be the same',
         color: 'red',
       });
 
-      notificationShownRef.current = true;
       formHook.reset();
 
       setTimeout(() => {
         notificationShownRef.current = false;
       }, 1000);
     }
-  }, [formHook.values.origin, formHook.values.destination]);
+  }, [isOriginDestinationSelected]);
 
   useEffect(() => {
     if (transport === 'sea' && formHook?.values?.typeOfBooking === 'AIR') {
