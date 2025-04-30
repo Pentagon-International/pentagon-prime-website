@@ -8,4 +8,4 @@ const apiCallProtected = axios.create({
     headers: { "Content-Type": "application/json" },
 });
 
-export { apiCallProtected };
+export { apiCallProtected, baseURL };
