@@ -21,7 +21,6 @@ import { useRouter } from "next/navigation";
 const today = dayjs()
 
 const ListAttachments = ({ data = [] }) => {
-  // console.log("FILES : ", data)
   if (!data || data?.length === 0) {
     return null
   }
@@ -34,7 +33,6 @@ const ListAttachments = ({ data = [] }) => {
       icon={<IconPaperclip style={{ width: rem(16), height: rem(16) }} />}
     >
       {data?.map((attachment, index) => {
-        // console.log("attachment url : ",attachment?.url)
         attachment?.url ? (
           <List.Item key={index} py={'xs'}>
             <Anchor href={attachment.url} target='_blank' size='sm'>
@@ -64,11 +62,6 @@ const CustomerRequestForm = (data = {
   const { seaData, airData, setSeaData, setAirData } = useTransportStore();
   const selectData = formValues?.typeOfBooking === 'air' ? airData : seaData
   const router = useRouter();
-
-  // console.log('selectData', selectData)
-
-  // console.log("👆🏻👆🏻👆🏻👆🏻👆🏻 : ", selectData)
-  console.log("...formValues : ", { ...formValues })
   const form = useForm({
     mode: 'controlled',
 
@@ -102,7 +95,6 @@ const CustomerRequestForm = (data = {
     // },
   });
 
-  console.log("form.values : ", form?.values)
   const [errors, setErrors] = useState({})
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [opened, { open, close }] = useDisclosure(false);
@@ -148,13 +140,11 @@ const CustomerRequestForm = (data = {
     },
   });
 
-  // console.log("CodeCategory : ", CodeCategory)
 
   const HsCodeQuery = useQuery({
     queryKey: ["Hs-code", containerList.hs1],
     queryFn: async () => apiCallProtected.get(`/pentagon/categories/h2/${containerList.hs1}`),
     select: (data) => {
-      // console.log("containerList.hs1 : ", containerList.hs1)
       return data.data?.map((item) => ({
         label: `${item.code} - ${item.description}`,
         value: `${item.code}`,
@@ -426,11 +416,6 @@ const CustomerRequestForm = (data = {
     }
   })
 
-  // useEffect(() => {
-  //   console.log('Form values updated:', form.values);
-  // }, [form.values]);
-
-
 
   const submitCustomerRequest = useMutation({
     mutationFn: (data) => apiCallProtected.post('/pentagon/createQuote', data, {
@@ -456,19 +441,14 @@ const CustomerRequestForm = (data = {
   const handleSubmit = (values) => {
     const validationErrors = form.validate();
     if (!validationErrors.hasErrors) {
-      console.log('Form submitted with values:', values);
       submitCustomerRequest.mutate(form.values);
-      router.push('/submitted');
     } else {
-      console.log('Validation errors:', validationErrors.errors);
     }
   };
 
   const handleFileUpload = category => files => {
-    // console.log("HITTTTT")
     const fileObj = new FormData()
 
-    // console.log('>>>>', fileObj)
     fileObj?.append('file', files[0])
     fileUpload.mutate(fileObj, {
 
@@ -1180,7 +1160,6 @@ const CustomerRequestForm = (data = {
             <Grid.Col span={6}>
               <Radio.Group
                 onChange={(isDangerous) => {
-                  // console.log("isDangerous : ", isDangerous)
                   form.setValues((prevValues) => ({
                     ...prevValues,
                     result: prevValues.result
