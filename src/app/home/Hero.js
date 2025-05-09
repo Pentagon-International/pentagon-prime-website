@@ -203,6 +203,7 @@ const Hero = ({ title, content }) => {
                     <Select
                       placeholder="Origin"
                       size="lg"
+                      searchable
                       w={isMobile ? '100%' : '45%'}
                       limit={5}
                       data={formValue?.memoizedTransportData}
@@ -267,6 +268,7 @@ const Hero = ({ title, content }) => {
 
                     <Select
                       placeholder="Destination"
+                      searchable
                       size="lg"
                       limit={5}
                       data={formValue?.memoizedTransportData}

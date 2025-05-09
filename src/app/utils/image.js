@@ -1,6 +1,6 @@
 const Images = {
   Icon: '/logo-pp.png',
-  logo: '/images/logo.png',
+  logo: '/images/PentagonPrime2.png',
   hero: '/images/hero_background.png',
   vector_p: '/images/vector_p.png',
   container: '/images/container.png',

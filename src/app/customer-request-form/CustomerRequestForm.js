@@ -469,6 +469,7 @@ const CustomerRequestForm = (data = {
               <Select
                 withAsterisk
                 label={'Origin'}
+                searchable
                 color={COLORS.secondaryColor}
                 placeholder="Select Origin"
                 size={isMobile ? "md" : "lg"}
@@ -529,6 +530,7 @@ const CustomerRequestForm = (data = {
               <Select
                 label={'Destination'}
                 withAsterisk
+                searchable
                 color={COLORS.secondaryColor}
                 placeholder="Select Destination"
                 size={isMobile ? "md" : "lg"}
