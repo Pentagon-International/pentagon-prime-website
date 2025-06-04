@@ -53,7 +53,8 @@ const Header = () => {
     top: 0,
     left: 0,
     width: "100%",
-    backgroundColor: "#111F40",
+    backgroundColor: "#F0F0F0",
+    boxShadow: "0 0 6px 3px rgba(0, 0, 0, 0.1)",
 
     // isScrolled
     //   ? "rgba(0, 0, 0, 0.7)"
@@ -89,7 +90,7 @@ const Header = () => {
         <header style={headerStyle}>
           <Flex justify="space-between" align="center" h="50">
             <a href="/" style={{ display: "flex", alignItems: "center" }}>
-              <Image src={Images.logo} alt="Logo" h={40} />
+              <Image src={Images.logo} alt="Logo" h={48} mb={5}/>
             </a>
             <Flex h="100%" gap={30} align="center" visibleFrom="sm">
               {navItems.map((item) => (
@@ -103,8 +104,8 @@ const Header = () => {
                 fz={"smx"}
                 radius={"md"}
                 style={{
-                  borderColor: COLORS.primaryColor,
-                  color: COLORS.primaryColor,
+                  borderColor: '#398499',
+                  color: "#398499",
                 }}
                 leftSection={<IconPhone stroke={1.5} size={18} />}
                 onClick={() => router.push("/contact")}
@@ -114,7 +115,7 @@ const Header = () => {
             </Group>
             <Burger
               opened={drawerOpened}
-              color={COLORS.primaryColor}
+              color={COLORS.secondaryColor}
               onClick={toggleDrawer}
               hiddenFrom="sm"
             />
@@ -167,6 +168,7 @@ const Header = () => {
                 <Button
                   variant="outline"
                   size="sm"
+                  radius={"md"}
                   fullWidth
                   style={{
                     borderColor: COLORS.serviceColor,

@@ -257,13 +257,13 @@ export const NavLink = ({ item }) => {
           onMouseEnter={open}
           onMouseLeave={close}
         >
-          <Text size="14px" color={COLORS.primaryColor}>
+          <Text size="14px" color={COLORS.secondaryColor}>
             {item.label}
           </Text>
           {opened ? (
-            <IconChevronUp size={16} color={COLORS.primaryColor} />
+            <IconChevronUp size={16} color={COLORS.secondaryColor} />
           ) : (
-            <IconChevronDown size={16} color={COLORS.primaryColor} />
+            <IconChevronDown size={16} color={COLORS.secondaryColor} />
           )}
         </a>
 
@@ -292,7 +292,7 @@ export const NavLink = ({ item }) => {
     </HoverCard>
   ) : (
     <a href={item.links} style={{ display: "flex", alignItems: "center" }}>
-      <Text size="14px" color={COLORS.primaryColor}>
+      <Text size="14px" color={COLORS.secondaryColor}>
         {item.label}
       </Text>
     </a>
