@@ -31,7 +31,7 @@ const Members = () => {
       try {
         const res = await client.getEntries({
           content_type: 'members',
-          order: 'sys.createdAt',
+          order: 'fields.order',
         });
         setMembers(res.items);
       } catch (error) {
