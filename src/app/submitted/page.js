@@ -2,7 +2,7 @@
 import { Button, Container, Image, Text, Title } from "@mantine/core";
 import { useRouter } from "next/navigation";
 
-const page = async () => {
+const page = () => {
     const router = useRouter();
 
     return (

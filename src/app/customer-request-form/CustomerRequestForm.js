@@ -36,7 +36,7 @@ const ListAttachments = ({ data = [] }) => {
         attachment?.url ? (
           <List.Item key={index} py={'xs'}>
             <Anchor href={attachment.url} target='_blank' size='sm'>
-              {attachment?.url?.split('/')?.pop()} 
+              {attachment?.url?.split('/')?.pop()}
             </Anchor>
           </List.Item>
         ) : null
@@ -46,82 +46,174 @@ const ListAttachments = ({ data = [] }) => {
   )
 }
 
-
 const CustomerRequestForm = (data = {
   type: undefined,
   weight: null,
   size: "20GP",
   containerCount: null,
   list: [],
-},
-  defaultSize = `20GP`,
-  submitCallback = () => null,
-) => {
-
+}, defaultSize = `20GP`, submitCallback = () => null) => {
   const { formValues } = useCustomerRequestStore();
   const { seaData, airData, setSeaData, setAirData } = useTransportStore();
   const selectData = formValues?.typeOfBooking === 'air' ? airData : seaData
   const router = useRouter();
-  const form = useForm({
-    mode: 'controlled',
 
-    initialValues: {
-      typeofShipment: '',
-      // ...formValues 
-      result: [
-        {
-          origin: formValues?.origin || {},
-          destination: formValues?.destination || {},
-          cargo: {
-            isDangerous: false,
-          },
-          unNo: null,
-          imo: null,
-          agents: [
-            "55bf1d1d-66ad-4726-8d72-8b39308792e1"
-          ],
-          stackable: true,
+  // const form = useForm({
+  //   mode: 'controlled',
+  //   initialValues: {
+  //     typeofBooking: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
+  //     category: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
+  //     customer_name: '',
+  //     contact_number: '',
+  //     email: '',
+  //     result: [
+  //       {
+  //         origin: formValues?.origin || {},
+  //         destination: formValues?.destination || {},
+  //         cargo: {
+  //           isDangerous: false,
+  //           remarks: '',
+  //         },
+  //         unNo: null,
+  //         imo: null,
+  //         agents: ["55bf1d1d-66ad-4726-8d72-8b39308792e1"],
+  //         stackable: true,
+  //         documents: [],
+  //         container_details: null
+  //       }
+  //     ]
+  //   },
+  // });
+ const form = useForm({
+  mode: 'controlled',
+  initialValues: {
+    typeofBooking: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
+    category: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
+    customer_name: '',
+    contact_number: '',
+    email: '',
+    result: [
+      {
+        origin: formValues?.origin || {},
+        destination: formValues?.destination || {},
+        cargo: {
+          isDangerous: false,
+          remarks: '',
+        },
+        unNo: null,
+        imo: null,
+        agents: ["55bf1d1d-66ad-4726-8d72-8b39308792e1"],
+        stackable: true,
+        documents: [],
+        container_details: null
+      }
+    ]
+  },
+  validate: (values) => {
+    const errors = {};
+
+    // Basic fields validation
+    if (!values.customer_name) errors.customer_name = 'Name is required';
+    
+    if (!values.contact_number) {
+      errors.contact_number = 'Mobile number is required';
+    } else if (!/^\d{10,15}$/.test(values.contact_number)) {
+      errors.contact_number = 'Invalid mobile number';
+    }
+    
+    if (!values.email) {
+      errors.email = 'Email is required';
+    } else if (!/^\S+@\S+$/.test(values.email)) {
+      errors.email = 'Invalid email';
+    }
+
+    // Result array validation
+    if (values.result && values.result.length > 0) {
+      const resultErrors = [];
+      const firstResult = values.result[0];
+      
+      // Origin validation
+      if (!firstResult.origin || !firstResult.origin.origin) {
+        resultErrors.push({ origin: { origin: 'Origin is required' } });
+      }
+      
+      if (!firstResult.origin || !firstResult.origin.shipment_type) {
+        resultErrors.push({ origin: { shipment_type: 'Shipment terms are required' } });
+      }
+      
+      if (!firstResult.origin || !firstResult.origin.ready_date) {
+        resultErrors.push({ origin: { ready_date: 'Cargo ready date is required' } });
+      }
+      
+      // Destination validation
+      if (!firstResult.destination || !firstResult.destination.destination) {
+        resultErrors.push({ destination: { destination: 'Destination is required' } });
+      }
+      
+      // Container details validation
+      if (!firstResult.container_details) {
+        resultErrors.push({ container_details: 'Cargo details are required' });
+      } else {
+        const bookingType = values.typeofBooking;
+        const containerDetails = firstResult.container_details;
+        
+        if (bookingType === 'FCL') {
+          if (!containerDetails.list || containerDetails.list.length === 0) {
+            resultErrors.push({ container_details: 'At least one container is required' });
+          } else {
+            for (const container of containerDetails.list) {
+              if (!container.size) {
+                resultErrors.push({ container_details: 'Container size is required' });
+                break;
+              }
+              
+              if (container.fields) {
+                for (const field of container.fields) {
+                  if (field.required && !field.value) {
+                    resultErrors.push({ container_details: `${field.label} is required` });
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        } else if (bookingType === 'LCL' || bookingType === 'AIR') {
+          if (!containerDetails.no_of_packages) {
+            resultErrors.push({ container_details: 'Number of packages is required' });
+          }
+          
+          if (!containerDetails.gross_weight) {
+            resultErrors.push({ container_details: 'Gross weight is required' });
+          }
+          
+          if (bookingType === 'LCL' && !containerDetails.volume) {
+            resultErrors.push({ container_details: 'Volume is required for LCL' });
+          }
+          
+          if (bookingType === 'AIR' && !containerDetails.volume_weight) {
+            resultErrors.push({ container_details: 'Volume weight is required for AIR' });
+          }
         }
-      ]
-      // stackable : true
-    },
-    // validateInputOnChange: true,
-    // validate: {
-    //   customer_name: (value) => (value ? null : 'Customer name is required'),
-    //   contact_number: (value) =>
-    //     value && /^\d{10}$/.test(value) ? null : 'Valid contact number is required',
-    //   email: (value) => value && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? null : 'Valid email is required',
-    //   typeofShipment: (value) => (value ? null : 'Type of shipment is required'),
-    // },
-  });
+      }
+      
+      // Dangerous cargo validation
+      if (firstResult.cargo?.isDangerous) {
+        if (!firstResult.imo) {
+          resultErrors.push({ imo: 'IMO class is required for dangerous goods' });
+        }
+        if (!firstResult.unNo) {
+          resultErrors.push({ unNo: 'UN number is required for dangerous goods' });
+        }
+      }
+      
+      if (resultErrors.length > 0) {
+        errors.result = resultErrors.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+      }
+    }
 
-  const [errors, setErrors] = useState({})
-  const isMobile = useMediaQuery('(max-width: 768px)');
-  const [opened, { open, close }] = useDisclosure(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const CustomTitle = () => (
-    <Flex align={"center"} gap={20}>
-      <div style={{ fontSize: 18 }}> Add Cargo Details </div>
-    </Flex>
-  );
-
-  const Icon = isMobile ? IconArrowsDownUp : IconArrowsLeftRight
-
-
-  const [containerList, setContainerList] = useState({
-    commodity: data?.commodity,
-    type: data?.type,
-    dimension: data?.dimension || "M",
-    weight: data?.weight || null,
-    hsCode: data?.hsCode || null,
-    hsCode2: data?.hsCode2 || null,
-    hs1: data?.hs1 || null,
-    hs2: data?.hs2 || null,
-    size: data?.size || null,
-    containerCount: data?.containerCount || null,
-    list: data?.list || [],
-  });
-
+    return errors;
+  }
+});
 
   const CodeCategory = useQuery({
     queryKey: ["hs-code-category"],
@@ -140,28 +232,37 @@ const CustomerRequestForm = (data = {
     },
   });
 
-
-  const HsCodeQuery = useQuery({
-    queryKey: ["Hs-code", containerList.hs1],
-    queryFn: async () => apiCallProtected.get(`/pentagon/categories/h2/${containerList.hs1}`),
-    select: (data) => {
-      return data.data?.map((item) => ({
-        label: `${item.code} - ${item.description}`,
-        value: `${item.code}`,
-      }))
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-    enabled: containerList?.hsCode ? true : false,
+  const [errors, setErrors] = useState({})
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const [openedModal, setOpenedModal] = useState(null);
+  const openModal = (type) => setOpenedModal(type);
+  const closeModal = () => setOpenedModal(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [containerList, setContainerList] = useState({
+    commodity: data?.commodity,
+    type: data?.type,
+    dimension: data?.dimension || "M",
+    weight: data?.weight || null,
+    hsCode: data?.hsCode || null,
+    hsCode2: data?.hsCode2 || null,
+    hs1: data?.hs1 || null,
+    hs2: data?.hs2 || null,
+    size: data?.size || null,
+    containerCount: data?.containerCount || null,
+    list: data?.list || [],
   });
-
   const [activeType, setActiveType] = useState(data?.type || "GC");
   const [activeSize, setActiveSize] = useState(defaultSize);
   const [selectedSize, setSelectedSize] = useState([]);
-  const [activeDimension, setActiveDimension] = useState(
-    data?.dimension || "M"
+  const [activeDimension, setActiveDimension] = useState(data?.dimension || "M");
+
+  const CustomTitle = () => (
+    <Flex align={"center"} gap={20}>
+      <div style={{ fontSize: 18 }}> Add Cargo Details </div>
+    </Flex>
   );
+
+  const Icon = isMobile ? IconArrowsDownUp : IconArrowsLeftRight
 
   useEffect(() => {
     if (TypesWithContainers.includes(activeType)) {
@@ -212,7 +313,6 @@ const CustomerRequestForm = (data = {
     },
   });
 
-
   const shipmentTermsQuery = useQuery({
     queryKey: ["shipment-types"],
     queryFn: async () => {
@@ -230,36 +330,50 @@ const CustomerRequestForm = (data = {
     },
   });
 
+  const segmantData =
+    formValues?.activeTransport === "sea"
+      ? [
+        {
+          value: 'FCL',
+          label: (
+            <Center style={{ gap: 10 }}>
+              <IconBox size={20} stroke={1.5} />
+              <span>FCL</span>
+            </Center>
+          ),
+        },
+        {
+          value: 'LCL',
+          label: (
+            <Center style={{ gap: 10 }}>
+              <IconSquareHalf size={20} stroke={1.5} />
+              <span>LCL</span>
+            </Center>
+          ),
+        },
+      ]
+      : [
+        {
+          value: 'AIR',
+          label: (
+            <Center style={{ gap: 10 }}>
+              <IconPlane size={20} stroke={1.5} />
+              <span>Air</span>
+            </Center>
+          ),
+        },
+      ];
 
-  const segmantData = [
-    {
-      value: 'FCL',
-      label: (
-        <Center style={{ gap: 10 }}>
-          <IconBox size={20} stroke={1.5} />
-          <span>FCL</span>
-        </Center>
-      ),
-    },
-    {
-      value: 'LCL',
-      label: (
-        <Center style={{ gap: 10 }}>
-          <IconSquareHalf size={20} stroke={1.5} />
-          <span>LCL</span>
-        </Center>
-      ),
-    },
-    {
-      value: 'AIR',
-      label: (
-        <Center style={{ gap: 10 }}>
-          <IconPlane size={20} stroke={1.5} />
-          <span>Air</span>
-        </Center>
-      ),
-    },
-  ]
+  const handleAddCargoClick = () => {
+    const bookingType = form.values.typeofBooking;
+    if (bookingType === 'FCL') {
+      openModal('FCL');
+    } else if (bookingType === 'LCL') {
+      openModal('LCL');
+    } else if (bookingType === 'AIR') {
+      openModal('AIR');
+    }
+  };
 
   const swapOriginDestination = () => {
     const currentOrigin = form?.values?.result?.[0]?.origin;
@@ -277,16 +391,16 @@ const CustomerRequestForm = (data = {
           origin: {
             ...currentDestination,
             origin: currentDestination.destination,
-            shipment_type: currentOrigin.shipment_type, // Keep shipment_type from origin
-            ready_date: currentOrigin.ready_date, // Keep ready_date from origin
-            pickup: currentOrigin.pickup, // Keep pickup from origin
+            shipment_type: currentOrigin.shipment_type,
+            ready_date: currentOrigin.ready_date,
+            pickup: currentOrigin.pickup,
           },
           destination: {
             ...currentOrigin,
             destination: currentOrigin.origin,
-            delivery: currentDestination.delivery, // Keep delivery from destination
-            customs: currentDestination.customs, // Keep customs from destination
-            address: currentDestination.address, // Keep address from destination
+            delivery: currentDestination.delivery,
+            customs: currentDestination.customs,
+            address: currentDestination.address,
           },
         },
       ];
@@ -296,9 +410,21 @@ const CustomerRequestForm = (data = {
         result: updatedResult,
       };
     });
-
   };
-
+  const HsCodeQuery = useQuery({
+    queryKey: ["Hs-code", containerList.hs1],
+    queryFn: async () => apiCallProtected.get(`/pentagon/categories/h2/${containerList.hs1}`),
+    select: (data) => {
+      return data.data?.map((item) => ({
+        label: `${item.code} - ${item.description}`,
+        value: `${item.code}`,
+      }))
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+    enabled: containerList?.hsCode ? true : false,
+  });
   const addNewContainer = () => {
     setContainerList((st) => {
       const newContainer = getContainerFields(st.type, st.dimension);
@@ -381,7 +507,6 @@ const CustomerRequestForm = (data = {
       }),
     onSuccess: (values) => {
       try {
-
         form.setValues((prevValues) => {
           const existingDocuments = prevValues?.result?.[0]?.documents || [];
           const updatedResult = [
@@ -416,44 +541,290 @@ const CustomerRequestForm = (data = {
     }
   })
 
-
   const submitCustomerRequest = useMutation({
     mutationFn: (data) => apiCallProtected.post('/pentagon/createQuote', data, {
       headers: {
         'x-client-secret': 'jwooF70KzT/gssKNwJVnr522+MaomDhgpocmcvF6ek2e7rI9he9m7guYU6i0OkoQkxu5DHjBgcVVUIgzl9bf0xnBLIgFh69x/uVfJWExIlLcgpLoNwlABxxhXFQmA/0H'
-        // 'Content-Type': 'multipart/form-data'
       }
     }),
     onSuccess: (res) => {
       router.push('/submitted');
     },
     onError: (error) => {
+      console.error('Submission error:', error);
     },
-    onSettled: () => {
-    }
   });
-
-  // Ensure formHook is not null before accessing its methods
-  // if (!formHook) {
-  //   return <div>Loading...</div>; // Show a loading state if formHook is not available yet
-  // }
-
-  const handleSubmit = (values) => {
-    const validationErrors = form.validate();
-    if (!validationErrors.hasErrors) {
-      submitCustomerRequest.mutate(form.values);
-    } else {
-    }
-  };
 
   const handleFileUpload = category => files => {
     const fileObj = new FormData()
-
     fileObj?.append('file', files[0])
-    fileUpload.mutate(fileObj, {
-
-    })
+    fileUpload.mutate(fileObj)
   }
+
+  // const handleSubmit = (values) => {
+  //   if (!form.isValid()) {
+  //     form.validate();
+  //     return;
+  //   }
+  //   const bookingType = values.typeofBooking;
+  //   const isAir = bookingType === 'AIR';
+  //   const isFCL = bookingType === 'FCL';
+  //   const isLCL = bookingType === 'LCL';
+
+  //   // Common payload structure
+  //   const payload = {
+  //     customer_name: values.customer_name,
+  //     contact_number: values.contact_number,
+  //     email: values.email,
+  //     typeofBooking: bookingType,
+  //     category: bookingType,
+  //     result: [
+  //       {
+  //         origin: {
+  //           origin: values.result[0]?.origin?.origin,
+  //           name: values.result[0]?.origin?.name,
+  //           port: values.result[0]?.origin?.port,
+  //           code: values.result[0]?.origin?.code,
+  //           pickup: values.result[0]?.origin?.pickup || false,
+  //           customs: values.result[0]?.origin?.customs || false,
+  //           address: values.result[0]?.origin?.address,
+  //           ready_date: values.result[0]?.origin?.ready_date
+  //             ? new Date(values.result[0]?.origin?.ready_date).toISOString()
+  //             : null,
+  //           shipment_type: values.result[0]?.origin?.shipment_type,
+  //         },
+  //         destination: {
+  //           destination: values.result[0]?.destination?.destination,
+  //           name: values.result[0]?.destination?.name,
+  //           port: values.result[0]?.destination?.port,
+  //           code: values.result[0]?.destination?.code,
+  //           delivery: values.result[0]?.destination?.delivery || false,
+  //           customs: values.result[0]?.destination?.customs || false,
+  //           address: values.result[0]?.destination?.address,
+  //         },
+  //         cargo: {
+  //           isDangerous: values.result[0]?.cargo?.isDangerous || false,
+  //           remarks: values.result[0]?.cargo?.remarks || "",
+  //         },
+  //         isInsurance: values.result[0]?.isInsurance || false,
+  //         stackable: values.result[0]?.stackable || true,
+  //         imo: values.result[0]?.imo,
+  //         unNo: values.result[0]?.unNo,
+  //         agents: values.result[0]?.agents || ["55bf1d1d-66ad-4726-8d72-8b39308792e1"],
+  //         documents: values.result[0]?.documents || [],
+  //       }
+  //     ]
+  //   };
+
+  //   // Add booking type specific fields
+  //   if (isFCL) {
+  //     payload.result[0].container_details = {
+  //       commodity: containerList.commodity,
+  //       type: containerList.type,
+  //       dimension: containerList.dimension,
+  //       weight: containerList.weight,
+  //       hsCode: containerList.hsCode,
+  //       hsCode2: containerList.hsCode2,
+  //       hs1: containerList.hs1,
+  //       hs2: containerList.hs2,
+  //       size: containerList.size,
+  //       containerCount: containerList.containerCount,
+  //       list: containerList.list?.map(item => ({
+  //         size: item.size,
+  //         fields: item.fields?.map(field => ({
+  //           label: field.label,
+  //           value: field.value,
+  //           checked: field.checked,
+  //           type: field.type
+  //         }))
+  //       }))
+  //     };
+  //   } else if (isLCL) {
+  //     payload.result[0].container_details = {
+  //       commodity: containerList.commodity,
+  //       type: 'LCL',
+  //       dimension: containerList.dimension,
+  //       weight: containerList.weight,
+  //       hsCode: containerList.hsCode,
+  //       hsCode2: containerList.hsCode2,
+  //       hs1: containerList.hs1,
+  //       hs2: containerList.hs2,
+  //       size: containerList.size,
+  //       containerCount: containerList.containerCount,
+  //       list: [
+  //         {
+  //           "no_of_package": containerList.no_of_packages,
+  //           "gross_weight": containerList.gross_weight,
+  //           "volume": containerList.volume
+  //         }
+  //       ]
+  //     };
+  //   } else if (isAir) {
+  //     payload.result[0].container_details = {
+  //       commodity: containerList.commodity,
+  //       type: 'AIR',
+  //       dimension: containerList.dimension,
+  //       weight: containerList.weight,
+  //       hsCode: containerList.hsCode,
+  //       hsCode2: containerList.hsCode2,
+  //       hs1: containerList.hs1,
+  //       hs2: containerList.hs2,
+  //       size: containerList.size,
+  //       containerCount: containerList.containerCount,
+  //       list: [
+  //         {
+  //           "no_of_package": containerList.no_of_packages,
+  //           "gross_weight": containerList.gross_weight,
+  //           "volume_weight": containerList.volume_weight
+  //         }
+  //       ]
+  //     };
+  //   }
+
+  //   submitCustomerRequest.mutate(payload);
+  // };
+
+  // const handleFileUpload = category => files => {
+  //   const fileObj = new FormData()
+
+  //   fileObj?.append('file', files[0])
+  //   fileUpload.mutate(fileObj, {
+
+  //   })
+  // }
+
+  const handleSubmit = (values) => {
+  // Validate all fields
+  form.validate();
+
+  // Check if form is valid
+  if (!form.isValid()) {
+    // Focus the first invalid field
+    const firstError = Object.keys(form.errors)[0];
+    if (firstError) {
+      document.querySelector(`[name="${firstError}"]`)?.focus();
+    }
+    return; // Stop submission
+  }
+
+  // Proceed with submission logic
+  const bookingType = values.typeofBooking;
+  const isAir = bookingType === 'AIR';
+  const isFCL = bookingType === 'FCL';
+  const isLCL = bookingType === 'LCL';
+
+  // ... rest of your payload construction
+  const payload = {
+    customer_name: values.customer_name,
+    contact_number: values.contact_number,
+    email: values.email,
+    typeofBooking: bookingType,
+    category: bookingType,
+    result: [
+      {
+        origin: {
+          origin: values.result[0]?.origin?.origin,
+          name: values.result[0]?.origin?.name,
+          port: values.result[0]?.origin?.port,
+          code: values.result[0]?.origin?.code,
+          pickup: values.result[0]?.origin?.pickup || false,
+          customs: values.result[0]?.origin?.customs || false,
+          address: values.result[0]?.origin?.address,
+          ready_date: values.result[0]?.origin?.ready_date
+            ? new Date(values.result[0]?.origin?.ready_date).toISOString()
+            : null,
+          shipment_type: values.result[0]?.origin?.shipment_type,
+        },
+        destination: {
+          destination: values.result[0]?.destination?.destination,
+          name: values.result[0]?.destination?.name,
+          port: values.result[0]?.destination?.port,
+          code: values.result[0]?.destination?.code,
+          delivery: values.result[0]?.destination?.delivery || false,
+          customs: values.result[0]?.destination?.customs || false,
+          address: values.result[0]?.destination?.address,
+        },
+        cargo: {
+          isDangerous: values.result[0]?.cargo?.isDangerous || false,
+          remarks: values.result[0]?.cargo?.remarks || "",
+        },
+        isInsurance: values.result[0]?.isInsurance || false,
+        stackable: values.result[0]?.stackable || true,
+        imo: values.result[0]?.imo,
+        unNo: values.result[0]?.unNo,
+        agents: values.result[0]?.agents || ["55bf1d1d-66ad-4726-8d72-8b39308792e1"],
+        documents: values.result[0]?.documents || [],
+      }
+    ]
+  };
+
+  // Add booking type specific fields
+  if (isFCL) {
+    payload.result[0].container_details = {
+      commodity: containerList.commodity,
+      type: containerList.type,
+      dimension: containerList.dimension,
+      weight: containerList.weight,
+      hsCode: containerList.hsCode,
+      hsCode2: containerList.hsCode2,
+      hs1: containerList.hs1,
+      hs2: containerList.hs2,
+      size: containerList.size,
+      containerCount: containerList.containerCount,
+      list: containerList.list?.map(item => ({
+        size: item.size,
+        fields: item.fields?.map(field => ({
+          label: field.label,
+          value: field.value,
+          checked: field.checked,
+          type: field.type
+        }))
+      }))
+    };
+  } else if (isLCL) {
+    payload.result[0].container_details = {
+      commodity: containerList.commodity,
+      type: 'LCL',
+      dimension: containerList.dimension,
+      weight: containerList.weight,
+      hsCode: containerList.hsCode,
+      hsCode2: containerList.hsCode2,
+      hs1: containerList.hs1,
+      hs2: containerList.hs2,
+      size: containerList.size,
+      containerCount: containerList.containerCount,
+      list: [
+        {
+          "no_of_package": containerList.no_of_packages,
+          "gross_weight": containerList.gross_weight,
+          "volume": containerList.volume
+        }
+      ]
+    };
+  } else if (isAir) {
+    payload.result[0].container_details = {
+      commodity: containerList.commodity,
+      type: 'AIR',
+      dimension: containerList.dimension,
+      weight: containerList.weight,
+      hsCode: containerList.hsCode,
+      hsCode2: containerList.hsCode2,
+      hs1: containerList.hs1,
+      hs2: containerList.hs2,
+      size: containerList.size,
+      containerCount: containerList.containerCount,
+      list: [
+        {
+          "no_of_package": containerList.no_of_packages,
+          "gross_weight": containerList.gross_weight,
+          "volume_weight": containerList.volume_weight
+        }
+      ]
+    };
+  }
+
+  submitCustomerRequest.mutate(payload);
+};
 
   return (
     <>
@@ -467,6 +838,7 @@ const CustomerRequestForm = (data = {
           <Grid px={'13%'}>
             <Grid.Col span={isMobile ? 12 : 5}>
               <Select
+                error={form.errors?.result?.[0]?.origin?.origin} 
                 withAsterisk
                 label={'Origin'}
                 searchable
@@ -474,7 +846,8 @@ const CustomerRequestForm = (data = {
                 placeholder="Select Origin"
                 size={isMobile ? "md" : "lg"}
                 limit={5}
-                data={selectData}
+                // data={selectData}
+                data={formValues?.memoizedTransportData}
                 fw={500}
                 styles={{
                   input: {
@@ -514,7 +887,7 @@ const CustomerRequestForm = (data = {
               <Flex w={'100%'} h={'100%'} justify={'center'} align={'center'}>
                 <ActionIcon
                   mt={32}
-                  withAsterisk
+                  // withAsterisk
                   variant="default"
                   size={28}
                   radius="xl"
@@ -528,13 +901,15 @@ const CustomerRequestForm = (data = {
             </Grid.Col>
             <Grid.Col span={isMobile ? 12 : 5} >
               <Select
+                error={form.errors?.result?.[0]?.destination?.destination}
                 label={'Destination'}
                 withAsterisk
                 searchable
                 color={COLORS.secondaryColor}
                 placeholder="Select Destination"
                 size={isMobile ? "md" : "lg"}
-                data={selectData}
+                // data={selectData}
+                data={formValues?.memoizedTransportData}
                 limit={5}
                 fw={500}
                 value={form?.values?.result?.[0]?.destination?.destination}
@@ -571,24 +946,23 @@ const CustomerRequestForm = (data = {
                 }}
               />
             </Grid.Col>
+
+
             <Grid.Col span={12}>
               <Text size="sm" fw={500} mb={3} mt={'xs'}>
                 Type of Booking
               </Text>
               <SegmentedControl
                 name="typeofBooking"
-                // onChange={(val) => {
-                //   form.setFieldValue('typeOfBooking', val);
-                // }}
                 key={form.key('typeofBooking')}
                 {...form.getInputProps('typeofBooking')}
-                onChange={((typeofBooking) => {
+                onChange={(typeofBooking) => {
                   form.setValues((prevValues) => ({
                     ...prevValues,
                     typeofBooking: typeofBooking,
                     category: typeofBooking
                   }));
-                })}
+                }}
                 fullWidth
                 size={isMobile ? '12px' : "14px"}
                 radius={'md'}
@@ -605,6 +979,8 @@ const CustomerRequestForm = (data = {
                 }}
               />
             </Grid.Col>
+
+
             <Grid.Col span={isMobile ? 12 : 6}>
               <TextInput
                 color={COLORS.portColor}
@@ -626,6 +1002,7 @@ const CustomerRequestForm = (data = {
                 radius="md"
                 key={form.key('customer_name')}
                 {...form.getInputProps('customer_name')}
+                error={form.errors.customer_name}
               />
             </Grid.Col>
             <Grid.Col span={isMobile ? 12 : 6}>
@@ -676,69 +1053,12 @@ const CustomerRequestForm = (data = {
               // error={errors.email}
               />
             </Grid.Col>
-            {/* <Grid.Col span={isMobile ? 12 : 6}>
-            <Select
-              withAsterisk
-              label="Select a Sales Person"
-              placeholder="Sales Person Name"
-              size={isMobile ? "md" : "lg"}
-              withScrollArea={false}
-              data={salesPersonQuery?.data || []}
-              // onChange={(v, opt) => formHook?.setFieldValue('referred_by', v)}
-              // value={(formHook.values.referred_by || '').toString()}
-              searchable
-              clearable
-              comboboxProps={{ shadow: 'md' }}
-              key={form.key('referred_by')}
-              {...form.getInputProps('referred_by')}
-              styles={{
-                dropdown: { maxHeight: 200, overflowY: 'auto' },
-                option: {
-                  fontSize: isMobile ? '14px' : '16px',
-                },
-                input: {
-                  fontSize: isMobile ? '14px' : '16px',
-                },
-                label: {
-                  fontSize: isMobile ? '14px' : '16px',
-                },
-                error: {
-                  fontSize: isMobile ? '12px' : '14px',
-                }
-              }}
-              radius="md"
-            />
-          </Grid.Col>
-          <Grid.Col span={isMobile ? 12 : 6}>
-            <TextInput
-              color={COLORS.portColor}
-              placeholder="Enter Reference"
-              size={isMobile ? "md" : "lg"}
-              // w={isMobile ? '100%' : '50%'}
-              label="Reference"
-              withAsterisk
-              styles={{
-                input: {
-                  fontSize: isMobile ? '14px' : '16px',
-                },
-                label: {
-                  fontSize: isMobile ? '14px' : '16px',
-                },
-                error: {
-                  fontSize: isMobile ? '12px' : '14px',
-                }
-              }}
-              radius="md"
-              {...form.getInputProps('reference')}
-              key={form.key('reference')}
-              error={errors.name}
-            />
-          </Grid.Col> */}
+
             <Grid.Col span={isMobile ? 12 : 6}>
               <Select
                 withAsterisk
-                label="Type of Shipment"
-                placeholder="Select Type of Shipment"
+                label="Shipment Terms"
+                placeholder="Select Shipment Terms"
                 size={isMobile ? "md" : "lg"}
                 withScrollArea={false}
                 data={shipmentTermsQuery?.data || []}
@@ -777,6 +1097,7 @@ const CustomerRequestForm = (data = {
                   }
                 }}
                 radius="md"
+                error={form.errors?.result?.[0]?.origin?.origin}
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -858,7 +1179,7 @@ const CustomerRequestForm = (data = {
                 name={'pickup'}
                 size='sm'
                 labelPosition='left'
-                label='Door Pickup ?'
+                label='Origin Pickup ?'
                 description='Local charges included (BL fee, document charges & terminal handling charges). Enable this to enter pickup address below'
                 styles={{
                   body: {
@@ -920,13 +1241,7 @@ const CustomerRequestForm = (data = {
                 }}
               />
             </Grid.Col>
-            {/* {form?.values?.pickup === true ? ( */}
-            {/* <Grid.Col span={6}> */}
 
-            {/* </Grid.Col> */}
-            {/* )
-            : <Grid.Col span={6}></Grid.Col>} */}
-            {/* <Grid.Col span={6}></Grid.Col> */}
             <Grid.Col span={6}>
               <Switch
                 mt={'md'}
@@ -1018,7 +1333,7 @@ const CustomerRequestForm = (data = {
                 name={'isOriginCustoms'}
                 size='sm'
                 labelPosition='left'
-                label='Origin Customs ?'
+                label='Origin Customs Clearance ?'
                 onChange={(customs) => {
                   form.setValues((prevValues) => ({
                     ...prevValues,
@@ -1059,16 +1374,13 @@ const CustomerRequestForm = (data = {
                 }}
               />
             </Grid.Col>
-            {/* {form?.values?.pickup === true ? ( */}
-            {/* <Grid.Col span={6}>
-              
-            </Grid.Col> */}
+
             <Grid.Col span={6}>
               <Switch
                 size='sm'
                 name='isDestinationCustoms'
                 labelPosition='left'
-                label='Destination Customs ?'
+                label='Destination Customs Clearance ?'
                 mt={'md'}
                 mb={'md'}
                 onChange={(customs) => {
@@ -1118,7 +1430,7 @@ const CustomerRequestForm = (data = {
                 size='sm'
                 name='isInsurance'
                 labelPosition='left'
-                label='Insurance Covered?'
+                label='Insurance Covered ?'
                 description='Insurance covered ( Provided by Pentagon Prime Global )'
                 mt={'md'}
                 mb={'md'}
@@ -1160,8 +1472,17 @@ const CustomerRequestForm = (data = {
               />
             </Grid.Col>
             <Grid.Col span={6}>
-              <Radio.Group
-                onChange={(isDangerous) => {
+
+              <Switch
+                size="sm"
+                name="isDangerous"
+                labelPosition="left"
+                label="Hazardous?"
+                mt="md"
+                mb="md"
+                checked={form.values.result?.[0]?.cargo?.isDangerous || false}
+                onChange={(event) => {
+                  const isDangerous = event.currentTarget.checked;
                   form.setValues((prevValues) => ({
                     ...prevValues,
                     result: prevValues.result
@@ -1170,28 +1491,41 @@ const CustomerRequestForm = (data = {
                           ...prevValues.result[0],
                           cargo: {
                             ...prevValues.result[0]?.cargo,
-                            isDangerous: isDangerous == 'd' ? true : false,
+                            isDangerous,
                           },
                         },
                       ]
                       : [],
                   }));
                 }}
-                label="Unit of Volume"
-                withAsterisk
-                color={COLORS.primaryColor}
-                mb="lg"
-              >
-                <Group mt={"md"} justify="space-around">
-                  <Radio value="nd" label="Non-Hazardous" />
-                  <Radio value="d" label="Hazardous" />
-                </Group>
-              </Radio.Group>
+                styles={{
+                  body: {
+                    justifyContent: 'space-between',
+                  },
+                  dropdown: { maxHeight: 200, overflowY: 'auto' },
+                  option: {
+                    fontSize: isMobile ? '14px' : '16px',
+                  },
+                  input: {
+                    fontSize: isMobile ? '14px' : '16px',
+                  },
+                  label: {
+                    fontSize: isMobile ? '14px' : '16px',
+                  },
+                  error: {
+                    fontSize: isMobile ? '12px' : '14px',
+                  },
+                  description: {
+                    fontSize: isMobile ? '14px' : '14px',
+                  },
+                }}
+              />
+
             </Grid.Col>
             <Grid.Col span={12}>
               <Button
                 fullWidth
-                onClick={open}
+                onClick={handleAddCargoClick}
                 leftSection={<IconPlus />}
               >
                 Add Cargo Details {form?.values?.result?.[0]?.container_details
@@ -1395,6 +1729,7 @@ const CustomerRequestForm = (data = {
                 <Button t={30}
                   // size='lg'
                   fw={600}
+                  disabled={!form.isValid()}
                   radius={'8px'}
                   styles={{
                     label: {
@@ -1413,21 +1748,20 @@ const CustomerRequestForm = (data = {
           </Grid>
         </Container>
 
-
-        <Modal opened={opened}
-          onClose={close} size="70%" title={<CustomTitle />} centered
-        // onClose={handleClose}
+        <Modal
+          opened={openedModal !== null}
+          onClose={closeModal}
+          size="70%"
+          title={<CustomTitle />}
+          centered
         >
           <Grid gutter="sm">
+            {/* Common Fields */}
             <Grid.Col span={6}>
               <Select
-                withAsterisk
                 size={isMobile ? "md" : "lg"}
                 placeholder="Choose cargo type"
-                required
-                onChange={(v) => {
-                  setActiveType(v)
-                }}
+                onChange={(v) => setActiveType(v)}
                 searchable
                 label="Cargo Type"
                 value={activeType}
@@ -1449,46 +1783,20 @@ const CustomerRequestForm = (data = {
                 placeholder="Enter Commodity"
                 size={isMobile ? "md" : "lg"}
                 label="Commodity"
-                // onChange={(commodity) => {
-                //   form.setValues((prevValues) => ({
-                //     ...prevValues,
-                //     result: prevValues.result
-                //       ? [
-                //         {
-                //           ...prevValues.result[0],
-                //           container_details: {
-                //             ...prevValues.result[0]?.container_details,
-                //             commodity: commodity.target.value,
-                //           },
-                //         },
-                //       ]
-                //       : [],
-                //   }));
-                // }}
                 withAsterisk
                 styles={{
-                  input: {
-                    fontSize: isMobile ? '14px' : '16px',
-                  },
-                  label: {
-                    fontSize: isMobile ? '14px' : '16px',
-                  },
-                  error: {
-                    fontSize: isMobile ? '12px' : '14px',
-                  }
+                  input: { fontSize: isMobile ? '14px' : '16px' },
+                  label: { fontSize: isMobile ? '14px' : '16px' },
+                  error: { fontSize: isMobile ? '12px' : '14px' }
                 }}
                 radius="md"
                 value={containerList.commodity}
-                onChange={(e) => {
-                  setContainerList((st) => ({ ...st, commodity: e.target.value }))
-                }
-                }
+                onChange={(e) => setContainerList((st) => ({ ...st, commodity: e.target.value }))}
               />
             </Grid.Col>
 
             <Grid.Col span={6}>
               <Select
-                withAsterisk
                 label="HS Code Category"
                 placeholder="Select HS Code Category"
                 size={isMobile ? "md" : "lg"}
@@ -1505,23 +1813,6 @@ const CustomerRequestForm = (data = {
                   error: { fontSize: isMobile ? '12px' : '14px' }
                 }}
                 radius="md"
-                // onChange={(value) => setSelectedCategory(value)}
-                // onChange={(hsCode) => {
-                //   form.setValues((prevValues) => ({
-                //     ...prevValues,
-                //     result: prevValues.result
-                //       ? [
-                //         {
-                //           ...prevValues.result[0],
-                //           container_details: {
-                //             ...prevValues.result[0]?.container_details,
-                //             hsCode: hsCode,
-                //           },
-                //         },
-                //       ]
-                //       : [],
-                //   }));
-                // }}
                 value={containerList.hs1}
                 onChange={(v, opt) => {
                   setContainerList((st) => ({
@@ -1542,7 +1833,6 @@ const CustomerRequestForm = (data = {
                   withScrollArea={false}
                   data={HsCodeQuery?.data || []}
                   placeholder="Select HS Code"
-                  // disabled={!selectedCategory}
                   styles={{
                     dropdown: { maxHeight: 200, overflowY: 'auto' },
                     option: { fontSize: isMobile ? '14px' : '16px' },
@@ -1563,165 +1853,277 @@ const CustomerRequestForm = (data = {
               </Grid.Col>
             ) : null}
 
-            <ScrollArea mah={250} mih={0} type="always" w="100%">
-              <Grid.Col span={12}>
+            {/* FCL Specific Fields */}
+            {openedModal === 'FCL' && (
+              <ScrollArea mah={250} mih={0} type="always" w="100%">
+                <Grid.Col span={12}>
+                  <Flex justify="space-between" align="center" mb="xs">
+                    <Text size="sm" fw={500}>
+                      Containers
+                    </Text>
 
-                <Flex justify="space-between" align="center" mb="xs">
-                  <Text size="sm" fw={500}>
-                    Containers
-                  </Text>
+                    {selectedSize.length - 1 < contSize.length && (
+                      <Button
+                        size="sm"
+                        variant="subtle"
+                        onClick={addNewContainer}
+                        leftSection={<IconPlus size={16} />}
+                      >
+                        Add Container
+                      </Button>
+                    )}
+                  </Flex>
 
-                  {selectedSize.length - 1 < contSize.length && (
-                    <Button
-                      size="sm"
-                      variant="subtle"
-                      onClick={addNewContainer}
-                      leftSection={<IconPlus size={16} />}
-                    >
-                      Add Container
-                    </Button>
-                  )}
-                </Flex>
+                  {containerList?.list?.map((item, i) => {
+                    if (!item) return null;
+                    return (
+                      <Grid key={i} w="100%" p="xs">
+                        <Grid.Col span={3}>
+                          <Select
+                            label="Container Size"
+                            w="auto"
+                            data={contSize}
+                            value={item.size}
+                            onChange={(v) => handleSizeChange(i, v)}
+                            required
+                            styles={{
+                              dropdown: { maxHeight: 200, overflowY: 'auto' },
+                              option: { fontSize: isMobile ? '14px' : '16px' },
+                              input: { fontSize: isMobile ? '14px' : '16px' },
+                              label: { fontSize: isMobile ? '14px' : '16px' },
+                              error: { fontSize: isMobile ? '12px' : '14px' }
+                            }}
+                            radius="md"
+                            size={isMobile ? "md" : "sm"}
+                          />
+                        </Grid.Col>
 
-                {containerList?.list?.map((item, i) => {
-                  if (!item) return null;
-                  return (
-                    <Grid key={i} w="100%" p="xs">
-                      <Grid.Col span={3}>
-                        <Select
-                          label="Container Size"
-                          w="auto"
-                          data={contSize}
-                          value={item.size}
-                          onChange={(v) => handleSizeChange(i, v)}
-                          required
-                          styles={{
-                            dropdown: { maxHeight: 200, overflowY: 'auto' },
-                            option: { fontSize: isMobile ? '14px' : '16px' },
-                            input: { fontSize: isMobile ? '14px' : '16px' },
-                            label: { fontSize: isMobile ? '14px' : '16px' },
-                            error: { fontSize: isMobile ? '12px' : '14px' }
-                          }}
-                          radius="md"
-                          size={isMobile ? "md" : "sm"}
-                        />
-                      </Grid.Col>
+                        {item?.fields?.map((field, j, arr) => {
+                          const inputSize = arr.length > 2 ? 'auto' : 'auto';
 
-                      {item?.fields?.map((field, j, arr) => {
-                        const inputSize = arr.length > 2 ? 'auto' : 'auto';
-
-                        if (field.type === types.DROPDOWN) {
-                          return (
-                            <Grid.Col span={3} key={j}>
-                              <Select
-                                w={inputSize}
-                                label={field.label}
-                                value={field.value}
-                                onChange={handleFields(i, j)}
-                                {...(field.options || {})}
-                                styles={{
-                                  dropdown: { maxHeight: 200, overflowY: 'auto' },
-                                  option: { fontSize: isMobile ? '14px' : '16px' },
-                                  input: { fontSize: isMobile ? '14px' : '16px' },
-                                  label: { fontSize: isMobile ? '14px' : '16px' },
-                                  error: { fontSize: isMobile ? '12px' : '14px' }
-                                }}
-                                radius="md"
-                                size={isMobile ? "md" : "sm"}
-                              />
-                            </Grid.Col>
-                          );
-                        }
-
-                        if (field.type === types.NUMBER) {
-                          return (
-                            <Grid.Col span={3} key={j}>
-                              <NumberInput
-                                w={inputSize}
-                                hideControls
-                                label={field.label}
-                                value={field.value}
-                                onChange={handleFields(i, j)}
-                                {...(field.options || {})}
-                                styles={{
-                                  option: { fontSize: isMobile ? '14px' : '16px' },
-                                  input: { fontSize: isMobile ? '14px' : '16px' },
-                                  label: { fontSize: isMobile ? '14px' : '16px' },
-                                  error: { fontSize: isMobile ? '12px' : '14px' }
-                                }}
-                                radius="md"
-                                size={isMobile ? "md" : "sm"}
-                              />
-                            </Grid.Col>
-                          );
-                        }
-
-                        if (field.type === types.CHECKBOX) {
-                          return (
-                            <Grid.Col span={2} key={j} mt={44}>
-                              <Flex h="100%" alignItems="center">
-                                <Checkbox
-                                  size="sm"
+                          if (field.type === types.DROPDOWN) {
+                            return (
+                              <Grid.Col span={3} key={j}>
+                                <Select
+                                  w={inputSize}
                                   label={field.label}
-                                  checked={field.checked}
+                                  value={field.value}
                                   onChange={handleFields(i, j)}
+                                  {...(field.options || {})}
+                                  styles={{
+                                    dropdown: { maxHeight: 200, overflowY: 'auto' },
+                                    option: { fontSize: isMobile ? '14px' : '16px' },
+                                    input: { fontSize: isMobile ? '14px' : '16px' },
+                                    label: { fontSize: isMobile ? '14px' : '16px' },
+                                    error: { fontSize: isMobile ? '12px' : '14px' }
+                                  }}
+                                  radius="md"
+                                  size={isMobile ? "md" : "sm"}
                                 />
-                              </Flex>
-                            </Grid.Col>
-                          );
-                        }
+                              </Grid.Col>
+                            );
+                          }
 
-                        if (field.type === types.OPTIONS) {
-                          return (
-                            <Grid.Col span={3} key={j}>
-                              <Radio.Group
-                                onChange={(value) => handleFields(i, j, value)}
-                                label="Unit of Volume"
-                                color={COLORS.primaryColor}
-                              >
-                                <Group justify="space-between" p="sm">
-                                  {field.options?.map((option) => (
-                                    <Radio value={option.value} label={option.label} key={option.value} />
-                                  ))}
-                                </Group>
-                              </Radio.Group>
-                            </Grid.Col>
-                          );
-                        }
-                      })}
+                          if (field.type === types.NUMBER) {
+                            return (
+                              <Grid.Col span={3} key={j}>
+                                <NumberInput
+                                  w={inputSize}
+                                  hideControls
+                                  label={field.label}
+                                  value={field.value}
+                                  withAsterisk={field.label === 'Weight (mt)' ? false : true}
+                                  onChange={handleFields(i, j)}
+                                  {...(field.options || {})}
+                                  styles={{
+                                    option: { fontSize: isMobile ? '14px' : '16px' },
+                                    input: { fontSize: isMobile ? '14px' : '16px' },
+                                    label: { fontSize: isMobile ? '14px' : '16px' },
+                                    error: { fontSize: isMobile ? '12px' : '14px' }
+                                  }}
+                                  radius="md"
+                                  size={isMobile ? "md" : "sm"}
+                                />
+                              </Grid.Col>
+                            );
+                          }
 
-                      <Grid.Col span={1}>
-                        <Flex align="center" mt={40}>
-                          <ActionIcon
-                            variant="subtle"
-                            color="red"
-                            onClick={() => removeContainer(i)}
-                          >
-                            <IconTrash stroke={1.5} size={30} />
-                          </ActionIcon>
-                        </Flex>
-                      </Grid.Col>
-                    </Grid>
-                  );
-                })}
+                          if (field.type === types.CHECKBOX) {
+                            return (
+                              <Grid.Col span={2} key={j} mt={44}>
+                                <Flex h="100%" alignItems="center">
+                                  <Checkbox
+                                    size="sm"
+                                    label={field.label}
+                                    checked={field.checked}
+                                    onChange={handleFields(i, j)}
+                                  />
+                                </Flex>
+                              </Grid.Col>
+                            );
+                          }
 
-              </Grid.Col>
-            </ScrollArea>
+                          if (field.type === types.OPTIONS) {
+                            return (
+                              <Grid.Col span={3} key={j}>
+                                <Radio.Group
+                                  onChange={(value) => handleFields(i, j, value)}
+                                  label="Unit of Volume"
+                                  color={COLORS.primaryColor}
+                                >
+                                  <Group justify="space-between" p="sm">
+                                    {field.options?.map((option) => (
+                                      <Radio value={option.value} label={option.label} key={option.value} />
+                                    ))}
+                                  </Group>
+                                </Radio.Group>
+                              </Grid.Col>
+                            );
+                          }
+                        })}
 
+                        <Grid.Col span={1}>
+                          <Flex align="center" mt={40}>
+                            <ActionIcon
+                              variant="subtle"
+                              color="red"
+                              onClick={() => removeContainer(i)}
+                            >
+                              <IconTrash stroke={1.5} size={30} />
+                            </ActionIcon>
+                          </Flex>
+                        </Grid.Col>
+                      </Grid>
+                    );
+                  })}
+                </Grid.Col>
+              </ScrollArea>
+            )}
+
+            {/* LCL Specific Fields */}
+            {openedModal === 'LCL' && (
+              <>
+                <Grid.Col span={isMobile ? 12 : 6}>
+                  <TextInput
+                    color={COLORS.portColor}
+                    placeholder="Enter No of Packages"
+                    size={isMobile ? "md" : "lg"}
+                    label="No of Packages"
+                    withAsterisk
+                    styles={{
+                      input: { fontSize: isMobile ? '14px' : '16px' },
+                      label: { fontSize: isMobile ? '14px' : '16px' },
+                      error: { fontSize: isMobile ? '12px' : '14px' }
+                    }}
+                    radius="md"
+                    value={containerList.packages}
+                    onChange={(e) => setContainerList((st) => ({ ...st, no_of_packages: e.target.value }))}
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={isMobile ? 12 : 6}>
+                  <TextInput
+                    color={COLORS.portColor}
+                    placeholder="Enter Gross Weight"
+                    size={isMobile ? "md" : "lg"}
+                    label="Gross Weight (Kgs)"
+                    withAsterisk
+                    styles={{
+                      input: { fontSize: isMobile ? '14px' : '16px' },
+                      label: { fontSize: isMobile ? '14px' : '16px' },
+                      error: { fontSize: isMobile ? '12px' : '14px' }
+                    }}
+                    radius="md"
+                    value={containerList.grossWeight}
+                    onChange={(e) => setContainerList((st) => ({ ...st, gross_weight: e.target.value }))}
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={isMobile ? 12 : 6}>
+                  <TextInput
+                    color={COLORS.portColor}
+                    placeholder="Enter Volume"
+                    size={isMobile ? "md" : "lg"}
+                    label="Volume (CBM)"
+                    withAsterisk
+                    styles={{
+                      input: { fontSize: isMobile ? '14px' : '16px' },
+                      label: { fontSize: isMobile ? '14px' : '16px' },
+                      error: { fontSize: isMobile ? '12px' : '14px' }
+                    }}
+                    radius="md"
+                    value={containerList.volume}
+                    onChange={(e) => setContainerList((st) => ({ ...st, volume: e.target.value }))}
+                  />
+                </Grid.Col>
+              </>
+            )}
+
+            {/* AIR Specific Fields */}
+            {openedModal === 'AIR' && (
+              <>
+                <Grid.Col span={isMobile ? 12 : 6}>
+                  <TextInput
+                    color={COLORS.portColor}
+                    placeholder="Enter No of Packages"
+                    size={isMobile ? "md" : "lg"}
+                    label="No of Packages"
+                    withAsterisk
+                    styles={{
+                      input: { fontSize: isMobile ? '14px' : '16px' },
+                      label: { fontSize: isMobile ? '14px' : '16px' },
+                      error: { fontSize: isMobile ? '12px' : '14px' }
+                    }}
+                    radius="md"
+                    value={containerList.packages}
+                    onChange={(e) => setContainerList((st) => ({ ...st, no_of_packages: e.target.value }))}
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={isMobile ? 12 : 6}>
+                  <TextInput
+                    color={COLORS.portColor}
+                    placeholder="Enter Gross Weight"
+                    size={isMobile ? "md" : "lg"}
+                    label="Gross Weight (Kgs)"
+                    withAsterisk
+                    styles={{
+                      input: { fontSize: isMobile ? '14px' : '16px' },
+                      label: { fontSize: isMobile ? '14px' : '16px' },
+                      error: { fontSize: isMobile ? '12px' : '14px' }
+                    }}
+                    radius="md"
+                    value={containerList.grossWeight}
+                    onChange={(e) => setContainerList((st) => ({ ...st, gross_weight: e.target.value }))}
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={isMobile ? 12 : 6}>
+                  <TextInput
+                    color={COLORS.portColor}
+                    label="Volume Weight (Kgs)"
+                    placeholder="Volume Weight"
+                    size={isMobile ? "md" : "lg"}
+                    withAsterisk
+                    styles={{
+                      input: { fontSize: isMobile ? '14px' : '16px' },
+                      label: { fontSize: isMobile ? '14px' : '16px' },
+                      error: { fontSize: isMobile ? '12px' : '14px' }
+                    }}
+                    radius="md"
+                    value={containerList.volume_weight}
+                    onChange={(e) => setContainerList((st) => ({ ...st, volume_weight: e.target.value }))}
+                  />
+                </Grid.Col>
+              </>
+            )}
+
+            {/* Common Submit Button */}
             <Grid.Col span={12}>
               <Button
                 rightSection={<IconArrowRight size={18} />}
                 radius="md"
                 size="sm"
-                // mt="md"
-                // styles={{
-                //   root: {
-                //     backgroundColor: '#2d8a92',
-                //     '&:hover': {
-                //       backgroundColor: '#246e73',
-                //     },
-                //   },
-                // }}
                 onClick={() => {
                   form.setValues((prevValues) => ({
                     ...prevValues,
@@ -1737,7 +2139,7 @@ const CustomerRequestForm = (data = {
                       ]
                       : [],
                   }));
-                  close();
+                  closeModal();
                 }}
               >
                 Add
@@ -1745,6 +2147,9 @@ const CustomerRequestForm = (data = {
             </Grid.Col>
           </Grid>
         </Modal>
+
+
+
       </form>
     </>
   );

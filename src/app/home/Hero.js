@@ -56,8 +56,9 @@ const Hero = ({ title, content }) => {
   const { seaData, airData, setSeaData, setAirData } = useTransportStore();
   const { setFormValues } = useCustomerRequestStore()
   const router = useRouter();
-  const [formValue, setFormValue] = useState({ typeOfBooking: 'FCL', origin: '', destination: '', activeTransport: 'sea', transportData: [], memoizedTransportData: seaData });
-
+  const [formValue, setFormValue] = useState({ typeOfBooking: 'FCL', origin: '', destination: '',code: '', activeTransport: 'sea', transportData: [], memoizedTransportData: seaData });
+  console.log("FormValueeeeeeeee:::::::::",formValue);
+  
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const Icon = isMobile ? IconArrowsDownUp : IconArrowsLeftRight
@@ -72,8 +73,9 @@ const Hero = ({ title, content }) => {
     refetchOnWindowFocus: false,
     select: (data) =>
       data?.data?.map((item) => ({
-        label: item.name,
+        label: `${item.name} - (${item.code})`,  
         value: String(item.id),
+        code: item.code,
       })) || [],
   });
 
@@ -87,8 +89,9 @@ const Hero = ({ title, content }) => {
     select: (data) => {
       console.log("data : ", data)
       return data?.data?.map((item) => ({
-        label: item.name,
+        label: `${item.name} - (${item.code})`, 
         value: String(item.id),
+        code: item.code,
       })) || []
     }
   });
@@ -101,47 +104,63 @@ const Hero = ({ title, content }) => {
   const notificationShownRef = useRef(false);
 
   useEffect(() => {
-    if (
-      formValue?.origin &&
-      formValue?.destination &&
-      formValue?.origin === formValue?.destination &&
-      !notificationShownRef.current
-    ) {
-      notifications.show({
-        title: 'Error',
-        message: 'Origin and destination cannot be the same',
-        color: 'red',
-      });
+  if (
+    formValue?.origin?.origin && 
+    formValue?.destination?.destination &&
+    formValue.origin.origin === formValue.destination.destination &&
+    !notificationShownRef.current
+  ) {
+    notifications.show({
+      title: 'Error',
+      message: 'Origin and destination cannot be the same',
+      color: 'red',
+    });
 
-      notificationShownRef.current = true;
-      // formHook.reset();
+    notificationShownRef.current = true;
+    
+    // Clear one of the fields (optional)
+    setFormValue(prev => ({
+      ...prev,
+      destination: {
+        destination: '',
+        port: '',
+        name: '',
+        code: ''
+      }
+    }));
 
-      setTimeout(() => {
-        notificationShownRef.current = false;
-      }, 1000);
-    }
-  }, [formValue?.origin, formValue?.destination]);
+    setTimeout(() => {
+      notificationShownRef.current = false;
+    }, 1000);
+  }
+}, [formValue?.origin?.origin, formValue?.destination?.destination]);
 
-
+// const isSameLocation = formValue?.origin?.origin && 
+//                       formValue?.destination?.destination &&
+//                       formValue.origin.origin === formValue.destination.destination;
   useEffect(() => {
     if (seaPortData) setSeaData(seaPortData || [])
     if (airPortData) setAirData(airPortData || [])
   }, [seaPortData, airPortData])
 
   // Optimized swap function
-  const swapOriginDestination = useCallback(() => {
-    setFormValue(prevValues => ({
-      ...prevValues,
-      origin: {
-        ...prevValues.destination,
-        origin: prevValues.destination.destination,
-      },
-      destination: {
-        ...prevValues.origin,
-        destination: prevValues.origin.origin
-      },
-    }));
-  }, []);
+const swapOriginDestination = useCallback(() => {
+  setFormValue(prevValues => ({
+    ...prevValues,
+    origin: {
+      ...prevValues.destination,
+      origin: prevValues.destination.destination,
+      name: prevValues.destination.name,
+      code: prevValues.destination.code
+    },
+    destination: {
+      ...prevValues.origin,
+      destination: prevValues.origin.origin,
+      name: prevValues.origin.name,
+      code: prevValues.origin.code
+    },
+  }));
+}, []);
 
   const handleGetQuote = () => {
     setFormValues(formValue);
@@ -184,6 +203,7 @@ const Hero = ({ title, content }) => {
                   activeTransport={formValue?.activeTransport}
                   onClick={() => setFormValue(prev => ({
                     ...prev,
+                    typeOfBooking: 'FCL',
                     activeTransport: 'sea',
                   }))}
                 />
@@ -193,6 +213,7 @@ const Hero = ({ title, content }) => {
                   activeTransport={formValue?.activeTransport}
                   onClick={() => setFormValue(prev => ({
                     ...prev,
+                    typeOfBooking: 'AIR',
                     activeTransport: 'air',
                   }))}
                 />
@@ -245,6 +266,7 @@ const Hero = ({ title, content }) => {
                             origin: opt?.value, 
                             port: opt?.value,
                             name: opt?.label,
+                            code: opt?.code
                           }
                         }))
                       }
@@ -318,6 +340,7 @@ const Hero = ({ title, content }) => {
                     size='lg'
                     fw={600}
                     // disabled={!isFormValid}
+                    // disabled={!formValue?.origin?.origin || !formValue?.destination?.destination || isSameLocation}
                     styles={{
                       label: {
                         fontSize: '16px',
