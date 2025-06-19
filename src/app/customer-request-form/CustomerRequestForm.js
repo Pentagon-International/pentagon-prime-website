@@ -84,136 +84,136 @@ const CustomerRequestForm = (data = {
   //     ]
   //   },
   // });
- const form = useForm({
-  mode: 'controlled',
-  initialValues: {
-    typeofBooking: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
-    category: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
-    customer_name: '',
-    contact_number: '',
-    email: '',
-    result: [
-      {
-        origin: formValues?.origin || {},
-        destination: formValues?.destination || {},
-        cargo: {
-          isDangerous: false,
-          remarks: '',
-        },
-        unNo: null,
-        imo: null,
-        agents: ["55bf1d1d-66ad-4726-8d72-8b39308792e1"],
-        stackable: true,
-        documents: [],
-        container_details: null
-      }
-    ]
-  },
-  validate: (values) => {
-    const errors = {};
+  const form = useForm({
+    mode: 'controlled',
+    initialValues: {
+      typeofBooking: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
+      category: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
+      customer_name: '',
+      contact_number: '',
+      email: '',
+      result: [
+        {
+          origin: formValues?.origin || {},
+          destination: formValues?.destination || {},
+          cargo: {
+            isDangerous: false,
+            remarks: '',
+          },
+          unNo: null,
+          imo: null,
+          agents: ["55bf1d1d-66ad-4726-8d72-8b39308792e1"],
+          stackable: true,
+          documents: [],
+          container_details: null
+        }
+      ]
+    },
+    validate: (values) => {
+      const errors = {};
 
-    // Basic fields validation
-    if (!values.customer_name) errors.customer_name = 'Name is required';
-    
-    if (!values.contact_number) {
-      errors.contact_number = 'Mobile number is required';
-    } else if (!/^\d{10,15}$/.test(values.contact_number)) {
-      errors.contact_number = 'Invalid mobile number';
-    }
-    
-    if (!values.email) {
-      errors.email = 'Email is required';
-    } else if (!/^\S+@\S+$/.test(values.email)) {
-      errors.email = 'Invalid email';
-    }
+      // Basic fields validation
+      if (!values.customer_name) errors.customer_name = 'Name is required';
 
-    // Result array validation
-    if (values.result && values.result.length > 0) {
-      const resultErrors = [];
-      const firstResult = values.result[0];
-      
-      // Origin validation
-      if (!firstResult.origin || !firstResult.origin.origin) {
-        resultErrors.push({ origin: { origin: 'Origin is required' } });
+      if (!values.contact_number) {
+        errors.contact_number = 'Mobile number is required';
+      } else if (!/^\d{10,15}$/.test(values.contact_number)) {
+        errors.contact_number = 'Invalid mobile number';
       }
-      
-      if (!firstResult.origin || !firstResult.origin.shipment_type) {
-        resultErrors.push({ origin: { shipment_type: 'Shipment terms are required' } });
+
+      if (!values.email) {
+        errors.email = 'Email is required';
+      } else if (!/^\S+@\S+$/.test(values.email)) {
+        errors.email = 'Invalid email';
       }
-      
-      if (!firstResult.origin || !firstResult.origin.ready_date) {
-        resultErrors.push({ origin: { ready_date: 'Cargo ready date is required' } });
-      }
-      
-      // Destination validation
-      if (!firstResult.destination || !firstResult.destination.destination) {
-        resultErrors.push({ destination: { destination: 'Destination is required' } });
-      }
-      
-      // Container details validation
-      if (!firstResult.container_details) {
-        resultErrors.push({ container_details: 'Cargo details are required' });
-      } else {
-        const bookingType = values.typeofBooking;
-        const containerDetails = firstResult.container_details;
-        
-        if (bookingType === 'FCL') {
-          if (!containerDetails.list || containerDetails.list.length === 0) {
-            resultErrors.push({ container_details: 'At least one container is required' });
-          } else {
-            for (const container of containerDetails.list) {
-              if (!container.size) {
-                resultErrors.push({ container_details: 'Container size is required' });
-                break;
-              }
-              
-              if (container.fields) {
-                for (const field of container.fields) {
-                  if (field.required && !field.value) {
-                    resultErrors.push({ container_details: `${field.label} is required` });
-                    break;
+
+      // Result array validation
+      if (values.result && values.result.length > 0) {
+        const resultErrors = [];
+        const firstResult = values.result[0];
+
+        // Origin validation
+        if (!firstResult.origin || !firstResult.origin.origin) {
+          resultErrors.push({ origin: { origin: 'Origin is required' } });
+        }
+
+        if (!firstResult.origin || !firstResult.origin.shipment_type) {
+          resultErrors.push({ origin: { shipment_type: 'Shipment terms are required' } });
+        }
+
+        if (!firstResult.origin || !firstResult.origin.ready_date) {
+          resultErrors.push({ origin: { ready_date: 'Cargo ready date is required' } });
+        }
+
+        // Destination validation
+        if (!firstResult.destination || !firstResult.destination.destination) {
+          resultErrors.push({ destination: { destination: 'Destination is required' } });
+        }
+
+        // Container details validation
+        if (!firstResult.container_details) {
+          resultErrors.push({ container_details: 'Cargo details are required' });
+        } else {
+          const bookingType = values.typeofBooking;
+          const containerDetails = firstResult.container_details;
+
+          if (bookingType === 'FCL') {
+            if (!containerDetails.list || containerDetails.list.length === 0) {
+              resultErrors.push({ container_details: 'At least one container is required' });
+            } else {
+              for (const container of containerDetails.list) {
+                if (!container.size) {
+                  resultErrors.push({ container_details: 'Container size is required' });
+                  break;
+                }
+
+                if (container.fields) {
+                  for (const field of container.fields) {
+                    if (field.required && !field.value) {
+                      resultErrors.push({ container_details: `${field.label} is required` });
+                      break;
+                    }
                   }
                 }
               }
             }
-          }
-        } else if (bookingType === 'LCL' || bookingType === 'AIR') {
-          if (!containerDetails.no_of_packages) {
-            resultErrors.push({ container_details: 'Number of packages is required' });
-          }
-          
-          if (!containerDetails.gross_weight) {
-            resultErrors.push({ container_details: 'Gross weight is required' });
-          }
-          
-          if (bookingType === 'LCL' && !containerDetails.volume) {
-            resultErrors.push({ container_details: 'Volume is required for LCL' });
-          }
-          
-          if (bookingType === 'AIR' && !containerDetails.volume_weight) {
-            resultErrors.push({ container_details: 'Volume weight is required for AIR' });
-          }
-        }
-      }
-      
-      // Dangerous cargo validation
-      if (firstResult.cargo?.isDangerous) {
-        if (!firstResult.imo) {
-          resultErrors.push({ imo: 'IMO class is required for dangerous goods' });
-        }
-        if (!firstResult.unNo) {
-          resultErrors.push({ unNo: 'UN number is required for dangerous goods' });
-        }
-      }
-      
-      if (resultErrors.length > 0) {
-        errors.result = resultErrors.reduce((acc, curr) => ({ ...acc, ...curr }), {});
-      }
-    }
+          } else if (bookingType === 'LCL' || bookingType === 'AIR') {
+            if (!containerDetails.no_of_packages) {
+              resultErrors.push({ container_details: 'Number of packages is required' });
+            }
 
-    return errors;
-  }
-});
+            if (!containerDetails.gross_weight) {
+              resultErrors.push({ container_details: 'Gross weight is required' });
+            }
+
+            if (bookingType === 'LCL' && !containerDetails.volume) {
+              resultErrors.push({ container_details: 'Volume is required for LCL' });
+            }
+
+            if (bookingType === 'AIR' && !containerDetails.volume_weight) {
+              resultErrors.push({ container_details: 'Volume weight is required for AIR' });
+            }
+          }
+        }
+
+        // Dangerous cargo validation
+        if (firstResult.cargo?.isDangerous) {
+          if (!firstResult.imo) {
+            resultErrors.push({ imo: 'IMO class is required for dangerous goods' });
+          }
+          if (!firstResult.unNo) {
+            resultErrors.push({ unNo: 'UN number is required for dangerous goods' });
+          }
+        }
+
+        if (resultErrors.length > 0) {
+          errors.result = resultErrors.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+        }
+      }
+
+      return errors;
+    }
+  });
 
   const CodeCategory = useQuery({
     queryKey: ["hs-code-category"],
@@ -694,137 +694,137 @@ const CustomerRequestForm = (data = {
   // }
 
   const handleSubmit = (values) => {
-  // Validate all fields
-  form.validate();
+    // Validate all fields
+    form.validate();
 
-  // Check if form is valid
-  if (!form.isValid()) {
-    // Focus the first invalid field
-    const firstError = Object.keys(form.errors)[0];
-    if (firstError) {
-      document.querySelector(`[name="${firstError}"]`)?.focus();
-    }
-    return; // Stop submission
-  }
-
-  // Proceed with submission logic
-  const bookingType = values.typeofBooking;
-  const isAir = bookingType === 'AIR';
-  const isFCL = bookingType === 'FCL';
-  const isLCL = bookingType === 'LCL';
-
-  // ... rest of your payload construction
-  const payload = {
-    customer_name: values.customer_name,
-    contact_number: values.contact_number,
-    email: values.email,
-    typeofBooking: bookingType,
-    category: bookingType,
-    result: [
-      {
-        origin: {
-          origin: values.result[0]?.origin?.origin,
-          name: values.result[0]?.origin?.name,
-          port: values.result[0]?.origin?.port,
-          code: values.result[0]?.origin?.code,
-          pickup: values.result[0]?.origin?.pickup || false,
-          customs: values.result[0]?.origin?.customs || false,
-          address: values.result[0]?.origin?.address,
-          ready_date: values.result[0]?.origin?.ready_date
-            ? new Date(values.result[0]?.origin?.ready_date).toISOString()
-            : null,
-          shipment_type: values.result[0]?.origin?.shipment_type,
-        },
-        destination: {
-          destination: values.result[0]?.destination?.destination,
-          name: values.result[0]?.destination?.name,
-          port: values.result[0]?.destination?.port,
-          code: values.result[0]?.destination?.code,
-          delivery: values.result[0]?.destination?.delivery || false,
-          customs: values.result[0]?.destination?.customs || false,
-          address: values.result[0]?.destination?.address,
-        },
-        cargo: {
-          isDangerous: values.result[0]?.cargo?.isDangerous || false,
-          remarks: values.result[0]?.cargo?.remarks || "",
-        },
-        isInsurance: values.result[0]?.isInsurance || false,
-        stackable: values.result[0]?.stackable || true,
-        imo: values.result[0]?.imo,
-        unNo: values.result[0]?.unNo,
-        agents: values.result[0]?.agents || ["55bf1d1d-66ad-4726-8d72-8b39308792e1"],
-        documents: values.result[0]?.documents || [],
+    // Check if form is valid
+    if (!form.isValid()) {
+      // Focus the first invalid field
+      const firstError = Object.keys(form.errors)[0];
+      if (firstError) {
+        document.querySelector(`[name="${firstError}"]`)?.focus();
       }
-    ]
-  };
+      return; // Stop submission
+    }
 
-  // Add booking type specific fields
-  if (isFCL) {
-    payload.result[0].container_details = {
-      commodity: containerList.commodity,
-      type: containerList.type,
-      dimension: containerList.dimension,
-      weight: containerList.weight,
-      hsCode: containerList.hsCode,
-      hsCode2: containerList.hsCode2,
-      hs1: containerList.hs1,
-      hs2: containerList.hs2,
-      size: containerList.size,
-      containerCount: containerList.containerCount,
-      list: containerList.list?.map(item => ({
-        size: item.size,
-        fields: item.fields?.map(field => ({
-          label: field.label,
-          value: field.value,
-          checked: field.checked,
-          type: field.type
+    // Proceed with submission logic
+    const bookingType = values.typeofBooking;
+    const isAir = bookingType === 'AIR';
+    const isFCL = bookingType === 'FCL';
+    const isLCL = bookingType === 'LCL';
+
+    // ... rest of your payload construction
+    const payload = {
+      customer_name: values.customer_name,
+      contact_number: values.contact_number,
+      email: values.email,
+      typeofBooking: bookingType,
+      category: bookingType,
+      result: [
+        {
+          origin: {
+            origin: values.result[0]?.origin?.origin,
+            name: values.result[0]?.origin?.name,
+            port: values.result[0]?.origin?.port,
+            code: values.result[0]?.origin?.code,
+            pickup: values.result[0]?.origin?.pickup || false,
+            customs: values.result[0]?.origin?.customs || false,
+            address: values.result[0]?.origin?.address,
+            ready_date: values.result[0]?.origin?.ready_date
+              ? new Date(values.result[0]?.origin?.ready_date).toISOString()
+              : null,
+            shipment_type: values.result[0]?.origin?.shipment_type,
+          },
+          destination: {
+            destination: values.result[0]?.destination?.destination,
+            name: values.result[0]?.destination?.name,
+            port: values.result[0]?.destination?.port,
+            code: values.result[0]?.destination?.code,
+            delivery: values.result[0]?.destination?.delivery || false,
+            customs: values.result[0]?.destination?.customs || false,
+            address: values.result[0]?.destination?.address,
+          },
+          cargo: {
+            isDangerous: values.result[0]?.cargo?.isDangerous || false,
+            remarks: values.result[0]?.cargo?.remarks || "",
+          },
+          isInsurance: values.result[0]?.isInsurance || false,
+          stackable: values.result[0]?.stackable || true,
+          imo: values.result[0]?.imo,
+          unNo: values.result[0]?.unNo,
+          agents: values.result[0]?.agents || ["55bf1d1d-66ad-4726-8d72-8b39308792e1"],
+          documents: values.result[0]?.documents || [],
+        }
+      ]
+    };
+
+    // Add booking type specific fields
+    if (isFCL) {
+      payload.result[0].container_details = {
+        commodity: containerList.commodity,
+        type: containerList.type,
+        dimension: containerList.dimension,
+        weight: containerList.weight,
+        hsCode: containerList.hsCode,
+        hsCode2: containerList.hsCode2,
+        hs1: containerList.hs1,
+        hs2: containerList.hs2,
+        size: containerList.size,
+        containerCount: containerList.containerCount,
+        list: containerList.list?.map(item => ({
+          size: item.size,
+          fields: item.fields?.map(field => ({
+            label: field.label,
+            value: field.value,
+            checked: field.checked,
+            type: field.type
+          }))
         }))
-      }))
-    };
-  } else if (isLCL) {
-    payload.result[0].container_details = {
-      commodity: containerList.commodity,
-      type: 'LCL',
-      dimension: containerList.dimension,
-      weight: containerList.weight,
-      hsCode: containerList.hsCode,
-      hsCode2: containerList.hsCode2,
-      hs1: containerList.hs1,
-      hs2: containerList.hs2,
-      size: containerList.size,
-      containerCount: containerList.containerCount,
-      list: [
-        {
-          "no_of_package": containerList.no_of_packages,
-          "gross_weight": containerList.gross_weight,
-          "volume": containerList.volume
-        }
-      ]
-    };
-  } else if (isAir) {
-    payload.result[0].container_details = {
-      commodity: containerList.commodity,
-      type: 'AIR',
-      dimension: containerList.dimension,
-      weight: containerList.weight,
-      hsCode: containerList.hsCode,
-      hsCode2: containerList.hsCode2,
-      hs1: containerList.hs1,
-      hs2: containerList.hs2,
-      size: containerList.size,
-      containerCount: containerList.containerCount,
-      list: [
-        {
-          "no_of_package": containerList.no_of_packages,
-          "gross_weight": containerList.gross_weight,
-          "volume_weight": containerList.volume_weight
-        }
-      ]
-    };
-  }
+      };
+    } else if (isLCL) {
+      payload.result[0].container_details = {
+        commodity: containerList.commodity,
+        type: 'LCL',
+        dimension: containerList.dimension,
+        weight: containerList.weight,
+        hsCode: containerList.hsCode,
+        hsCode2: containerList.hsCode2,
+        hs1: containerList.hs1,
+        hs2: containerList.hs2,
+        size: containerList.size,
+        containerCount: containerList.containerCount,
+        list: [
+          {
+            "no_of_package": containerList.no_of_packages,
+            "gross_weight": containerList.gross_weight,
+            "volume": containerList.volume
+          }
+        ]
+      };
+    } else if (isAir) {
+      payload.result[0].container_details = {
+        commodity: containerList.commodity,
+        type: 'AIR',
+        dimension: containerList.dimension,
+        weight: containerList.weight,
+        hsCode: containerList.hsCode,
+        hsCode2: containerList.hsCode2,
+        hs1: containerList.hs1,
+        hs2: containerList.hs2,
+        size: containerList.size,
+        containerCount: containerList.containerCount,
+        list: [
+          {
+            "no_of_package": containerList.no_of_packages,
+            "gross_weight": containerList.gross_weight,
+            "volume_weight": containerList.volume_weight
+          }
+        ]
+      };
+    }
 
-  submitCustomerRequest.mutate(payload);
-};
+    submitCustomerRequest.mutate(payload);
+  };
 
   return (
     <>
@@ -838,7 +838,7 @@ const CustomerRequestForm = (data = {
           <Grid px={'13%'}>
             <Grid.Col span={isMobile ? 12 : 5}>
               <Select
-                error={form.errors?.result?.[0]?.origin?.origin} 
+                error={form.errors?.result?.[0]?.origin?.origin}
                 withAsterisk
                 label={'Origin'}
                 searchable
@@ -1154,92 +1154,94 @@ const CustomerRequestForm = (data = {
                 rightSection={<IconCalendar stroke={1.5} />}
               />
             </Grid.Col>
-            <Grid.Col span={6}>
-              <Switch
-                mt={'md'}
-                mb={'md'}
-                // key={form.key('pickup')}
-                // {...form.getInputProps('pickup')}
-                onChange={(pickup) => {
-                  form.setValues((prevValues) => ({
-                    ...prevValues,
-                    result: prevValues.result
-                      ? [
-                        {
-                          ...prevValues.result[0],
-                          origin: {
-                            ...prevValues.result[0]?.origin,
-                            pickup: pickup.currentTarget.checked,
+            <Grid.Col span={6} >
+              <Flex direction={'column'} justify={'space-between'} h={isMobile ? null : 158}>
+                <Switch
+                  mt={'md'}
+                  mb={'md'}
+                  // key={form.key('pickup')}
+                  // {...form.getInputProps('pickup')}
+                  onChange={(pickup) => {
+                    form.setValues((prevValues) => ({
+                      ...prevValues,
+                      result: prevValues.result
+                        ? [
+                          {
+                            ...prevValues.result[0],
+                            origin: {
+                              ...prevValues.result[0]?.origin,
+                              pickup: pickup.currentTarget.checked,
+                            },
                           },
-                        },
-                      ]
-                      : [],
-                  }));
-                }}
-                name={'pickup'}
-                size='sm'
-                labelPosition='left'
-                label='Origin Pickup ?'
-                description='Local charges included (BL fee, document charges & terminal handling charges). Enable this to enter pickup address below'
-                styles={{
-                  body: {
-                    justifyContent: 'space-between'
-                  },
-                  dropdown: { maxHeight: 200, overflowY: 'auto' },
-                  option: {
-                    fontSize: isMobile ? '14px' : '16px',
-                  },
-                  input: {
-                    fontSize: isMobile ? '14px' : '16px',
-                  },
-                  label: {
-                    fontSize: isMobile ? '14px' : '16px',
-                  },
-                  error: {
-                    fontSize: isMobile ? '12px' : '14px',
-                  },
-                  description: {
-                    fontSize: isMobile ? '14px' : '14px',
-                  }
-                }}
-              // checked = {form?.values?.result[0]?.origin?.pickup}
-              // checked={form.values.pickup}
-              />
-              <TextInput
-                name={'pickupAddress'}
-                disabled={!form?.values?.result?.[0]?.origin?.pickup || false}
-                // label='Pickup Address'
-                size={isMobile ? "md" : "lg"}
-                placeholder="Enter Pickup Address"
-                radius="md"
-                onChange={(address) => {
-                  form.setValues((prevValues) => ({
-                    ...prevValues,
-                    result: prevValues.result
-                      ? [
-                        {
-                          ...prevValues.result[0],
-                          origin: {
-                            ...prevValues.result[0]?.origin,
-                            address: address.target.value,
+                        ]
+                        : [],
+                    }));
+                  }}
+                  name={'pickup'}
+                  size='sm'
+                  labelPosition='left'
+                  label='Origin Pickup ?'
+                  description='Local charges included (BL fee, document charges & terminal handling charges). Enable this to enter pickup address below.     '
+                  styles={{
+                    body: {
+                      justifyContent: 'space-between'
+                    },
+                    dropdown: { maxHeight: 200, overflowY: 'auto' },
+                    option: {
+                      fontSize: isMobile ? '14px' : '16px',
+                    },
+                    input: {
+                      fontSize: isMobile ? '14px' : '16px',
+                    },
+                    label: {
+                      fontSize: isMobile ? '14px' : '16px',
+                    },
+                    error: {
+                      fontSize: isMobile ? '12px' : '14px',
+                    },
+                    description: {
+                      fontSize: isMobile ? '14px' : '14px',
+                    }
+                  }}
+                // checked = {form?.values?.result[0]?.origin?.pickup}
+                // checked={form.values.pickup}
+                />
+                <TextInput
+                  name={'pickupAddress'}
+                  disabled={!form?.values?.result?.[0]?.origin?.pickup || false}
+                  // label='Pickup Address'
+                  size={isMobile ? "md" : "lg"}
+                  placeholder="Enter Pickup Address"
+                  radius="md"
+                  onChange={(address) => {
+                    form.setValues((prevValues) => ({
+                      ...prevValues,
+                      result: prevValues.result
+                        ? [
+                          {
+                            ...prevValues.result[0],
+                            origin: {
+                              ...prevValues.result[0]?.origin,
+                              address: address.target.value,
+                            },
                           },
-                        },
-                      ]
-                      : [],
-                  }));
-                }}
-                styles={{
-                  input: {
-                    fontSize: isMobile ? '14px' : '16px',
-                  },
-                  label: {
-                    fontSize: isMobile ? '14px' : '16px',
-                  },
-                  error: {
-                    fontSize: isMobile ? '12px' : '14px',
-                  }
-                }}
-              />
+                        ]
+                        : [],
+                    }));
+                  }}
+                  styles={{
+                    input: {
+                      fontSize: isMobile ? '14px' : '16px',
+                    },
+                    label: {
+                      fontSize: isMobile ? '14px' : '16px',
+                    },
+                    error: {
+                      fontSize: isMobile ? '12px' : '14px',
+                    }
+                  }}
+                />
+              </Flex>
             </Grid.Col>
 
             <Grid.Col span={6}>
