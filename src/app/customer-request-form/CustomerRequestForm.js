@@ -5,7 +5,7 @@ import { IconArrowRight, IconArrowsDownUp, IconArrowsLeftRight, IconBox, IconCal
 import { COLORS } from "../utils/COLORS";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import useTransportStore from "../store/transportStore";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useCustomerRequestStore from "../store/customerRequestStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiCallProtected } from "../api/api";
@@ -57,33 +57,11 @@ const CustomerRequestForm = (data = {
   const { seaData, airData, setSeaData, setAirData } = useTransportStore();
   const selectData = formValues?.typeOfBooking === 'air' ? airData : seaData
   const router = useRouter();
+  console.log({ formValues }, "formvalues of crffffff");
+  if (!formValues) {
+    return <div>Loading...</div>;
+  }
 
-  // const form = useForm({
-  //   mode: 'controlled',
-  //   initialValues: {
-  //     typeofBooking: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
-  //     category: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
-  //     customer_name: '',
-  //     contact_number: '',
-  //     email: '',
-  //     result: [
-  //       {
-  //         origin: formValues?.origin || {},
-  //         destination: formValues?.destination || {},
-  //         cargo: {
-  //           isDangerous: false,
-  //           remarks: '',
-  //         },
-  //         unNo: null,
-  //         imo: null,
-  //         agents: ["55bf1d1d-66ad-4726-8d72-8b39308792e1"],
-  //         stackable: true,
-  //         documents: [],
-  //         container_details: null
-  //       }
-  //     ]
-  //   },
-  // });
   const form = useForm({
     mode: 'controlled',
     initialValues: {
@@ -330,8 +308,8 @@ const CustomerRequestForm = (data = {
     },
   });
 
-  const segmantData =
-    formValues?.activeTransport === "sea"
+  const segmantData = React.useMemo(() => {
+    return formValues?.activeTransport === "sea"
       ? [
         {
           value: 'FCL',
@@ -363,6 +341,7 @@ const CustomerRequestForm = (data = {
           ),
         },
       ];
+  }, [formValues?.activeTransport]);
 
   const handleAddCargoClick = () => {
     const bookingType = form.values.typeofBooking;
@@ -442,6 +421,7 @@ const CustomerRequestForm = (data = {
   };
 
   const removeContainer = (containerNo) => {
+    if (containerNo === 0) return;
     const filter = selectedSize.filter((_, index) => containerNo !== index);
     setSelectedSize(filter);
     setContainerList((st) => {
@@ -560,138 +540,6 @@ const CustomerRequestForm = (data = {
     fileObj?.append('file', files[0])
     fileUpload.mutate(fileObj)
   }
-
-  // const handleSubmit = (values) => {
-  //   if (!form.isValid()) {
-  //     form.validate();
-  //     return;
-  //   }
-  //   const bookingType = values.typeofBooking;
-  //   const isAir = bookingType === 'AIR';
-  //   const isFCL = bookingType === 'FCL';
-  //   const isLCL = bookingType === 'LCL';
-
-  //   // Common payload structure
-  //   const payload = {
-  //     customer_name: values.customer_name,
-  //     contact_number: values.contact_number,
-  //     email: values.email,
-  //     typeofBooking: bookingType,
-  //     category: bookingType,
-  //     result: [
-  //       {
-  //         origin: {
-  //           origin: values.result[0]?.origin?.origin,
-  //           name: values.result[0]?.origin?.name,
-  //           port: values.result[0]?.origin?.port,
-  //           code: values.result[0]?.origin?.code,
-  //           pickup: values.result[0]?.origin?.pickup || false,
-  //           customs: values.result[0]?.origin?.customs || false,
-  //           address: values.result[0]?.origin?.address,
-  //           ready_date: values.result[0]?.origin?.ready_date
-  //             ? new Date(values.result[0]?.origin?.ready_date).toISOString()
-  //             : null,
-  //           shipment_type: values.result[0]?.origin?.shipment_type,
-  //         },
-  //         destination: {
-  //           destination: values.result[0]?.destination?.destination,
-  //           name: values.result[0]?.destination?.name,
-  //           port: values.result[0]?.destination?.port,
-  //           code: values.result[0]?.destination?.code,
-  //           delivery: values.result[0]?.destination?.delivery || false,
-  //           customs: values.result[0]?.destination?.customs || false,
-  //           address: values.result[0]?.destination?.address,
-  //         },
-  //         cargo: {
-  //           isDangerous: values.result[0]?.cargo?.isDangerous || false,
-  //           remarks: values.result[0]?.cargo?.remarks || "",
-  //         },
-  //         isInsurance: values.result[0]?.isInsurance || false,
-  //         stackable: values.result[0]?.stackable || true,
-  //         imo: values.result[0]?.imo,
-  //         unNo: values.result[0]?.unNo,
-  //         agents: values.result[0]?.agents || ["55bf1d1d-66ad-4726-8d72-8b39308792e1"],
-  //         documents: values.result[0]?.documents || [],
-  //       }
-  //     ]
-  //   };
-
-  //   // Add booking type specific fields
-  //   if (isFCL) {
-  //     payload.result[0].container_details = {
-  //       commodity: containerList.commodity,
-  //       type: containerList.type,
-  //       dimension: containerList.dimension,
-  //       weight: containerList.weight,
-  //       hsCode: containerList.hsCode,
-  //       hsCode2: containerList.hsCode2,
-  //       hs1: containerList.hs1,
-  //       hs2: containerList.hs2,
-  //       size: containerList.size,
-  //       containerCount: containerList.containerCount,
-  //       list: containerList.list?.map(item => ({
-  //         size: item.size,
-  //         fields: item.fields?.map(field => ({
-  //           label: field.label,
-  //           value: field.value,
-  //           checked: field.checked,
-  //           type: field.type
-  //         }))
-  //       }))
-  //     };
-  //   } else if (isLCL) {
-  //     payload.result[0].container_details = {
-  //       commodity: containerList.commodity,
-  //       type: 'LCL',
-  //       dimension: containerList.dimension,
-  //       weight: containerList.weight,
-  //       hsCode: containerList.hsCode,
-  //       hsCode2: containerList.hsCode2,
-  //       hs1: containerList.hs1,
-  //       hs2: containerList.hs2,
-  //       size: containerList.size,
-  //       containerCount: containerList.containerCount,
-  //       list: [
-  //         {
-  //           "no_of_package": containerList.no_of_packages,
-  //           "gross_weight": containerList.gross_weight,
-  //           "volume": containerList.volume
-  //         }
-  //       ]
-  //     };
-  //   } else if (isAir) {
-  //     payload.result[0].container_details = {
-  //       commodity: containerList.commodity,
-  //       type: 'AIR',
-  //       dimension: containerList.dimension,
-  //       weight: containerList.weight,
-  //       hsCode: containerList.hsCode,
-  //       hsCode2: containerList.hsCode2,
-  //       hs1: containerList.hs1,
-  //       hs2: containerList.hs2,
-  //       size: containerList.size,
-  //       containerCount: containerList.containerCount,
-  //       list: [
-  //         {
-  //           "no_of_package": containerList.no_of_packages,
-  //           "gross_weight": containerList.gross_weight,
-  //           "volume_weight": containerList.volume_weight
-  //         }
-  //       ]
-  //     };
-  //   }
-
-  //   submitCustomerRequest.mutate(payload);
-  // };
-
-  // const handleFileUpload = category => files => {
-  //   const fileObj = new FormData()
-
-  //   fileObj?.append('file', files[0])
-  //   fileUpload.mutate(fileObj, {
-
-  //   })
-  // }
 
   const handleSubmit = (values) => {
     // Validate all fields
@@ -825,7 +673,20 @@ const CustomerRequestForm = (data = {
 
     submitCustomerRequest.mutate(payload);
   };
-
+  useEffect(() => {
+    console.log("Form values:", form.values);
+    console.log("Form values typeofBooking:", form.values.typeofBooking);
+  }, [form.values]);
+  useEffect(() => {
+    if (formValues?.activeTransport) {
+      const bookingType = formValues.activeTransport === "sea" ? 'FCL' : 'AIR';
+      form.setValues({
+        ...form.values,
+        typeofBooking: bookingType,
+        category: bookingType
+      });
+    }
+  }, [formValues?.activeTransport]);
   return (
     <>
       <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -956,6 +817,7 @@ const CustomerRequestForm = (data = {
                 name="typeofBooking"
                 key={form.key('typeofBooking')}
                 {...form.getInputProps('typeofBooking')}
+                value={form.values.typeofBooking}
                 onChange={(typeofBooking) => {
                   form.setValues((prevValues) => ({
                     ...prevValues,
@@ -967,7 +829,6 @@ const CustomerRequestForm = (data = {
                 size={isMobile ? '12px' : "14px"}
                 radius={'md'}
                 color={'#CDF6FF'}
-                defaultValue="FCL"
                 data={segmantData}
                 styles={{
                   indicator: {
@@ -1985,15 +1846,17 @@ const CustomerRequestForm = (data = {
                         })}
 
                         <Grid.Col span={1}>
-                          <Flex align="center" mt={40}>
-                            <ActionIcon
-                              variant="subtle"
-                              color="red"
-                              onClick={() => removeContainer(i)}
-                            >
-                              <IconTrash stroke={1.5} size={30} />
-                            </ActionIcon>
-                          </Flex>
+                          {i > 0 && (
+                            <Flex align="center" mt={40}>
+                              <ActionIcon
+                                variant="subtle"
+                                color="red"
+                                onClick={() => removeContainer(i)}
+                              >
+                                <IconTrash stroke={1.5} size={30} />
+                              </ActionIcon>
+                            </Flex>
+                          )}
                         </Grid.Col>
                       </Grid>
                     );

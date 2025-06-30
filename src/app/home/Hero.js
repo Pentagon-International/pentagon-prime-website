@@ -205,6 +205,8 @@ const swapOriginDestination = useCallback(() => {
                     ...prev,
                     typeOfBooking: 'FCL',
                     activeTransport: 'sea',
+                    origin: {origin:null},
+                    destination: {destination:null},
                   }))}
                 />
                 <TransportOption
@@ -213,10 +215,14 @@ const swapOriginDestination = useCallback(() => {
                   activeTransport={formValue?.activeTransport}
                   onClick={() => setFormValue(prev => ({
                     ...prev,
+                    origin: {origin:null},
+                     destination: {destination:null},
                     typeOfBooking: 'AIR',
                     activeTransport: 'air',
+                    memoizedTransportData: airData,
                   }))}
                 />
+                {console.log('111111111',airData)}
               </Flex>
               <Flex direction="column">
                 <form>
@@ -260,6 +266,7 @@ const swapOriginDestination = useCallback(() => {
                       leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
                       value={formValue?.origin?.origin}
                       onChange={(value, opt) => {
+                        console.log('opt', value, opt)
                         setFormValue(prev => ({
                           ...prev,
                           origin: {
@@ -272,6 +279,7 @@ const swapOriginDestination = useCallback(() => {
                       }
                       }
                     />
+                    {console.log('formValue?.memoizedTransportData', formValue?.memoizedTransportData)}
                     <ActionIcon
                       variant="default"
                       size={32}
