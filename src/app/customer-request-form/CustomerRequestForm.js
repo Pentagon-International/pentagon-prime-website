@@ -17,13 +17,24 @@ import { contSize, getContainerFields, options, types, TypesWithContainers } fro
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { result } from "lodash";
 import { useRouter } from "next/navigation";
+import { notifications } from "@mantine/notifications";
 
 const today = dayjs()
 
 const ListAttachments = ({ data = [] }) => {
   if (!data || data?.length === 0) {
-    return null
+    return null;
   }
+
+  // Filter out duplicates by URL
+  const uniqueFiles = data.reduce((acc, current) => {
+    const x = acc.find(item => item.url === current.url);
+    if (!x) {
+      return acc.concat([current]);
+    } else {
+      return acc;
+    }
+  }, []);
 
   return (
     <List
@@ -32,19 +43,19 @@ const ListAttachments = ({ data = [] }) => {
       spacing={'xs'}
       icon={<IconPaperclip style={{ width: rem(16), height: rem(16) }} />}
     >
-      {data?.map((attachment, index) => {
+      {uniqueFiles?.map((attachment, index) => (
         attachment?.url ? (
           <List.Item key={index} py={'xs'}>
             <Anchor href={attachment.url} target='_blank' size='sm'>
-              {attachment?.url?.split('/')?.pop()}
+              {attachment.displayName ||
+                (attachment.url.split('/').pop()?.split('?')[0] || 'Document')}
             </Anchor>
           </List.Item>
         ) : null
-      }
-      )}
+      ))}
     </List>
-  )
-}
+  );
+};
 
 const CustomerRequestForm = (data = {
   type: undefined,
@@ -61,6 +72,8 @@ const CustomerRequestForm = (data = {
   if (!formValues) {
     return <div>Loading...</div>;
   }
+  const [filteredOriginData, setFilteredOriginData] = useState(formValues?.memoizedTransportData || []);
+  const [filteredDestinationData, setFilteredDestinationData] = useState(formValues?.memoizedTransportData || []);
 
   const form = useForm({
     mode: 'controlled',
@@ -210,6 +223,27 @@ const CustomerRequestForm = (data = {
     },
   });
 
+  // Filter destination options when origin changes
+  useEffect(() => {
+    if (form.values.result?.[0]?.origin?.origin) {
+      const filteredDestinations = formValues?.memoizedTransportData?.filter(
+        item => item.value !== form.values.result?.[0]?.origin?.origin
+      );
+      setFilteredDestinationData(filteredDestinations || []);
+    }
+  }, [form.values.result?.[0]?.origin?.origin]);
+
+  // Filter origin options when destination changes
+  useEffect(() => {
+    if (form.values.result?.[0]?.destination?.destination) {
+      const filteredOrigins = formValues?.memoizedTransportData?.filter(
+        item => item.value !== form.values.result?.[0]?.destination?.destination
+      );
+      setFilteredOriginData(filteredOrigins || []);
+    }
+  }, [form.values.result?.[0]?.destination?.destination]);
+
+  const [uploadingFile, setUploadingFile] = useState(false);
   const [errors, setErrors] = useState({})
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [openedModal, setOpenedModal] = useState(null);
@@ -389,6 +423,9 @@ const CustomerRequestForm = (data = {
         result: updatedResult,
       };
     });
+    const temp = filteredOriginData;
+    setFilteredOriginData(filteredDestinationData);
+    setFilteredDestinationData(temp);
   };
   const HsCodeQuery = useQuery({
     queryKey: ["Hs-code", containerList.hs1],
@@ -536,10 +573,63 @@ const CustomerRequestForm = (data = {
   });
 
   const handleFileUpload = category => files => {
-    const fileObj = new FormData()
-    fileObj?.append('file', files[0])
-    fileUpload.mutate(fileObj)
-  }
+    const fileObj = new FormData();
+    fileObj.append('file', files[0]);
+
+    // Store the original filename for display
+    const originalFilename = files[0].name;
+
+    fileUpload.mutate(fileObj, {
+      onSuccess: (response) => {
+        const url = response?.data?.data?.url;
+        let displayName = originalFilename;
+
+        if (url) {
+          // Extract just the filename part from the URL (before query params)
+          const urlParts = url.split('/');
+          const lastPart = urlParts[urlParts.length - 1];
+          displayName = lastPart.split('?')[0] || originalFilename;
+        }
+
+        form.setValues((prevValues) => {
+          const existingDocuments = prevValues?.result?.[0]?.documents || [];
+
+          // Check if this file already exists in documents
+          const fileExists = existingDocuments.some(doc => doc.url === url);
+
+          if (!fileExists) {
+            const updatedResult = [
+              {
+                ...prevValues?.result?.[0],
+                documents: [
+                  ...existingDocuments,
+                  {
+                    category: category, // Only use the provided category
+                    url: url,
+                    displayName: displayName,
+                    originalName: originalFilename
+                  },
+                ],
+              },
+            ];
+
+            return {
+              ...prevValues,
+              result: updatedResult,
+            };
+          }
+          return prevValues; // If file exists, don't modify state
+        });
+      },
+      onError: (error) => {
+        notifications.show({
+          title: 'Upload failed',
+          message: 'Could not upload file. Please try again.',
+          color: 'red',
+        });
+      }
+    });
+  };
 
   const handleSubmit = (values) => {
     // Validate all fields
@@ -707,9 +797,15 @@ const CustomerRequestForm = (data = {
                 placeholder="Select Origin"
                 size={isMobile ? "md" : "lg"}
                 limit={5}
-                // data={selectData}
-                data={formValues?.memoizedTransportData}
+                data={filteredOriginData}
+                // data={formValues?.memoizedTransportData}
                 fw={500}
+                clearable
+                clearButtonProps={{
+                  style: {
+                    color: '#afb1b4',
+                  },
+                }}
                 styles={{
                   input: {
                     fontSize: isMobile ? '14px' : '16px',
@@ -769,11 +865,17 @@ const CustomerRequestForm = (data = {
                 color={COLORS.secondaryColor}
                 placeholder="Select Destination"
                 size={isMobile ? "md" : "lg"}
-                // data={selectData}
-                data={formValues?.memoizedTransportData}
+                data={filteredDestinationData}
+                // data={formValues?.memoizedTransportData}
                 limit={5}
                 fw={500}
                 value={form?.values?.result?.[0]?.destination?.destination}
+                clearable
+                clearButtonProps={{
+                  style: {
+                    color: '#afb1b4',
+                  },
+                }}
                 styles={{
                   input: {
                     fontSize: isMobile ? '14px' : '16px',
@@ -925,6 +1027,11 @@ const CustomerRequestForm = (data = {
                 data={shipmentTermsQuery?.data || []}
                 searchable
                 clearable
+                clearButtonProps={{
+                  style: {
+                    color: '#afb1b4',
+                  },
+                }}
                 comboboxProps={{ shadow: 'md' }}
                 onChange={(shipment_type) => {
                   form.setValues((prevValues) => ({
@@ -1398,132 +1505,140 @@ const CustomerRequestForm = (data = {
                   : ''}
               </Button>
             </Grid.Col>
-            {
-              form?.values?.result?.[0]?.cargo?.isDangerous ? (
-                <>
-                  <Grid.Col span={6}>
-                    <Select
-                      withAsterisk
-                      label="IMO class"
-                      placeholder="Sales IMO class"
-                      size={isMobile ? "md" : "lg"}
-                      withScrollArea={false}
-                      data={imoClass || []}
-                      searchable
-                      clearable
-                      comboboxProps={{ shadow: 'md' }}
-                      // key={form.key('imo')}
-                      // {...form.getInputProps('imo')}
-                      onChange={(imo) => {
-                        form.setValues((prevValues) => ({
-                          ...prevValues,
-                          result: prevValues.result
-                            ? [
-                              {
-                                ...prevValues.result[0],
-                                imo: imo
-                              },
-                            ]
-                            : [],
-                        }));
-                      }}
-                      styles={{
-                        dropdown: { maxHeight: 200, overflowY: 'auto' },
-                        option: {
-                          fontSize: isMobile ? '14px' : '16px',
-                        },
-                        input: {
-                          fontSize: isMobile ? '14px' : '16px',
-                        },
-                        label: {
-                          fontSize: isMobile ? '14px' : '16px',
-                        },
-                        error: {
-                          fontSize: isMobile ? '12px' : '14px',
-                        }
-                      }}
-                      radius="md"
-                    />
-                  </Grid.Col>
-                  <Grid.Col span={6}>
-                    <TextInput
-                      value={form?.values?.unNo}
-                      size={isMobile ? "md" : "lg"}
-                      label='UN No'
-                      placeholder="Enter UN No"
-                      radius="md"
-                      onChange={(unNo) => {
-                        form.setValues((prevValues) => ({
-                          ...prevValues,
-                          result: prevValues.result
-                            ? [
-                              {
-                                ...prevValues.result[0],
-                                unNo: unNo?.target?.value
-                              },
-                            ]
-                            : [],
-                        }));
-                      }}
-                      styles={{
-                        input: {
-                          fontSize: isMobile ? '14px' : '16px',
-                        },
-                        label: {
-                          fontSize: isMobile ? '14px' : '16px',
-                        },
-                        error: {
-                          fontSize: isMobile ? '12px' : '14px',
-                        }
-                      }}
-                    />
-                  </Grid.Col>
-                  <Grid.Col>
-                    <FileButton
-                      name='msds'
-                      accept='image/png,image/jpeg,application/pdf'
-                      onChange={handleFileUpload('msds')}
-                      multiple
-                    >
-                      {props => (
-                        <Button
-                          fullWidth
-                          variant='outline'
-                          loading={fileUpload?.isLoading}
-                          leftSection={<IconUpload stroke={1.5} />}
-                          {...props}
-                        >
-                          Upload MSDS
-                        </Button>
-                      )}
-                    </FileButton>
-                  </Grid.Col>
+            {form?.values?.result?.[0]?.cargo?.isDangerous ? (
+              <>
+                {/* Dangerous goods fields */}
+                <Grid.Col span={6}>
+                  <Select
+                    withAsterisk
+                    label="IMO class"
+                    placeholder="Select IMO class"
+                    size={isMobile ? "md" : "lg"}
+                    withScrollArea={false}
+                    data={imoClass || []}
+                    searchable
+                    clearable
+                    clearButtonProps={{
+                      style: {
+                        color: '#afb1b4',
+                      },
+                    }}
+                    comboboxProps={{ shadow: 'md' }}
+                    value={form?.values?.result?.[0]?.imo}
+                    onChange={(imo) => {
+                      form.setValues((prevValues) => ({
+                        ...prevValues,
+                        result: prevValues.result
+                          ? [
+                            {
+                              ...prevValues.result[0],
+                              imo: imo
+                            },
+                          ]
+                          : [],
+                      }));
+                    }}
+                    styles={{
+                      dropdown: { maxHeight: 200, overflowY: 'auto' },
+                      option: {
+                        fontSize: isMobile ? '14px' : '16px',
+                      },
+                      input: {
+                        fontSize: isMobile ? '14px' : '16px',
+                      },
+                      label: {
+                        fontSize: isMobile ? '14px' : '16px',
+                      },
+                      error: {
+                        fontSize: isMobile ? '12px' : '14px',
+                      }
+                    }}
+                    radius="md"
+                  />
+                </Grid.Col>
 
-                </>) : (
-                <>
-                  <Grid.Col>
-                    <FileButton
-                      name='docs'
-                      accept='image/png,image/jpeg,application/pdf'
-                      onChange={handleFileUpload('docs')}
-                      multiple
-                    >
-                      {props => (
-                        <Button
-                          fullWidth
-                          variant='outline'
-                          loading={fileUpload?.isLoading}
-                          leftSection={<IconFiles stroke={1.5} />}
-                          {...props}
-                        >
-                          Upload Relevant Documents
-                        </Button>
-                      )}
-                    </FileButton>
-                  </Grid.Col>
-                </>
-              )
-            }
+                <Grid.Col span={6}>
+                  <TextInput
+                    withAsterisk
+                    value={form?.values?.result?.[0]?.unNo || ''}
+                    size={isMobile ? "md" : "lg"}
+                    label='UN No'
+                    placeholder="Enter UN Number"
+                    radius="md"
+                    onChange={(e) => {
+                      form.setValues((prevValues) => ({
+                        ...prevValues,
+                        result: prevValues.result
+                          ? [
+                            {
+                              ...prevValues.result[0],
+                              unNo: e.target.value
+                            },
+                          ]
+                          : [],
+                      }));
+                    }}
+                    styles={{
+                      input: {
+                        fontSize: isMobile ? '14px' : '16px',
+                      },
+                      label: {
+                        fontSize: isMobile ? '14px' : '16px',
+                      },
+                      error: {
+                        fontSize: isMobile ? '12px' : '14px',
+                      }
+                    }}
+                  />
+                </Grid.Col>
+
+                {/* MSDS Upload - only shown when cargo is dangerous */}
+                <Grid.Col>
+                  <FileButton
+                    name='msds'
+                    accept='image/png,image/jpeg,application/pdf'
+                    onChange={handleFileUpload('msds')}
+                    multiple
+                  >
+                    {(props) => (
+                      <Button
+                        fullWidth
+                        variant='outline'
+                        loading={fileUpload?.isLoading}
+                        leftSection={<IconUpload stroke={1.5} />}
+                        {...props}
+                      >
+                        {fileUpload?.isLoading ? 'Uploading MSDS...' : 'Upload MSDS'}
+                      </Button>
+                    )}
+                  </FileButton>
+                </Grid.Col>
+              </>
+            ) : (
+              <>
+                {/* Regular documents upload */}
+                <Grid.Col>
+                  <FileButton
+                    name='docs'
+                    accept='image/png,image/jpeg,application/pdf'
+                    onChange={handleFileUpload('docs')}
+                    multiple
+                  >
+                    {props => (
+                      <Button
+                        fullWidth
+                        variant='outline'
+                        loading={fileUpload?.isLoading}
+                        leftSection={<IconFiles stroke={1.5} />}
+                        {...props}
+                      >
+                        Upload Relevant Documents
+                      </Button>
+                    )}
+                  </FileButton>
+                </Grid.Col>
+              </>
+            )}
             <ErrorBoundary
               fallback={
                 <Alert
@@ -1586,7 +1701,7 @@ const CustomerRequestForm = (data = {
             </Grid.Col>
             <Grid.Col span={12}>
               <Flex justify={'flex-end'} w={'100%'} align={'center'} gap={'md'}>
-                <Button size="sm" variant="outline" color="red" radius={'8px'}>
+                <Button size="sm" variant="outline" color="red" radius={'8px'} onClick={() => router.back()}>
                   Cancel
                 </Button>
                 <Button t={30}
@@ -1667,6 +1782,11 @@ const CustomerRequestForm = (data = {
                 data={CodeCategory?.data || []}
                 searchable
                 clearable
+                clearButtonProps={{
+                  style: {
+                    color: '#afb1b4',
+                  },
+                }}
                 comboboxProps={{ shadow: 'md' }}
                 styles={{
                   dropdown: { maxHeight: 200, overflowY: 'auto' },
@@ -1690,6 +1810,12 @@ const CustomerRequestForm = (data = {
             {containerList.hs1 && HsCodeQuery.data?.length ? (
               <Grid.Col span={6}>
                 <Select
+                  clearable
+                  clearButtonProps={{
+                    style: {
+                      color: '#afb1b4',
+                    },
+                  }}
                   withAsterisk
                   label="HS Code"
                   size={isMobile ? "md" : "lg"}

@@ -37,8 +37,6 @@ import { useRouter } from 'next/navigation';
 import useCustomerRequestStore from '../store/customerRequestStore';
 import { values } from 'lodash';
 
-
-// Memoized TransportOption component to prevent re-renders
 const TransportOption = memo(({ type, icon, activeTransport, onClick }) => (
   <Group
     style={type === activeTransport ? styles.groupstyle : { cursor: 'pointer' }}
@@ -54,16 +52,13 @@ const TransportOption = memo(({ type, icon, activeTransport, onClick }) => (
 
 const Hero = ({ title, content }) => {
   const { seaData, airData, setSeaData, setAirData } = useTransportStore();
-  const { setFormValues } = useCustomerRequestStore()
+  const { setFormValues } = useCustomerRequestStore();
   const router = useRouter();
-  const [formValue, setFormValue] = useState({ typeOfBooking: 'FCL', origin: '', destination: '',code: '', activeTransport: 'sea', transportData: [], memoizedTransportData: seaData });
-  console.log("FormValueeeeeeeee:::::::::",formValue);
-  
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const Icon = isMobile ? IconArrowsDownUp : IconArrowsLeftRight;
+  const notificationShownRef = useRef(false);
 
-  const Icon = isMobile ? IconArrowsDownUp : IconArrowsLeftRight
-
-
+  // First, define the queries
   const { data: seaPortData } = useQuery({
     queryKey: [`seaPortData`],
     queryFn: async () => {
@@ -73,7 +68,7 @@ const Hero = ({ title, content }) => {
     refetchOnWindowFocus: false,
     select: (data) =>
       data?.data?.map((item) => ({
-        label: `${item.name} - (${item.code})`,  
+        label: `${item.name} - (${item.code})`,
         value: String(item.id),
         code: item.code,
       })) || [],
@@ -87,96 +82,162 @@ const Hero = ({ title, content }) => {
     },
     refetchOnWindowFocus: false,
     select: (data) => {
-      console.log("data : ", data)
       return data?.data?.map((item) => ({
-        label: `${item.name} - (${item.code})`, 
+        label: `${item.name} - (${item.code})`,
         value: String(item.id),
         code: item.code,
       })) || []
     }
   });
 
+  // Then define the state that depends on the queries
+  const [formValue, setFormValue] = useState({
+    typeOfBooking: 'FCL',
+    origin: '',
+    destination: '',
+    code: '',
+    activeTransport: 'sea',
+    transportData: [],
+    memoizedTransportData: seaData
+  });
+
+  // State for filtered options
+  const [filteredOriginOptions, setFilteredOriginOptions] = useState(seaData || []);
+  const [filteredDestinationOptions, setFilteredDestinationOptions] = useState(seaData || []);
+
+  // Now we can safely use seaPortData and airPortData in effects
   useEffect(() => {
-    setFormValue((prev) => ({ ...prev, memoizedTransportData: formValue?.activeTransport == 'sea' ? seaData : airData }))
-  }, [formValue?.activeTransport, seaData, airData])
+    if (seaPortData) setSeaData(seaPortData || []);
+    if (airPortData) setAirData(airPortData || []);
+  }, [seaPortData, airPortData]);
 
-
-  const notificationShownRef = useRef(false);
-
+  // Update filtered options when data or selections change
   useEffect(() => {
-  if (
-    formValue?.origin?.origin && 
-    formValue?.destination?.destination &&
-    formValue.origin.origin === formValue.destination.destination &&
-    !notificationShownRef.current
-  ) {
-    notifications.show({
-      title: 'Error',
-      message: 'Origin and destination cannot be the same',
-      color: 'red',
-    });
+    if (formValue?.memoizedTransportData) {
+      // Filter origin options based on selected destination
+      if (formValue?.destination?.destination) {
+        const filteredOrigins = formValue.memoizedTransportData.filter(
+          item => item.value !== formValue.destination.destination
+        );
+        setFilteredOriginOptions(filteredOrigins);
+      } else {
+        setFilteredOriginOptions(formValue.memoizedTransportData);
+      }
 
-    notificationShownRef.current = true;
-    
-    // Clear one of the fields (optional)
+      // Filter destination options based on selected origin
+      if (formValue?.origin?.origin) {
+        const filteredDestinations = formValue.memoizedTransportData.filter(
+          item => item.value !== formValue.origin.origin
+        );
+        setFilteredDestinationOptions(filteredDestinations);
+      } else {
+        setFilteredDestinationOptions(formValue.memoizedTransportData);
+      }
+    }
+  }, [
+    formValue?.origin?.origin,
+    formValue?.destination?.destination,
+    formValue?.memoizedTransportData
+  ]);
+
+  // Handle same location selection
+  useEffect(() => {
+    if (
+      formValue?.origin?.origin &&
+      formValue?.destination?.destination &&
+      formValue.origin.origin === formValue.destination.destination &&
+      !notificationShownRef.current
+    ) {
+      notifications.show({
+        title: 'Error',
+        message: 'Origin and destination cannot be the same',
+        color: 'red',
+      });
+
+      notificationShownRef.current = true;
+
+      // Clear destination
+      setFormValue(prev => ({
+        ...prev,
+        destination: {
+          destination: '',
+          port: '',
+          name: '',
+          code: ''
+        }
+      }));
+
+      setTimeout(() => {
+        notificationShownRef.current = false;
+      }, 1000);
+    }
+  }, [formValue?.origin?.origin, formValue?.destination?.destination]);
+
+  // Update memoized transport data when transport type changes
+  useEffect(() => {
     setFormValue(prev => ({
       ...prev,
-      destination: {
-        destination: '',
-        port: '',
-        name: '',
-        code: ''
-      }
+      memoizedTransportData: prev.activeTransport === 'sea' ? seaData : airData,
+      // Reset selections when transport type changes
+      origin: { origin: null },
+      destination: { destination: null }
     }));
+    setFilteredOriginOptions(formValue.activeTransport === 'sea' ? seaData : airData);
+    setFilteredDestinationOptions(formValue.activeTransport === 'sea' ? seaData : airData);
+  }, [formValue.activeTransport, seaData, airData]);
 
-    setTimeout(() => {
-      notificationShownRef.current = false;
-    }, 1000);
-  }
-}, [formValue?.origin?.origin, formValue?.destination?.destination]);
+  // Optimized swap function with filtered options
+  const swapOriginDestination = useCallback(() => {
+    if (!formValue?.origin?.origin || !formValue?.destination?.destination) {
+      notifications.show({
+        title: 'Error',
+        message: 'Both origin and destination must be selected to swap',
+        color: 'red',
+      });
+      return;
+    }
 
-// const isSameLocation = formValue?.origin?.origin && 
-//                       formValue?.destination?.destination &&
-//                       formValue.origin.origin === formValue.destination.destination;
-  useEffect(() => {
-    if (seaPortData) setSeaData(seaPortData || [])
-    if (airPortData) setAirData(airPortData || [])
-  }, [seaPortData, airPortData])
+    setFormValue(prevValues => ({
+      ...prevValues,
+      origin: {
+        ...prevValues.destination,
+        origin: prevValues.destination.destination,
+        name: prevValues.destination.name,
+        code: prevValues.destination.code
+      },
+      destination: {
+        ...prevValues.origin,
+        destination: prevValues.origin.origin,
+        name: prevValues.origin.name,
+        code: prevValues.origin.code
+      },
+    }));
+  }, [formValue]);
 
-  // Optimized swap function
-const swapOriginDestination = useCallback(() => {
-  setFormValue(prevValues => ({
-    ...prevValues,
-    origin: {
-      ...prevValues.destination,
-      origin: prevValues.destination.destination,
-      name: prevValues.destination.name,
-      code: prevValues.destination.code
-    },
-    destination: {
-      ...prevValues.origin,
-      destination: prevValues.origin.origin,
-      name: prevValues.origin.name,
-      code: prevValues.origin.code
-    },
-  }));
-}, []);
+  // Check if form is valid for submission
+  const isFormValid = useMemo(() => {
+    return (
+      formValue?.origin?.origin &&
+      formValue?.destination?.destination &&
+      formValue.origin.origin !== formValue.destination.destination
+    );
+  }, [formValue?.origin?.origin, formValue?.destination?.destination]);
 
   const handleGetQuote = () => {
-    setFormValues(formValue);
-    router.push('/customer-request-form');
+    if (isFormValid) {
+      setFormValues(formValue);
+      router.push('/customer-request-form');
+    }
   };
 
   return (
     <Box style={styles.heroContainer}>
       <Container fluid px={'7%'} mt={80} py="60px" style={{ height: '100vh', margin: '0 auto' }}>
-        {
-          !isMobile && (
-            <Box style={styles.overlayContainer}>
-              <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} h={!isMobile && 745} />
-            </Box>
-          )
-        }
+        {!isMobile && (
+          <Box style={styles.overlayContainer}>
+            <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} h={!isMobile && 745} />
+          </Box>
+        )}
         <Stack h={'100%'} gap={0} justify="flex-start">
           <Title
             c={COLORS.primaryColor}
@@ -205,8 +266,8 @@ const swapOriginDestination = useCallback(() => {
                     ...prev,
                     typeOfBooking: 'FCL',
                     activeTransport: 'sea',
-                    origin: {origin:null},
-                    destination: {destination:null},
+                    origin: { origin: null },
+                    destination: { destination: null },
                   }))}
                 />
                 <TransportOption
@@ -215,14 +276,12 @@ const swapOriginDestination = useCallback(() => {
                   activeTransport={formValue?.activeTransport}
                   onClick={() => setFormValue(prev => ({
                     ...prev,
-                    origin: {origin:null},
-                     destination: {destination:null},
+                    origin: { origin: null },
+                    destination: { destination: null },
                     typeOfBooking: 'AIR',
                     activeTransport: 'air',
-                    memoizedTransportData: airData,
                   }))}
                 />
-                {console.log('111111111',airData)}
               </Flex>
               <Flex direction="column">
                 <form>
@@ -231,11 +290,17 @@ const swapOriginDestination = useCallback(() => {
                       placeholder="Origin"
                       size="lg"
                       searchable
+                      clearable
                       w={isMobile ? '100%' : '45%'}
                       limit={5}
-                      data={formValue?.memoizedTransportData}
+                      data={filteredOriginOptions}
                       className='custom-placeholder'
                       radius="md"
+                      clearButtonProps={{
+                        style: {
+                          color: '#afb1b4',
+                        },
+                      }}
                       styles={{
                         input: {
                           fontSize: '18px',
@@ -266,20 +331,18 @@ const swapOriginDestination = useCallback(() => {
                       leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
                       value={formValue?.origin?.origin}
                       onChange={(value, opt) => {
-                        console.log('opt', value, opt)
                         setFormValue(prev => ({
                           ...prev,
                           origin: {
-                            origin: opt?.value, 
-                            port: opt?.value,
-                            name: opt?.label,
-                            code: opt?.code
+                            origin: value,       // Use value instead of opt?.value
+                            port: value,         // Use value instead of opt?.value
+                            name: opt?.label || '',  // Provide fallback empty string
+                            code: opt?.code || ''    // Provide fallback empty string
                           }
-                        }))
-                      }
-                      }
+                        }));
+                      }}
                     />
-                    {console.log('formValue?.memoizedTransportData', formValue?.memoizedTransportData)}
+
                     <ActionIcon
                       variant="default"
                       size={32}
@@ -299,9 +362,15 @@ const swapOriginDestination = useCallback(() => {
                     <Select
                       placeholder="Destination"
                       searchable
+                      clearable
+                      clearButtonProps={{
+                        style: {
+                          color: '#afb1b4',
+                        },
+                      }}
                       size="lg"
                       limit={5}
-                      data={formValue?.memoizedTransportData}
+                      data={filteredDestinationOptions}
                       radius="md"
                       w={isMobile ? '100%' : '45%'}
                       styles={{
@@ -335,9 +404,10 @@ const swapOriginDestination = useCallback(() => {
                       onChange={(value, opt) => setFormValue(prev => ({
                         ...prev,
                         destination: {
-                          destination: opt.value,
-                          port: opt?.value,
-                          name: opt?.label,
+                          destination: value,  // Use value instead of opt.value
+                          port: value,        // Use value instead of opt?.value
+                          name: opt?.label || '',  // Provide fallback empty string
+                          code: opt?.code || ''    // Provide fallback empty string
                         },
                       }))}
                     />
@@ -347,12 +417,10 @@ const swapOriginDestination = useCallback(() => {
                     mt={30}
                     size='lg'
                     fw={600}
-                    // disabled={!isFormValid}
-                    // disabled={!formValue?.origin?.origin || !formValue?.destination?.destination || isSameLocation}
+                    disabled={!isFormValid}
                     styles={{
                       label: {
                         fontSize: '16px',
-
                       },
                     }}
                     bg={'##CDF6FF'}
@@ -367,15 +435,6 @@ const swapOriginDestination = useCallback(() => {
           </Box>
         </Stack>
       </Container>
-
-      {/* Port Modal Component */}
-      {/* <PortComponent
-        transportData={memoizedTransportData}
-        modalOpened={modalOpened}
-        setModalOpened={setModalOpened}
-        formHook={formHook}
-        transport={activeTransport}
-      /> */}
     </Box>
   );
 };
