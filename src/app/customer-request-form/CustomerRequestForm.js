@@ -244,19 +244,19 @@ const CustomerRequestForm = (data = {
 
       // Basic fields validation
       if (!values.customer_name) {
-        errors.customer_name = 'Name is required';
+        errors.customer_name = 'Please enter the Name';
       }
 
       if (!values.contact_number) {
-        errors.contact_number = 'Mobile number is required';
+        errors.contact_number = 'Please enter the valid Mobile number';
       } else if (!phoneRegex.test(values.contact_number)) {
-        errors.contact_number = 'Invalid mobile number (10-15 digits required)';
+        errors.contact_number = 'Please enter the valid Mobile number';
       }
 
       if (!values.email) {
-        errors.email = 'Email is required';
+        errors.email = 'Please enter the valid Email';
       } else if (!emailRegex.test(values.email)) {
-        errors.email = 'Invalid email format';
+        errors.email = 'Please enter the valid Email';
       }
 
       // Result array validation
@@ -268,46 +268,46 @@ const CustomerRequestForm = (data = {
 
         // Origin validation
         if (!origin?.origin) {
-          resultErrors.push({ origin: { origin: 'Origin location is required' } });
+          resultErrors.push({ origin: { origin: 'Please enter the Origin' } });
         }
         if (!firstResult.origin?.shipment_type) {
           resultErrors.origin = {
             ...resultErrors.origin,
-            shipment_type: 'Shipment terms are required'
+            shipment_type: 'Please enter the Shipment terms'
           };
         }
         if (!firstResult.origin?.ready_date) {
           resultErrors.origin = {
             ...resultErrors.origin,
-            ready_date: 'Cargo ready date is required'
+            ready_date: 'Please enter the Cargo ready date'
           };
         }
 
         // Destination validation
         if (!destination?.destination) {
-          resultErrors.push({ destination: { destination: 'Destination is required' } });
+          resultErrors.push({ destination: { destination: 'Please enter the Destination' } });
         }
 
         // Container details validation
         if (!container_details) {
-          resultErrors.push({ container_details: 'Cargo details are required' });
+          resultErrors.push({ container_details: 'Please enter the valid Cargo details' });
         } else {
           switch (bookingType) {
             case 'FCL':
               if (!container_details.list?.length) {
-                resultErrors.push({ container_details: 'At least one container is required' });
+                resultErrors.push({ container_details: 'Please enter at least one valid Container' });
               } else {
                 container_details.list.forEach((container, index) => {
                   if (!container.size) {
                     resultErrors.push({
-                      container_details: `Container ${index + 1}: Size is required`
+                      container_details: `Please enter the valid Size for Container ${index + 1}`
                     });
                   }
 
                   container.fields?.forEach(field => {
                     if (field.required && !field.value) {
                       resultErrors.push({
-                        container_details: `Container ${index + 1}: ${field.label} is required`
+                        container_details: `Please enter the valid ${field.label} for Container ${index + 1}`
                       });
                     }
                   });
@@ -317,46 +317,42 @@ const CustomerRequestForm = (data = {
 
             case 'LCL':
               if (!container_details.no_of_packages) {
-                resultErrors.push({ container_details: 'Number of packages is required' });
+                resultErrors.push({ container_details: 'Please enter the Number of packages' });
               }
               if (!container_details.gross_weight) {
-                resultErrors.push({ container_details: 'Gross weight is required' });
+                resultErrors.push({ container_details: 'Please enter the Gross weight' });
               }
               if (!container_details.volume) {
-                resultErrors.push({ container_details: 'Volume is required for LCL' });
+                resultErrors.push({ container_details: 'Please enter the Volume' });
               }
               break;
 
             case 'AIR':
               if (!container_details.no_of_packages) {
-                resultErrors.push({ container_details: 'Number of packages is required' });
+                resultErrors.push({ container_details: 'Please enter the Number of packages' });
               }
               if (!container_details.gross_weight) {
-                resultErrors.push({ container_details: 'Gross weight is required' });
+                resultErrors.push({ container_details: 'Please enter the Gross weight' });
               }
               if (!container_details.volume_weight) {
-                resultErrors.push({ container_details: 'Volume weight is required for AIR' });
+                resultErrors.push({ container_details: 'Please enter the Volume weight' });
               }
               break;
 
             default:
-              resultErrors.push({ container_details: `Unknown booking type: ${bookingType}` });
+              resultErrors.push({ container_details: `Please enter the valid Booking type` });
           }
         }
 
         // Dangerous cargo validation
         if (cargo?.isDangerous) {
-
           if (!firstResult.imo) {
-            console.log('satisfied no data');
-
-            resultErrors.push({ imo: 'IMO class is required for dangerous goods' });
+            resultErrors.push({ imo: 'Please enter the IMO class' });
           }
           // if (!firstResult.unNo) {
-          //   resultErrors.push({ unNo: 'UN number is required for dangerous goods' });
+          //   resultErrors.push({ unNo: 'Please enter the valid UN number' });
           // }
         }
-        console.log('result errrorssss', resultErrors);
 
         // Combine result errors if any exist
         if (Object.keys(resultErrors).length > 0) {
@@ -366,6 +362,7 @@ const CustomerRequestForm = (data = {
 
       return errors;
     }
+
   });
   console.log('form errors', form.errors);
 
@@ -949,103 +946,73 @@ const CustomerRequestForm = (data = {
 
     // Common validation for all types
     if (!containerList.commodity) {
-      errors.commodity = 'Commodity is required';
-    }
-    // if (!containerList.hs1) {
-    //   errors.hs1 = 'HS Code Category is required';
-    // }
-    if (containerList.hs1 && !containerList.hs2) {
-      errors.hs2 = 'HS Code is required';
+      errors.commodity = 'Please enter the Commodity';
     }
 
-    // Type-specific validation
-    // if (bookingType === 'FCL') {
-    //   if (!containerList.list || containerList.list.length === 0) {
-    //     errors.list = 'At least one container is required';
-    //   } else {
-    //     containerList.list.forEach((item, i) => {
-    //       if (!item.size) {
-    //         errors[`container_${i}_size`] = 'Container size is required';
-    //       }
-    //       item.fields?.forEach((field, j) => {
-    //         if (field.required && !field.value && field.type !== types.CHECKBOX) {
-    //           errors[`container_${i}_field_${j}`] = `${field.label} is required`;
-    //         }
-    //       });
-    //     });
-    //   }
-    // }
-    // Type-specific validation
+    if (containerList.hs1 && !containerList.hs2) {
+      errors.hs2 = 'Please enter the HS Code';
+    }
+
     if (bookingType === 'FCL') {
       if (!containerList.list || containerList.list.length === 0) {
-        errors.list = 'At least one container is required';
+        errors.list = 'Please enter the valid Container';
       } else {
         containerList.list.forEach((item, i) => {
           // Validate container size
           if (item.size === undefined || item.size === null || item.size === '') {
-            errors[`container_${i}_size`] = 'Container size is required';
+            errors[`container_${i}_size`] = 'Please enter the valid Container size';
           }
 
           // Validate each field in the container
           item.fields?.forEach((field, j) => {
             const errorKey = `container_${i}_field_${j}`;
-
             const fieldValue = field?.value || null;
 
-            // Special handling for Count field
-            // Validate Weight field
             if (field.label === 'Count') {
-              if (field.required) {
-                errors[errorKey] = 'Count is required';
-              } else if (field.required && (fieldValue === null || fieldValue === undefined || fieldValue === '')) {
-                errors[errorKey] = 'Count is required';
+              if (field.required && (fieldValue === null || fieldValue === undefined || fieldValue === '')) {
+                errors[errorKey] = 'Please enter the valid Count';
               } else if (fieldValue < 1) {
-                errors[errorKey] = 'Count must be at least 1';
+                errors[errorKey] = 'Please enter the valid Count';
               }
             }
             // else if (field.label === 'Weight (mt)') {
-            //   if (field.required && !valueExists) {
-            //     errors[errorKey] = 'Weight is required';
-            //   } else if (field.required && (fieldValue === null || fieldValue === undefined || fieldValue === '')) {
-            //     errors[errorKey] = 'Weight is required';
+            //   if (field.required && (fieldValue === null || fieldValue === undefined || fieldValue === '')) {
+            //     errors[errorKey] = 'Please enter the valid Weight';
             //   } else if (fieldValue <= 0) {
-            //     errors[errorKey] = 'Weight must be greater than 0';
+            //     errors[errorKey] = 'Please enter the valid Weight';
             //   }
             // }
-            // Validate other required fields
-            else if (field.required) {
-              errors[errorKey] = `${field.label} is required`;
-            } else if (field.required && (fieldValue === null || fieldValue === undefined || fieldValue === '')) {
-              errors[errorKey] = `${field.label} is required`;
+            else if (field.required && (fieldValue === null || fieldValue === undefined || fieldValue === '')) {
+              errors[errorKey] = `Please enter the valid ${field.label}`;
             }
           });
         });
       }
-    }
-    else if (bookingType === 'LCL') {
+    } else if (bookingType === 'LCL') {
       if (!containerList.no_of_packages) {
-        errors.no_of_packages = 'Number of packages is required';
+        errors.no_of_packages = 'Please enter the Number of packages';
       }
       if (!containerList.gross_weight) {
-        errors.gross_weight = 'Gross weight is required';
+        errors.gross_weight = 'Please enter the Gross weight';
       }
       if (!containerList.volume) {
-        errors.volume = 'Volume is required';
+        errors.volume = 'Please enter the Volume';
       }
     } else if (bookingType === 'AIR') {
       if (!containerList.no_of_packages) {
-        errors.no_of_packages = 'Number of packages is required';
+        errors.no_of_packages = 'Please enter the Number of packages';
       }
       if (!containerList.gross_weight) {
-        errors.gross_weight = 'Gross weight is required';
+        errors.gross_weight = 'Please enter the Gross weight';
       }
       if (!containerList.volume_weight) {
-        errors.volume_weight = 'Volume weight is required';
+        errors.volume_weight = 'Please enter the Volume weight';
       }
     }
 
     return errors;
   };
+
   return (
     <>
       <form onSubmit={form.onSubmit(handleSubmit)}>
