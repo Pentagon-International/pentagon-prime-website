@@ -68,12 +68,147 @@ const CustomerRequestForm = (data = {
   const { seaData, airData, setSeaData, setAirData } = useTransportStore();
   const selectData = formValues?.typeOfBooking === 'air' ? airData : seaData
   const router = useRouter();
-  console.log({ formValues }, "formvalues of crffffff");
   if (!formValues) {
     return <div>Loading...</div>;
   }
+
   const [filteredOriginData, setFilteredOriginData] = useState(formValues?.memoizedTransportData || []);
   const [filteredDestinationData, setFilteredDestinationData] = useState(formValues?.memoizedTransportData || []);
+
+  // const form = useForm({
+  //   mode: 'controlled',
+  //   initialValues: {
+  //     typeofBooking: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
+  //     category: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
+  //     customer_name: '',
+  //     contact_number: '',
+  //     email: '',
+  //     result: [
+  //       {
+  //         origin: {
+  //           ...(formValues?.origin || {})
+  //         },
+  //         destination: formValues?.destination || {},
+  //         cargo: {
+  //           isDangerous: false,
+  //           remarks: '',
+  //         },
+  //         unNo: null,
+  //         imo: null,
+  //         agents: ["55bf1d1d-66ad-4726-8d72-8b39308792e1"],
+  //         stackable: true,
+  //         documents: [],
+  //         container_details: null
+  //       }
+  //     ]
+  //   },
+  //   validate: (values) => {
+  //     const errors = {};
+
+  //     // Basic fields validation
+  //     if (!values.customer_name) errors.customer_name = 'Name is required';
+
+  //     if (!values.contact_number) {
+  //       errors.contact_number = 'Mobile number is required';
+  //     } else if (!/^\d{10,15}$/.test(values.contact_number)) {
+  //       errors.contact_number = 'Invalid mobile number';
+  //     }
+
+  //     if (!values.email) {
+  //       errors.email = 'Email is required';
+  //     } else if (!/^\S+@\S+$/.test(values.email)) {
+  //       errors.email = 'Invalid email';
+  //     }
+
+  //     // Result array validation
+  //     if (values.result && values.result.length > 0) {
+  //       const resultErrors = [];
+  //       console.log('result errors', resultErrors);
+
+  //       const firstResult = values.result[0];
+
+  //       // Origin validation
+  //       if (!firstResult.origin || !firstResult.origin.origin) {
+  //         resultErrors.push({ origin: { origin: 'Origin is required' } });
+  //       }
+
+  //       if (!firstResult.origin.shipment_type) {
+  //         console.log('satisfied');
+  //         resultErrors.push({ origin: { shipment_type: 'Shipment is required' } });
+  //       }
+  //       if (!firstResult.origin.ready_date) {
+  //         resultErrors.push({ origin: { ready_date: 'Cargo ready date is required' } });
+  //       }
+
+  //       // Destination validation
+  //       if (!firstResult.destination || !firstResult.destination.destination) {
+  //         resultErrors.push({ destination: { destination: 'Destination is required' } });
+  //       }
+
+  //       // Container details validation
+  //       if (!firstResult.container_details) {
+  //         resultErrors.push({ container_details: 'Cargo details are required' });
+  //       } else {
+  //         const bookingType = values.typeofBooking;
+  //         const containerDetails = firstResult.container_details;
+
+  //         if (bookingType === 'FCL') {
+  //           if (!containerDetails.list || containerDetails.list.length === 0) {
+  //             resultErrors.push({ container_details: 'At least one container is required' });
+  //           } else {
+  //             for (const container of containerDetails.list) {
+  //               if (!container.size) {
+  //                 resultErrors.push({ container_details: 'Container size is required' });
+  //                 break;
+  //               }
+
+  //               if (container.fields) {
+  //                 for (const field of container.fields) {
+  //                   if (field.required && !field.value) {
+  //                     resultErrors.push({ container_details: `${field.label} is required` });
+  //                     break;
+  //                   }
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         } else if (bookingType === 'LCL' || bookingType === 'AIR') {
+  //           if (!containerDetails.no_of_packages) {
+  //             resultErrors.push({ container_details: 'Number of packages is required' });
+  //           }
+
+  //           if (!containerDetails.gross_weight) {
+  //             resultErrors.push({ container_details: 'Gross weight is required' });
+  //           }
+
+  //           if (bookingType === 'LCL' && !containerDetails.volume) {
+  //             resultErrors.push({ container_details: 'Volume is required for LCL' });
+  //           }
+
+  //           if (bookingType === 'AIR' && !containerDetails.volume_weight) {
+  //             resultErrors.push({ container_details: 'Volume weight is required for AIR' });
+  //           }
+  //         }
+  //       }
+
+  //       // Dangerous cargo validation
+  //       if (firstResult.cargo?.isDangerous) {
+  //         if (!firstResult.imo) {
+  //           resultErrors.push({ imo: 'IMO class is required for dangerous goods' });
+  //         }
+  //         if (!firstResult.unNo) {
+  //           resultErrors.push({ unNo: 'UN number is required for dangerous goods' });
+  //         }
+  //       }
+
+  //       if (resultErrors.length > 0) {
+  //         errors.result = resultErrors.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+  //       }
+  //     }
+
+  //     return errors;
+  //   }
+  // });
 
   const form = useForm({
     mode: 'controlled',
@@ -85,7 +220,9 @@ const CustomerRequestForm = (data = {
       email: '',
       result: [
         {
-          origin: formValues?.origin || {},
+          origin: {
+            ...(formValues?.origin || {})
+          },
           destination: formValues?.destination || {},
           cargo: {
             isDangerous: false,
@@ -102,109 +239,135 @@ const CustomerRequestForm = (data = {
     },
     validate: (values) => {
       const errors = {};
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phoneRegex = /^\d{10,15}$/;
 
       // Basic fields validation
-      if (!values.customer_name) errors.customer_name = 'Name is required';
+      if (!values.customer_name) {
+        errors.customer_name = 'Name is required';
+      }
 
       if (!values.contact_number) {
         errors.contact_number = 'Mobile number is required';
-      } else if (!/^\d{10,15}$/.test(values.contact_number)) {
-        errors.contact_number = 'Invalid mobile number';
+      } else if (!phoneRegex.test(values.contact_number)) {
+        errors.contact_number = 'Invalid mobile number (10-15 digits required)';
       }
 
       if (!values.email) {
         errors.email = 'Email is required';
-      } else if (!/^\S+@\S+$/.test(values.email)) {
-        errors.email = 'Invalid email';
+      } else if (!emailRegex.test(values.email)) {
+        errors.email = 'Invalid email format';
       }
 
       // Result array validation
-      if (values.result && values.result.length > 0) {
+      if (values.result?.length > 0) {
         const resultErrors = [];
         const firstResult = values.result[0];
+        const { origin, destination, cargo, container_details } = firstResult;
+        const bookingType = values.typeofBooking;
 
         // Origin validation
-        if (!firstResult.origin || !firstResult.origin.origin) {
-          resultErrors.push({ origin: { origin: 'Origin is required' } });
+        if (!origin?.origin) {
+          resultErrors.push({ origin: { origin: 'Origin location is required' } });
         }
-
-        if (!firstResult.origin || !firstResult.origin.shipment_type) {
-          resultErrors.push({ origin: { shipment_type: 'Shipment terms are required' } });
+        if (!firstResult.origin?.shipment_type) {
+          resultErrors.origin = {
+            ...resultErrors.origin,
+            shipment_type: 'Shipment terms are required'
+          };
         }
-
-        if (!firstResult.origin || !firstResult.origin.ready_date) {
-          resultErrors.push({ origin: { ready_date: 'Cargo ready date is required' } });
+        if (!firstResult.origin?.ready_date) {
+          resultErrors.origin = {
+            ...resultErrors.origin,
+            ready_date: 'Cargo ready date is required'
+          };
         }
 
         // Destination validation
-        if (!firstResult.destination || !firstResult.destination.destination) {
+        if (!destination?.destination) {
           resultErrors.push({ destination: { destination: 'Destination is required' } });
         }
 
         // Container details validation
-        if (!firstResult.container_details) {
+        if (!container_details) {
           resultErrors.push({ container_details: 'Cargo details are required' });
         } else {
-          const bookingType = values.typeofBooking;
-          const containerDetails = firstResult.container_details;
-
-          if (bookingType === 'FCL') {
-            if (!containerDetails.list || containerDetails.list.length === 0) {
-              resultErrors.push({ container_details: 'At least one container is required' });
-            } else {
-              for (const container of containerDetails.list) {
-                if (!container.size) {
-                  resultErrors.push({ container_details: 'Container size is required' });
-                  break;
-                }
-
-                if (container.fields) {
-                  for (const field of container.fields) {
-                    if (field.required && !field.value) {
-                      resultErrors.push({ container_details: `${field.label} is required` });
-                      break;
-                    }
+          switch (bookingType) {
+            case 'FCL':
+              if (!container_details.list?.length) {
+                resultErrors.push({ container_details: 'At least one container is required' });
+              } else {
+                container_details.list.forEach((container, index) => {
+                  if (!container.size) {
+                    resultErrors.push({
+                      container_details: `Container ${index + 1}: Size is required`
+                    });
                   }
-                }
+
+                  container.fields?.forEach(field => {
+                    if (field.required && !field.value) {
+                      resultErrors.push({
+                        container_details: `Container ${index + 1}: ${field.label} is required`
+                      });
+                    }
+                  });
+                });
               }
-            }
-          } else if (bookingType === 'LCL' || bookingType === 'AIR') {
-            if (!containerDetails.no_of_packages) {
-              resultErrors.push({ container_details: 'Number of packages is required' });
-            }
+              break;
 
-            if (!containerDetails.gross_weight) {
-              resultErrors.push({ container_details: 'Gross weight is required' });
-            }
+            case 'LCL':
+              if (!container_details.no_of_packages) {
+                resultErrors.push({ container_details: 'Number of packages is required' });
+              }
+              if (!container_details.gross_weight) {
+                resultErrors.push({ container_details: 'Gross weight is required' });
+              }
+              if (!container_details.volume) {
+                resultErrors.push({ container_details: 'Volume is required for LCL' });
+              }
+              break;
 
-            if (bookingType === 'LCL' && !containerDetails.volume) {
-              resultErrors.push({ container_details: 'Volume is required for LCL' });
-            }
+            case 'AIR':
+              if (!container_details.no_of_packages) {
+                resultErrors.push({ container_details: 'Number of packages is required' });
+              }
+              if (!container_details.gross_weight) {
+                resultErrors.push({ container_details: 'Gross weight is required' });
+              }
+              if (!container_details.volume_weight) {
+                resultErrors.push({ container_details: 'Volume weight is required for AIR' });
+              }
+              break;
 
-            if (bookingType === 'AIR' && !containerDetails.volume_weight) {
-              resultErrors.push({ container_details: 'Volume weight is required for AIR' });
-            }
+            default:
+              resultErrors.push({ container_details: `Unknown booking type: ${bookingType}` });
           }
         }
 
         // Dangerous cargo validation
-        if (firstResult.cargo?.isDangerous) {
+        if (cargo?.isDangerous) {
+
           if (!firstResult.imo) {
+            console.log('satisfied no data');
+
             resultErrors.push({ imo: 'IMO class is required for dangerous goods' });
           }
-          if (!firstResult.unNo) {
-            resultErrors.push({ unNo: 'UN number is required for dangerous goods' });
-          }
+          // if (!firstResult.unNo) {
+          //   resultErrors.push({ unNo: 'UN number is required for dangerous goods' });
+          // }
         }
+        console.log('result errrorssss', resultErrors);
 
-        if (resultErrors.length > 0) {
-          errors.result = resultErrors.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+        // Combine result errors if any exist
+        if (Object.keys(resultErrors).length > 0) {
+          errors.result = [resultErrors];
         }
       }
 
       return errors;
     }
   });
+  console.log('form errors', form.errors);
 
   const CodeCategory = useQuery({
     queryKey: ["hs-code-category"],
@@ -249,6 +412,8 @@ const CustomerRequestForm = (data = {
   const [openedModal, setOpenedModal] = useState(null);
   const openModal = (type) => setOpenedModal(type);
   const closeModal = () => setOpenedModal(null);
+  const [modalErrors, setModalErrors] = useState({});
+
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [containerList, setContainerList] = useState({
     commodity: data?.commodity,
@@ -263,6 +428,7 @@ const CustomerRequestForm = (data = {
     containerCount: data?.containerCount || null,
     list: data?.list || [],
   });
+
   const [activeType, setActiveType] = useState(data?.type || "GC");
   const [activeSize, setActiveSize] = useState(defaultSize);
   const [selectedSize, setSelectedSize] = useState([]);
@@ -378,6 +544,7 @@ const CustomerRequestForm = (data = {
   }, [formValues?.activeTransport]);
 
   const handleAddCargoClick = () => {
+    setModalErrors({}); // Clear previous errors
     const bookingType = form.values.typeofBooking;
     if (bookingType === 'FCL') {
       openModal('FCL');
@@ -441,6 +608,7 @@ const CustomerRequestForm = (data = {
     },
     enabled: containerList?.hsCode ? true : false,
   });
+
   const addNewContainer = () => {
     setContainerList((st) => {
       const newContainer = getContainerFields(st.type, st.dimension);
@@ -764,10 +932,6 @@ const CustomerRequestForm = (data = {
     submitCustomerRequest.mutate(payload);
   };
   useEffect(() => {
-    console.log("Form values:", form.values);
-    console.log("Form values typeofBooking:", form.values.typeofBooking);
-  }, [form.values]);
-  useEffect(() => {
     if (formValues?.activeTransport) {
       const bookingType = formValues.activeTransport === "sea" ? 'FCL' : 'AIR';
       form.setValues({
@@ -777,6 +941,111 @@ const CustomerRequestForm = (data = {
       });
     }
   }, [formValues?.activeTransport]);
+
+
+  const validateCargoDetails = () => {
+    const bookingType = form.values.typeofBooking;
+    const errors = {};
+
+    // Common validation for all types
+    if (!containerList.commodity) {
+      errors.commodity = 'Commodity is required';
+    }
+    // if (!containerList.hs1) {
+    //   errors.hs1 = 'HS Code Category is required';
+    // }
+    if (containerList.hs1 && !containerList.hs2) {
+      errors.hs2 = 'HS Code is required';
+    }
+
+    // Type-specific validation
+    // if (bookingType === 'FCL') {
+    //   if (!containerList.list || containerList.list.length === 0) {
+    //     errors.list = 'At least one container is required';
+    //   } else {
+    //     containerList.list.forEach((item, i) => {
+    //       if (!item.size) {
+    //         errors[`container_${i}_size`] = 'Container size is required';
+    //       }
+    //       item.fields?.forEach((field, j) => {
+    //         if (field.required && !field.value && field.type !== types.CHECKBOX) {
+    //           errors[`container_${i}_field_${j}`] = `${field.label} is required`;
+    //         }
+    //       });
+    //     });
+    //   }
+    // }
+    // Type-specific validation
+    if (bookingType === 'FCL') {
+      if (!containerList.list || containerList.list.length === 0) {
+        errors.list = 'At least one container is required';
+      } else {
+        containerList.list.forEach((item, i) => {
+          // Validate container size
+          if (item.size === undefined || item.size === null || item.size === '') {
+            errors[`container_${i}_size`] = 'Container size is required';
+          }
+
+          // Validate each field in the container
+          item.fields?.forEach((field, j) => {
+            const errorKey = `container_${i}_field_${j}`;
+
+            const fieldValue = field?.value || null;
+
+            // Special handling for Count field
+            // Validate Weight field
+            if (field.label === 'Count') {
+              if (field.required) {
+                errors[errorKey] = 'Count is required';
+              } else if (field.required && (fieldValue === null || fieldValue === undefined || fieldValue === '')) {
+                errors[errorKey] = 'Count is required';
+              } else if (fieldValue < 1) {
+                errors[errorKey] = 'Count must be at least 1';
+              }
+            }
+            // else if (field.label === 'Weight (mt)') {
+            //   if (field.required && !valueExists) {
+            //     errors[errorKey] = 'Weight is required';
+            //   } else if (field.required && (fieldValue === null || fieldValue === undefined || fieldValue === '')) {
+            //     errors[errorKey] = 'Weight is required';
+            //   } else if (fieldValue <= 0) {
+            //     errors[errorKey] = 'Weight must be greater than 0';
+            //   }
+            // }
+            // Validate other required fields
+            else if (field.required) {
+              errors[errorKey] = `${field.label} is required`;
+            } else if (field.required && (fieldValue === null || fieldValue === undefined || fieldValue === '')) {
+              errors[errorKey] = `${field.label} is required`;
+            }
+          });
+        });
+      }
+    }
+    else if (bookingType === 'LCL') {
+      if (!containerList.no_of_packages) {
+        errors.no_of_packages = 'Number of packages is required';
+      }
+      if (!containerList.gross_weight) {
+        errors.gross_weight = 'Gross weight is required';
+      }
+      if (!containerList.volume) {
+        errors.volume = 'Volume is required';
+      }
+    } else if (bookingType === 'AIR') {
+      if (!containerList.no_of_packages) {
+        errors.no_of_packages = 'Number of packages is required';
+      }
+      if (!containerList.gross_weight) {
+        errors.gross_weight = 'Gross weight is required';
+      }
+      if (!containerList.volume_weight) {
+        errors.volume_weight = 'Volume weight is required';
+      }
+    }
+
+    return errors;
+  };
   return (
     <>
       <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -789,7 +1058,7 @@ const CustomerRequestForm = (data = {
           <Grid px={'13%'}>
             <Grid.Col span={isMobile ? 12 : 5}>
               <Select
-                error={form.errors?.result?.[0]?.origin?.origin}
+                error={form.errors?.result?.[0]?.find(item => item?.origin)?.origin?.origin || null}
                 withAsterisk
                 label={'Origin'}
                 searchable
@@ -815,10 +1084,15 @@ const CustomerRequestForm = (data = {
                   },
                   label: {
                     fontSize: isMobile ? '14px' : '16px',
-                  }
+                  },
+                  error: {
+                    fontSize: isMobile ? '12px' : '14px', // Smaller error text
+                    marginTop: '4px',
+                  },
+
                 }}
                 radius="md"
-                value={form?.values?.result?.[0]?.origin?.origin}
+                value={form?.values?.result?.[0]?.origin?.origin || []}
                 leftSection={<IconMapPin size={20} color={COLORS.secondaryColor} />}
                 onChange={(origin, value) => {
                   form.setValues((prevValues) => ({
@@ -858,7 +1132,8 @@ const CustomerRequestForm = (data = {
             </Grid.Col>
             <Grid.Col span={isMobile ? 12 : 5} >
               <Select
-                error={form.errors?.result?.[0]?.destination?.destination}
+                // error={form.errors?.result?.[0]?.destination?.destination}
+                error={form.errors?.result?.[0]?.find(item => item?.destination)?.destination?.destination || null}
                 label={'Destination'}
                 withAsterisk
                 searchable
@@ -869,7 +1144,7 @@ const CustomerRequestForm = (data = {
                 // data={formValues?.memoizedTransportData}
                 limit={5}
                 fw={500}
-                value={form?.values?.result?.[0]?.destination?.destination}
+                value={form?.values?.result?.[0]?.destination?.destination || []}
                 clearable
                 clearButtonProps={{
                   style: {
@@ -885,7 +1160,12 @@ const CustomerRequestForm = (data = {
                   },
                   label: {
                     fontSize: isMobile ? '14px' : '16px',
-                  }
+                  },
+                  error: {
+                    fontSize: isMobile ? '12px' : '14px', // Smaller error text
+                    marginTop: '4px',
+                  },
+
                 }}
                 radius="md"
                 leftSection={<IconMapPin size={20} color={COLORS.secondaryColor} />}
@@ -1027,6 +1307,7 @@ const CustomerRequestForm = (data = {
                 data={shipmentTermsQuery?.data || []}
                 searchable
                 clearable
+                value={form.values.result?.[0]?.origin?.shipment_type || null} // Add this line
                 clearButtonProps={{
                   style: {
                     color: '#afb1b4',
@@ -1065,9 +1346,10 @@ const CustomerRequestForm = (data = {
                   }
                 }}
                 radius="md"
-                error={form.errors?.result?.[0]?.origin?.origin}
+                error={form.errors?.result?.[0]?.origin?.shipment_type}
               />
             </Grid.Col>
+
             <Grid.Col span={6}>
               <DateInput
                 size={isMobile ? "md" : "lg"}
@@ -1120,6 +1402,7 @@ const CustomerRequestForm = (data = {
                 minDate={today.add(1, 'day').toDate()}
                 maxDate={today.add(1, 'year').toDate()}
                 rightSection={<IconCalendar stroke={1.5} />}
+                error={form.errors?.result?.[0]?.origin?.ready_date}
               />
             </Grid.Col>
             <Grid.Col span={6} >
@@ -1511,6 +1794,7 @@ const CustomerRequestForm = (data = {
                 <Grid.Col span={6}>
                   <Select
                     withAsterisk
+                    error={form.errors?.result?.[0]?.find(item => item?.imo)?.imo || null}
                     label="IMO class"
                     placeholder="Select IMO class"
                     size={isMobile ? "md" : "lg"}
@@ -1524,7 +1808,7 @@ const CustomerRequestForm = (data = {
                       },
                     }}
                     comboboxProps={{ shadow: 'md' }}
-                    value={form?.values?.result?.[0]?.imo}
+                    value={form?.values?.result?.[0]?.imo || []}
                     onChange={(imo) => {
                       form.setValues((prevValues) => ({
                         ...prevValues,
@@ -1559,7 +1843,7 @@ const CustomerRequestForm = (data = {
 
                 <Grid.Col span={6}>
                   <TextInput
-                    withAsterisk
+                    // withAsterisk
                     value={form?.values?.result?.[0]?.unNo || ''}
                     size={isMobile ? "md" : "lg"}
                     label='UN No'
@@ -1705,9 +1989,10 @@ const CustomerRequestForm = (data = {
                   Cancel
                 </Button>
                 <Button t={30}
+                  loading={submitCustomerRequest.isPending}
                   // size='lg'
                   fw={600}
-                  disabled={!form.isValid()}
+                  // disabled={!form.isValid()}
                   radius={'8px'}
                   styles={{
                     label: {
@@ -1727,12 +2012,23 @@ const CustomerRequestForm = (data = {
         </Container>
 
         <Modal
+          //  
           opened={openedModal !== null}
           onClose={closeModal}
           size="70%"
+          styles={{
+            content: {
+              height: '60vh', // or '50vh', '100%', etc.
+            },
+          }}
           title={<CustomTitle />}
           centered
         >
+          {Object.keys(modalErrors).length > 0 && (
+            <Alert color="red" mb="md">
+              Please fill all required fields
+            </Alert>
+          )}
           <Grid gutter="sm">
             {/* Common Fields */}
             <Grid.Col span={6}>
@@ -1757,6 +2053,7 @@ const CustomerRequestForm = (data = {
 
             <Grid.Col span={isMobile ? 12 : 6}>
               <TextInput
+                error={modalErrors.commodity}
                 color={COLORS.portColor}
                 placeholder="Enter Commodity"
                 size={isMobile ? "md" : "lg"}
@@ -1768,7 +2065,7 @@ const CustomerRequestForm = (data = {
                   error: { fontSize: isMobile ? '12px' : '14px' }
                 }}
                 radius="md"
-                value={containerList.commodity}
+                value={containerList.commodity || ""}
                 onChange={(e) => setContainerList((st) => ({ ...st, commodity: e.target.value }))}
               />
             </Grid.Col>
@@ -1796,7 +2093,7 @@ const CustomerRequestForm = (data = {
                   error: { fontSize: isMobile ? '12px' : '14px' }
                 }}
                 radius="md"
-                value={containerList.hs1}
+                value={containerList.hs1 || []}
                 onChange={(v, opt) => {
                   setContainerList((st) => ({
                     ...st,
@@ -1810,6 +2107,7 @@ const CustomerRequestForm = (data = {
             {containerList.hs1 && HsCodeQuery.data?.length ? (
               <Grid.Col span={6}>
                 <Select
+                  error={modalErrors.hs2}
                   clearable
                   clearButtonProps={{
                     style: {
@@ -1830,7 +2128,7 @@ const CustomerRequestForm = (data = {
                     error: { fontSize: isMobile ? '12px' : '14px' }
                   }}
                   radius="md"
-                  value={containerList.hs2}
+                  value={containerList.hs2 || []}
                   onChange={(v, opt) =>
                     setContainerList((st) => ({
                       ...st,
@@ -1872,7 +2170,7 @@ const CustomerRequestForm = (data = {
                             label="Container Size"
                             w="auto"
                             data={contSize}
-                            value={item.size}
+                            value={item.size || []}
                             onChange={(v) => handleSizeChange(i, v)}
                             required
                             styles={{
@@ -1889,14 +2187,17 @@ const CustomerRequestForm = (data = {
 
                         {item?.fields?.map((field, j, arr) => {
                           const inputSize = arr.length > 2 ? 'auto' : 'auto';
+                          const errorKey = `container_${i}_field_${j}`;
+                          const fieldError = modalErrors[errorKey];
 
                           if (field.type === types.DROPDOWN) {
                             return (
                               <Grid.Col span={3} key={j}>
                                 <Select
+                                  error={fieldError}
                                   w={inputSize}
                                   label={field.label}
-                                  value={field.value}
+                                  value={field.value || []}
                                   onChange={handleFields(i, j)}
                                   {...(field.options || {})}
                                   styles={{
@@ -1917,6 +2218,7 @@ const CustomerRequestForm = (data = {
                             return (
                               <Grid.Col span={3} key={j}>
                                 <NumberInput
+                                  error={fieldError}
                                   w={inputSize}
                                   hideControls
                                   label={field.label}
@@ -1996,6 +2298,7 @@ const CustomerRequestForm = (data = {
               <>
                 <Grid.Col span={isMobile ? 12 : 6}>
                   <TextInput
+                    error={modalErrors.no_of_packages}
                     color={COLORS.portColor}
                     placeholder="Enter No of Packages"
                     size={isMobile ? "md" : "lg"}
@@ -2014,6 +2317,7 @@ const CustomerRequestForm = (data = {
 
                 <Grid.Col span={isMobile ? 12 : 6}>
                   <TextInput
+                    error={modalErrors.gross_weight}
                     color={COLORS.portColor}
                     placeholder="Enter Gross Weight"
                     size={isMobile ? "md" : "lg"}
@@ -2032,6 +2336,7 @@ const CustomerRequestForm = (data = {
 
                 <Grid.Col span={isMobile ? 12 : 6}>
                   <TextInput
+                    error={modalErrors.volume}
                     color={COLORS.portColor}
                     placeholder="Enter Volume"
                     size={isMobile ? "md" : "lg"}
@@ -2043,7 +2348,7 @@ const CustomerRequestForm = (data = {
                       error: { fontSize: isMobile ? '12px' : '14px' }
                     }}
                     radius="md"
-                    value={containerList.volume}
+                    value={containerList.volume || ''}
                     onChange={(e) => setContainerList((st) => ({ ...st, volume: e.target.value }))}
                   />
                 </Grid.Col>
@@ -2056,6 +2361,7 @@ const CustomerRequestForm = (data = {
                 <Grid.Col span={isMobile ? 12 : 6}>
                   <TextInput
                     color={COLORS.portColor}
+                    error={modalErrors?.no_of_packages}
                     placeholder="Enter No of Packages"
                     size={isMobile ? "md" : "lg"}
                     label="No of Packages"
@@ -2066,13 +2372,14 @@ const CustomerRequestForm = (data = {
                       error: { fontSize: isMobile ? '12px' : '14px' }
                     }}
                     radius="md"
-                    value={containerList.packages}
+                    value={containerList.no_of_packages || ''}
                     onChange={(e) => setContainerList((st) => ({ ...st, no_of_packages: e.target.value }))}
                   />
                 </Grid.Col>
 
                 <Grid.Col span={isMobile ? 12 : 6}>
                   <TextInput
+                    error={modalErrors?.gross_weight}
                     color={COLORS.portColor}
                     placeholder="Enter Gross Weight"
                     size={isMobile ? "md" : "lg"}
@@ -2084,13 +2391,14 @@ const CustomerRequestForm = (data = {
                       error: { fontSize: isMobile ? '12px' : '14px' }
                     }}
                     radius="md"
-                    value={containerList.grossWeight}
+                    value={containerList.gross_weight || ''}
                     onChange={(e) => setContainerList((st) => ({ ...st, gross_weight: e.target.value }))}
                   />
                 </Grid.Col>
 
                 <Grid.Col span={isMobile ? 12 : 6}>
                   <TextInput
+                    error={modalErrors?.volume_weight}
                     color={COLORS.portColor}
                     label="Volume Weight (Kgs)"
                     placeholder="Volume Weight"
@@ -2102,7 +2410,7 @@ const CustomerRequestForm = (data = {
                       error: { fontSize: isMobile ? '12px' : '14px' }
                     }}
                     radius="md"
-                    value={containerList.volume_weight}
+                    value={containerList.volume_weight || ''}
                     onChange={(e) => setContainerList((st) => ({ ...st, volume_weight: e.target.value }))}
                   />
                 </Grid.Col>
@@ -2116,21 +2424,26 @@ const CustomerRequestForm = (data = {
                 radius="md"
                 size="sm"
                 onClick={() => {
-                  form.setValues((prevValues) => ({
-                    ...prevValues,
-                    result: prevValues.result
-                      ? [
-                        {
-                          ...prevValues.result[0],
-                          container_details: {
-                            ...prevValues.result[0]?.container_details,
-                            ...containerList,
+                  const errors = validateCargoDetails();
+                  setModalErrors(errors);
+
+                  if (Object.keys(errors).length === 0) {
+                    form.setValues((prevValues) => ({
+                      ...prevValues,
+                      result: prevValues.result
+                        ? [
+                          {
+                            ...prevValues.result[0],
+                            container_details: {
+                              ...prevValues.result[0]?.container_details,
+                              ...containerList,
+                            },
                           },
-                        },
-                      ]
-                      : [],
-                  }));
-                  closeModal();
+                        ]
+                        : [],
+                    }));
+                    closeModal();
+                  }
                 }}
               >
                 Add

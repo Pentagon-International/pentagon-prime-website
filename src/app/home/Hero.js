@@ -223,11 +223,41 @@ const Hero = ({ title, content }) => {
     );
   }, [formValue?.origin?.origin, formValue?.destination?.destination]);
 
+  const [formErrors, setFormErrors] = useState({
+    origin: false,
+    destination: false
+  });
+
   const handleGetQuote = () => {
-    if (isFormValid) {
-      setFormValues(formValue);
-      router.push('/customer-request-form');
+    // Reset errors
+    setFormErrors({
+      origin: !formValue?.origin?.origin,
+      destination: !formValue?.destination?.destination
+    });
+
+    // Check if fields are empty
+    if (!formValue?.origin?.origin || !formValue?.destination?.destination) {
+      notifications.show({
+        title: 'Error',
+        message: 'Please select both origin and destination',
+        color: 'red',
+      });
+      return;
     }
+
+    // Check if origin and destination are same
+    if (formValue.origin.origin === formValue.destination.destination) {
+      notifications.show({
+        title: 'Error',
+        message: 'Origin and destination cannot be the same',
+        color: 'red',
+      });
+      return;
+    }
+
+    // If all validations pass
+    setFormValues(formValue);
+    router.push('/customer-request-form');
   };
 
   return (
@@ -301,6 +331,7 @@ const Hero = ({ title, content }) => {
                           color: '#afb1b4',
                         },
                       }}
+                      error={formErrors.destination ? <Text fw={400} size='sm' > Please Select origin </Text> : null}
                       styles={{
                         input: {
                           fontSize: '18px',
@@ -373,6 +404,7 @@ const Hero = ({ title, content }) => {
                       data={filteredDestinationOptions}
                       radius="md"
                       w={isMobile ? '100%' : '45%'}
+                      error={formErrors.destination ? <Text fw={400} size='sm' > Please select destination </Text> : null}
                       styles={{
                         input: {
                           fontSize: '18px',
@@ -417,7 +449,6 @@ const Hero = ({ title, content }) => {
                     mt={30}
                     size='lg'
                     fw={600}
-                    disabled={!isFormValid}
                     styles={{
                       label: {
                         fontSize: '16px',
