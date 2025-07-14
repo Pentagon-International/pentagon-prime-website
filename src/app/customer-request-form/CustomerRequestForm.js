@@ -18,10 +18,66 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { result } from "lodash";
 import { useRouter } from "next/navigation";
 import { notifications } from "@mantine/notifications";
+import { Transition } from '@mantine/core';
+
+function CargoButton({
+  hasContainerDetailsError,
+  form,
+  handleAddCargoClick,
+}) {
+  const [pulse, setPulse] = useState(false);
+
+  // Toggle "pulse" flag every 700 ms while the error is active
+  useEffect(() => {
+    if (!hasContainerDetailsError) {
+      setPulse(false);
+      return;
+    }
+
+    const id = setInterval(() => setPulse((v) => !v), 700);
+    return () => clearInterval(id);
+  }, [hasContainerDetailsError]);
+
+  const containerDetails = form?.values?.result?.[0]?.container_details;
+
+  // Two inline‑style states to alternate between
+  const baseStyle = {
+    transform: 'scale(1)',
+  };
+  const pulsedStyle = {
+    transform: 'scale(1)',
+    boxShadow: '0 0 8px rgba(255, 0, 0, 0.45)',
+  };
+
+  return (
+    <Transition mounted transition="fade" duration={200} timingFunction="ease">
+      {(styles) => (
+        <Button
+          style={{
+            ...styles, // from Transition fade‑in/out
+            ...(hasContainerDetailsError ? (pulse ? pulsedStyle : baseStyle) : {}),
+          }}
+          color={hasContainerDetailsError ? 'red' : ''}
+          variant={hasContainerDetailsError ? 'outline' : 'filled'}
+          fullWidth
+          onClick={handleAddCargoClick}
+          leftSection={<IconPlus />}
+        >
+          Add Cargo Details{' '}
+          {containerDetails
+            ? `(${containerDetails.type} – ${containerDetails.list?.length ?? containerDetails.containerCount
+            })`
+            : ''}
+        </Button>
+      )}
+    </Transition>
+  );
+}
+
 
 const today = dayjs()
 
-const ListAttachments = ({ data = [] }) => {
+const ListAttachments = ({ data = [], onDelete }) => {
   if (!data || data?.length === 0) {
     return null;
   }
@@ -46,10 +102,20 @@ const ListAttachments = ({ data = [] }) => {
       {uniqueFiles?.map((attachment, index) => (
         attachment?.url ? (
           <List.Item key={index} py={'xs'}>
-            <Anchor href={attachment.url} target='_blank' size='sm'>
-              {attachment.displayName ||
-                (attachment.url.split('/').pop()?.split('?')[0] || 'Document')}
-            </Anchor>
+            <Group gap="sm">
+              <Anchor href={attachment.url} target='_blank' size='sm'>
+                {attachment.displayName ||
+                  (attachment.url.split('/').pop()?.split('?')[0] || 'Document')}
+              </Anchor>
+              <ActionIcon
+                variant="subtle"
+                color="red"
+                size="sm"
+                onClick={() => onDelete(index)}
+              >
+                <IconTrash size={16} />
+              </ActionIcon>
+            </Group>
           </List.Item>
         ) : null
       ))}
@@ -74,141 +140,6 @@ const CustomerRequestForm = (data = {
 
   const [filteredOriginData, setFilteredOriginData] = useState(formValues?.memoizedTransportData || []);
   const [filteredDestinationData, setFilteredDestinationData] = useState(formValues?.memoizedTransportData || []);
-
-  // const form = useForm({
-  //   mode: 'controlled',
-  //   initialValues: {
-  //     typeofBooking: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
-  //     category: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
-  //     customer_name: '',
-  //     contact_number: '',
-  //     email: '',
-  //     result: [
-  //       {
-  //         origin: {
-  //           ...(formValues?.origin || {})
-  //         },
-  //         destination: formValues?.destination || {},
-  //         cargo: {
-  //           isDangerous: false,
-  //           remarks: '',
-  //         },
-  //         unNo: null,
-  //         imo: null,
-  //         agents: ["55bf1d1d-66ad-4726-8d72-8b39308792e1"],
-  //         stackable: true,
-  //         documents: [],
-  //         container_details: null
-  //       }
-  //     ]
-  //   },
-  //   validate: (values) => {
-  //     const errors = {};
-
-  //     // Basic fields validation
-  //     if (!values.customer_name) errors.customer_name = 'Name is required';
-
-  //     if (!values.contact_number) {
-  //       errors.contact_number = 'Mobile number is required';
-  //     } else if (!/^\d{10,15}$/.test(values.contact_number)) {
-  //       errors.contact_number = 'Invalid mobile number';
-  //     }
-
-  //     if (!values.email) {
-  //       errors.email = 'Email is required';
-  //     } else if (!/^\S+@\S+$/.test(values.email)) {
-  //       errors.email = 'Invalid email';
-  //     }
-
-  //     // Result array validation
-  //     if (values.result && values.result.length > 0) {
-  //       const resultErrors = [];
-  //       console.log('result errors', resultErrors);
-
-  //       const firstResult = values.result[0];
-
-  //       // Origin validation
-  //       if (!firstResult.origin || !firstResult.origin.origin) {
-  //         resultErrors.push({ origin: { origin: 'Origin is required' } });
-  //       }
-
-  //       if (!firstResult.origin.shipment_type) {
-  //         console.log('satisfied');
-  //         resultErrors.push({ origin: { shipment_type: 'Shipment is required' } });
-  //       }
-  //       if (!firstResult.origin.ready_date) {
-  //         resultErrors.push({ origin: { ready_date: 'Cargo ready date is required' } });
-  //       }
-
-  //       // Destination validation
-  //       if (!firstResult.destination || !firstResult.destination.destination) {
-  //         resultErrors.push({ destination: { destination: 'Destination is required' } });
-  //       }
-
-  //       // Container details validation
-  //       if (!firstResult.container_details) {
-  //         resultErrors.push({ container_details: 'Cargo details are required' });
-  //       } else {
-  //         const bookingType = values.typeofBooking;
-  //         const containerDetails = firstResult.container_details;
-
-  //         if (bookingType === 'FCL') {
-  //           if (!containerDetails.list || containerDetails.list.length === 0) {
-  //             resultErrors.push({ container_details: 'At least one container is required' });
-  //           } else {
-  //             for (const container of containerDetails.list) {
-  //               if (!container.size) {
-  //                 resultErrors.push({ container_details: 'Container size is required' });
-  //                 break;
-  //               }
-
-  //               if (container.fields) {
-  //                 for (const field of container.fields) {
-  //                   if (field.required && !field.value) {
-  //                     resultErrors.push({ container_details: `${field.label} is required` });
-  //                     break;
-  //                   }
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         } else if (bookingType === 'LCL' || bookingType === 'AIR') {
-  //           if (!containerDetails.no_of_packages) {
-  //             resultErrors.push({ container_details: 'Number of packages is required' });
-  //           }
-
-  //           if (!containerDetails.gross_weight) {
-  //             resultErrors.push({ container_details: 'Gross weight is required' });
-  //           }
-
-  //           if (bookingType === 'LCL' && !containerDetails.volume) {
-  //             resultErrors.push({ container_details: 'Volume is required for LCL' });
-  //           }
-
-  //           if (bookingType === 'AIR' && !containerDetails.volume_weight) {
-  //             resultErrors.push({ container_details: 'Volume weight is required for AIR' });
-  //           }
-  //         }
-  //       }
-
-  //       // Dangerous cargo validation
-  //       if (firstResult.cargo?.isDangerous) {
-  //         if (!firstResult.imo) {
-  //           resultErrors.push({ imo: 'IMO class is required for dangerous goods' });
-  //         }
-  //         if (!firstResult.unNo) {
-  //           resultErrors.push({ unNo: 'UN number is required for dangerous goods' });
-  //         }
-  //       }
-
-  //       if (resultErrors.length > 0) {
-  //         errors.result = resultErrors.reduce((acc, curr) => ({ ...acc, ...curr }), {});
-  //       }
-  //     }
-
-  //     return errors;
-  //   }
-  // });
 
   const form = useForm({
     mode: 'controlled',
@@ -365,6 +296,11 @@ const CustomerRequestForm = (data = {
 
   });
   console.log('form errors', form.errors);
+
+  const hasContainerDetailsError = form.errors?.result?.[0]?.some(
+    error => error?.container_details !== undefined
+  );
+  console.log("hasContainerDetailsError", hasContainerDetailsError);
 
   const CodeCategory = useQuery({
     queryKey: ["hs-code-category"],
@@ -679,12 +615,12 @@ const CustomerRequestForm = (data = {
     submitCallback(containerList);
   }, [containerList]);
 
-  const fileUpload = useMutation({
+  const { mutate: fileUpload, isPending: isUploading, } = useMutation({
     mutationFn: data =>
       apiCallProtected.post('/pentagon/file/upload', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'x-client-secret': 'jwooF70KzT/gssKNwJVnr522+MaomDhgpocmcvF6ek2e7rI9he9m7guYU6i0OkoQkxu5DHjBgcVVUIgzl9bf0xnBLIgFh69x/uVfJWExIlLcgpLoNwlABxxhXFQmA/0H'
+          'x-client-secret': process.env.NEXT_PUBLIC_X_CLIENT_SECRET
         }
       }),
     onSuccess: (values) => {
@@ -726,7 +662,7 @@ const CustomerRequestForm = (data = {
   const submitCustomerRequest = useMutation({
     mutationFn: (data) => apiCallProtected.post('/pentagon/createQuote', data, {
       headers: {
-        'x-client-secret': 'jwooF70KzT/gssKNwJVnr522+MaomDhgpocmcvF6ek2e7rI9he9m7guYU6i0OkoQkxu5DHjBgcVVUIgzl9bf0xnBLIgFh69x/uVfJWExIlLcgpLoNwlABxxhXFQmA/0H'
+        'x-client-secret': process.env.NEXT_PUBLIC_X_CLIENT_SECRET
       }
     }),
     onSuccess: (res) => {
@@ -736,6 +672,7 @@ const CustomerRequestForm = (data = {
       console.error('Submission error:', error);
     },
   });
+  console.log("isUploading for fileupload:::  ", isUploading);
 
   const handleFileUpload = category => files => {
     const fileObj = new FormData();
@@ -744,7 +681,7 @@ const CustomerRequestForm = (data = {
     // Store the original filename for display
     const originalFilename = files[0].name;
 
-    fileUpload.mutate(fileObj, {
+    fileUpload(fileObj, {
       onSuccess: (response) => {
         const url = response?.data?.data?.url;
         let displayName = originalFilename;
@@ -795,7 +732,22 @@ const CustomerRequestForm = (data = {
       }
     });
   };
+  const handleDeleteFile = (index) => {
+    form.setValues((prevValues) => {
+      const updatedDocuments = [...prevValues.result[0].documents];
+      updatedDocuments.splice(index, 1);
 
+      return {
+        ...prevValues,
+        result: [
+          {
+            ...prevValues.result[0],
+            documents: updatedDocuments,
+          },
+        ],
+      };
+    });
+  };
   const handleSubmit = (values) => {
     // Validate all fields
     form.validate();
@@ -1743,7 +1695,8 @@ const CustomerRequestForm = (data = {
 
             </Grid.Col>
             <Grid.Col span={12}>
-              <Button
+              {/* <Button color={hasContainerDetailsError ? 'red' : ''}
+                variant={hasContainerDetailsError ? "outline" : "filled"}
                 fullWidth
                 onClick={handleAddCargoClick}
                 leftSection={<IconPlus />}
@@ -1753,7 +1706,8 @@ const CustomerRequestForm = (data = {
                   form?.values?.result?.[0]?.container_details?.containerCount
                   })`
                   : ''}
-              </Button>
+              </Button> */}
+              <CargoButton hasContainerDetailsError={hasContainerDetailsError} form={form} handleAddCargoClick={handleAddCargoClick} />
             </Grid.Col>
             {form?.values?.result?.[0]?.cargo?.isDangerous ? (
               <>
@@ -1852,14 +1806,13 @@ const CustomerRequestForm = (data = {
                     multiple
                   >
                     {(props) => (
-                      <Button
+                      <Button loading={isUploading}
                         fullWidth
                         variant='outline'
-                        loading={fileUpload?.isLoading}
                         leftSection={<IconUpload stroke={1.5} />}
                         {...props}
                       >
-                        {fileUpload?.isLoading ? 'Uploading MSDS...' : 'Upload MSDS'}
+                        Upload MSDS
                       </Button>
                     )}
                   </FileButton>
@@ -1876,10 +1829,9 @@ const CustomerRequestForm = (data = {
                     multiple
                   >
                     {props => (
-                      <Button
+                      <Button loading={isUploading}
                         fullWidth
                         variant='outline'
-                        loading={fileUpload?.isLoading}
                         leftSection={<IconFiles stroke={1.5} />}
                         {...props}
                       >
@@ -1900,7 +1852,7 @@ const CustomerRequestForm = (data = {
                 />
               }
             >
-              <ListAttachments data={form?.values?.result?.[0]?.documents} />
+              <ListAttachments data={form?.values?.result?.[0]?.documents} onDelete={handleDeleteFile} />
             </ErrorBoundary>
             <Grid.Col>
               <Textarea
@@ -2427,3 +2379,145 @@ const CustomerRequestForm = (data = {
 };
 
 export default CustomerRequestForm;
+
+
+
+
+
+
+
+
+// const form = useForm({
+//   mode: 'controlled',
+//   initialValues: {
+//     typeofBooking: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
+//     category: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
+//     customer_name: '',
+//     contact_number: '',
+//     email: '',
+//     result: [
+//       {
+//         origin: {
+//           ...(formValues?.origin || {})
+//         },
+//         destination: formValues?.destination || {},
+//         cargo: {
+//           isDangerous: false,
+//           remarks: '',
+//         },
+//         unNo: null,
+//         imo: null,
+//         agents: ["55bf1d1d-66ad-4726-8d72-8b39308792e1"],
+//         stackable: true,
+//         documents: [],
+//         container_details: null
+//       }
+//     ]
+//   },
+//   validate: (values) => {
+//     const errors = {};
+
+//     // Basic fields validation
+//     if (!values.customer_name) errors.customer_name = 'Name is required';
+
+//     if (!values.contact_number) {
+//       errors.contact_number = 'Mobile number is required';
+//     } else if (!/^\d{10,15}$/.test(values.contact_number)) {
+//       errors.contact_number = 'Invalid mobile number';
+//     }
+
+//     if (!values.email) {
+//       errors.email = 'Email is required';
+//     } else if (!/^\S+@\S+$/.test(values.email)) {
+//       errors.email = 'Invalid email';
+//     }
+
+//     // Result array validation
+//     if (values.result && values.result.length > 0) {
+//       const resultErrors = [];
+//       console.log('result errors', resultErrors);
+
+//       const firstResult = values.result[0];
+
+//       // Origin validation
+//       if (!firstResult.origin || !firstResult.origin.origin) {
+//         resultErrors.push({ origin: { origin: 'Origin is required' } });
+//       }
+
+//       if (!firstResult.origin.shipment_type) {
+//         console.log('satisfied');
+//         resultErrors.push({ origin: { shipment_type: 'Shipment is required' } });
+//       }
+//       if (!firstResult.origin.ready_date) {
+//         resultErrors.push({ origin: { ready_date: 'Cargo ready date is required' } });
+//       }
+
+//       // Destination validation
+//       if (!firstResult.destination || !firstResult.destination.destination) {
+//         resultErrors.push({ destination: { destination: 'Destination is required' } });
+//       }
+
+//       // Container details validation
+//       if (!firstResult.container_details) {
+//         resultErrors.push({ container_details: 'Cargo details are required' });
+//       } else {
+//         const bookingType = values.typeofBooking;
+//         const containerDetails = firstResult.container_details;
+
+//         if (bookingType === 'FCL') {
+//           if (!containerDetails.list || containerDetails.list.length === 0) {
+//             resultErrors.push({ container_details: 'At least one container is required' });
+//           } else {
+//             for (const container of containerDetails.list) {
+//               if (!container.size) {
+//                 resultErrors.push({ container_details: 'Container size is required' });
+//                 break;
+//               }
+
+//               if (container.fields) {
+//                 for (const field of container.fields) {
+//                   if (field.required && !field.value) {
+//                     resultErrors.push({ container_details: `${field.label} is required` });
+//                     break;
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         } else if (bookingType === 'LCL' || bookingType === 'AIR') {
+//           if (!containerDetails.no_of_packages) {
+//             resultErrors.push({ container_details: 'Number of packages is required' });
+//           }
+
+//           if (!containerDetails.gross_weight) {
+//             resultErrors.push({ container_details: 'Gross weight is required' });
+//           }
+
+//           if (bookingType === 'LCL' && !containerDetails.volume) {
+//             resultErrors.push({ container_details: 'Volume is required for LCL' });
+//           }
+
+//           if (bookingType === 'AIR' && !containerDetails.volume_weight) {
+//             resultErrors.push({ container_details: 'Volume weight is required for AIR' });
+//           }
+//         }
+//       }
+
+//       // Dangerous cargo validation
+//       if (firstResult.cargo?.isDangerous) {
+//         if (!firstResult.imo) {
+//           resultErrors.push({ imo: 'IMO class is required for dangerous goods' });
+//         }
+//         if (!firstResult.unNo) {
+//           resultErrors.push({ unNo: 'UN number is required for dangerous goods' });
+//         }
+//       }
+
+//       if (resultErrors.length > 0) {
+//         errors.result = resultErrors.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+//       }
+//     }
+
+//     return errors;
+//   }
+// });
