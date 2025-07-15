@@ -481,7 +481,6 @@
 // export default FairContainer;
 
 
-
 import {
   ActionIcon,
   Button,
@@ -514,7 +513,6 @@ const FairContainer = ({
   submitCallback = () => null,
   type = "FCL", // Default to FCL if not specified
 }) => {
-
   // Initialize state based on type
   const initialState = {
     type: data?.type || "GC",
@@ -533,6 +531,21 @@ const FairContainer = ({
   const [activeSize, setActiveSize] = useState(initialState.size);
   const [selectedSize, setSelectedSize] = useState([]);
   const [activeDimension] = useState("M"); // Removed unused dimension state
+
+  // Initialize FCL container on first render if type is FCL
+  useEffect(() => {
+    if (type === "FCL" && TypesWithContainers.includes(activeType) && state.list.length === 0) {
+      const d = getContainerFields(activeType, activeDimension);
+      setState(prev => ({
+        ...prev,
+        type: activeType,
+        list: [{
+          size: activeSize,
+          fields: d,
+        }],
+      }));
+    }
+  }, []); // Empty dependency array to run only once on mount
 
   useEffect(() => {
     if (type === "FCL" && TypesWithContainers.includes(activeType)) {
@@ -553,7 +566,6 @@ const FairContainer = ({
   useEffect(() => {
     submitCallback(state);
   }, [state]);
-console.log("state in fair container",state);
 
   const addNewContainer = () => {
     if (type !== "FCL") return;
@@ -738,7 +750,7 @@ console.log("state in fair container",state);
       ) : (
         <>
           <Grid.Col span={6}>
-            <TextInput 
+            <TextInput
               color={COLORS.portColor}
               placeholder="Enter No of Packages"
               label="No of Packages"
