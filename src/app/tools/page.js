@@ -120,7 +120,7 @@ const CbmCalc = () => {
     container40ftHC,
   } = state;
 
-  const [tools, setTools] = useState('Fare Calculation')
+  const [tools, setTools] = useState('CBM')
   const isMobile = useMediaQuery('(max-width:768px)')
 
   const [formData, setFormData] = useState({
@@ -241,7 +241,7 @@ const CbmCalc = () => {
               }}
               value={tools}
               data={[
-                'Fare Calculation',
+                // 'Fare Calculation',
                 'CBM', 'CWC']} />
           </Flex>
         </Grid.Col>
@@ -590,10 +590,10 @@ const CbmCalc = () => {
           </Grid>
         </Box>
       }
-      {
+      {/* {
         tools == 'Fare Calculation' &&
         <FairCalculation />
-      }
+      } */}
     </Container>
   );
 };
