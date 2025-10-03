@@ -30,7 +30,7 @@ const Images = {
   port: '/images/port.jpg',
   pentagon_freight: '/images/pentagon-freight.png',
   pentagon_line: '/images/pentagon-line.png',
-  pentagon_zig_zag: '/images/zig_zag.png',
+  pentagon_zig_zag: '/images/zig_zag.gif',
   incoterms_handshake: '/images/incoterms_handshake.png',
 };
 

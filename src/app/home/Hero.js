@@ -482,6 +482,7 @@ const styles = {
     minHeight: '100vh',
     position: 'relative',
     overflowY: 'hidden',
+    opacity: 0.8,
     top: 0,
     left: 0,
   },

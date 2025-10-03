@@ -123,7 +123,7 @@ const Members = () => {
 
       <Flex justify="center" my={50}>
         <Title size={isMobile ? '30px' : '40px'} fw={800} tt={'uppercase'} lh={'lgx2'}>
-          OUR Team
+          CORE Team
         </Title>
       </Flex>
 

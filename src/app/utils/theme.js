@@ -1,12 +1,21 @@
-import { Kumbh_Sans } from 'next/font/google';
+import { Kumbh_Sans, Roboto, Poppins } from 'next/font/google';
 
 const kumbhSans = Kumbh_Sans({
     weight: ['400', '500', '600', '700', '800', '900'],
     subsets: ['latin'],
 });
+// const roboto = Roboto({
+//   weight: ["400", "500", "700"],
+//   subsets: ["latin"],
+// });
+
+const poppins = Poppins({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+});
 
 const theme = {
-    fontFamily: kumbhSans.style.fontFamily,
+    fontFamily: `${poppins.style.fontFamily}, sans-serif`,
     fontSizes: {
         xs: "clamp(0.7rem, 0.8vw, 0.9rem)",    // ~11.2px - 14.4px
         smx: "clamp(0.8rem, 1vw, 1rem)",      // ~12.8px - 16px

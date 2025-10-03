@@ -151,7 +151,7 @@ const NewsList = ({ newsItems }) => {
                         ...styles.paginationDot,
                         backgroundColor:
                           index === Math.floor(startIndex / ITEMS_PER_VIEW)
-                            ? '#0E52F2'
+                            ? '#46DABE'
                             : '#F3F3F3',
                       }}
                     />

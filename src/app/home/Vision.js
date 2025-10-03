@@ -34,7 +34,7 @@ import { client } from "../api/contentful";
 
 const styles = {
   container: {
-    background: "linear-gradient(180deg, #0012E6 0%, #FFFFFF 100%)",
+    background: "linear-gradient(180deg, #0013e6d6 0%, #FFFFFF 100%)",
     color: "white",
     padding: "4rem 2rem",
     paddingLeft: "0",
