@@ -185,7 +185,7 @@ const MilestoneTimeline = ({ milestones }) => {
           style={{
             width: isMobile ? '1200px' : '100%',
             height: 'auto',
-            minHeight: '600px',
+            minHeight: '450px',
           }}
         >
           <path

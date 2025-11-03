@@ -90,7 +90,8 @@ const Header = () => {
         <header style={headerStyle}>
           <Flex justify="space-between" align="center" h="50">
             <a href="/" style={{ display: "flex", alignItems: "center" }}>
-              <Image src={Images.logo} alt="Logo" h={48} mb={5}/>
+              <Image src={Images.logo_only} alt="Logo" h={48} mb={5}/>
+              <Text className="logo-font" fs="italic" fz={22} fw={700} tw="balance" pt={10} c="#326b7d">Pentagon Prime</Text>
             </a>
             <Flex h="100%" gap={30} align="center" visibleFrom="sm">
               {navItems.map((item) => (

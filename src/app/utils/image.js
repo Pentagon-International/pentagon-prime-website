@@ -1,5 +1,6 @@
 const Images = {
   Icon: '/logo-pp.png',
+  logo_only: '/images/logo_only.png',
   logo: '/images/new_logo.png',
   hero: '/images/hero_background.png',
   vector_p: '/images/vector_p.png',

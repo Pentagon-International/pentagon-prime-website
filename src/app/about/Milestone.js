@@ -29,13 +29,12 @@ const Milestone = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
-    <Container fluid px={'7%'} my={150}>
-      <Title tt={'uppercase'} fw={800} lh={'lgx2'} size={  isMobile ? '28px' : '40px'}>Milestone</Title>
+    <Container fluid px={'7%'}>
+      <Title tt={'uppercase'} fw={800} lh={'lgx2'} size={  isMobile ? '28px' : '40px'}>Our story: Leadership & Milestones</Title>
                 {/* <Text c={COLORS.textColor} size="base" lh="sm" maw={ isMobile ? '100%' : '80%'} mt={14}> */}
       
-      <Text size='base' c={COLORS.textColor} mt={20} lh="sm" mb={isMobile && 50} w={ isMobile ? '100%' : '40%'}>
-        Our journey continues, and we invite you to be part of this exciting
-        evolution in content creation.
+      <Text size='base' c={COLORS.textColor} mt={20} lh="sm" mb={isMobile && 50} w={ isMobile ? '100%' : '90%'}>
+        Founded in 2007, Pentagon Group has grown into a multi-vertical logistics platform with operations across Asia and Africa. We’ve expanded capabilities organically to include consolidation services, NVOCC operations, digital logistics (Pentafox/Pulse), and professional customs licensing, all designed to give customers a single trusted partner for complex trade.
       </Text>
       <MilestoneTimeline milestones={milestoneData} />
     </Container>

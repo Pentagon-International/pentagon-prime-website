@@ -6,6 +6,8 @@ import Values from './Values';
 import Milestone from './Milestone';
 import Members from './Members';
 import { fetchEntries } from '../utils/fetchEntries';
+import CustomerBenefits from './CustomerBenefits';
+import CustomerChoose from './CustomerChoose';
 
 const page = async () => {
   const title = 'Want to GET PRIME experience?';
@@ -24,7 +26,9 @@ const page = async () => {
       <About title={aboutData.title} content={aboutData.content} />
       <Mission />
       {/* <Values /> */}
+      <CustomerBenefits />
       <Milestone />
+      <CustomerChoose />
       <Members />
       <BottomCard title={title} text={text} button={button} />
     </div>

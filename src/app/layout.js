@@ -14,8 +14,14 @@ import { baseURL } from './api/api';
 import { IconArrowUp, IconBrandWhatsapp } from '@tabler/icons-react';
 import { useWindowScroll } from '@mantine/hooks';
 import { COLORS } from './utils/COLORS';
+import { Libre_Baskerville } from "next/font/google";
 
-
+const libreBaskerville = Libre_Baskerville({
+  subsets: ["latin"],
+  weight: ["400", "700"], 
+  variable: "--font-libre-baskerville",
+  style: ["normal", "italic"]
+});
 // export const metadata = {
 //   title: "Pentagon Prime",
 //   description: "Pentagon Prime is a unit of Pentagon Group",
@@ -39,7 +45,7 @@ const rootToWhatsApp = () => {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={libreBaskerville.variable}>
       <body className={kumbhSans.className}>
         <QueryProvider>
           <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>

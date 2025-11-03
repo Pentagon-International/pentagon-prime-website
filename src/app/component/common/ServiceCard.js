@@ -29,10 +29,9 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
         display={"flex"}
         direction={"column"}
         justify={"flex-start"}
-        mih={"250px"}
-        p={isMobile ? '20px' : "40px"}
-        radius={32}
-        h={"300px"}
+        p={'25px'}
+        radius={20}
+        h={isMobile ? "200px" : "250px"}
       >
         <Flex
           align={"center"}
@@ -59,7 +58,7 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
             fw={700}
             size={theme.fontSizes.base}
             order={4}
-            mt={isMobile ? 0 : 28}
+            mt={isMobile ? 0 : 20}
           >
             {item.fields.service_title || item.fields.title}
           </Title>
@@ -80,7 +79,7 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
             fw={700}
             size={theme.fontSizes.base}
             order={4}
-            mt={28}
+            mt={20}
           >
             {item.fields.service_title || item.fields.title}
           </Title>
