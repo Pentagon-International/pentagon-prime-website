@@ -132,7 +132,7 @@ const CustomerBenefits = ({ title, content, title2 }) => {
               return (
                 <GridCol
                   key={index}
-                  span={{ base: 12, md: 3 }}
+                  span={{ base: 12, sm: 6, md: 4, lg: 3 }}
                   style={{ display: "flex" }}
                 >
                   <Card

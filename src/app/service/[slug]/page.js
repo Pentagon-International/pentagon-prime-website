@@ -16,7 +16,8 @@ export async function generateStaticParams() {
 }
 
 const ServicePage = async ({ params }) => {
-  const resData = await fetchEntries(params.slug);
+  const resolvedParams = await params;
+  const resData = await fetchEntries(resolvedParams.slug);
 
 
   const [retailData, shipAnywhereData,] = await Promise.all([
@@ -25,7 +26,7 @@ const ServicePage = async ({ params }) => {
     fetchEntries("ship-anywhere"),
   ]);
 
-  const shippingData = await fetchShippmententries(params.slug);
+  const shippingData = await fetchShippmententries(resolvedParams.slug);
 
   return (
     <>

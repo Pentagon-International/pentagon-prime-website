@@ -1,4 +1,3 @@
-
 import { COLORS } from "@/app/utils/COLORS";
 import { theme } from "@/app/utils/theme";
 import {
@@ -16,24 +15,20 @@ import { useMediaQuery } from "@mantine/hooks";
 import React from "react";
 
 const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
-
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   return (
-    <GridCol
-      span={{ base: 12, md: 3 }}
-      key={item.sys.id}
-    >
+    <GridCol span={{ base: 12, sm: 6, md: 4, lg: 3 }} key={item.sys.id}>
       <Card
-      onClick={() => (window.location.href = item?.fields?.knowmore)}
+        onClick={() => (window.location.href = item?.fields?.knowmore)}
         bg={backgroundColor}
         display={"flex"}
         direction={"column"}
         justify={"flex-start"}
-        p={'25px'}
+        p={"25px"}
         radius={20}
         h={isMobile ? "200px" : "250px"}
-        style={{cursor:"pointer"}}
+        style={{ cursor: "pointer" }}
       >
         <Flex
           align={"center"}
@@ -53,31 +48,11 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
             alt={item.fields.service_title || item.fields.title}
           />
         </Flex>
-        {isMobile ? <Stack w={"100%"}>
+        <Group>
           <Title
             tw="balance"
             display={"flex"}
-            fw={700}
-            size={theme.fontSizes.base}
-            order={4}
-            mt={isMobile ? 0 : 20}
-          >
-            {item.fields.service_title || item.fields.title}
-          </Title>
-          <Text
-            tw="balance"
-            c={COLORS.textColor}
-            lh={"sm"}
-            size="sm"
-            style={{ flexGrow: 1 }}
-          >
-            {item.fields.service_description || item.fields.description}
-          </Text>
-        </Stack> : <Group>
-          <Title
-            tw="balance"
-            display={"flex"}
-              align={"center"}
+            align={"center"}
             fw={700}
             size={theme.fontSizes.base}
             order={4}
@@ -94,7 +69,8 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
           >
             {item.fields.service_description || item.fields.description}
           </Text>
-        </Group>}
+        </Group>
+        
         {/* {item.fields?.knowmore && (
           <Flex
             align="center"
