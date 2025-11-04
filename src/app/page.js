@@ -25,7 +25,6 @@ const Page = async () => {
     fetchPrimeNetwork()
   ]);
     
-  console.log(primeData)
   return (
     <>
       <Hero title={heroData.title} content={heroData.content} />

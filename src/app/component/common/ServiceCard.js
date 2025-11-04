@@ -25,6 +25,7 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
       key={item.sys.id}
     >
       <Card
+      onClick={() => (window.location.href = item?.fields?.knowmore)}
         bg={backgroundColor}
         display={"flex"}
         direction={"column"}
@@ -32,6 +33,7 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
         p={'25px'}
         radius={20}
         h={isMobile ? "200px" : "250px"}
+        style={{cursor:"pointer"}}
       >
         <Flex
           align={"center"}

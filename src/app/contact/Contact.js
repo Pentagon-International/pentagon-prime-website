@@ -48,7 +48,7 @@ const Contact = () => {
           <Text size={isMobile ? '18px' : 'base'} fw={700}>Headquarters</Text>
           <Text size='sm' tw="balance" maw={isMobile ? '100%' : '70%'}>
             Unit No. 204 Satellite Silver, Marol Naka Andheri Kurla Road,
-            Andheri (east) Mumbai, Maharashtra – 400059, India
+            Andheri (East) Mumbai, Maharashtra – 400059, India
           </Text>
           <Text size='base' fw={700}>Phone & Email Address</Text>
 
