@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   Box,
@@ -12,14 +12,14 @@ import {
   Text,
   Title,
   Tooltip,
-} from '@mantine/core';
-import { IconPhoneCall, IconPinnedFilled } from '@tabler/icons-react';
-import React, { useEffect, useState } from 'react';
-import { client } from '../api/contentful';
-import { COLORS } from '../utils/COLORS';
-import Images from '../utils/image';
-import { useMediaQuery } from '@mantine/hooks';
-import { Carousel } from '@mantine/carousel';
+} from "@mantine/core";
+import { IconPhoneCall, IconPinnedFilled } from "@tabler/icons-react";
+import React, { useEffect, useState } from "react";
+import { client } from "../api/contentful";
+import { COLORS } from "../utils/COLORS";
+import { useMediaQuery } from "@mantine/hooks";
+import { Carousel } from "@mantine/carousel";
+import { highlightText } from "../utils/highlightText";
 
 const Global = () => {
   const [locationData, setLocationData] = useState([]);
@@ -29,203 +29,223 @@ const Global = () => {
     const fetchData = async () => {
       try {
         const res = await client.getEntries({
-          content_type: 'location',
-          order: 'sys.createdAt',
+          content_type: "location",
+          order: "sys.createdAt",
         });
         setLocationData(res.items);
-        // Set the first location as selected by default
         if (res.items.length > 0) {
           setSelectedPlace(res.items[0].fields.place);
         }
       } catch (error) {
-        console.error('Error fetching partners:', error);
+        console.error("Error fetching partners:", error);
       }
     };
     fetchData();
   }, []);
 
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
+  // Group countries
+  const indiaPlaces = ["New Delhi", "Pune", "Bangalore", "Chennai", "Ahmedabad"];
+  const overseasPlaces = ["USA", "Kenya", "Dubai", "Vietnam", "China"];
+
+  const indiaData = locationData.filter((item) =>
+    indiaPlaces.includes(item.fields.place)
+  );
+  const overseasData = locationData.filter((item) =>
+    overseasPlaces.includes(item.fields.place)
+  );
+
   const places = [
-    { name: 'USA', x: '21%', y: '48%' },
-    { name: 'Kenya', x: '62%', y: '62.5%' },
-    { name: 'Dubai', x: '66%', y: '51%' },
-    { name: 'New Delhi', x: '73.5%', y: '50%' },
-    { name: 'Pune', x: '73%', y: '54%' },
-    { name: 'Bangalore', x: '73.5%', y: '57%' },
-    { name: 'Chennai', x: '75%', y: '57%' },
-    { name: 'Vietnam', x: '83.5%', y: '57%' },
-    { name: 'China', x: '85.5%', y: '51%' },
+    { name: "USA", x: "21%", y: "48%" },
+    { name: "Kenya", x: "62%", y: "62.5%" },
+    { name: "Dubai", x: "66%", y: "51%" },
+    { name: "New Delhi", x: "73.5%", y: "50%" },
+    { name: "Pune", x: "73%", y: "54%" },
+    { name: "Bangalore", x: "73.5%", y: "57%" },
+    { name: "Chennai", x: "75%", y: "57%" },
+    { name: "Vietnam", x: "83.5%", y: "57%" },
+    { name: "Ahmedabad", x: "71.5%", y: "52%" },
+    { name: "China", x: "85.5%", y: "51%" },
   ];
 
-  const handlePlaceSelect = (placeName) => {
-    setSelectedPlace(placeName);
-  };
+  const handlePlaceSelect = (placeName) => setSelectedPlace(placeName);
+
+  const renderCard = (item) => (
+    <Card
+      key={item.sys.id}
+      bg={selectedPlace === item.fields.place ? COLORS.serviceColor : "#F2F7FC"}
+      radius="32px"
+      p={30}
+      onClick={() => setSelectedPlace(item.fields.place)}
+      style={{
+        transition: "all 0.5s ease",
+        cursor: "pointer",
+        height: "260px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between", // ✅ evenly spaces content
+      }}
+    >
+      {/* Title */}
+      <Title
+        size="md"
+        fw={700}
+        order={5}
+        c={selectedPlace === item.fields.place ? "white" : "inherit"}
+      >
+        {item.fields.place}
+      </Title>
+
+      {/* Address */}
+      <Text
+        size="smx"
+        c={selectedPlace === item.fields.place ? "white" : COLORS.textColor}
+        mt={10}
+        style={{
+          flexGrow: 1, // ✅ fills space evenly
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+      >
+        {item.fields.address}
+      </Text>
+
+      {/* Contact */}
+      <Group align="center" wrap="nowrap" gap={5} mt={15}>
+        <IconPhoneCall
+          size={14}
+          color={
+            selectedPlace === item.fields.place ? "white" : COLORS.serviceColor
+          }
+        />
+        <Text
+          size="smx"
+          c={selectedPlace === item.fields.place ? "white" : "inherit"}
+        >
+          {item.fields.number}
+        </Text>
+      </Group>
+    </Card>
+  );
+
+  const renderCarousel = (data) => (
+    <Carousel
+      mt={20}
+      align={"start"}
+      slideSize="80%"
+      height={"auto"}
+      w={"100%"}
+      slideGap="xs"
+      loop
+      initialSlide={
+        selectedPlace
+          ? data.findIndex((item) => item.fields.place === selectedPlace)
+          : 0
+      }
+      onSlideChange={(index) => {
+        if (data[index]) setSelectedPlace(data[index].fields.place);
+      }}
+      styles={{
+        controls: {
+          display: "none",
+          visibility: "hidden",
+          opacity: 0,
+          pointerEvents: "none",
+        },
+      }}
+    >
+      {data.map((item) => (
+        <Carousel.Slide key={item.sys.id}>{renderCard(item)}</Carousel.Slide>
+      ))}
+    </Carousel>
+  );
 
   return (
-    <Container fluid px={'7%'} py={'70px'}>
-      <Center tt={'uppercase'}>
-        <Title size={isMobile ? 'lg' : 'xl'} fw={800} lh={'lgx2'}>
-          Our <span style={{ color: COLORS.serviceColor }}> Global</span> Presence
+    <Container fluid px={"7%"} py={"70px"}>
+      {/* Header */}
+      <Center tt={"uppercase"}>
+        <Title size={isMobile ? "lg" : "xl"} fw={800} lh={"lgx2"}>
+          Our <span style={{ color: COLORS.serviceColor }}>Global</span>{" "}
+          Presence
         </Title>
       </Center>
+
+      {/* Map Section */}
       <Box pos="relative" w="100%" mx="auto">
         <Image
           src="/images/worldMap.png"
           alt="World Map"
-          style={{ width: '100%', height: 'auto' }}
+          style={{ width: "100%", height: "auto" }}
         />
-
-        {/* Markers */}
         {places.map((place, idx) => (
-          <Tooltip 
-            key={idx} 
-            label={place.name} 
-            arrowSize={8} 
-            bg={'white'} 
-            c={COLORS.serviceColor} 
-            fz={20} 
-            fw={600} 
+          <Tooltip
+            key={idx}
+            label={place.name}
+            arrowSize={8}
+            bg={"white"}
+            c={COLORS.serviceColor}
+            fz={20}
+            fw={600}
             withArrow
-            events={{ hover: true, focus: true, touch: true }}
           >
             <Box
               onClick={() => handlePlaceSelect(place.name)}
               style={{
-                position: 'absolute',
+                position: "absolute",
                 left: place.x,
                 top: place.y,
-                transform: 'translate(-50%, -100%)',
-                cursor: 'pointer',
+                transform: "translate(-50%, -100%)",
+                cursor: "pointer",
               }}
             >
-              <IconPinnedFilled 
-                size={24}                                    
-                stroke={1.5}                                
-                color={selectedPlace === place.name ? COLORS.serviceColor : "#e84c4c"}                                  
+              <IconPinnedFilled
+                size={24}
+                stroke={1.5}
+                color={
+                  selectedPlace === place.name ? COLORS.footerBackground : "#e84c4c"
+                }
               />
             </Box>
           </Tooltip>
         ))}
       </Box>
-      <Grid columns={12} align={'center'} justify="center">
+
+      {/* India Section */}
+      <Box mt={40}>
+        <Title order={3} fw={800} mb={20} tt="uppercase">
+          {highlightText("# Indian # Branches")}
+        </Title>
         {isMobile ? (
-          <Carousel 
-            mt={40} 
-            align={'start'} 
-            slideSize="80%" 
-            height={'auto'} 
-            w={'100%'} 
-            slideGap="xs" 
-            loop
-            initialSlide={selectedPlace ? 
-              locationData.findIndex(item => item.fields.place === selectedPlace) : 0}
-            onSlideChange={(index) => {
-              if (locationData[index]) {
-                setSelectedPlace(locationData[index].fields.place);
-              }
-            }}
-            styles={{
-              controls: {
-                display: 'none',
-                visibility: 'hidden',
-                opacity: 0,
-                pointerEvents: 'none',
-              }
-            }}
-          >
-            {locationData.map((item) => (
-              <Carousel.Slide key={item.sys.id}>
-                <Card 
-                  mih={'200px'} 
-                  bg={selectedPlace === item.fields.place ? COLORS.serviceColor : '#F2F7FC'} 
-                  radius={'32px'} 
-                  p={30}
-                  onClick={() => setSelectedPlace(item.fields.place)}
-                  style={{
-                    border: selectedPlace === item.fields.place ? `2px solid ${COLORS.serviceColor}` : 'none',
-                    transition: 'all 0.3s ease',
-                  }}
-                >
-                  <Title 
-                    size={'md'} 
-                    fw={700} 
-                    order={5}
-                    c={selectedPlace === item.fields.place ? 'white' : 'inherit'}
-                  >
-                    {item?.fields?.place}
-                  </Title>
-                  <Text 
-                    size='smx' 
-                    mih={'100px'} 
-                    c={selectedPlace === item.fields.place ? 'white' : COLORS.textColor} 
-                    mt={20}
-                  >
-                    {item?.fields?.address}
-                  </Text>
-                  <Group align="center" gap={5}>
-                    <IconPhoneCall 
-                      size={14} 
-                      color={selectedPlace === item.fields.place ? 'white' : COLORS.serviceColor} 
-                    />
-                    <Text 
-                      size='smx'
-                      c={selectedPlace === item.fields.place ? 'white' : 'inherit'}
-                    >
-                      {item?.fields?.number}
-                    </Text>
-                  </Group>
-                </Card>
-              </Carousel.Slide>
-            ))}
-          </Carousel>
+          renderCarousel(indiaData)
         ) : (
-          locationData.map((item) => (
-            <GridCol key={item.sys.id} span={3}>
-              <Card 
-                mih={'200px'} 
-                bg={selectedPlace === item.fields.place ? COLORS.serviceColor : '#F2F7FC'} 
-                radius={'32px'} 
-                p={30}
-                onClick={() => setSelectedPlace(item.fields.place)}
-                style={{
-                  border: selectedPlace === item.fields.place ? `2px solid ${COLORS.serviceColor}` : 'none',
-                  transition: 'all 0.3s ease',
-                  cursor: 'pointer',
-                }}
-              >
-                <Title 
-                  size={'md'} 
-                  fw={700} 
-                  order={5}
-                  c={selectedPlace === item.fields.place ? 'white' : 'inherit'}
-                >
-                  {item?.fields?.place}
-                </Title>
-                <Text 
-                  size='smx' 
-                  mih={'100px'} 
-                  c={selectedPlace === item.fields.place ? 'white' : COLORS.textColor} 
-                  mt={20}
-                >
-                  {item?.fields?.address}
-                </Text>
-                <Group align="center" gap={5}>
-                  <IconPhoneCall 
-                    size={14} 
-                    color={selectedPlace === item.fields.place ? 'white' : COLORS.serviceColor} 
-                  />
-                  <Text 
-                    size='smx'
-                    c={selectedPlace === item.fields.place ? 'white' : 'inherit'}
-                  >
-                    {item?.fields?.number}
-                  </Text>
-                </Group>
-              </Card>
-            </GridCol>
-          ))
+          <Grid columns={12} align="center" justify="flex-start" gutter="xl">
+            {indiaData.map((item) => (
+              <GridCol key={item.sys.id} span={3}>
+                {renderCard(item)}
+              </GridCol>
+            ))}
+          </Grid>
         )}
-      </Grid>
+      </Box>
+
+      {/* Overseas Section */}
+      <Box mt={60}>
+        <Title order={3} fw={800} mb={20} tt="uppercase">
+          {highlightText("# Overseas # Branches")}
+        </Title>
+        {isMobile ? (
+          renderCarousel(overseasData)
+        ) : (
+          <Grid columns={12} align="center" justify="flex-start" gutter="xl">
+            {overseasData.map((item) => (
+              <GridCol key={item.sys.id} span={3}>
+                {renderCard(item)}
+              </GridCol>
+            ))}
+          </Grid>
+        )}
+      </Box>
     </Container>
   );
 };

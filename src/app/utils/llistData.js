@@ -111,7 +111,7 @@ const customerChooseList = [
       title: "Capacity management",
       description:
         "Proactive optioning during peak seasons and charter capabilities for oversized/urgent loads.",
-      icon: "IconBoxes",
+      icon: "IconPackages",
     },
   },
   {

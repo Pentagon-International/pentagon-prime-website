@@ -16,7 +16,7 @@ const Images = {
   tradeCard_background2: '/images/bg_2.png',
   flight_black: '/images/flight_black.png',
   arrow: '/images/arrow.png',
-  chairman: '/images/chairman.png',
+  chairman: '/images/chairman_image.jpg',
   global: '/images/global.png',
   map: '/images/map.png',
   contact: '/images/contact.png',

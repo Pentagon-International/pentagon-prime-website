@@ -43,12 +43,12 @@ const Contact = () => {
           <Title size={isMobile ? '26px' : '40px'} lh={'lgx2'} fw={800} tt={'uppercase'}>Contact Us</Title>
           <Text size={isMobile ? 'sm' : 'base'} lh={'28px'} tw='balance'>
             Ready to begin your journey with Pentagon Prime, have a question, or
-            need assistance? We're here to help.
+            need assistance? <br />We're here to help.
           </Text>
           <Text size={isMobile ? '18px' : 'base'} fw={700}>Headquarters</Text>
           <Text size='sm' tw="balance" maw={isMobile ? '100%' : '70%'}>
             Unit No. 204 Satellite Silver, Marol Naka Andheri Kurla Road,
-            Andheri (East) Mumbai, Maharashtra – 400059, India
+            <br />Andheri (East) Mumbai, Maharashtra – 400059, India
           </Text>
           <Text size='base' fw={700}>Phone & Email Address</Text>
 

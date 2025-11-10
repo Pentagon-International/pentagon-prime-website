@@ -27,16 +27,16 @@ const navItems = [
   { label: "Solutions", links: "/service", dropdown: true },
   { label: "Resources", links: "/", dropdown: true },
   { label: "About Us", links: "/about", dropdown: false },
-  // { label: 'Company', links: '/help', dropdown: true },  
+  // { label: 'Company', links: '/help', dropdown: true },
 ];
 
 const Header = () => {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const currentPath = usePathname();
   const router = useRouter();
-  const [showNav, setShowNav] = useState(false)
 
   const isAppliedBackground = ["/", "/contact", "/resource"].includes(
     currentPath
@@ -69,29 +69,39 @@ const Header = () => {
   };
 
   const FeatureItem = ({ feature }) => (
-    showNav && (
-      <Box ml="lg" mt={20}>
-        <a href={feature.link} style={{ textDecoration: 'none', color: 'inherit' }}>
-          <Text size="sm" fw={500} color={COLORS.secondaryColor}>
-            {feature.title}
-          </Text>
-          <Text size="xs" color="dimmed">
-            {feature.description}
-          </Text>
-        </a>
-      </Box>
-    )
+    <Box ml="lg" mt={20}>
+      <a
+        href={feature.link}
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
+        <Text size="sm" fw={500} c={COLORS.secondaryColor}>
+          {feature.title}
+        </Text>
+        <Text size="xs" c="dimmed">
+          {feature.description}
+        </Text>
+      </a>
+    </Box>
   );
 
-  
   return (
     <Container fluid px="7%">
       <Box>
         <header style={headerStyle}>
           <Flex justify="space-between" align="center" h="50">
             <a href="/" style={{ display: "flex", alignItems: "center" }}>
-              <Image src={Images.logo_only} alt="Logo" h={48} mb={5}/>
-              <Text className="logo-font" fs="italic" fz={22} fw={700} tw="balance" pt={10} c="#326b7d">Pentagon Prime</Text>
+              <Image src={Images.logo_only} alt="Logo" h={48} mb={5} />
+              <Text
+                className="logo-font"
+                fs="italic"
+                fz={22}
+                fw={700}
+                tw="balance"
+                pt={10}
+                c="#326b7d"
+              >
+                Pentagon Prime
+              </Text>
             </a>
             <Flex h="100%" gap={30} align="center" visibleFrom="sm">
               {navItems.map((item) => (
@@ -105,7 +115,7 @@ const Header = () => {
                 fz={"smx"}
                 radius={"md"}
                 style={{
-                  borderColor: '#398499',
+                  borderColor: "#398499",
                   color: "#398499",
                 }}
                 leftSection={<IconPhone stroke={1.5} size={18} />}
@@ -136,11 +146,18 @@ const Header = () => {
                       size="md"
                       w="100%"
                       color={COLORS.secondaryColor}
-                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        cursor: "pointer",
+                      }}
                       onClick={(e) => {
                         if (item.dropdown) {
                           e.preventDefault();
-                          setShowNav(!showNav);
+                          setOpenDropdown(
+                            openDropdown === item.label ? null : item.label
+                          );
                         } else {
                           closeDrawer();
                           window.location.href = item.links;
@@ -148,14 +165,16 @@ const Header = () => {
                       }}
                     >
                       {item.label}
-                      {item?.dropdown && (
+                      {item.dropdown && (
                         <IconChevronDown
                           color={COLORS.secondaryColor}
                           stroke={1.5}
                         />
                       )}
                     </Text>
+
                     {item.dropdown &&
+                      openDropdown === item.label &&
                       featuresMap[item.label]?.map((feature) => (
                         <FeatureItem key={feature.title} feature={feature} />
                       ))}
@@ -163,9 +182,7 @@ const Header = () => {
                 ))}
 
                 <Divider my="sm" />
-                {/* <Anchor size="md" ta="center" style={{ color: COLORS.portColor, textDecoration: 'underline' }}>
-                  Talk to an Expert
-                </Anchor> */}
+
                 <Button
                   variant="outline"
                   size="sm"
@@ -175,12 +192,10 @@ const Header = () => {
                     borderColor: COLORS.serviceColor,
                     color: COLORS.serviceColor,
                   }}
-                  onClick={
-                    () => {
-                      router.push("/contact")
-                      closeDrawer()
-                    }
-                  }
+                  onClick={() => {
+                    router.push("/contact");
+                    closeDrawer();
+                  }}
                 >
                   Talk to an Expert
                 </Button>

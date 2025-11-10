@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { Title, Card, Button, Group, Image, Box, ActionIcon } from '@mantine/core';
-import React, { useEffect, useState, useRef } from 'react';
-import { COLORS } from '../utils/COLORS';
-import { useMediaQuery } from '@mantine/hooks';
-import { IconArrowLeft, IconArrowRight, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import Images from '../utils/image';
+import { Title, Card, Box, ActionIcon, Image } from "@mantine/core";
+import React, { useEffect, useState, useRef } from "react";
+import { COLORS } from "../utils/COLORS";
+import { useMediaQuery } from "@mantine/hooks";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import Images from "../utils/image";
 
 const MilestoneTimeline = ({ milestones }) => {
   const [selectedMilestone, setSelectedMilestone] = useState(
@@ -13,10 +13,9 @@ const MilestoneTimeline = ({ milestones }) => {
   );
   const [activeIndex, setActiveIndex] = useState(0);
   const timelineSvgRef = useRef(null);
-  const cardRef = useRef(null);
   const timelineContainerRef = useRef(null);
-
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const [circlePositions, setCirclePositions] = useState([]);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
     if (milestones.length > 0) {
@@ -25,110 +24,110 @@ const MilestoneTimeline = ({ milestones }) => {
     }
   }, [milestones]);
 
+  // Draw timeline path and circles
   useEffect(() => {
-    const svg = document.getElementById('timelineSvg');
+    const svg = document.getElementById("timelineSvg");
     if (!svg) return;
-    
-    const path = svg.querySelector('path');
-    if (!path) return;
-    
-    const pathLength = path.getTotalLength();
 
-    while (svg.lastChild && svg.lastChild.tagName !== 'path') {
+    const path = svg.querySelector("path");
+    if (!path) return;
+
+    const pathLength = path.getTotalLength();
+    const positions = [];
+
+    while (svg.lastChild && svg.lastChild.tagName !== "path") {
       svg.removeChild(svg.lastChild);
     }
 
     milestones.forEach((milestone, index) => {
       const adjustedIndex = index + 1;
-      const totalMilestones = milestones.length + 1;
-      const position = path.getPointAtLength(
-        (pathLength / totalMilestones) * adjustedIndex
-      );
+      const total = milestones.length + 1;
+      const pos = path.getPointAtLength((pathLength / total) * adjustedIndex);
+      positions.push({ x: pos.x, y: pos.y });
 
-      const activeCircle = document.createElementNS(
-        'http://www.w3.org/2000/svg',
-        'circle'
+      const outer = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "circle"
       );
-      activeCircle.setAttribute('cx', position.x);
-      activeCircle.setAttribute('cy', position.y);
-      activeCircle.setAttribute('r', 10);
-      activeCircle.setAttribute(
-        'stroke',
-        index === activeIndex ? '#0EC9F2' : '#5F62E9'
+      outer.setAttribute("cx", pos.x);
+      outer.setAttribute("cy", pos.y);
+      outer.setAttribute("r", 10);
+      outer.setAttribute(
+        "stroke",
+        index === activeIndex ? "#0EC9F2" : "#5F62E9"
       );
-      activeCircle.setAttribute('fill', 'transparent');
-      activeCircle.setAttribute('class', `active-circle-${index}`);
-      svg.appendChild(activeCircle);
+      outer.setAttribute("fill", "transparent");
+      outer.setAttribute("class", `active-circle-${index}`);
+      svg.appendChild(outer);
 
-      const circle = document.createElementNS(
-        'http://www.w3.org/2000/svg',
-        'circle'
+      const inner = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "circle"
       );
-      circle.setAttribute('cx', position.x);
-      circle.setAttribute('cy', position.y);
-      circle.setAttribute('r', 6);
-      circle.setAttribute('class', `milestone-circle-${index}`);
-      circle.setAttribute(
-        'fill',
-        index === activeIndex ? '#0EC9F2' : '#5F62E9'
-      );
-      circle.style.cursor = 'pointer';
-      circle.addEventListener('click', () => {
+      inner.setAttribute("cx", pos.x);
+      inner.setAttribute("cy", pos.y);
+      inner.setAttribute("r", 6);
+      inner.setAttribute("fill", index === activeIndex ? "#0EC9F2" : "#5F62E9");
+      inner.setAttribute("class", `milestone-circle-${index}`);
+      inner.style.cursor = "pointer";
+      inner.addEventListener("click", () => {
         setSelectedMilestone(milestone);
         setActiveIndex(index);
       });
-      svg.appendChild(circle);
+      svg.appendChild(inner);
 
-      const yearText = document.createElementNS(
-        'http://www.w3.org/2000/svg',
-        'text'
+      const text = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "text"
       );
-      yearText.setAttribute('x', position.x - 40);
-      yearText.setAttribute('y', position.y - 30);
-      yearText.setAttribute('font-size', '20');
-      yearText.setAttribute('fill', COLORS.textColor);
-      yearText.setAttribute('font-weight', 600);
-      yearText.setAttribute('dominant-baseline', 'middle');
-      yearText.setAttribute('text-anchor', 'start');
-      yearText.setAttribute('class', `year-text-${index}`);
-      yearText.textContent = milestone.fields.year;
-      yearText.style.cursor = 'pointer';
-      yearText.addEventListener('click', () => {
+      text.setAttribute("x", pos.x - 25);
+      text.setAttribute("y", pos.y - 25);
+      text.setAttribute("font-size", "18");
+      text.setAttribute("fill", COLORS.textColor);
+      text.setAttribute("font-weight", 600);
+      text.style.cursor = "pointer";
+      text.textContent = milestone.fields.year;
+      text.addEventListener("click", () => {
         setSelectedMilestone(milestone);
         setActiveIndex(index);
       });
-      svg.appendChild(yearText);
+      svg.appendChild(text);
     });
+
+    setCirclePositions(positions);
   }, [milestones, activeIndex]);
 
+  // Update active state
   useEffect(() => {
     milestones.forEach((_, index) => {
-      const activeCircle = document.querySelector(`.active-circle-${index}`);
-      if (activeCircle) {
-        activeCircle.setAttribute(
-          'stroke',
-          index === activeIndex ? '#0EC9F2' : '#5F62E9'
+      const outer = document.querySelector(`.active-circle-${index}`);
+      const inner = document.querySelector(`.milestone-circle-${index}`);
+
+      if (outer) {
+        outer.setAttribute(
+          "stroke",
+          index === activeIndex ? "#0EC9F2" : "#5F62E9"
         );
       }
-      const circle = document.querySelector(`.milestone-circle-${index}`);
-      if (circle) {
-        circle.setAttribute(
-          'fill',
-          index === activeIndex ? '#0EC9F2' : '#5F62E9'
+      if (inner) {
+        inner.setAttribute(
+          "fill",
+          index === activeIndex ? "#0EC9F2" : "#5F62E9"
         );
       }
     });
 
     if (isMobile && timelineContainerRef.current) {
-      const activeCircle = document.querySelector(`.active-circle-${activeIndex}`);
+      const activeCircle = document.querySelector(
+        `.active-circle-${activeIndex}`
+      );
       if (activeCircle) {
-        const circleX = parseFloat(activeCircle.getAttribute('cx'));
+        const cx = parseFloat(activeCircle.getAttribute("cx"));
         const containerWidth = timelineContainerRef.current.clientWidth;
-        const scrollPosition = circleX - containerWidth / 2;
-        
+        const scrollTo = cx - containerWidth / 2;
         timelineContainerRef.current.scrollTo({
-          left: scrollPosition,
-          behavior: 'smooth'
+          left: scrollTo,
+          behavior: "smooth",
         });
       }
     }
@@ -148,44 +147,94 @@ const MilestoneTimeline = ({ milestones }) => {
     }
   };
 
+  // --- ✅ compute card position (SVG -> container coordinates) ---
+  const computeCardPosition = () => {
+    const svg = timelineSvgRef.current;
+    const container = timelineContainerRef.current;
+    const pos = circlePositions[activeIndex];
+
+    let cardLeft = 0;
+    let cardTop = 0;
+
+    if (!svg || !container || !pos) return { cardLeft, cardTop };
+
+    try {
+      const pt = svg.createSVGPoint();
+      pt.x = pos.x;
+      pt.y = pos.y;
+
+      const screenPt = pt.matrixTransform(svg.getScreenCTM());
+      const containerRect = container.getBoundingClientRect();
+
+      cardLeft = screenPt.x - containerRect.left + container.scrollLeft;
+      cardTop = screenPt.y - containerRect.top + container.scrollTop;
+
+      const verticalGap = 10; 
+      const cardHeight = 180; 
+      const cardWidth = 350;
+
+      cardTop = cardTop + verticalGap;
+
+      const year = selectedMilestone?.fields?.year;
+      if ([2022, 2024, 2025].includes(year)) {
+        cardLeft = cardLeft - cardWidth - 10;
+      } else {
+        cardLeft = cardLeft + 10;
+      }
+
+      const maxLeft = container.scrollWidth - cardWidth - 8;
+      if (cardLeft < 8) cardLeft = 8;
+      if (cardLeft > maxLeft) cardLeft = maxLeft;
+    } catch (e) {
+      console.warn("Position calc fallback:", e);
+      cardLeft = (pos?.x || 0) + 20;
+      cardTop = (pos?.y || 0) + 25;
+    }
+
+    return { cardLeft, cardTop };
+  };
+
+  const { cardLeft, cardTop } = computeCardPosition();
+
   return (
     <div
       style={{
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-        minHeight: '60vh',
-        display: 'flex',
-        flexDirection: isMobile ? 'column' : 'row',
-        alignItems: isMobile ? 'center' : 'center',
-        justifyContent: 'space-between',
-        gap: '20px'
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        minHeight: "60vh",
+        display: "flex",
+        flexDirection: isMobile ? "column" : "row",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
       <div
         ref={timelineContainerRef}
         style={{
-          overflowX: isMobile ? 'auto' : 'visible',
-          width: isMobile ? '100%' : '100%',
-          marginBottom: isMobile ? '20px' : 0,
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-          WebkitOverflowScrolling: 'touch',
-          height: '100%'
+          overflowX: "scroll",
+          overflowY: "hidden",
+          width: "100%",
+          height: "650px",
+          paddingTop:"10px",
+          position: "relative",
         }}
       >
+        {/* ✅ Responsive SVG timeline */}
         <svg
-          width={isMobile ? '1200' : '1194'}
-          height={isMobile ? '400' : '488'}
-          viewBox="0 0 1194 488"
+          viewBox="0 0 1240 570"
+          preserveAspectRatio="xMidYMid meet"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           id="timelineSvg"
           ref={timelineSvgRef}
           style={{
-            width: isMobile ? '1200px' : '100%',
-            height: 'auto',
-            minHeight: '450px',
+            width: "100%",
+            height: "100%",
+            minWidth: "1200px",
+            minHeight: "460px",
+            position: "relative",
+            zIndex: 1,
           }}
         >
           <path
@@ -194,67 +243,139 @@ const MilestoneTimeline = ({ milestones }) => {
             strokeDasharray="5 5"
           />
         </svg>
+
+        {/* ✅ Desktop Detail Card */}
+        {!isMobile && selectedMilestone && circlePositions[activeIndex] && (
+          <Card
+            shadow="sm"
+            padding="md"
+            radius="md"
+            bg={"#e6f9fe"}
+            style={{
+              overflow: "visible",
+              zIndex: 10,
+              width: "350px",
+              borderRadius: "8px",
+              position: "absolute",
+              transition: "all 0.3s ease",
+              top: cardTop,
+              left: cardLeft,
+            }}
+          >
+            <Title size={"md"} order={3}>
+              {selectedMilestone.fields.year}
+            </Title>
+
+            <div style={{ color: COLORS.textColor }}>
+              {selectedMilestone.fields.description?.content.map(
+                (item, index) => {
+                  if (item.nodeType === "unordered-list") {
+                    return (
+                      <ul
+                        key={index}
+                        style={{ paddingLeft: "20px", margin: "10px 0" }}
+                      >
+                        {item.content.map((listItem, i) => {
+                          const text =
+                            listItem.content[0]?.content[0]?.value ||
+                            "No description available";
+                          return (
+                            <li
+                              key={`${index}-${i}`}
+                              style={{
+                                fontSize: "16px",
+                                listStyleType: "disc",
+                                marginBottom: "8px",
+                              }}
+                            >
+                              {text}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    );
+                  }
+                  if (item.nodeType === "paragraph") {
+                    return (
+                      <p
+                        key={index}
+                        style={{ fontSize: "16px", marginBottom: "10px" }}
+                      >
+                        {item.content[0]?.value || ""}
+                      </p>
+                    );
+                  }
+                  return null;
+                }
+              )}
+            </div>
+          </Card>
+        )}
       </div>
 
-      {selectedMilestone && (
+      {/* ✅ Mobile View Below Timeline */}
+      {isMobile && selectedMilestone && (
         <Card
           shadow="sm"
           padding="md"
           radius="md"
-          bg={'#0EC9F21A'}
-          ref={cardRef}
+          bg={"#0EC9F21A"}
           style={{
             overflow: "visible",
-            width: isMobile ? '90%' : '40%',
-            marginTop: isMobile ? '20px' : 0,
-            padding: '20px 30px',
-            borderRadius: '8px',
-            position: 'relative',
-            right: isMobile ? 0 : 0,
-            display: 'block'
+            width: "90%",
+            marginTop: "20px",
+            padding: "20px 30px",
+            borderRadius: "8px",
+            position: "relative",
           }}
         >
-          <Box style={{ width: 30, height: 30 }} pos={'absolute'} right={isMobile ? -30 : -30} top={-30}>
-            <Image src={Images.arrow} w={"100%"} h={"100%"} alt="arrow" />
-          </Box>
-          {isMobile && (
-            <div
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '-30px',
-                transform: 'translateY(-50%)',
-                backgroundColor: 'transparent',
-                zIndex: 10,
-              }}
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "-30px",
+              transform: "translateY(-50%)",
+              backgroundColor: "transparent",
+              zIndex: 10,
+            }}
+          >
+            <ActionIcon
+              variant="outline"
+              radius="xl"
+              size="sm"
+              disabled={activeIndex === 0}
+              onClick={handlePrev}
             >
-              <ActionIcon
-                variant="outline"
-                radius="xl"
-                size="sm"
-                disabled={activeIndex === 0}
-                onClick={handlePrev}
-              >
-                <IconChevronLeft size={20} />
-              </ActionIcon>
-            </div>
-          )}
+              <IconChevronLeft size={20} />
+            </ActionIcon>
+          </div>
 
-          <Title size={'md'} order={3}>
+          <Title size={"md"} order={3}>
             {selectedMilestone.fields.year}
           </Title>
-          <div style={{ color: COLORS.textColor, marginTop: '20px' }}>
+
+          <div style={{ color: COLORS.textColor, marginTop: "20px" }}>
             {selectedMilestone.fields.description?.content.map(
               (item, index) => {
-                if (item.nodeType === 'unordered-list') {
+                if (item.nodeType === "unordered-list") {
                   return (
-                    <ul key={index} style={{ paddingLeft: '20px', margin: '10px 0' }}>
+                    <ul
+                      key={index}
+                      style={{ paddingLeft: "20px", margin: "10px 0" }}
+                    >
                       {item.content.map((listItem, i) => {
                         const text =
                           listItem.content[0]?.content[0]?.value ||
-                          'No description available';
+                          "No description available";
                         return (
-                          <li style={{ fontSize: '16px', listStyleType: 'disc', marginBottom: '8px' }} key={`${index}-${i}`}>
+                          <li
+                            key={`${index}-${i}`}
+                            style={{
+                              fontSize: "16px",
+                              listStyleType: "disc",
+                              marginBottom: "8px",
+                            }}
+                          >
                             {text}
                           </li>
                         );
@@ -262,10 +383,13 @@ const MilestoneTimeline = ({ milestones }) => {
                     </ul>
                   );
                 }
-                if (item.nodeType === 'paragraph') {
+                if (item.nodeType === "paragraph") {
                   return (
-                    <p key={index} style={{ fontSize: '16px', marginBottom: '10px' }}>
-                      {item.content[0]?.value || ''}
+                    <p
+                      key={index}
+                      style={{ fontSize: "16px", marginBottom: "10px" }}
+                    >
+                      {item.content[0]?.value || ""}
                     </p>
                   );
                 }
@@ -273,28 +397,27 @@ const MilestoneTimeline = ({ milestones }) => {
               }
             )}
           </div>
-          {isMobile && (
-            <div
-              style={{
-                position: 'absolute',
-                top: '50%',
-                right: '-30px',
-                transform: 'translateY(-50%)',
-                backgroundColor: 'transparent',
-                zIndex: 10,
-              }}
+
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              right: "-30px",
+              transform: "translateY(-50%)",
+              backgroundColor: "transparent",
+              zIndex: 10,
+            }}
+          >
+            <ActionIcon
+              variant="outline"
+              radius="xl"
+              size="sm"
+              disabled={activeIndex === milestones.length - 1}
+              onClick={handleNext}
             >
-              <ActionIcon
-                variant="outline"
-                radius="xl"
-                size="sm"
-                disabled={activeIndex === milestones.length - 1}
-                onClick={handleNext}
-              >
-                <IconChevronRight size={20} />
-              </ActionIcon>
-            </div>
-          )}
+              <IconChevronRight size={20} />
+            </ActionIcon>
+          </div>
         </Card>
       )}
     </div>

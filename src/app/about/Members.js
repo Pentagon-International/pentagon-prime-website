@@ -166,7 +166,7 @@ const Members = () => {
         >
           Our strength is the combination of specialist teams and a
           platform-first approach: operations, customs experts, project
-          planners, and Pentafox technologists working together so customers can
+          planners, and Pentafox technologies working together so customers can
           act faster and with confidence.
         </Text>
       </Box>

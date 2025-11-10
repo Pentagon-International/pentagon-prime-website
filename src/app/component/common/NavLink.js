@@ -190,11 +190,9 @@ const FeatureItem = ({ feature }) => {
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.backgroundColor = "#F5F5F5";
-        e.currentTarget.style.transform = "translateX(2px)";
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.backgroundColor = "transparent";
-        e.currentTarget.style.transform = "translateX(0)";
       }}
     >
       <Group wrap="nowrap" gap={8} align="center">
