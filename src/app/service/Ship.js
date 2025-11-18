@@ -19,7 +19,7 @@ const Ship = ({ first_title, first_content, serviceData }) => {
 
 
   return (
-    <Container fluid px={'7%'} py={isMobile ? 0 : '10px'} mb={isMobile ? 20 : 160}>
+    <Container fluid px={'7%'} py={isMobile ? 0 : '10px'} mb={isMobile ? 20 : 60}>
       <Stack gap={isMobile ? 20 : 100}>
         <Flex direction={'column'}>
           <Title fw={800} tt={'uppercase'}>{highlightText(first_title)}</Title>

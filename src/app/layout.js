@@ -15,6 +15,7 @@ import { IconArrowUp, IconBrandWhatsapp } from '@tabler/icons-react';
 import { useWindowScroll } from '@mantine/hooks';
 import { COLORS } from './utils/COLORS';
 import { Libre_Baskerville } from "next/font/google";
+import Images from '@/app/utils/image';
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ["latin"],
@@ -46,6 +47,9 @@ const rootToWhatsApp = () => {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={libreBaskerville.variable}>
+    <head>
+      <link rel="icon" href={Images.logo_only} />
+    </head>
       <body className={kumbhSans.className}>
         <QueryProvider>
           <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>

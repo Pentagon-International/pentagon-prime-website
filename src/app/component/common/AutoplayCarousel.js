@@ -1,31 +1,29 @@
 "use client";
 
-import React, { useRef, useMemo } from "react";
+import React, { useMemo } from "react";
 import { Carousel } from "@mantine/carousel";
 import { Box, Image } from "@mantine/core";
 import Autoplay from "embla-carousel-autoplay";
 
 export default function MantineAutoplayCarousel({
   slides,
-  interval = 3000,
+  interval = 4000,
   loop = true,
-  withIndicators = true,
   draggable = true,
   height = 400,
   bgColor = "#fff",
 }) {
-  // ✅ useMemo ensures plugin created only once
   const autoplay = useMemo(
     () => Autoplay({ delay: interval, stopOnInteraction: false }),
     [interval]
   );
 
   return (
-    <Box px={20} style={{ width: "90%", backgroundColor: bgColor, overflow: "hidden" }}>
+    <Box px={20} style={{ width: "90%", backgroundColor: bgColor }}>
       <Carousel
         loop={loop}
         height={height}
-        slideSize="80%"
+        slideSize={{ base: "100%", sm: "70%" }}
         slideGap="sm"
         controlsOffset="lg"
         controlSize={20}
@@ -40,22 +38,45 @@ export default function MantineAutoplayCarousel({
           <Carousel.Slide key={index}>
             <Box
               style={{
-                height,
+                position: "relative",
+                cursor:"pointer",
+                height:"100%",
                 width: "100%",
-                backgroundColor: bgColor,
+                overflow: "hidden",
+                backgroundColor: "black",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
+
+              {/* BLACK GLASS BLUR BG */}
+              <Box
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  backgroundImage: `url(${s.src})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  filter: "blur(25px)",
+                  opacity: 0.35,
+                  transform: "scale(1.2)",
+                }}
+              />
+
+              {/* MAIN IMAGE – FIXED HEIGHT + CENTERED */}
               <Image
                 src={s.src}
                 alt={s.alt || `slide-${index}`}
                 fit="contain"
-                height={height}
-                radius={20}
-                width="100%"
-                style={{ objectFit: "contain", objectPosition: "center" }}
+                style={{
+                  position: "relative",
+                  height: "100%",
+                  width: "auto",        
+                  maxWidth: "100%",    
+                  objectFit: "contain",
+                  zIndex: 2,
+                }}
               />
             </Box>
           </Carousel.Slide>

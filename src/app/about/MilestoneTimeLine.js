@@ -202,7 +202,7 @@ const MilestoneTimeline = ({ milestones }) => {
         position: "relative",
         width: "100%",
         height: "100%",
-        minHeight: "60vh",
+        minHeight: "65vh",
         display: "flex",
         flexDirection: isMobile ? "column" : "row",
         alignItems: "center",
@@ -212,10 +212,11 @@ const MilestoneTimeline = ({ milestones }) => {
       <div
         ref={timelineContainerRef}
         style={{
-          overflowX: "scroll",
+          overflowX: "auto",
           overflowY: "hidden",
           width: "100%",
-          height: "650px",
+          height: "630px",
+          paddingBottom: "50px",
           paddingTop:"10px",
           position: "relative",
         }}
