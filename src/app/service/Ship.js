@@ -1,22 +1,34 @@
 'use client'
 import {
+  Box,
   Container,
   Flex,
   Grid,
   GridCol,
   Image,
+  List,
   Stack,
   Text,
+  ThemeIcon,
   Title,
 } from '@mantine/core';
 import { COLORS } from '../utils/COLORS';
 import { highlightText } from '../utils/highlightText';
 import { useMediaQuery } from '@mantine/hooks';
 import { Carousel } from '@mantine/carousel';
+import { usePathname } from 'next/navigation';
+import { IconCheck } from '@tabler/icons-react';
+import { memo, useMemo } from 'react';
 
 const Ship = ({ first_title, first_content, serviceData }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const pathname = usePathname();
 
+  const sortedServiceData = useMemo(() => {
+    return serviceData?.sort((a, b) => (a.fields.order || 0) - (b.fields.order || 0)) || [];
+  }, [serviceData]);
+
+  const isODCProjectCargo = useMemo(() => pathname === "/service/odc-project-cargo/", [pathname]);
 
   return (
     <Container fluid px={'7%'} py={isMobile ? 0 : '10px'} mb={isMobile ? 20 : 30}>
@@ -26,12 +38,32 @@ const Ship = ({ first_title, first_content, serviceData }) => {
           <Text size='sm' c={COLORS.textColor} lh={isMobile ? '20px' : ''} mt={'lg'} w={isMobile ? '100%' : '100%'}>
             {highlightText(first_content)}
           </Text>
-          
+          {isODCProjectCargo && <Text size='sm' c={COLORS.textColor} lh={isMobile ? '20px' : ''} mt={'lg'} w={isMobile ? '100%' : '100%'}>
+            {highlightText("Practical sustainability that is built into the operations! For many clients, ODC often includes renewable-energy equipment. We support the green economy by handling critical green-energy cargo with care and efficiency, while also:")}
+          </Text>}
+          {isODCProjectCargo && <Box mt={10} pl={40}>
+            <List
+              spacing="sm"
+              size="sm"
+              c={COLORS.textColor}
+              icon={
+                <ThemeIcon size={16} radius="xl">
+                  <IconCheck size={12} />
+                </ThemeIcon>
+              }
+            >
+              <List.Item>Optimizing routes to reduce unnecessary mileage</List.Item>
+              <List.Item>Planning multimodal combinations that lower emissions per ton moved</List.Item>
+              <List.Item>Improving utilisation through back-haul planning and consolidation wherever possible</List.Item>
+            </List>
+          </Box>}
+          {isODCProjectCargo && <Text size='sm' c={COLORS.textColor} lh={isMobile ? '20px' : ''} mt={'lg'} w={isMobile ? '100%' : '100%'}>
+            {highlightText("When we say engineered certainty at every stage, we mean it!")}
+            </Text>}
           {isMobile ? (
             <Grid w={'100%'}>
               <Carousel slideSize="80%" w={'100%'} height={450} align={'start'} slideGap="md" loop withControls={false}>
-              {serviceData
-                ?.sort((a, b) => (a.fields.order || 0) - (b.fields.order || 0)).map((item) => (
+              {sortedServiceData.map((item) => (
                   <Carousel.Slide key={item.sys.id} w={'100%'}>
                     <GridCol key={item.sys.id} span={15} mt={'md'}>
                       <Image
@@ -51,8 +83,7 @@ const Ship = ({ first_title, first_content, serviceData }) => {
             </Grid>
           ) : (
             <Grid columns={3} gutter={70} mt={60}>
-              {serviceData
-                ?.sort((a, b) => (a.fields.order || 0) - (b.fields.order || 0)).map((item) => (
+              {sortedServiceData.map((item) => (
                   <GridCol key={item.sys.id} span={1}>
                     <Image
                      h={225}
@@ -75,4 +106,4 @@ const Ship = ({ first_title, first_content, serviceData }) => {
   );
 };
 
-export default Ship;
+export default memo(Ship);

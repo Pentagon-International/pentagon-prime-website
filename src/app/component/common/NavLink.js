@@ -46,6 +46,9 @@ import {
   IconWorldDollar,
 } from "@tabler/icons-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState, useEffect, memo, useMemo, useCallback } from "react";
+import { useLoading } from "./LoadingContext";
 
 export const featuresMap = {
   Products: [
@@ -176,11 +179,26 @@ export const featuresMap = {
   ],
 };
 
-const FeatureItem = ({ feature }) => {
+const FeatureItem = memo(({ feature }) => {
+  const { startLoading } = useLoading();
+
+  const handleClick = useCallback(() => {
+    startLoading();
+  }, [startLoading]);
+
+  const handleMouseEnter = useCallback((e) => {
+    e.currentTarget.style.backgroundColor = "#F5F5F5";
+  }, []);
+
+  const handleMouseLeave = useCallback((e) => {
+    e.currentTarget.style.backgroundColor = "transparent";
+  }, []);
+
   return (
     <UnstyledButton
       component={Link}
       href={feature.link}
+      onClick={handleClick}
       style={{
         display: "block",
         width: "100%",
@@ -188,12 +206,8 @@ const FeatureItem = ({ feature }) => {
         borderRadius: "4px",
         transition: "all 0.3s ease",
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = "#F5F5F5";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = "transparent";
-      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Group wrap="nowrap" gap={8} align="center">
         <ThemeIcon
@@ -228,10 +242,93 @@ const FeatureItem = ({ feature }) => {
       </Group>
     </UnstyledButton>
   );
-};
+});
 
-export const NavLink = ({ item }) => {
+export const NavLink = memo(({ item }) => {
   const [opened, { open, close }] = useDisclosure(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const { startLoading } = useLoading();
+  const activeColor = "rgb(0, 33, 95)";
+  const pathname = usePathname();
+
+  // Define groups clearly
+  const solutionsPaths = useMemo(() => ['/service'], []);
+  const resourcesPaths = useMemo(() => [
+    '/blog/',
+    '/tools/',
+    '/inco-terms/',
+    '/shipping-terms/',
+    '/shipping-lines/',
+  ], []);
+
+  const isHome = useMemo(() => pathname === '/', [pathname]);
+  const isSolutions = useMemo(() => pathname.startsWith('/service/'), [pathname]);
+  const isResources = useMemo(() => resourcesPaths.includes(pathname), [pathname, resourcesPaths]);
+  const isAbout = useMemo(() => pathname.startsWith('/about'), [pathname]);
+
+  // Now map menu item → active logic
+  const isActive = useMemo(() =>
+    (item.label === 'Home' && isHome) ||
+    (item.label === 'Solutions' && isSolutions) ||
+    (item.label === 'Resources' && isResources) ||
+    (item.label === 'About Us' && isAbout),
+    [item.label, isHome, isSolutions, isResources, isAbout]
+  );
+
+  const linkStyles = useMemo(() => ({
+    display: "flex",
+    alignItems: "center",
+    gap: 5,
+    textDecoration: "none",
+    fontSize: "16px",
+    fontWeight: 900,
+    padding: "8px 16px",
+    borderRadius: "20px",
+    backgroundColor: isActive ? activeColor : "transparent",
+    transition: "all 0.2s ease",
+  }), [isActive, activeColor]);
+
+  const textColor = useMemo(() => {
+    if (isActive) return "white";
+    if (isHovered) return activeColor;
+    return COLORS.secondaryColor;
+  }, [isActive, isHovered, activeColor]);
+
+  const iconColor = useMemo(() => {
+    if (isActive) return "white";
+    if (isHovered || opened) return activeColor;
+    return COLORS.secondaryColor;
+  }, [isActive, isHovered, opened, activeColor]);
+
+  const handleLinkClick = useCallback((e) => {
+    if (item.links === '/service') {
+      e.preventDefault();
+    } else {
+      startLoading();
+    }
+  }, [item.links, startLoading]);
+
+  const handleMouseEnter = useCallback(() => {
+    open();
+    setIsHovered(true);
+  }, [open]);
+
+  const handleMouseLeave = useCallback(() => {
+    close();
+    setIsHovered(false);
+  }, [close]);
+
+  const handleNonDropdownClick = useCallback(() => {
+    startLoading();
+  }, [startLoading]);
+
+  const handleNonDropdownMouseEnter = useCallback(() => {
+    setIsHovered(true);
+  }, []);
+
+  const handleNonDropdownMouseLeave = useCallback(() => {
+    setIsHovered(false);
+  }, []);
 
   return item.dropdown ? (
     <HoverCard
@@ -244,22 +341,34 @@ export const NavLink = ({ item }) => {
       <HoverCardTarget>
         <Link
           href={item.links}
-          style={{ display: "flex", alignItems: "center", gap: 5, textDecoration: "none" }}
-          onClick={(e) => {
-            if (item.links === '/service') {
-              e.preventDefault(); // prevent the render of the page (service)
-            }
-          }}
-          onMouseEnter={open}
-          onMouseLeave={close}
+          style={linkStyles}
+          onClick={handleLinkClick}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
-          <Text size="14px" color={COLORS.secondaryColor}>
+          <Text 
+            size="16px" 
+            style={{ 
+              color: textColor,
+              fontSize: "16px"
+            }}
+          >
             {item.label}
           </Text>
           {opened ? (
-            <IconChevronUp size={16} color={COLORS.secondaryColor} />
+            <IconChevronUp 
+              size={16} 
+              style={{ 
+                color: iconColor
+              }} 
+            />
           ) : (
-            <IconChevronDown size={16} color={COLORS.secondaryColor} />
+            <IconChevronDown 
+              size={16} 
+              style={{ 
+                color: iconColor
+              }} 
+            />
           )}
         </Link>
 
@@ -287,10 +396,22 @@ export const NavLink = ({ item }) => {
       </HoverCardDropdown>
     </HoverCard>
   ) : (
-    <Link href={item.links} style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-      <Text size="14px" color={COLORS.secondaryColor}>
+    <Link 
+      href={item.links} 
+      style={linkStyles}
+      onClick={handleNonDropdownClick}
+      onMouseEnter={handleNonDropdownMouseEnter}
+      onMouseLeave={handleNonDropdownMouseLeave}
+    >
+      <Text 
+        size="16px" 
+        style={{ 
+          color: textColor,
+          fontSize: "16px"
+        }}
+      >
         {item.label}
       </Text>
     </Link>
   );
-};
+});

@@ -74,7 +74,7 @@ const Global = () => {
   const renderCard = (item) => (
     <Card
       key={item.sys.id}
-      bg={selectedPlace === item.fields.place ? COLORS.serviceColor : "#F2F7FC"}
+      bg={selectedPlace === item.fields.place ? "rgb(0, 33, 95)" : "#F2F7FC"}
       radius="32px"
       p={30}
       onClick={() => setSelectedPlace(item.fields.place)}
@@ -203,7 +203,7 @@ const Global = () => {
                 size={24}
                 stroke={1.5}
                 color={
-                  selectedPlace === place.name ? COLORS.footerBackground : "#e84c4c"
+                  selectedPlace === place.name ? "rgb(0, 33, 95)" : "#e84c4c"
                 }
               />
             </Box>

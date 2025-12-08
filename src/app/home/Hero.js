@@ -39,7 +39,12 @@ import { values } from 'lodash';
 
 const TransportOption = memo(({ type, icon, activeTransport, onClick }) => (
   <Group
-    style={type === activeTransport ? styles.groupstyle : { cursor: 'pointer' }}
+    style={{
+      ...styles.groupstyle,
+      color: COLORS.primaryColor,
+      backgroundColor: type === activeTransport ? COLORS.secondaryColor : 'transparent',
+      cursor: type !== activeTransport ? 'pointer' : 'default',
+    }}
     onClick={() => onClick(type)}
     gap={10}
   >
@@ -270,7 +275,7 @@ const Hero = ({ title, content }) => {
         )}
         <Stack h={'100%'} gap={0} justify="flex-start">
           <Title
-            c={COLORS.primaryColor}
+            c="rgb(0, 33, 95)"
             style={{ zIndex: 100 }}
             fw={900}
             order={1}
@@ -280,7 +285,7 @@ const Hero = ({ title, content }) => {
           >
             {highlightText(title)}
           </Title>
-          <Text lh={isMobile ? "md" : "lgx"} size={isMobile ? '15px' : '19px'} maw={isMobile ? '80%' : '40%'} fw={400} mt={15}>
+          <Text lh={isMobile ? "md" : "lgx"} size={isMobile ? '15px' : '19px'} maw={isMobile ? '80%' : '40%'} fw={600} mt={15}>
             {highlightText(content)}
           </Text>
           <Box h={'100%'}>
@@ -337,6 +342,7 @@ const Hero = ({ title, content }) => {
                           fontSize: '18px',
                           backgroundColor: '#ffffff45',
                           color: '#fff',
+                          border: "2px solid white",
                           "::placeholder": {
                             color: "#fff",
                             opacity: 1,
@@ -409,7 +415,8 @@ const Hero = ({ title, content }) => {
                         input: {
                           fontSize: '18px',
                           backgroundColor: '#ffffff45',
-                          color: '#fff'
+                          color: '#fff',
+                          border: "2px solid white",
                         },
                         item: {
                           fontSize: '18px',
@@ -455,6 +462,7 @@ const Hero = ({ title, content }) => {
                       },
                     }}
                     bg={'##CDF6FF'}
+                    radius={'md'}
                     c={COLORS.primaryColor}
                     onClick={handleGetQuote}
                   >
@@ -474,11 +482,7 @@ export default Hero;
 
 const styles = {
   heroContainer: {
-    backgroundImage: `linear-gradient(to bottom ,rgb(0, 33, 95),rgb(0, 65, 179))`,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    color: 'white',
+    color: 'rgb(1, 34, 95)',
     minHeight: '100vh',
     position: 'relative',
     overflowY: 'hidden',
@@ -506,12 +510,12 @@ const styles = {
     backgroundPosition: 'center',
   },
   transportOptions: {
+    color: '#fff',
     borderRadius: '24px',
-    backgroundColor: `#0000004d`,
+    backgroundColor: `#000000bf`,
     gap: '12px',
   },
   groupstyle: {
-    backgroundColor: COLORS.secondaryColor,
     padding: '10px 16px',
     borderRadius: '10px',
   },

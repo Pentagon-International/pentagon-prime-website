@@ -23,6 +23,7 @@ import { Carousel } from "@mantine/carousel";
 const CustomerBenefits = ({ title, content, title2 }) => {
   const [listData, setListData] = useState([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const iconColor = ["red", "blue", "orange", "rgb(0, 33, 95)", "green"];
 
   useEffect(() => {
     // Example: fetching from Contentful (uncomment if needed)
@@ -45,21 +46,21 @@ const CustomerBenefits = ({ title, content, title2 }) => {
     <Container fluid px="7%" py="70px">
 
       {/* Services Section */}
-      <Box mt={40}>
+      <Box mt={40} mb={40}>
         <Title
           tt="uppercase"
           c={COLORS.headerBackground}
           lh="md"
-          mb={30}
+          mb={50}
           ta="center"
           fw={800}
-          size={isMobile ? "20px" : "28px"}
+          size={isMobile ? "20px" : "32px"}
         >
           {highlightText("What customers get (benefits)")}
         </Title>
 
         {/* Responsive Grid or Carousel */}
-        <Grid columns={9} mt="lg" gutter="lg" w="100%">
+        <Grid columns={9} mt="lg" gutter="xl" w="100%">
           {isMobile ? (
             <Carousel
               align="start"
@@ -81,8 +82,9 @@ const CustomerBenefits = ({ title, content, title2 }) => {
                 return (
                   <Carousel.Slide key={index}>
                     <Card
-                      bg={"#F2F7FC"}
-                      p="20px"
+                      bg={"white"}
+                      p="32px"
+                      shadow="md"
                       radius={15}
                       style={{
                         flex: 1,
@@ -90,18 +92,20 @@ const CustomerBenefits = ({ title, content, title2 }) => {
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "space-between",
+                        border: "3px solid #E0E0E0",
                       }}
                     >
                       <Stack gap="sm" justify="space-between" h="100%">
                         {/* Icon */}
-                        <IconComponent size={42} stroke={1.6} color="#1E88E5" />
+                        <IconComponent size={52} stroke={1.8} color="white" style={{backgroundColor: iconColor[index], padding: "8px", borderRadius: "8px"}} />
 
                         {/* Title */}
                         <Title
                           order={4}
                           fw={700}
-                          size={theme.fontSizes.base}
+                          size="20px"
                           mt={isMobile ? 0 : 20}
+                          c="rgb(0, 33, 95)"
                           lh="sm"
                         >
                           {item.fields.service_title || item.fields.title}
@@ -132,12 +136,13 @@ const CustomerBenefits = ({ title, content, title2 }) => {
               return (
                 <GridCol
                   key={index}
-                  span={{ base: 12, sm: 6, md: 4, lg: 3 }}
+                  span={{ base: 12, sm: 6, md: item.fields.service_title==="Sustainability" || item.fields.title==="Sustainability" || item.fields.title==="Support" || item.fields.service_title==="Support"  ? 6 : 4, lg: item.fields.service_title==="Sustainability" || item.fields.title==="Sustainability" || item.fields.title==="Support" || item.fields.service_title==="Support"  ? 4.5 : 3 }}
                   style={{ display: "flex" }}
                 >
                   <Card
-                    bg={"#F2F7FC"}
-                    p="20px"
+                    bg={"white"}
+                    p="32px"
+                    shadow="md"
                     radius={15}
                     style={{
                       flex: 1,
@@ -145,17 +150,19 @@ const CustomerBenefits = ({ title, content, title2 }) => {
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "space-between",
+                      border: "3px solid #E0E0E0",
                     }}
                   >
                     <Stack gap="sm" justify="space-between" h="100%">
                       {/* Icon */}
-                      <IconComponent size={42} stroke={1.6} color="#1E88E5" />
+                      <IconComponent size={52} stroke={1.8} color="white" style={{backgroundColor: iconColor[index], padding: "8px", borderRadius: "8px"}} />
 
                       {/* Title */}
                       <Title
                         order={4}
                         fw={700}
-                        size={theme.fontSizes.base}
+                        size="20px"
+                        c="rgb(0, 33, 95)"
                         mt={isMobile ? 0 : 20}
                         lh="sm"
                       >

@@ -23,13 +23,13 @@ import {
   IconBrandFacebook,
 } from '@tabler/icons-react';
 import Images from "@/app/utils/image";
-import React from 'react';
+import React, { memo, useMemo, useCallback } from 'react';
 import { useMediaQuery } from '@mantine/hooks';
 import Link from 'next/link';
 
 const Footer = () => {
   // Reorganize services into 3 columns
-  const services = [
+  const services = useMemo(() => [
     [
       { title: 'Air Freight Forwarding', slug: 'air-freight-forwarding' },
       { title: 'Sea Freight Forwarding', slug: 'sea-freight-forwarding' },
@@ -48,17 +48,46 @@ const Footer = () => {
       { title: 'Exhibition Cargo', slug: 'exhibition-cargo' },
       { title: 'First and Last-Mile Delivery', slug: 'first-and-last-mile-delivery' },
     ]
-  ];
+  ], []);
 
-  const linkStyle = {
+  const linkStyle = useMemo(() => ({
     transition: 'all 0.3s ease',
     '&:hover': {
       color: '#0E53F2',
       transform: 'translateX(5px)',
     }
-  };
+  }), []);
 
   const isMobile = useMediaQuery('(max-width:768px)');
+
+  const handleLinkedInClick = useCallback(() => {
+    window.open('https://www.linkedin.com/company/pentagon-freight');
+  }, []);
+
+  const handleInstagramClick = useCallback(() => {
+    window.open('https://www.instagram.com/pentagon_freight/');
+  }, []);
+
+  const handleFacebookClick = useCallback(() => {
+    window.open('https://www.facebook.com/PentagonFreightSolutions/');
+  }, []);
+
+  const handleAddressClick = useCallback(() => {
+    window.open('https://maps.google.com/?q=Satellite Silver, Marol Naka, Andheri Kurla Road, Andheri East, Mumbai');
+  }, []);
+
+  const handlePhoneClick = useCallback(() => {
+    window.open('tel:+912245966999');
+  }, []);
+
+  const handleEmailClick = useCallback(() => {
+    window.open('mailto:pentagon@pentagonindia.net');
+  }, []);
+
+  const mobileServices = useMemo(() => 
+    [[...services[0], services[1][0], services[1][1]], [services[1][2], services[1][3], ...services[2]]],
+    [services]
+  );
 
   return (
     <footer style={{ backgroundColor: '#111', color: 'white', padding: '50px 0' }}>
@@ -88,7 +117,7 @@ const Footer = () => {
                   transition: 'transform 0.3s ease',
                   '&:hover': { transform: 'translateY(-3px)', color: '#0E53F2' }
                 }}
-                onClick={() => window.open('https://www.linkedin.com/company/pentagon-freight')}
+                onClick={handleLinkedInClick}
               >
                 <IconBrandLinkedin size={22} />
               </Box>
@@ -98,7 +127,7 @@ const Footer = () => {
                   transition: 'transform 0.3s ease',
                   '&:hover': { transform: 'translateY(-3px)', color: '#0E53F2' }
                 }}
-                onClick={() => window.open('https://www.instagram.com/pentagon_freight/')}
+                onClick={handleInstagramClick}
               >
                 <IconBrandInstagram size={22} />
               </Box>
@@ -108,7 +137,7 @@ const Footer = () => {
                   transition: 'transform 0.3s ease',
                   '&:hover': { transform: 'translateY(-3px)', color: '#0E53F2' }
                 }}
-                onClick={() => window.open('https://www.facebook.com/PentagonFreightSolutions/')}
+                onClick={handleFacebookClick}
               >
                 <IconBrandFacebook size={22} />
               </Box>
@@ -128,7 +157,7 @@ const Footer = () => {
 
             {isMobile ?
               <SimpleGrid cols={2} spacing="md" breakpoints={[{ maxWidth: 'md', cols: 2 }, { maxWidth: 'xs', cols: 2 }]}>
-                {[[...services[0], services[1][0], services[1][1]], [services[1][2], services[1][3], ...services[2]]].map((column, colIndex) => (
+                {mobileServices.map((column, colIndex) => (
                   <Stack key={colIndex} spacing={6}>
                     {column.map((item, index) => (
                       <Link
@@ -211,7 +240,7 @@ const Footer = () => {
                 maxWidth: 'none',
                 flexShrink: 1
               }}
-              onClick={() => window.open('https://maps.google.com/?q=Satellite Silver, Marol Naka, Andheri Kurla Road, Andheri East, Mumbai')}
+              onClick={handleAddressClick}
               style={{ cursor: 'pointer' }}
             >
               <IconMapPin size={18} color="#0EC9F2" style={{ flexShrink: 0, marginTop: 4 }} />
@@ -225,7 +254,7 @@ const Footer = () => {
 
             <Group
               spacing="sm"
-              onClick={() => window.open('tel:+912245966999')}
+              onClick={handlePhoneClick}
               sx={{
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
@@ -243,7 +272,7 @@ const Footer = () => {
 
             <Group
               spacing="sm"
-              onClick={() => window.open('mailto:pentagon@pentagonindia.net')}
+              onClick={handleEmailClick}
               styles={{
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
@@ -269,4 +298,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default memo(Footer);

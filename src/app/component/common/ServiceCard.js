@@ -12,23 +12,40 @@ import {
   Title,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import React from "react";
+import React, { memo, useCallback } from "react";
 
 const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
+  const handleClick = useCallback(() => {
+    if (item?.fields?.knowmore) {
+      window.location.href = item.fields.knowmore;
+    }
+  }, [item?.fields?.knowmore]);
+
+  const handleMouseEnter = useCallback((e) => {
+    e.currentTarget.style.outline = "3px solid rgb(0, 33, 95)";
+  }, []);
+
+  const handleMouseLeave = useCallback((e) => {
+    e.currentTarget.style.outline = "none";
+  }, []);
+
   return (
     <GridCol span={{ base: 12, sm: 6, md: 4, lg: 3 }} key={item.sys.id}>
       <Card
-        onClick={() => (window.location.href = item?.fields?.knowmore)}
+        onClick={handleClick}
         bg={backgroundColor}
         display={"flex"}
         direction={"column"}
         justify={"flex-start"}
         p={"25px"}
+        shadow="md"
         radius={20}
         h={isMobile ? "200px" : "250px"}
-        style={{ cursor: "pointer" }}
+        style={{ cursor: "pointer"}}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <Flex
           align={"center"}
@@ -62,7 +79,6 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
           </Title>
           <Text
             tw="balance"
-            c={COLORS.textColor}
             lh={"sm"}
             size="sm"
             style={{ flexGrow: 1 }}
@@ -98,4 +114,4 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
   );
 };
 
-export default ServiceCard;
+export default memo(ServiceCard);

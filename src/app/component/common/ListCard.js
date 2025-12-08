@@ -15,8 +15,70 @@ import {
   import { useMediaQuery } from "@mantine/hooks";
   import { COLORS } from "@/app/utils/COLORS";
   import { theme } from "@/app/utils/theme";
+  import { memo, useMemo } from "react";
   
-  export default function ListCard({
+  const ListCardItem = memo(({ item, index, isMobile }) => {
+    const iconName = item?.fields?.icon || item?.fields?.icon;
+    const IconComponent = useMemo(() => 
+      (iconName && TablerIcons[iconName]) || TablerIcons.IconQuestionMark,
+      [iconName]
+    );
+    
+    const title = item?.fields?.service_title || item?.fields?.title;
+    const description = item?.fields?.service_description || item?.fields?.description;
+    
+    const cardStyle = useMemo(() => ({
+      flex: 1,
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+    }), []);
+
+    return (
+      <Card
+        bg={"#F2F7FC"}
+        p="20px"
+        radius={15}
+        style={cardStyle}
+      >
+        <Stack gap="sm" justify="space-between" h="100%">
+          {iconName && (
+            <IconComponent
+              size={42}
+              stroke={1.6}
+              color="#1E88E5"
+            />
+          )}
+          {title && (
+            <Title
+              order={4}
+              fw={700}
+              size="20px"
+              mt={isMobile ? 0 : 20}
+              lh="sm"
+            >
+              {title}
+            </Title>
+          )}
+          {description && (
+            <Text
+              c="gray"
+              lh="sm"
+              size="sm"
+              style={{
+                flexGrow: 1,
+              }}
+            >
+              {description}
+            </Text>
+          )}
+        </Stack>
+      </Card>
+    );
+  });
+
+  function ListCard({
       listData = [],
       sectionTitle,
     }) {
@@ -54,146 +116,28 @@ import {
                   },
                 }}
               >
-                {listData.map((item, index) => {
-                  const iconName = item?.fields.icon;
-                  const IconComponent =
-                    (iconName && TablerIcons[iconName]) ||
-                    TablerIcons.IconQuestionMark;
-  
-                  const title = item?.fields.service_title || item?.fields.title;
-                  const description =
-                    item?.fields.service_description || item?.fields.description;
-  
-                  return (
+                {listData.map((item, index) => (
                     <Carousel.Slide key={index}>
-                      <Card
-                        bg={"#F2F7FC"}
-                        p="20px"
-                        radius={15}
-                        style={{
-                          flex: 1,
-                          height: "100%",
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <Stack gap="sm" justify="space-between" h="100%">
-                          {/* ICON (Only if exists) */}
-                          {iconName && (
-                            <IconComponent
-                              size={42}
-                              stroke={1.6}
-                              color="#1E88E5"
-                            />
-                          )}
-  
-                          {/* TITLE (Only if exists) */}
-                          {title && (
-                            <Title
-                              order={4}
-                              fw={700}
-                              size="20px"
-                              mt={isMobile ? 0 : 20}
-                              lh="sm"
-                            >
-                              {title}
-                            </Title>
-                          )}
-  
-                          {/* DESCRIPTION (Only if exists) */}
-                          {description && (
-                            <Text
-                              c="gray"
-                              lh="sm"
-                              size="sm"
-                              style={{
-                                flexGrow: 1,
-                              }}
-                            >
-                              {description}
-                            </Text>
-                          )}
-                        </Stack>
-                      </Card>
+                      <ListCardItem item={item} index={index} isMobile={isMobile} />
                     </Carousel.Slide>
-                  );
-                })}
+                  ))}
               </Carousel>
             ) : (
-              listData.map((item, index) => {
-                const iconName = item.fields.icon;
-                const IconComponent =
-                  (iconName && TablerIcons[iconName]) ||
-                  TablerIcons.IconQuestionMark;
-  
-                const title = item.fields.service_title || item.fields.title;
-                const description =
-                  item.fields.service_description || item.fields.description;
-  
-                return (
+              listData.map((item, index) => (
                   <GridCol
                     key={index}
                     span={{ base: 12, sm: 6, md: 4, lg: 3 }}
                     style={{ display: "flex" }}
                   >
-                    <Card
-                      bg={"#F2F7FC"}
-                      p="20px"
-                      radius={15}
-                      style={{
-                        flex: 1,
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Stack gap="sm" justify="space-between" h="100%">
-                        {/* ICON */}
-                        {iconName && (
-                          <IconComponent
-                            size={42}
-                            stroke={1.6}
-                            color="#1E88E5"
-                          />
-                        )}
-  
-                        {/* TITLE */}
-                        {title && (
-                          <Title
-                            order={4}
-                            fw={700}
-                            size="20px"
-                            mt={isMobile ? 0 : 20}
-                            lh="sm"
-                          >
-                            {title}
-                          </Title>
-                        )}
-  
-                        {/* DESCRIPTION */}
-                        {description && (
-                          <Text
-                            c="gray"
-                            lh="sm"
-                            size="sm"
-                            style={{
-                              flexGrow: 1,
-                            }}
-                          >
-                            {description}
-                          </Text>
-                        )}
-                      </Stack>
-                    </Card>
+                    <ListCardItem item={item} index={index} isMobile={isMobile} />
                   </GridCol>
-                );
-              })
+                ))
             )}
           </Grid>
         </Box>
       </Container>
     );
   }
+  
+  export default memo(ListCard);
   

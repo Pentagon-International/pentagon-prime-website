@@ -52,7 +52,7 @@ const Members = () => {
           size={isMobile ? "28px" : "40px"}
         >
           {/* <Title size={isMobile ? '30px' : '40px'} fw={800} tt={'uppercase'} lh={'lgx2'}> */}
-          Message from the chairman
+          {highlightText("Message from the # chairman #")}
         </Title>
       </Flex>
       <Flex
@@ -66,12 +66,12 @@ const Members = () => {
           padding="lg"
           radius="lg"
           style={{
-            maxWidth: "1000px",
+            maxWidth: "1200px",
             width: "100%",
           }}
         >
           <Grid gutter="60" dir={isMobile ? "column" : "row"} align="center">
-            <GridCol span={isMobile ? 12 : 5} pr={0}>
+            <GridCol span={isMobile ? 12 : 4} pr={0}>
               <CardSection>
                 <Image
                   src={Images.chairman}
@@ -84,16 +84,16 @@ const Members = () => {
                 />
               </CardSection>
             </GridCol>
-            <GridCol span={isMobile ? 12 : 7} pl={0} pr={65}>
+            <GridCol span={isMobile ? 12 : 8} pl={0} pr={65}>
               <Stack spacing="md">
                 <Text
                   size={20}
                   lh={"md"}
                   mt={-10}
                   tw="balance"
-                  fs={"italic"}
                   c={COLORS.textColor}
                   ta={"justify"}
+
                 >
                   "We started with a single aim - to make trade easier!
                   Today, Pentagon Group combines disciplined operations with practical digital tools to deliver visibility, predictability, and sustainable choices. As the world shifts to green energy, logistics must follow: we're building tech-enabled green logistics that safely and efficiently move renewable-energy supply chains. Our goal is simple: a comprehensive, low-friction solution that makes booking cargo as easy as booking a flight."
@@ -122,18 +122,18 @@ const Members = () => {
                 </Grid.Col>
               </Grid> */}
                 <Stack spacing="md" mt={"xl"}>
-                  <Text size={theme?.fontSizes?.lgx} fw={600}>
+                  <Text size={theme?.fontSizes?.lg} c="rgb(0, 33, 95)" fw={700}>
                     Paresh Bhanushali
                   </Text>
                   <Text
-                    size={theme?.fontSizes?.md}
+                    size={20}
                     mt={-10}
                     c={COLORS.textColor}
                     lh={1.5}
                   >
-                    Chairman & Managing Director
+                    <b>Chairman & Managing Director</b>
                     <br />
-                    Pentagon Group of Companies
+                    <i>Pentagon Group of Companies</i>
                   </Text>
                 </Stack>
               </Flex>
@@ -172,6 +172,7 @@ const Members = () => {
           fw={800}
           tt={"uppercase"}
           lh={"lgx2"}
+          c="rgb(0, 33, 95)"
         >
           CORE Team
         </Title>

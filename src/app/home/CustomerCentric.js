@@ -29,26 +29,28 @@ const CustomerCentric = () => {
         align="stretch"
         style={{ width: "100%" }}
         justify="center"
+        columns={isMobile ? 6 : 12}
       >
         {listData?.map((item, index) => {
           return (
-            <Grid.Col span={12} key={index}>
+            <Grid.Col span={6} key={index}>
               <Box
                 p="1rem"
+                shadow="lg"
                 style={{
-                  height: "100%",
+                  height: "100px",
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
                   gap: "1rem",
                   justifyContent: "flex-start",
                   backgroundColor:"#F2F7FC",
-                  color: "#313131",
-                  borderRadius: "5px",
+                  color: COLORS.textColor,
+                  borderRadius: "20px",
                   boxShadow: "0 2px 5px lightgray",
                 }}
               >
-                <IconCircleCheck size={40} stroke={2.5} color="green" />
+                <IconCircleCheck stroke={2.5} color="rgb(0, 33, 95)" style={{width: "36px", flexShrink: 0, height: "36px"}} />
                 <Text ta="left" fz={20} fw={500} dangerouslySetInnerHTML={{ __html: item.fields.description }} />
               </Box>
               {/* {index<listData.length-1 && <span><Divider size="md" my="xs" w="70%" style={{justifySelf:"center", color:"#313131"}}  /></span> } */}

@@ -1,15 +1,33 @@
+"use client";
 import BottomCard from "../component/common/BottomCard";
 import FAQ from "../component/common/FAQ";
 import QuoteCard from "./QuoteCard";
 import Retail from "./Retail";
 import Ship from "./Ship";
+import { usePathname } from "next/navigation";
+import { memo, useMemo } from "react";
 
-export default async function ServiceLayout({ children }) {
-
-
-    const title = 'Want to GET PRIME experience?';
-    const text =
-        'Talk to a supply chain solutions expert and see the Prime Platform in action.';
+function ServiceLayout({ children }) {
+    const pathname = usePathname();
+    
+    const title = useMemo(() => 
+        pathname === "/service/warehousing-and-distribution/" 
+            ? 'Want a demo of our warehouse dashboard or a lane-level cost estimate? ' 
+            : pathname === "/service/cross-country-trade/" 
+                ? 'Planning a cross-border move?' 
+                : 'Want to GET PRIME experience?',
+        [pathname]
+    );
+    
+    const text = useMemo(() => 
+        pathname === "/service/warehousing-and-distribution/" 
+            ? 'Contact our team for an operational review and a free feasibility note.' 
+            : pathname === "/service/cross-country-trade/" 
+                ? "Request a quote or speak to our Cross-Country Trade team. we'll map the most cost-effective, compliant and low-friction route for your cargo!" 
+                : 'Talk to a supply chain solutions expert and see the Prime Platform in action.',
+        [pathname]
+    );
+    
     const button = 'Reach us here';
     return (
         <>
@@ -20,3 +38,5 @@ export default async function ServiceLayout({ children }) {
         </>
     );
 }
+
+export default memo(ServiceLayout);

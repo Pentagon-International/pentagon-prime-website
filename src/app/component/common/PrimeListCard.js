@@ -2,15 +2,16 @@ import { COLORS } from "@/app/utils/COLORS";
 import { theme } from "@/app/utils/theme";
 import { Card, Stack, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import React from "react";
+import React, { memo } from "react";
 
-const PrimeListCard = ({ item, backgroundColor, IconComponent }) => {
+const PrimeListCard = ({ item, backgroundColor, IconComponent, iconColor }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   return (
     <Card
       bg={backgroundColor}
-      p="20px"
+      p="32px"
+      shadow="md"
       radius={15}
       style={{
         flex: 1,
@@ -18,18 +19,20 @@ const PrimeListCard = ({ item, backgroundColor, IconComponent }) => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
+        border: "3px solid #E0E0E0",
       }}
     >
       <Stack gap="sm" justify="space-between" h="100%">
         {/* Icon */}
-        <IconComponent size={42} stroke={1.6} color="#1E88E5" />
+        <IconComponent size={52} stroke={1.8} color="white" style={{backgroundColor: iconColor, padding: "8px", borderRadius: "8px"}} />
 
         {/* Title */}
         <Title
           order={4}
           fw={700}
-          size={theme.fontSizes.base}
+          size="20px"
           mt={isMobile ? 0 : 20}
+          c="rgb(0, 33, 95)"
           lh="sm"
         >
           {item.fields.service_title || item.fields.title}
@@ -51,4 +54,4 @@ const PrimeListCard = ({ item, backgroundColor, IconComponent }) => {
   );
 };
 
-export default PrimeListCard;
+export default memo(PrimeListCard);

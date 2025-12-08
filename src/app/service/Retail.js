@@ -6,12 +6,22 @@ import Images from '../utils/image';
 import ServiceCard from '../component/common/ServiceCard';
 import { highlightText } from '../utils/highlightText';
 import { useMediaQuery } from '@mantine/hooks';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo, useMemo } from 'react';
 import { Carousel } from '@mantine/carousel';
 
 const Retail = ({ first_title, first_content, second_title, second_content, illustration }) => {
   const [serviceData, setServiceData] = useState([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const imageSrc = useMemo(() => 
+    isMobile ? Images.mob_prime_network : illustration,
+    [isMobile, illustration]
+  );
+
+  const imageStyle = useMemo(() => ({
+    position: 'relative',
+    maxWidth: !isMobile && '50%',
+  }), [isMobile]);
 
   useEffect(() => {
     const fetchServiceData = async () => {
@@ -53,23 +63,17 @@ const Retail = ({ first_title, first_content, second_title, second_content, illu
         </Flex>
 
         <Image
-          src={isMobile ? Images.mob_prime_network : illustration}
+          src={imageSrc}
           alt="prime_network"
           h={isMobile ? "auto" : "auto"}
           w={isMobile ? "100%" : "40%"}
           mt={isMobile ? 70 : 0}
           fit={'contain'}
-          style={{
-            position: 'relative',
-            // transform: 'translateY(-50%)',
-            // top: '10px',
-            maxWidth: !isMobile && '50%',
-            // height: '10%',
-          }}
+          style={imageStyle}
         />
       </Flex>
     </Container>
   );
 };
 
-export default Retail;
+export default memo(Retail);

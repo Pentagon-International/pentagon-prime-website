@@ -8,8 +8,11 @@ const page = () => {
     <>
       <div
         style={{
-          backgroundColor: '#000371',
+          backgroundImage: "linear-gradient(to bottom, rgb(0, 30, 87), rgb(1, 46, 129))",
           height: '100vh',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
         }}
       >
         <Contact />

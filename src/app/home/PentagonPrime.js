@@ -21,6 +21,7 @@ import PrimeListCard from "../component/common/PrimeListCard";
 const PentagonPrime = ({ title, content, title2 }) => {
   const [listData, setListData] = useState([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const iconColor = ["red", "blue", "orange", "rgb(0, 33, 95)", "green"];
 
   useEffect(() => {
     // Example: fetching from Contentful (uncomment if needed)
@@ -43,21 +44,21 @@ const PentagonPrime = ({ title, content, title2 }) => {
     <Container fluid px="7%" py="70px" >
 
       {/* Services Section */}
-      <Box mt={40}>
+      <Box mt={20}>
         <Title
           tt="uppercase"
           c={COLORS.headerBackground}
           lh="md"
-          mb={30}
+          mb={50}
           ta="center"
           fw={800}
-          size={isMobile ? "20px" : "28px"}
+          size={isMobile ? "24px" : "32px"}
         >
           {highlightText(title2)}
         </Title>
 
         {/* Responsive Grid or Carousel */}
-        <Grid columns={9} mt="lg" gutter="lg" w="100%">
+        <Grid columns={9} mt="lg" gutter="xl" w="100%">
           {isMobile ? (
             <Carousel
               align="start"
@@ -81,7 +82,8 @@ const PentagonPrime = ({ title, content, title2 }) => {
                     <PrimeListCard
                       IconComponent={IconComponent}
                       item={item}
-                      backgroundColor="#F2F7FC"
+                      backgroundColor="white"
+                      iconColor={iconColor[index]}
                     />
                   </Carousel.Slide>
                 );
@@ -100,7 +102,8 @@ const PentagonPrime = ({ title, content, title2 }) => {
                   <PrimeListCard
                     IconComponent={IconComponent}
                     item={item}
-                    backgroundColor="#F2F7FC"
+                    backgroundColor="white"
+                    iconColor={iconColor[index]}
                   />
                 </GridCol>
               );

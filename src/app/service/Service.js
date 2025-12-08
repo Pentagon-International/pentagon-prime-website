@@ -16,30 +16,58 @@ import { COLORS } from '../utils/COLORS';
 import { highlightText } from '../utils/highlightText';
 import { useRouter } from 'next/navigation';
 import { useMediaQuery } from '@mantine/hooks';
+import { memo, useMemo } from 'react';
 
-export default function Service({ title, icon, iconTitle, content, backgroundImage }) {
+function Service({ title, icon, iconTitle, content, backgroundImage }) {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const containerStyle = useMemo(() => ({
+    minHeight: isMobile ? '100vh' : '80vh',
+    maxHeight: isMobile ? '100vh' : '80vh',
+    display: 'flex',
+    flexDirection: isMobile ? 'column' : 'row',
+    marginTop: '60px',
+    backgroundColor: '#111F40',
+    color: '#FFF',
+    position: 'relative',
+  }), [isMobile]);
+
+  const leftSectionStyle = useMemo(() => ({
+    width: isMobile ? '100%' : '50%',
+    display: 'flex',
+    alignItems: 'center',
+    paddingTop: '100px',
+    paddingBottom: isMobile ? '50px' : '100px'
+  }), [isMobile]);
+
+  const rightSectionStyle = useMemo(() => ({
+    position: 'sticky',
+    top: isMobile ? '60px' : '60px',
+    width: isMobile ? '100%' : '50%',
+    height: isMobile ? '60vw' : 'calc(80vh)',
+    alignSelf: 'flex-start'
+  }), [isMobile]);
+
+  const backgroundImageStyle = useMemo(() => ({
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    right: 0,
+    top: 0,
+  }), []);
+
+  const overlayStyle = useMemo(() => ({
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  }), []);
   return (
-    <div
-      style={{
-        minHeight: isMobile ? '100vh' : '80vh',
-        maxHeight: isMobile ? '100vh' : '80vh',
-        display: 'flex',
-        flexDirection: isMobile ? 'column' : 'row',
-        marginTop: '60px',
-        backgroundColor: '#111F40',
-        color: '#FFF',
-        position: 'relative',
-      }}
-    >
-      <div style={{
-        width: isMobile ? '100%' : '50%',
-        display: 'flex',
-        alignItems: 'center',
-        paddingTop: '100px',
-        paddingBottom: isMobile ? '50px' : '100px'
-      }}>
+    <div style={containerStyle}>
+      <div style={leftSectionStyle}>
         <Stack
           px={isMobile ? '6%' : '13%'}
           spacing={isMobile ? 'sm' : 'xl'}
@@ -82,36 +110,17 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
         </Stack>
       </div>
 
-      <div style={{
-        position: 'sticky',
-        top: isMobile ? '60px' : '60px',
-        width: isMobile ? '100%' : '50%',
-        height: isMobile ? '60vw' : 'calc(80vh)',
-        alignSelf: 'flex-start'
-      }}>
+      <div style={rightSectionStyle}>
         <BackgroundImage
           src={backgroundImage}
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            right: 0,
-            top: 0,
-          }}
+          style={backgroundImageStyle}
           fit={isMobile ? "cover" : "cover"}
           alt="sea freight"
         />
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          }}
-        />
+        <div style={overlayStyle} />
       </div>
     </div>
   );
 }
+
+export default memo(Service);

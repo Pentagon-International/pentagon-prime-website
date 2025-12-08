@@ -34,8 +34,8 @@ import { client } from "../api/contentful";
 
 const styles = {
   container: {
-    background: "linear-gradient(180deg, #0013e6d6 0%, #FFFFFF 100%)",
-    color: "white",
+    background: "white",
+    color: "rgb(0, 34, 95)",
     padding: "4rem 2rem",
     paddingLeft: "0",
   },
@@ -178,13 +178,13 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
           p={'0 2%'}
           mt={isMobile && 50}
         >
-          <Title tt={"uppercase"} fw={800} size={isMobile ? "20px" : "34px"} lh={1}>
+          <Title tt={"uppercase"} c="rgb(0, 33, 95)" fw={800} size={isMobile ? "20px" : "34px"} lh={1}>
             {highlightText(title)}
           </Title>
-          <Text mt={'lg'} c={isMobile ? COLORS.textColor : ''} ta={'justify'} maw={"100%"} lh={"sm"} size="sm">
+          <Text mt={'lg'} c="rgb(54, 54, 54)" ta={'justify'} maw={"100%"} lh={"sm"} size="sm">
             {highlightText(content)}
           </Text>
-          <Grid w={'100%'} mt={'lg'}>
+          <Grid w={'100%'} gutter="xl" mt={'lg'}>
             {isMobile ? (
               <Carousel
                 align={isMobile ? 'start' : 'center'} slideSize="70%" height={220} w={'100%'} slideGap="xs" loop
@@ -211,8 +211,9 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
                           direction={"column"}
                           justify={"flex-start"}
                           mih={"150"}
+                          shadow="md"
                           p={isMobile ? '20px' : "20px"}
-                          radius={32}
+                          radius={20}
                           h={"200px"}
                         >
                           <Flex
@@ -317,8 +318,9 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
                         direction={"column"}
                         justify={"flex-start"}
                         mih={"150"}
+                        shadow="md"
                         p={isMobile ? '20px' : "20px"}
-                        radius={32}
+                        radius={20}
                         h={"200px"}
                       >
                         <Flex
@@ -326,6 +328,7 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
                           display={"flex"}
                           mb={"10px"}
                           w={"fit-content"}
+                          gap={10}
                           style={{ border: "none", borderRadius: "12px" }}
                         >
                           <Image

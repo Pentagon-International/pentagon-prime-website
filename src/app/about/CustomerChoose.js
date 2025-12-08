@@ -23,7 +23,7 @@ import { Carousel } from "@mantine/carousel";
 const CustomerChoose = ({ title, content, title2 }) => {
   const [listData, setListData] = useState([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
-
+  const iconColor = ["blue", "orange", "red", "green", "rgb(0, 33, 95)"];
   useEffect(() => {
     // Example: fetching from Contentful (uncomment if needed)
     // const fetchListData = async () => {
@@ -49,10 +49,10 @@ const CustomerChoose = ({ title, content, title2 }) => {
           tt="uppercase"
           c={COLORS.headerBackground}
           lh="md"
-          mb={30}
+          mb={50}
           ta="center"
           fw={800}
-          size={isMobile ? "20px" : "28px"}
+          size={isMobile ? "20px" : "32px"}
         >
           {highlightText("Pentagon Air: Why customers choose it")}
         </Title>
@@ -67,7 +67,7 @@ const CustomerChoose = ({ title, content, title2 }) => {
         </Text>
 
         {/* Responsive Grid or Carousel */}
-        <Grid columns={9} mt="lg" gutter="lg" w="100%">
+        <Grid columns={9} mt="lg" gutter="xl" w="100%">
           {isMobile ? (
             <Carousel
               align="start"
@@ -89,8 +89,9 @@ const CustomerChoose = ({ title, content, title2 }) => {
                 return (
                   <Carousel.Slide key={index}>
                     <Card
-                      bg={"#F2F7FC"}
-                      p="20px"
+                      bg={"white"}
+                      p="32px"
+                      shadow="md"
                       radius={15}
                       style={{
                         flex: 1,
@@ -98,17 +99,19 @@ const CustomerChoose = ({ title, content, title2 }) => {
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "space-between",
+                        border: "3px solid #E0E0E0",
                       }}
                     >
                       <Stack gap="sm" justify="space-between" h="100%">
                         {/* Icon */}
-                        <IconComponent size={42} stroke={1.6} color="#1E88E5" />
+                        <IconComponent size={52} stroke={1.8} color="white" style={{backgroundColor: iconColor[index], padding: "8px", borderRadius: "8px"}} />
 
                         {/* Title */}
                         <Title
                           order={4}
                           fw={700}
-                          size={theme.fontSizes.base}
+                          size="20px"
+                          c="rgb(0, 33, 95)"
                           mt={isMobile ? 0 : 20}
                           lh="sm"
                         >
@@ -144,8 +147,9 @@ const CustomerChoose = ({ title, content, title2 }) => {
                   style={{ display: "flex" }}
                 >
                   <Card
-                    bg={"#F2F7FC"}
-                    p="20px"
+                    bg={"white"}
+                    p="32px"
+                    shadow="md"
                     radius={15}
                     style={{
                       flex: 1,
@@ -153,17 +157,19 @@ const CustomerChoose = ({ title, content, title2 }) => {
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "space-between",
+                      border: "3px solid #E0E0E0",
                     }}
                   >
                     <Stack gap="sm" justify="space-between" h="100%">
                       {/* Icon */}
-                      <IconComponent size={42} stroke={1.6} color="#1E88E5" />
+                      <IconComponent size={52} stroke={1.8} color="white" style={{backgroundColor: iconColor[index], padding: "8px", borderRadius: "8px"}} />
 
                       {/* Title */}
                       <Title
                         order={4}
                         fw={700}
-                        size={theme.fontSizes.base}
+                        size="20px"
+                        c="rgb(0, 33, 95)"
                         mt={isMobile ? 0 : 20}
                         lh="sm"
                       >
