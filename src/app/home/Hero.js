@@ -474,7 +474,7 @@ export default Hero;
 
 const styles = {
   heroContainer: {
-    backgroundImage: `url(${Images.hero})`,
+    backgroundImage: `linear-gradient(to bottom ,rgb(0, 33, 95),rgb(0, 65, 179))`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
@@ -482,7 +482,6 @@ const styles = {
     minHeight: '100vh',
     position: 'relative',
     overflowY: 'hidden',
-    opacity: 0.8,
     top: 0,
     left: 0,
   },

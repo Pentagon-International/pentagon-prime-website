@@ -55,9 +55,8 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
               // ta={'justify'}
               size="md"
               style={{ maxWidth: '100%' }}
-            >
-              {highlightText(iconTitle)}
-            </Text>
+              dangerouslySetInnerHTML={{ __html: iconTitle }}
+            />
           </Group>
           <Text
             fs={'italic'}
@@ -68,9 +67,8 @@ export default function Service({ title, icon, iconTitle, content, backgroundIma
               whiteSpace: 'pre-wrap'
             }}
             // ta={'justify'}
-          >
-            {highlightText(content)}
-          </Text>
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
           {/* <Button 
             size={isMobile ? "md" : "xl"}
             radius={12} 

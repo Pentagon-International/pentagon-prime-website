@@ -20,6 +20,7 @@ import Images from "@/app/utils/image";
 import { featuresMap, NavLink } from "../common/NavLink";
 import { IconChevronDown, IconPhone } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const navItems = [
   { label: "Home", links: "/", dropdown: false },
@@ -53,7 +54,7 @@ const Header = () => {
     top: 0,
     left: 0,
     width: "100%",
-    backgroundColor: "#F0F0F0",
+    backgroundColor: "#FFFFFF",
     boxShadow: "0 0 6px 3px rgba(0, 0, 0, 0.1)",
 
     // isScrolled
@@ -70,7 +71,7 @@ const Header = () => {
 
   const FeatureItem = ({ feature }) => (
     <Box ml="lg" mt={20}>
-      <a
+      <Link
         href={feature.link}
         style={{ textDecoration: "none", color: "inherit" }}
       >
@@ -80,7 +81,7 @@ const Header = () => {
         <Text size="xs" c="dimmed">
           {feature.description}
         </Text>
-      </a>
+      </Link>
     </Box>
   );
 
@@ -89,7 +90,7 @@ const Header = () => {
       <Box>
         <header style={headerStyle}>
           <Flex justify="space-between" align="center" h="50">
-            <a href="/" style={{ display: "flex", alignItems: "center" }}>
+            <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
               <Image src={Images.logo_only} alt="Logo" h={48} mb={5} />
               <Text
                 className="logo-font"
@@ -102,7 +103,7 @@ const Header = () => {
               >
                 Pentagon Prime
               </Text>
-            </a>
+            </Link>
             <Flex h="100%" gap={30} align="center" visibleFrom="sm">
               {navItems.map((item) => (
                 <NavLink key={item.label} item={item} />
@@ -160,7 +161,7 @@ const Header = () => {
                           );
                         } else {
                           closeDrawer();
-                          window.location.href = item.links;
+                          router.push(item.links);
                         }
                       }}
                     >

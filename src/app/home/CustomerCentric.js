@@ -49,7 +49,7 @@ const CustomerCentric = () => {
                 }}
               >
                 <IconCircleCheck size={40} stroke={2.5} color="green" />
-                <Text ta="left" fz={20} fw={500}>{item.fields.description}</Text>
+                <Text ta="left" fz={20} fw={500} dangerouslySetInnerHTML={{ __html: item.fields.description }} />
               </Box>
               {/* {index<listData.length-1 && <span><Divider size="md" my="xs" w="70%" style={{justifySelf:"center", color:"#313131"}}  /></span> } */}
             </Grid.Col>

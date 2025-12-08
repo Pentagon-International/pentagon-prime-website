@@ -19,13 +19,14 @@ const Ship = ({ first_title, first_content, serviceData }) => {
 
 
   return (
-    <Container fluid px={'7%'} py={isMobile ? 0 : '10px'} mb={isMobile ? 20 : 60}>
+    <Container fluid px={'7%'} py={isMobile ? 0 : '10px'} mb={isMobile ? 20 : 30}>
       <Stack gap={isMobile ? 20 : 100}>
         <Flex direction={'column'}>
           <Title fw={800} tt={'uppercase'}>{highlightText(first_title)}</Title>
           <Text size='sm' c={COLORS.textColor} lh={isMobile ? '20px' : ''} mt={'lg'} w={isMobile ? '100%' : '100%'}>
             {highlightText(first_content)}
           </Text>
+          
           {isMobile ? (
             <Grid w={'100%'}>
               <Carousel slideSize="80%" w={'100%'} height={450} align={'start'} slideGap="md" loop withControls={false}>

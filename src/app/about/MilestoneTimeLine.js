@@ -176,7 +176,7 @@ const MilestoneTimeline = ({ milestones }) => {
       cardTop = cardTop + verticalGap;
 
       const year = selectedMilestone?.fields?.year;
-      if ([2022, 2024, 2025].includes(year)) {
+      if ([2022, 2023, 2024, 2025].includes(year)) {
         cardLeft = cardLeft - cardWidth - 10;
       } else {
         cardLeft = cardLeft + 10;

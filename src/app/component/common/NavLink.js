@@ -213,20 +213,18 @@ const FeatureItem = ({ feature }) => {
           />
         </ThemeIcon>
 
-        <Anchor
-          component={Text}
-          underline="never"
-          href={feature.link}
+        <Text
           fw={500}
           c={COLORS.secondaryColor}
           style={{
             letterSpacing: '0.1px',
             lineHeight: 1.2,
             fontSize: 13,
+            textDecoration: 'none',
           }}
         >
           {feature.title}
-        </Anchor>
+        </Text>
       </Group>
     </UnstyledButton>
   );
@@ -244,9 +242,9 @@ export const NavLink = ({ item }) => {
       withinPortal
     >
       <HoverCardTarget>
-        <a
+        <Link
           href={item.links}
-          style={{ display: "flex", alignItems: "center", gap: 5 }}
+          style={{ display: "flex", alignItems: "center", gap: 5, textDecoration: "none" }}
           onClick={(e) => {
             if (item.links === '/service') {
               e.preventDefault(); // prevent the render of the page (service)
@@ -263,7 +261,7 @@ export const NavLink = ({ item }) => {
           ) : (
             <IconChevronDown size={16} color={COLORS.secondaryColor} />
           )}
-        </a>
+        </Link>
 
       </HoverCardTarget>
 
@@ -289,10 +287,10 @@ export const NavLink = ({ item }) => {
       </HoverCardDropdown>
     </HoverCard>
   ) : (
-    <a href={item.links} style={{ display: "flex", alignItems: "center" }}>
+    <Link href={item.links} style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
       <Text size="14px" color={COLORS.secondaryColor}>
         {item.label}
       </Text>
-    </a>
+    </Link>
   );
 };

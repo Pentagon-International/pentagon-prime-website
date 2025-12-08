@@ -7,6 +7,9 @@ import AutoplayCarousel from "@/app/component/common/AutoplayCarousel";
 import { Box, Image, Title } from "@mantine/core";
 import VideoCarousel from "@/app/component/common/VideoCarousel/VideoCarousel";
 import { highlightText } from "../../utils/highlightText";
+import ListCard from "@/app/component/common/ListCard";
+import { customClearanceList, exhibitionCargoList, exhibitionCargoList2, projectCargoList, projectCargoList2, crossTradeList, crossTradeList2, odcProjectCargoList } from "@/app/utils/llistData";
+
 
 export async function generateStaticParams() {
   const entries = await client.getEntries({
@@ -66,6 +69,7 @@ const ServicePage = async ({ params }) => {
 
   const shippingData = await fetchShippmententries(resolvedParams.slug);
 
+
   return (
     <>
       <Service
@@ -87,10 +91,36 @@ const ServicePage = async ({ params }) => {
         }
       />
       {resData?.reference === "odc-project-cargo" && (
+        <Box style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+          <ListCard listData={odcProjectCargoList} sectionTitle={"we make it possible"} />
+        </Box>
+      )}
+      {resData?.reference === "odc-project-cargo" && (
         <Box py={20} mb={50} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
           <AutoplayCarousel slides={cargoSlides} interval={4000} height={450} />
         </Box>
       )}
+      {resData?.reference === "customs-clearance" && (
+        <Box py={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+          <ListCard listData={customClearanceList} sectionTitle={"What we do: end-to-end, shipper-first"} />
+        </Box>
+      )}
+      {resData?.reference === "exhibition-cargo" && (
+        <Box py={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+          <ListCard listData={exhibitionCargoList} sectionTitle={"What we handle"} />
+        </Box>
+      )}
+      {resData?.reference === "break-bulk-cargo" && (
+        <Box py={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+          <ListCard listData={projectCargoList} sectionTitle={"What we do"} />
+        </Box>
+      )}
+      {resData?.reference === "cross-country-trade" && (
+        <Box py={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+          <ListCard listData={crossTradeList} sectionTitle={"What we deliver"} />
+        </Box>
+      )}
+
       <Ship
         first_title={resData?.title3}
         first_content={resData?.content2}
@@ -98,11 +128,26 @@ const ServicePage = async ({ params }) => {
         />
         {/* #add video carousel here if resData?.reference === "odc-project-cargo" */}
         {resData?.reference === "odc-project-cargo" && (
-          <Box py={20} mt={50} mb={50} style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", }}>
+          <Box py={20} mt={50} mb={20} style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", }}>
             <Title tt="uppercase" size={'28px'} fw={800} lh={'lgx2'}>{highlightText("Our Cargo # Movement # Videos")}</Title>
             <VideoCarousel videos={cargoVideos} />
           </Box>
         )}
+        {resData?.reference === "exhibition-cargo" && (
+        <Box py={20} mb={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+          <ListCard listData={exhibitionCargoList2} sectionTitle={"Sustainability - practical, measurable steps"} />
+        </Box>
+      )}
+        {resData?.reference === "break-bulk-cargo" && (
+        <Box py={20} mb={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+          <ListCard listData={projectCargoList2} sectionTitle={"Why shippers choose Pentagon Prime"} />
+        </Box>
+      )}
+        {resData?.reference === "cross-country-trade" && (
+        <Box py={20} mb={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+          <ListCard listData={crossTradeList2} sectionTitle={"Why shippers choose Pentagon Prime"} />
+        </Box>
+      )}
     </>
   );
 };

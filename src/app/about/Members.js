@@ -87,7 +87,7 @@ const Members = () => {
             <GridCol span={isMobile ? 12 : 7} pl={0} pr={65}>
               <Stack spacing="md">
                 <Text
-                  size={theme?.fontSizes?.md}
+                  size={20}
                   lh={"md"}
                   mt={-10}
                   tw="balance"
@@ -95,10 +95,8 @@ const Members = () => {
                   c={COLORS.textColor}
                   ta={"justify"}
                 >
-                  “We started small, but always with a simple aim, to make trade
-                  easier! Today, we combine disciplined operations with digital
-                  tools to give customers visibility, predictability, and
-                  sustainable choices.”
+                  "We started with a single aim - to make trade easier!
+                  Today, Pentagon Group combines disciplined operations with practical digital tools to deliver visibility, predictability, and sustainable choices. As the world shifts to green energy, logistics must follow: we're building tech-enabled green logistics that safely and efficiently move renewable-energy supply chains. Our goal is simple: a comprehensive, low-friction solution that makes booking cargo as easy as booking a flight."
                 </Text>
               </Stack>
               <Flex>
@@ -133,7 +131,7 @@ const Members = () => {
                     c={COLORS.textColor}
                     lh={1.5}
                   >
-                    Chairman and Managing Director
+                    Chairman & Managing Director
                     <br />
                     Pentagon Group of Companies
                   </Text>
@@ -153,7 +151,7 @@ const Members = () => {
           ta="center"
           size={isMobile ? "20px" : "34px"}
         >
-          {highlightText("Our # people # & tech")}
+          {highlightText("Our # people # & technology")}
         </Title>
         <Text
           c={COLORS.textColor}
@@ -164,10 +162,8 @@ const Members = () => {
             whiteSpace: "pre-line",
           }}
         >
-          Our strength is the combination of specialist teams and a
-          platform-first approach: operations, customs experts, project
-          planners, and Pentafox technologies working together so customers can
-          act faster and with confidence.
+          Our strength is the combination of specialist teams and a product-driven mindset.
+          Operations, customs, engineering & project teams collaborate closely with IT to transform processes into platform features - enabling faster decisions and dependable execution.
         </Text>
       </Box>
       <Flex justify="center" my={50}>

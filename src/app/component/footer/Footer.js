@@ -25,6 +25,7 @@ import {
 import Images from "@/app/utils/image";
 import React from 'react';
 import { useMediaQuery } from '@mantine/hooks';
+import Link from 'next/link';
 
 const Footer = () => {
   // Reorganize services into 3 columns
@@ -130,30 +131,25 @@ const Footer = () => {
                 {[[...services[0], services[1][0], services[1][1]], [services[1][2], services[1][3], ...services[2]]].map((column, colIndex) => (
                   <Stack key={colIndex} spacing={6}>
                     {column.map((item, index) => (
-                      <Anchor
+                      <Link
                         key={index}
                         href={`/service/${item.slug}`}
-                        style={{ color: COLORS.primaryColor }}
-                        underline={false}
-                        sx={{
-                          ...linkStyle,
-                          lineHeight: 1.2,
-                          padding: '2px 0',
-                          fontSize: 12,
-                        }}
+                        style={{ color: COLORS.primaryColor, textDecoration: 'none' }}
                       >
                         <Text
                           style={{
+                            ...linkStyle,
                             lineHeight: 1.2,
-                            margin: 0,
+                            padding: '2px 0',
                             fontSize: 12,
+                            margin: 0,
                           }}
                           p={'0px'}
                           m={'0px'}
                         >
                           {item.title}
                         </Text>
-                      </Anchor>
+                      </Link>
                     ))}
                   </Stack>
                 ))}
@@ -163,27 +159,23 @@ const Footer = () => {
                 {services.map((column, colIndex) => (
                   <Stack key={colIndex} spacing={6}>
                     {column.map((item, index) => (
-                      <Anchor
+                      <Link
                         key={index}
                         href={`/service/${item.slug}`}
-                        style={{ color: COLORS.primaryColor }}
-                        underline={false}
-                        sx={{
-                          ...linkStyle,
-                          lineHeight: 1.2,
-                          padding: '2px 0',
-                        }}
+                        style={{ color: COLORS.primaryColor, textDecoration: 'none' }}
                       >
                         <Text
                           style={{
+                            ...linkStyle,
                             lineHeight: 1.2,
+                            padding: '2px 0',
                             margin: 0,
                             fontSize: 15,
                           }}
                         >
                           {item.title}
                         </Text>
-                      </Anchor>
+                      </Link>
                     ))}
                   </Stack>
                 ))}

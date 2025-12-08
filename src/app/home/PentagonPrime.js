@@ -40,29 +40,7 @@ const PentagonPrime = ({ title, content, title2 }) => {
   }, []);
 
   return (
-    <Container fluid px="7%" py="70px">
-      {/* Section Header */}
-      <Flex justify="center" align="center" direction="column" ta="center">
-        <Title
-          tt="uppercase"
-          lh={isMobile ? "md" : "lgx2"}
-          mb={5}
-          fw={800}
-          size={isMobile ? "20px" : "34px"}
-        >
-          {highlightText(title)}
-        </Title>
-        <Text
-          c={COLORS.textColor}
-          lh="md"
-          size={isMobile ? "14px" : "18px"}
-          mt={10}
-          ta="center"
-          maw={isMobile ? "90%" : "75%"}
-        >
-          {highlightText(content)}
-        </Text>
-      </Flex>
+    <Container fluid px="7%" py="70px" >
 
       {/* Services Section */}
       <Box mt={40}>

@@ -56,11 +56,8 @@ const Mission = () => {
             whiteSpace: "pre-line",
           }}
         >
-          We are not just freight forwarders... We are tech-enabled forwarders!
-          Our platforms deliver live tracking, instant rates & schedules, online
-          booking, SI submission and access to digital Bills of Lading. Behind
-          the screens is a team of logistics specialists who turn visibility
-          into action and data into measurable service outcomes for customers.
+          We’re not traditional forwarders — we’re <b>tech-enabled logistics partners</b>.
+          Our operational, customs, and project specialists work alongside our IT and product teams to convert process-driven playbooks into <b>digital workflows</b> that reduce admin, improve speed, and deliver consistency.
         </Text>
       </Box>
       <Flex direction={"column"} gap={"xl"}>

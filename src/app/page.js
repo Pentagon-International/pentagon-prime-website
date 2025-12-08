@@ -26,7 +26,7 @@ const Page = async () => {
   ]);
     
   return (
-    <>
+    <div>
       <Hero title={heroData.title} content={heroData.content} />
       <Vision title={visionData.title} content={visionData.content} tradeItems={tradeItems} tradeContent={tradeContent} />
       <PentagonPrime title={primeData.title} content={primeData.content} title2={primeData.title2}/>
@@ -38,7 +38,7 @@ const Page = async () => {
       <News />
       <Partner title={partnerData.title} content={partnerData.content} />
       <HighlightContent />
-    </>
+    </div>
   );
 };
 
