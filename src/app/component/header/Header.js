@@ -175,7 +175,7 @@ const Header = () => {
               onMouseEnter={handleButtonMouseEnter}
               onMouseLeave={handleButtonMouseLeave}
             >
-              Talk to an Expert
+              Talk to Prime
             </Button>
 
             </Group>
@@ -242,7 +242,7 @@ const Header = () => {
                   }}
                   onClick={handleDrawerContactClick}
                 >
-                  Talk to an Expert
+                  Talk to Prime
                 </Button>
               </Flex>
             </Drawer>

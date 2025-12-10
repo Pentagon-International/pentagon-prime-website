@@ -56,7 +56,7 @@ const CustomerBenefits = ({ title, content, title2 }) => {
           fw={800}
           size={isMobile ? "20px" : "32px"}
         >
-          {highlightText("What customers get (benefits)")}
+          {highlightText("What customers get")}
         </Title>
 
         {/* Responsive Grid or Carousel */}

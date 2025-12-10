@@ -178,7 +178,7 @@ const Members = () => {
         </Title>
       </Flex>
 
-      <Grid columns={3} px={isMobile ? 0 : 100}>
+      <Grid columns={3} gutter="xl" px={isMobile ? 0 : 40} justify="start" align="center">
         {isMobile ? (
           <Carousel
             align={"start"}
@@ -218,17 +218,24 @@ const Members = () => {
           </Carousel>
         ) : (
           members.map((item) => (
-            <GridCol key={item.sys.id} span={1} mb={"xl"}>
-              <Image
-                radius={"lg"}
-                style={{ width: "80%", height: "80%", objectFit: "cover" }}
-                src={item.fields.image?.fields?.file?.url}
-                alt={item.fields.name}
-              />
+            <GridCol key={item.sys.id} span={1} mb={"xl"} px={isMobile ? 0 : 20} style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+              <Box style={{ width: "80%", maxHeight:"450px", overflow: "hidden", borderRadius: "12px", transition: "all 0.5s ease" }}>
+                <Image
+                  style={{ maxHeight: "450px", transition: "all 0.5s ease" }}
+                  src={item.fields.image?.fields?.file?.url}
+                  alt={item.fields.name}
+                  onMouseEnter={(e)=>{
+                    e.currentTarget.style.scale = "1.05";
+                  }}
+                  onMouseLeave={(e)=>{
+                    e.currentTarget.style.scale = "1";
+                  }}
+                />
+              </Box>
               <Text fw={700} size="md" mt={"md"}>
                 {item.fields.name}
               </Text>
-              <Text size="sm" c={COLORS.textColor}>
+              <Text size="sm" fw={500} c={COLORS.textColor}>
                 {item.fields.role}
               </Text>
             </GridCol>

@@ -285,7 +285,7 @@ const Hero = ({ title, content }) => {
           >
             {highlightText(title)}
           </Title>
-          <Text lh={isMobile ? "md" : "lgx"} size={isMobile ? '15px' : '19px'} maw={isMobile ? '80%' : '40%'} fw={600} mt={15}>
+          <Text lh={isMobile ? "md" : "lgx"}  size={isMobile ? '20px' : '24px'} maw={isMobile ? '80%' : '40%'} fw={600} mt={15}>
             {highlightText(content)}
           </Text>
           <Box h={'100%'}>
@@ -318,7 +318,7 @@ const Hero = ({ title, content }) => {
                   }))}
                 />
               </Flex>
-              <Flex direction="column">
+              <Flex direction="column" mt={20}>
                 <form>
                   <Flex direction={isMobile ? 'column' : 'row'} w={'100%'} align='center' gap={isMobile ? 0 : '30'} justify='space-between'>
                     <Select
@@ -336,7 +336,7 @@ const Hero = ({ title, content }) => {
                           color: '#afb1b4',
                         },
                       }}
-                      error={formErrors.destination ? <Text fw={400} size='sm' > Please Select origin </Text> : null}
+                      error={formErrors.origin ? 'Please Select origin' : null}
                       styles={{
                         input: {
                           fontSize: '18px',
@@ -359,6 +359,11 @@ const Hero = ({ title, content }) => {
                           fontSize: '16px',
                           fontWeight: '600',
                           color: '#fff',
+                        },
+                        error: {
+                          padding:"10px 0",
+                          fontSize: '14px',
+                          color: 'red',
                         },
                       }}
                       classNames={{
@@ -410,7 +415,7 @@ const Hero = ({ title, content }) => {
                       data={filteredDestinationOptions}
                       radius="md"
                       w={isMobile ? '100%' : '45%'}
-                      error={formErrors.destination ? <Text fw={400} size='sm' > Please select destination </Text> : null}
+                      error={formErrors.destination ? 'Please select destination' : null}
                       styles={{
                         input: {
                           fontSize: '18px',
@@ -432,6 +437,11 @@ const Hero = ({ title, content }) => {
                           fontSize: '16px',
                           fontWeight: '600',
                           color: '#fff',
+                        },
+                        error: {
+                          padding:"10px 0",
+                          fontSize: '14px',
+                          color: 'red',
                         },
                       }}
                       classNames={{
@@ -461,7 +471,13 @@ const Hero = ({ title, content }) => {
                         fontSize: '16px',
                       },
                     }}
-                    bg={'##CDF6FF'}
+                    bg={'#0AC1F1'}
+                    onMouseEnter={(e)=>{
+                      e.currentTarget.style.backgroundColor = "#09B1D1";
+                    }}
+                    onMouseLeave={(e)=>{
+                      e.currentTarget.style.backgroundColor = "#0AC1F1";
+                    }}
                     radius={'md'}
                     c={COLORS.primaryColor}
                     onClick={handleGetQuote}

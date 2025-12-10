@@ -1,3 +1,4 @@
+"use client";
 import { highlightText } from '@/app/utils/highlightText';
 import { Flex, Text, Title, Container, Group, Box } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';

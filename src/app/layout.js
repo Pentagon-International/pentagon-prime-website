@@ -19,7 +19,7 @@ import Images from '@/app/utils/image';
 import { LoadingProvider, useLoading } from './component/common/LoadingContext';
 import Loader from './component/common/Loader';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState, useMemo, useCallback, memo } from 'react';
+import { useEffect, useState, useMemo, useCallback, memo, useRef } from 'react';
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ["latin"],
@@ -50,91 +50,235 @@ const rootToWhatsApp = () => {
 
 const LayoutContent = memo(({ children }) => {
   const pathname = usePathname();
-  const { isLoading, stopLoading } = useLoading();
-  const [startTime, setStartTime] = useState(null);
+  const { isLoading, stopLoading, startLoading } = useLoading();
+  const startTimeRef = useRef(null);
+  const isInitialLoadRef = useRef(true);
+  const previousPathnameRef = useRef(pathname);
+  const loadingCheckIntervalRef = useRef(null);
+
+  // Start loading on initial app load (only once)
+  useEffect(() => {
+    if (isInitialLoadRef.current) {
+      isInitialLoadRef.current = false;
+      startLoading();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
 
   // Reset and track when loading starts
   useEffect(() => {
-    if (isLoading && !startTime) {
-      setStartTime(Date.now());
-    } else if (!isLoading) {
-      setStartTime(null);
+    if (isLoading) {
+      if (!startTimeRef.current) {
+        startTimeRef.current = Date.now();
+      }
+    } else {
+      startTimeRef.current = null;
+      // Clear any existing intervals
+      if (loadingCheckIntervalRef.current) {
+        clearInterval(loadingCheckIntervalRef.current);
+        loadingCheckIntervalRef.current = null;
+      }
     }
-  }, [isLoading, startTime]);
+  }, [isLoading]);
+
+  // Reset startTime when pathname changes during loading (navigation happened)
+  useEffect(() => {
+    if (pathname !== previousPathnameRef.current) {
+      previousPathnameRef.current = pathname;
+      // Only reset timer if we're currently loading
+      if (isLoading && startTimeRef.current) {
+        startTimeRef.current = Date.now();
+      }
+    }
+  }, [pathname, isLoading]);
 
   // Wait for page to actually load
   useEffect(() => {
-    if (!isLoading) return;
+    if (!isLoading) {
+      // Clear any existing intervals when not loading
+      if (loadingCheckIntervalRef.current) {
+        clearInterval(loadingCheckIntervalRef.current);
+        loadingCheckIntervalRef.current = null;
+      }
+      return;
+    }
 
-    let isMounted = true;
-    const minDisplayTime = 600; // Minimum 600ms for smooth UX
-    const maxWaitTime = 5000; // Maximum 5 seconds wait time
+    const minDisplayTime = 1200; // Minimum 1.2 seconds for smooth UX
+    const maxWaitTime = 10000; // Maximum 10 seconds wait time
+    const imageLoadPromises = new Set();
+    const loadedImages = new Set();
+    let fontsReadyResolved = false;
+    
+    // Check fonts loading
+    const checkFontsReady = async () => {
+      if (fontsReadyResolved) return true;
+      try {
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+          fontsReadyResolved = true;
+          return true;
+        }
+      } catch (e) {
+        // Font API not available or error
+      }
+      fontsReadyResolved = true;
+      return true;
+    };
+    
+    // Start checking fonts in background
+    checkFontsReady();
 
-    const checkPageReady = () => {
-      // Check if main content exists and is rendered
-      const mainContent = document.querySelector('main.main');
-      const hasContent = mainContent && mainContent.children.length > 0;
-      
-      // Check if document is fully loaded
-      const isDocumentReady = document.readyState === 'complete';
-      
-      // Check if images are loaded (optional, but improves UX)
+    // Track image loading
+    const trackImageLoading = () => {
       const images = document.querySelectorAll('img');
-      const criticalImagesLoaded = Array.from(images).every(img => img.complete || !img.src);
-      
-      return hasContent && isDocumentReady && criticalImagesLoaded;
+      images.forEach((img) => {
+        if (img.src && !loadedImages.has(img.src)) {
+          if (img.complete) {
+            loadedImages.add(img.src);
+          } else {
+            const promise = new Promise((resolve) => {
+              const onLoad = () => {
+                loadedImages.add(img.src);
+                img.removeEventListener('load', onLoad);
+                img.removeEventListener('error', onLoad); // Count errors as loaded
+                resolve();
+              };
+              img.addEventListener('load', onLoad, { once: true });
+              img.addEventListener('error', onLoad, { once: true });
+            });
+            imageLoadPromises.add(promise);
+          }
+        }
+      });
     };
 
+    // Track image loading promises for async resolution
+    const resolveImagePromises = async () => {
+      if (imageLoadPromises.size > 0) {
+        try {
+          await Promise.race([
+            Promise.all(Array.from(imageLoadPromises)),
+            new Promise(resolve => setTimeout(resolve, 2000)) // Max 2s wait for images
+          ]);
+        } catch (e) {
+          // Ignore errors
+        }
+      }
+    };
+    
+    // Resolve image promises in background
+    resolveImagePromises();
+
+    let checkCount = 0;
+    const maxChecks = 200; // Maximum number of checks (20 seconds at 100ms interval)
+    let isReadyState = false;
+    let lastReadyCheck = 0;
+
     const tryStopLoading = () => {
-      if (!isMounted) return;
+      if (!isLoading) return; // Double check loading state
       
-      const elapsed = Date.now() - (startTime || Date.now());
-      const isReady = checkPageReady();
+      checkCount++;
+      const elapsed = Date.now() - (startTimeRef.current || Date.now());
       
-      if (isReady && elapsed >= minDisplayTime) {
+      // Check readiness less frequently (every 500ms) for performance
+      if (elapsed - lastReadyCheck >= 500 || checkCount === 1) {
+        lastReadyCheck = elapsed;
+        
+        // Synchronous check first
+        const mainContent = document.querySelector('main.main');
+        const hasContent = mainContent && mainContent.children.length > 0;
+        const isDocumentReady = document.readyState === 'complete';
+        
+        // Check images synchronously
+        trackImageLoading();
+        const images = document.querySelectorAll('img');
+        const hasImages = images.length > 0;
+        let allImagesLoaded = true;
+        
+        if (hasImages) {
+          allImagesLoaded = Array.from(images).every(img => {
+            return img.complete || loadedImages.has(img.src) || !img.src;
+          });
+        }
+        
+        // Check React hydration
+        const isReactHydrated = document.body.hasAttribute('data-reactroot') || 
+                                document.querySelector('[data-reactroot]') !== null ||
+                                (mainContent && mainContent.children.length > 0);
+        
+        // Check fonts - use resolved state
+        const fontsLoaded = fontsReadyResolved || (document.fonts && document.fonts.status === 'loaded');
+        
+        isReadyState = hasContent && isDocumentReady && fontsLoaded && allImagesLoaded && isReactHydrated;
+      }
+      
+      if (isReadyState && elapsed >= minDisplayTime) {
         // Page is ready and minimum time has passed
         stopLoading();
-      } else if (elapsed >= maxWaitTime) {
+        return;
+      }
+      
+      if (elapsed >= maxWaitTime || checkCount >= maxChecks) {
         // Maximum wait time reached, stop loading anyway
         stopLoading();
-      } else {
-        // Check again after a short delay
-        setTimeout(tryStopLoading, 100);
+        return;
       }
     };
 
-    // Start checking after a small delay to allow navigation to start
-    const initialDelay = setTimeout(() => {
+    // Use interval instead of recursive setTimeout for better performance
+    const checkInterval = setInterval(() => {
       tryStopLoading();
-    }, 200);
+    }, 100);
+
+    loadingCheckIntervalRef.current = checkInterval;
 
     // Also listen for window load event as a backup
     const handleWindowLoad = () => {
-      if (isMounted) {
+      if (isLoading) {
+        // Wait a bit for React to finish rendering and images to load
         setTimeout(() => {
-          const elapsed = Date.now() - (startTime || Date.now());
-          if (elapsed >= minDisplayTime) {
+          if (!isLoading) return;
+          
+          const elapsed = Date.now() - (startTimeRef.current || Date.now());
+          
+          // Final comprehensive check
+          const mainContent = document.querySelector('main.main');
+          const hasContent = mainContent && mainContent.children.length > 0;
+          const isDocumentReady = document.readyState === 'complete';
+          
+          trackImageLoading();
+          const images = document.querySelectorAll('img');
+          const allImagesLoaded = images.length === 0 || Array.from(images).every(img => {
+            return img.complete || loadedImages.has(img.src) || !img.src;
+          });
+          
+          if (hasContent && isDocumentReady && allImagesLoaded && elapsed >= minDisplayTime) {
             stopLoading();
-          } else {
-            setTimeout(() => stopLoading(), minDisplayTime - elapsed);
+          } else if (elapsed >= minDisplayTime) {
+            // Even if not fully ready, stop after minimum time if window loaded
+            setTimeout(() => {
+              if (isLoading) stopLoading();
+            }, Math.max(0, minDisplayTime - elapsed + 500));
           }
-        }, 100);
+        }, 500);
       }
     };
 
+    // Check immediately if page is already loaded
     if (document.readyState === 'complete') {
-      // Page already loaded
-      setTimeout(tryStopLoading, 100);
+      setTimeout(() => tryStopLoading(), 200);
     } else {
-      window.addEventListener('load', handleWindowLoad);
+      window.addEventListener('load', handleWindowLoad, { once: true });
     }
 
     return () => {
-      isMounted = false;
-      clearTimeout(initialDelay);
+      clearInterval(checkInterval);
+      loadingCheckIntervalRef.current = null;
       window.removeEventListener('load', handleWindowLoad);
+      imageLoadPromises.clear();
+      loadedImages.clear();
     };
-  }, [isLoading, pathname, startTime, stopLoading]);
+  }, [isLoading, stopLoading]);
 
   return (
     <>

@@ -45,7 +45,7 @@ const ACinfo = () => {
         <Grid columns={12}>
           <GridCol span={isMobile ? 12 : 6}>
             <Group>
-              <Title size={isMobile ? 'lg' : 'lgx'} fw={800} lh={'lgx2'} tt={'uppercase'} textWrap="balance">
+              <Title size={isMobile ? '28px' : '32px'} fw={800} lh={'lgx2'} tt={'uppercase'} textWrap="balance">
                 Additional Contact Information
               </Title>
               <List c={COLORS.textColor} p={isMobile ? '10px 20px' : '0px 0px'} style={{
@@ -57,7 +57,7 @@ const ACinfo = () => {
                   <span
                     onClick={() => window.open('mailto:pentagon@pentagonindia.net')}
                     style={{
-                      textDecoration: 'underline', cursor: 'pointer', color: COLORS.serviceColor
+                      textDecoration: 'underline', cursor: 'pointer', color: "rgb(0, 33, 95)"
                     }}>
                     press@pentagonprime.com
                   </span>
@@ -65,7 +65,7 @@ const ACinfo = () => {
                 <ListItem lh={'28px'}>
                   Interested in becoming a partner?{' '}
                   <span style={{
-                    textDecoration: 'underline', cursor: 'pointer', color: COLORS.serviceColor
+                    textDecoration: 'underline', cursor: 'pointer', color: "rgb(0, 33, 95)"
                   }}
                     onClick={() => setModalOpened(true)}
                   >
@@ -78,7 +78,7 @@ const ACinfo = () => {
                   <span
                     onClick={() => window.open('mailto:pentagon@pentagonindia.net')}
                     style={{
-                      textDecoration: 'underline', cursor: 'pointer', color: COLORS.serviceColor
+                      textDecoration: 'underline', cursor: 'pointer', color: "rgb(0, 33, 95)"
                     }}
                   >
                     Tell us about it here.

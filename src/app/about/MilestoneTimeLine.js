@@ -81,8 +81,8 @@ const MilestoneTimeline = ({ milestones }) => {
         "text"
       );
       text.setAttribute("x", pos.x - 25);
-      text.setAttribute("y", pos.y - 25);
-      text.setAttribute("font-size", "18");
+      text.setAttribute("y", Math.max(15, pos.y - 25));
+      text.setAttribute("font-size", isMobile ? "14" : "18");
       text.setAttribute("fill", COLORS.textColor);
       text.setAttribute("font-weight", 600);
       text.style.cursor = "pointer";
@@ -95,7 +95,7 @@ const MilestoneTimeline = ({ milestones }) => {
     });
 
     setCirclePositions(positions);
-  }, [milestones, activeIndex]);
+  }, [milestones, activeIndex, isMobile]);
 
   // Update active state
   useEffect(() => {
@@ -202,7 +202,7 @@ const MilestoneTimeline = ({ milestones }) => {
         position: "relative",
         width: "100%",
         height: "100%",
-        minHeight: "65vh",
+        minHeight: isMobile ? "auto" : "75vh",
         display: "flex",
         flexDirection: isMobile ? "column" : "row",
         alignItems: "center",
@@ -215,15 +215,14 @@ const MilestoneTimeline = ({ milestones }) => {
           overflowX: "auto",
           overflowY: "hidden",
           width: "100%",
-          height: "630px",
-          paddingBottom: "50px",
-          paddingTop:"10px",
+          height: isMobile ? "550px" : "650px",
+          paddingBottom: isMobile ? "60px" : "100px",
           position: "relative",
         }}
       >
         {/* ✅ Responsive SVG timeline */}
         <svg
-          viewBox="0 0 1240 570"
+          viewBox="0 -50 1240 550"
           preserveAspectRatio="xMidYMid meet"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -232,8 +231,8 @@ const MilestoneTimeline = ({ milestones }) => {
           style={{
             width: "100%",
             height: "100%",
-            minWidth: "1200px",
-            minHeight: "460px",
+            minWidth: isMobile ? "100%" : "1200px",
+            minHeight: isMobile ? "450px" : "490px",
             position: "relative",
             zIndex: 1,
           }}
@@ -242,6 +241,7 @@ const MilestoneTimeline = ({ milestones }) => {
             d="M1.00025 486.603L73.9988 464.689L219.499 453.606L342.999 407.606L451.499 350.606L556.999 301.106L656.499 229.106L781.499 204.106L857.499 127.606L975.499 88.6057L1076 39.1056L1193 1.10559"
             stroke="#ABABAB"
             strokeDasharray="5 5"
+            strokeWidth="2"
           />
         </svg>
 

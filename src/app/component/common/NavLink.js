@@ -1,3 +1,4 @@
+"use client";
 import { COLORS } from "@/app/utils/COLORS";
 import {
   Anchor,
@@ -46,7 +47,7 @@ import {
   IconWorldDollar,
 } from "@tabler/icons-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, memo, useMemo, useCallback } from "react";
 import { useLoading } from "./LoadingContext";
 
@@ -181,10 +182,17 @@ export const featuresMap = {
 
 const FeatureItem = memo(({ feature }) => {
   const { startLoading } = useLoading();
+  const router = useRouter();
 
-  const handleClick = useCallback(() => {
-    startLoading();
-  }, [startLoading]);
+  const handleClick = useCallback((e) => {
+    if (feature.link) {
+      e.preventDefault();
+      startLoading();
+      router.push(feature.link);
+    } else {
+      startLoading();
+    }
+  }, [startLoading, router, feature.link]);
 
   const handleMouseEnter = useCallback((e) => {
     e.currentTarget.style.backgroundColor = "#F5F5F5";
@@ -248,6 +256,7 @@ export const NavLink = memo(({ item }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [isHovered, setIsHovered] = useState(false);
   const { startLoading } = useLoading();
+  const router = useRouter();
   const activeColor = "rgb(0, 33, 95)";
   const pathname = usePathname();
 
@@ -318,9 +327,11 @@ export const NavLink = memo(({ item }) => {
     setIsHovered(false);
   }, [close]);
 
-  const handleNonDropdownClick = useCallback(() => {
+  const handleNonDropdownClick = useCallback((e) => {
+    e.preventDefault();
     startLoading();
-  }, [startLoading]);
+    router.push(item.links);
+  }, [startLoading, router, item.links]);
 
   const handleNonDropdownMouseEnter = useCallback(() => {
     setIsHovered(true);

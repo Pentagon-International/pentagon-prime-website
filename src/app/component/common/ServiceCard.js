@@ -1,3 +1,4 @@
+"use client";
 import { COLORS } from "@/app/utils/COLORS";
 import { theme } from "@/app/utils/theme";
 import {
@@ -12,23 +13,39 @@ import {
   Title,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { useLoading } from "./LoadingContext";
 
 const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const router = useRouter();
+  const { startLoading } = useLoading();
+  const knowmoreRef = useRef(item?.fields?.knowmore);
 
-  const handleClick = useCallback(() => {
-    if (item?.fields?.knowmore) {
-      window.location.href = item.fields.knowmore;
-    }
+  // Update ref when knowmore changes
+  React.useEffect(() => {
+    knowmoreRef.current = item?.fields?.knowmore;
   }, [item?.fields?.knowmore]);
 
+  const handleClick = useCallback(() => {
+    const knowmore = knowmoreRef.current;
+    if (knowmore) {
+      startLoading();
+      router.push(knowmore);
+    }
+  }, [router, startLoading]);
+
   const handleMouseEnter = useCallback((e) => {
-    e.currentTarget.style.outline = "3px solid rgb(0, 33, 95)";
+    e.currentTarget.style.border = "3px solid rgb(0, 33, 95)";
+    e.currentTarget.style.backgroundColor = "rgb(0, 33, 95)";
+    e.currentTarget.style.color = "#FFF";
   }, []);
 
   const handleMouseLeave = useCallback((e) => {
-    e.currentTarget.style.outline = "none";
+    e.currentTarget.style.border = "3px solid #E0E0E0";
+    e.currentTarget.style.backgroundColor = "#FFF";
+    e.currentTarget.style.color = "#000";
   }, []);
 
   return (
@@ -42,17 +59,17 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
         p={"25px"}
         shadow="md"
         radius={20}
-        h={isMobile ? "200px" : "250px"}
-        style={{ cursor: "pointer"}}
+        h={isMobile ? "240px" : "250px"}
+        style={{ cursor: "pointer", border:"3px solid #E0E0E0", transition:"all 0.5s ease"}}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         <Flex
           align={"center"}
+          justify={"center"}
           display={"flex"}
           mb={"10px"}
-          w={"fit-content"}
-          style={{ border: border || "none", borderRadius: "12px" }}
+          style={{ border: border || "none", borderRadius: "8px", backgroundColor: "#FFF", padding: "8px", width: "60px", height: "60px" }}
         >
           <Image
             src={

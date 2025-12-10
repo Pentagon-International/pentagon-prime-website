@@ -214,7 +214,8 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
                           shadow="md"
                           p={isMobile ? '20px' : "20px"}
                           radius={20}
-                          h={"200px"}
+                          h={"100%"}
+                          mah={"250px"}
                         >
                           <Flex
                             align={"center"}
@@ -321,7 +322,8 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
                         shadow="md"
                         p={isMobile ? '20px' : "20px"}
                         radius={20}
-                        h={"200px"}
+                        h={"100%"}
+                        mah={"250px"}
                       >
                         <Flex
                           align={"center"}

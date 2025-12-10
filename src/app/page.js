@@ -33,8 +33,8 @@ const Page = async () => {
       <LogisticsServices title={serviceData.title} />
       <LogisticsTeam title={teamData.title} content={teamData.content} />
       <CustomerCentric />
-      <Certificate />
       <PrimeNetwork content={primeNetwork} />
+      <Certificate />
       <News />
       <Partner title={partnerData.title} content={partnerData.content} />
       <HighlightContent />

@@ -50,7 +50,7 @@ const LogisticsServices = ({ title }) => {
           View All Services
         </Button> */}
       </Flex>
-      <Grid columns={9} mt="lg" gutter="lg" w={'100%'}>
+      <Grid columns={9} mt="lg" gutter="xl" w={'100%'}>
         {isMobile ? (
           <Carousel
             align={isMobile ? 'start' : 'center'} slideSize="70%" height={300} w={'100%'} slideGap="xs" loop
@@ -68,7 +68,7 @@ const LogisticsServices = ({ title }) => {
                 <ServiceCard
                   key={index}
                   item={item}
-                  backgroundColor="#F2F7FC"
+                  backgroundColor="#FFF"
                   anchorText={anchorText}
                 />
               </Carousel.Slide>
@@ -80,7 +80,7 @@ const LogisticsServices = ({ title }) => {
               <ServiceCard
                 key={index}
                 item={item}
-                backgroundColor="#F2F7FC"
+                backgroundColor="#FFF"
                 anchorText={anchorText}
               />
             ))

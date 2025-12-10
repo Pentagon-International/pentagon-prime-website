@@ -74,9 +74,25 @@ const Global = () => {
   const renderCard = (item) => (
     <Card
       key={item.sys.id}
-      bg={selectedPlace === item.fields.place ? "rgb(0, 33, 95)" : "#F2F7FC"}
+      bg={selectedPlace === item.fields.place ? "rgb(0, 33, 95)" : "#FFF"}
+      c={selectedPlace === item.fields.place ? "#FFF" : "#000"}
+      shadow="md"
       radius="32px"
       p={30}
+      onMouseEnter={(e)=>{
+        if(selectedPlace !== item.fields.place){
+          e.currentTarget.style.backgroundColor = "rgb(0, 51, 145)";
+          e.currentTarget.style.color = "#FFF";
+          e.currentTarget.style.border = "3px solid rgb(0, 51, 145)";
+        }
+      }}
+      onMouseLeave={(e)=>{
+        if(selectedPlace !== item.fields.place){
+          e.currentTarget.style.backgroundColor = "#FFF";
+          e.currentTarget.style.color = "#000";
+          e.currentTarget.style.border = "3px solid #E0E0E0";
+        }
+      }}
       onClick={() => setSelectedPlace(item.fields.place)}
       style={{
         transition: "all 0.5s ease",
@@ -84,7 +100,8 @@ const Global = () => {
         height: "260px",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between", // ✅ evenly spaces content
+        justifyContent: "space-between",
+        border: selectedPlace === item.fields.place ? "3px solid rgb(0, 33, 95)" : "3px solid #E0E0E0",
       }}
     >
       {/* Title */}
@@ -100,8 +117,8 @@ const Global = () => {
       {/* Address */}
       <Text
         size="smx"
-        c={selectedPlace === item.fields.place ? "white" : COLORS.textColor}
         mt={10}
+        c={selectedPlace === item.fields.place ? "white" : "inherit"}
         style={{
           flexGrow: 1, // ✅ fills space evenly
           overflow: "hidden",
@@ -184,7 +201,7 @@ const Global = () => {
             label={place.name}
             arrowSize={8}
             bg={"white"}
-            c={COLORS.serviceColor}
+            c={"rgb(0, 33, 95)"}
             fz={20}
             fw={600}
             withArrow
@@ -200,7 +217,7 @@ const Global = () => {
               }}
             >
               <IconPinnedFilled
-                size={24}
+                size={selectedPlace === place.name ? 32 : 24}
                 stroke={1.5}
                 color={
                   selectedPlace === place.name ? "rgb(0, 33, 95)" : "#e84c4c"

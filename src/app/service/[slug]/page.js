@@ -22,6 +22,17 @@ export async function generateStaticParams() {
   }));
 }
 
+const breakBulkCargoSlides = [
+  { src: "/break-bulk-images/break-bulk-cargo-1.jpeg", alt: "break-bulk-cargo-1" },
+  { src: "/break-bulk-images/break-bulk-cargo-2.jpeg", alt: "break-bulk-cargo-2" },
+  { src: "/break-bulk-images/break-bulk-cargo-3.jpeg", alt: "break-bulk-cargo-3" },
+  { src: "/break-bulk-images/break-bulk-cargo-4.jpeg", alt: "break-bulk-cargo-4" },
+  { src: "/break-bulk-images/break-bulk-cargo-5.jpeg", alt: "break-bulk-cargo-5" },
+  { src: "/break-bulk-images/break-bulk-cargo-6.jpeg", alt: "break-bulk-cargo-6" },
+  { src: "/break-bulk-images/break-bulk-cargo-7.jpeg", alt: "break-bulk-cargo-7" },
+];
+
+
 const cargoSlides = [
   { src: "/cargo-images/cargo-area.jpeg", alt: "cargo-area" },
   { src: "/cargo-images/cargo-in-ship-closeview.jpeg", alt: "cargo-in-ship-closeview" },
@@ -113,6 +124,11 @@ const ServicePage = async ({ params }) => {
       {resData?.reference === "break-bulk-cargo" && (
         <Box py={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
           <ListCard listData={projectCargoList} sectionTitle={"What we do"} />
+        </Box>
+      )}
+      {resData?.reference === "break-bulk-cargo" && (
+        <Box py={20} mb={50} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+          <AutoplayCarousel slides={breakBulkCargoSlides} interval={4000} height={450} />
         </Box>
       )}
       {resData?.reference === "cross-country-trade" && (

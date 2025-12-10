@@ -1,3 +1,4 @@
+"use client";
 import { ActionIcon, Autocomplete, Button, Center, Divider, Flex, Group, Modal, SegmentedControl, Stack, TextInput } from '@mantine/core';
 import { IconArrowsDownUp, IconArrowsLeftRight, IconBox, IconMail, IconMapPin, IconPlane, IconSquareHalf } from '@tabler/icons-react';
 import React, { useEffect, useRef, useState } from 'react';

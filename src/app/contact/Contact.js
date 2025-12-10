@@ -35,24 +35,24 @@ const Contact = () => {
         px={'auto'}
         justify={isMobile ? 'center' : 'space-between'}
         style={{
-          color: 'white',
+          color: 'rgb(0, 33, 95)',
           height: '100vh',
         }}
       >
         <Stack p={isMobile ? 0 : 15} >
           <Title size={isMobile ? '26px' : '40px'} lh={'lgx2'} fw={800} tt={'uppercase'}>Contact Us</Title>
-          <Text size={isMobile ? 'sm' : 'base'} lh={'28px'} tw='balance'>
+          <Text size={isMobile ? 'sm' : 'base'} lh={'28px'} fw={500} tw='balance' c={"rgb(53, 53, 53)"}>
             Ready to begin your journey with Pentagon Prime, have a question, or
             need assistance? <br />We're here to help.
           </Text>
-          <Text size={isMobile ? '18px' : 'base'} fw={700}>Headquarters</Text>
-          <Text size='sm' tw="balance" maw={isMobile ? '100%' : '70%'}>
+          <Text size={isMobile ? '18px' : 'base'} fw={700} mt={20} tt={'uppercase'}>Headquarters</Text>
+          <Text size='sm' tw="balance" maw={isMobile ? '100%' : '70%'} c={"rgb(53, 53, 53)"}>
             Unit No. 204 Satellite Silver, Marol Naka Andheri Kurla Road,
             <br />Andheri (East) Mumbai, Maharashtra – 400059, India
           </Text>
-          <Text size='base' fw={700}>Phone & Email Address</Text>
+          <Text size='base' fw={700} tt={'uppercase'} mt={20}>Phone & Email Address</Text>
 
-          <Box style={actionStyle} onClick={() => window.open('tel:02245966999')}>
+          <Box style={actionStyle}>
             <Group gap={10}>
               <IconPhone
                 color="#0EC9F2"
@@ -64,13 +64,15 @@ const Contact = () => {
                 size='sm'
                 className="text"
                 style={{ transition: 'color 0.3s ease' }}
+                c={"rgb(53, 53, 53)"}
+                onClick={() => window.open('tel:02245966999')}
               >
                 022 4596 6999
               </Text>
             </Group>
           </Box>
 
-          <Box style={actionStyle} onClick={() => window.open('mailto:pentagon@pentagonindia.net')}>
+          <Box style={actionStyle}>
             <Group gap={10}>
               <IconMail
                 color="#0EC9F2"
@@ -81,7 +83,9 @@ const Contact = () => {
               <Text
                 size='sm'
                 className="text"
+                c={"rgb(53, 53, 53)"}
                 style={{ transition: 'color 0.3s ease' }}
+                onClick={() => window.open('mailto:pentagon@pentagonindia.net')}
               >
                 pentagon@pentagonindia.net
               </Text>

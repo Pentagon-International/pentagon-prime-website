@@ -291,7 +291,7 @@ const Footer = () => {
         </Box>
 
         <Text size="sm" mt={40} c={COLORS.textColor}>
-          © 2024 Pentagon Group. All Rights Reserved.
+          © 2024 Pentagon Prime. All Rights Reserved.
         </Text>
       </Container>
     </footer>

@@ -66,10 +66,20 @@ const Ship = ({ first_title, first_content, serviceData }) => {
               {sortedServiceData.map((item) => (
                   <Carousel.Slide key={item.sys.id} w={'100%'}>
                     <GridCol key={item.sys.id} span={15} mt={'md'}>
-                      <Image
-                        src={item.fields.image?.fields?.file?.url}
-                        alt={item.name}
-                      />
+                      <Box style={{ overflow: 'hidden', transition: 'all 0.5s ease', borderRadius: '12px', width: '100%', height: '250px' }}>
+                        <Image
+                          h={250}
+                          src={item.fields.image?.fields?.file?.url}
+                          alt={item.name}
+                          style={{ transition: 'all 0.5s ease', overflow: 'hidden' }}
+                          onMouseEnter={(e)=>{
+                            e.currentTarget.style.scale = "1.05";
+                          }}
+                          onMouseLeave={(e)=>{
+                            e.currentTarget.style.scale = "1";
+                          }}
+                        />
+                      </Box>
                       <Text size="sm" fw={500} mt={20}>
                         {item.fields.title}
                       </Text>
@@ -84,12 +94,21 @@ const Ship = ({ first_title, first_content, serviceData }) => {
           ) : (
             <Grid columns={3} gutter={70} mt={60}>
               {sortedServiceData.map((item) => (
-                  <GridCol key={item.sys.id} span={1}>
-                    <Image
-                     h={225}
-                      src={item.fields.image?.fields?.file?.url}
-                      alt={item.name}
-                    />
+                  <GridCol key={item.sys.id} span={1} >
+                    <Box style={{ overflow: 'hidden', transition: 'all 0.5s ease', borderRadius: '12px', width: '100%', height: '275px', border: '1px solid #E0E0E0' }}>
+                      <Image
+                        h={275}
+                        src={item.fields.image?.fields?.file?.url}
+                        alt={item.name}
+                        style={{ transition: 'all 0.5s ease', overflow: 'hidden' }}
+                        onMouseEnter={(e)=>{
+                          e.currentTarget.style.scale = "1.05";
+                        }}
+                        onMouseLeave={(e)=>{
+                          e.currentTarget.style.scale = "1";
+                        }}
+                      />
+                    </Box>
                     <Text size="md" fw={500} mt={20}>
                       {item.fields.title}
                     </Text>

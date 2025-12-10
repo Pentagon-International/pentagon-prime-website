@@ -273,7 +273,6 @@ const CbmCalc = () => {
                   data={["cm", "inch", "meter"]}
                   placeholder="Select unit"
                   mb="sm"
-                  hideControls
                 />
 
                 <Grid>
