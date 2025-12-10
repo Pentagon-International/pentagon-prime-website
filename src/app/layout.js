@@ -56,6 +56,11 @@ const LayoutContent = memo(({ children }) => {
   const previousPathnameRef = useRef(pathname);
   const loadingCheckIntervalRef = useRef(null);
 
+  // Set static page title for all pages
+  useEffect(() => {
+    document.title = "Pentagon Prime";
+  }, [pathname]); // Reset title on navigation to ensure it stays static
+
   // Start loading on initial app load (only once)
   useEffect(() => {
     if (isInitialLoadRef.current) {
