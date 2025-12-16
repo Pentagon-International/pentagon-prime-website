@@ -34,6 +34,7 @@ const breakBulkCargoSlides = [
 
 
 const cargoSlides = [
+  { src: "/cargo-images/cargo-truck.jpeg", alt: "cargo-truck" },
   { src: "/cargo-images/cargo-area.jpeg", alt: "cargo-area" },
   { src: "/cargo-images/cargo-in-ship-closeview.jpeg", alt: "cargo-in-ship-closeview" },
   { src: "/cargo-images/cargo-area-2.jpeg", alt: "cargo-area-2" },

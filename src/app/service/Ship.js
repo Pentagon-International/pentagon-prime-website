@@ -95,7 +95,7 @@ const Ship = ({ first_title, first_content, serviceData }) => {
             <Grid columns={3} gutter={70} mt={60}>
               {sortedServiceData.map((item) => (
                   <GridCol key={item.sys.id} span={1} >
-                    <Box style={{ overflow: 'hidden', transition: 'all 0.5s ease', borderRadius: '12px', width: '100%', height: '275px', border: '1px solid #E0E0E0' }}>
+                    <Box style={{ overflow: 'hidden', transition: 'all 0.5s ease', borderRadius: '12px', width: '100%', height: '270px', border: '1px solid #E0E0E0' }}>
                       <Image
                         h={275}
                         src={item.fields.image?.fields?.file?.url}

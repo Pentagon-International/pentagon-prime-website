@@ -16,11 +16,12 @@
       width: 100%;
       margin: 0 auto;
       max-width: 85vw;
+      position: relative;
     }
     h1 {
       font-size: 28px;
       font-weight: bold;
-      margin-bottom: 20px;
+      margin-bottom: 50px;
       text-align: center;
       color: rgb(0, 33, 95);
     }
@@ -30,11 +31,51 @@
       margin-top: 20px;
       margin-bottom: 10px;
     }
+    h3 {
+      font-size: 17px;
+      font-weight: bold;
+      margin-top: 15px;
+      margin-bottom: 8px;
+    }
     p {
       font-size: 16px;
       margin-bottom: 10px;
       text-align: justify;
       text-indent: 40px;
+    }
+    ul {
+      font-size: 16px;
+      margin-bottom: 10px;
+      padding-left: 60px;
+    }
+    li {
+      margin-bottom: 6px;
+      text-align: justify;
+    }
+    .back-link {
+      position: absolute;
+      top: 80px;
+      left: 0;
+      display: inline-block;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 5px;
+      border: 2px solid rgb(0, 33, 95);
+      background-color: rgb(0, 33, 95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+    }
+    .back-link:hover {
+      cursor: pointer;
+      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.8);
+    }
+    .back-link a {
+      color: #ffffff;
+      text-decoration: none;
     }
   </style>
 </head>
@@ -117,7 +158,64 @@
       totally cool with that. Some stuff belongs to our clients. Imitation or manipulation of them
       is frowned upon.
     </p>
+    <h2>Location Data Collection & Use</h2>
 
+    <h3>Location Information We Collect</h3>
+    <ul>
+      <li>
+        We may collect and process location information from your device when you use the App.
+        This may include:
+      </li>
+      <li>
+        Approximate location (such as city or region), and/or
+      </li>
+      <li>
+        Precise location (such as GPS coordinates), depending on your device settings and permissions granted.
+      </li>
+    </ul>
+
+    <h3>How We Use Location Data</h3>
+    <ul>
+      <li>
+        We use location data strictly for the following purposes:
+      </li>
+      <li>
+        To provide and improve App functionality
+      </li>
+      <li>
+        To support features explicitly requested by the user
+      </li>
+      <li>
+        To comply with legal or regulatory requirements, if applicable
+      </li>
+      <li>
+        We do not use location data for advertising or profiling unless explicitly stated and consented to.
+      </li>
+    </ul>
+
+    <h3>Data Sharing</h3>
+    <ul>
+      <li>
+        We do not sell location data. Location information may be shared only with:
+      </li>
+      <li>
+        Trusted service providers who assist in app functionality (under confidentiality obligations), or
+      </li>
+      <li>
+        Legal authorities, if required by law
+      </li>
+    </ul>
+
+    <h3>Data Retention</h3>
+    <ul>
+      <li>
+        Location data is retained only for as long as necessary to fulfill the purposes described above
+        and is securely deleted thereafter, unless a longer retention period is required by law
+      </li>
+    </ul>
+    <div class="back-link">
+      <a href="/">Back to Home</a>
+    </div>
   </div>
 
 </body>

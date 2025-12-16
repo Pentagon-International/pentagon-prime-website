@@ -21,6 +21,7 @@ import {
   IconMapPin,
   IconBrandInstagram,
   IconBrandFacebook,
+  IconFileText,
 } from '@tabler/icons-react';
 import Images from "@/app/utils/image";
 import React, { memo, useMemo, useCallback } from 'react';
@@ -97,7 +98,7 @@ const Footer = () => {
           direction={{ base: 'column', md: 'row' }}
           justify="space-between"
           gap={{ base: 40, md: 60 }}
-          mb={50}
+          mb={40}
         >
           {/* Company Info */}
           <Box style={{ flex: 2 }}>
@@ -142,6 +143,12 @@ const Footer = () => {
                 <IconBrandFacebook size={22} />
               </Box>
             </Group>
+            <Link href="/privacy-policy/index.html" style={{ color: COLORS.primaryColor, marginTop: 20, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}>
+              <IconFileText size={18} color="#0EC9F2" />
+              <Text color="white" lh={1.6} style={{ fontSize: isMobile ? 12 : 15, cursor: 'pointer' }}>
+                Privacy Policy
+              </Text>
+            </Link>
           </Box>
 
           {/* Services - 3 Column Layout */}

@@ -269,8 +269,8 @@ const Hero = ({ title, content }) => {
     <Box style={styles.heroContainer}>
       <Container fluid px={'7%'} mt={80} py="60px" style={{ height: '100vh', margin: '0 auto' }}>
         {!isMobile && (
-          <Box style={styles.overlayContainer}>
-            <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} h={!isMobile && 745} />
+          <Box style={styles.overlayContainer} pl={20}>
+            <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} h={!isMobile && 600} />
           </Box>
         )}
         <Stack h={'100%'} gap={0} justify="flex-start">

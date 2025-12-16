@@ -29,7 +29,7 @@ const Images = {
   contact_vector : '/images/contactUs_vector.png',
   vessel: '/images/vessel.jpg',
   port: '/images/port.jpg',
-  pentagon_freight: '/images/pentagon-freight.png',
+  pentagon_freight: '/images/pentagon-prime-hero-bg.png',
   pentagon_line: '/images/pentagon-line.png',
   pentagon_zig_zag: '/images/zig_zag.gif',
   incoterms_handshake: '/images/incoterms_handshake.png',
