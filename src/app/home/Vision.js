@@ -154,7 +154,8 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
     <Container
       fluid
       px={"7%"}
-      py={isMobile ? "30px" : "70px"}
+      py={20}
+      pb={30}
       style={styles.container}
     >
       <Trade items={tradeItems} content={tradeContent} />

@@ -267,7 +267,7 @@ const Hero = ({ title, content }) => {
 
   return (
     <Box style={styles.heroContainer}>
-      <Container fluid px={'7%'} mt={80} py="60px" style={{ height: '100vh', margin: '0 auto' }}>
+      <Container fluid px={'7%'} mt={80} pt="60px" pb={20} style={{ height: '100%', minHeight: '650px', margin: '0 auto' }}>
         {!isMobile && (
           <Box style={styles.overlayContainer} pl={20}>
             <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} h={!isMobile && 600} />
@@ -499,7 +499,7 @@ export default Hero;
 const styles = {
   heroContainer: {
     color: 'rgb(1, 34, 95)',
-    minHeight: '100vh',
+    minHeight: '650px',
     position: 'relative',
     overflowY: 'hidden',
     top: 0,
