@@ -1,6 +1,7 @@
 "use client";
 import { Box, Loader as MantineLoader, Text } from "@mantine/core";
 import { COLORS } from "@/app/utils/COLORS";
+import { TYPOGRAPHY } from "@/app/utils/TYPOGRAPHY";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { memo } from "react";
 
@@ -92,7 +93,7 @@ const Loader = memo(({ isLoading }) => {
         color="rgb(0, 33, 95)"
         type="dots"
       />
-      <Text size="28px" c="rgb(0, 33, 95)" fw={700}>Worth the Wait</Text>
+      <Text size={TYPOGRAPHY.h3.desktop} c="rgb(0, 33, 95)" fw={700}>Worth the Wait</Text>
     </Box>
   );
 });

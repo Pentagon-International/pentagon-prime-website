@@ -7,6 +7,7 @@ import AutoplayCarousel from "@/app/component/common/AutoplayCarousel";
 import { Box, Image, Title } from "@mantine/core";
 import VideoCarousel from "@/app/component/common/VideoCarousel/VideoCarousel";
 import { highlightText } from "../../utils/highlightText";
+import { TYPOGRAPHY } from "../../utils/TYPOGRAPHY";
 import ListCard from "@/app/component/common/ListCard";
 import { customClearanceList, exhibitionCargoList, exhibitionCargoList2, projectCargoList, projectCargoList2, crossTradeList, crossTradeList2, odcProjectCargoList } from "@/app/utils/llistData";
 
@@ -146,7 +147,7 @@ const ServicePage = async ({ params }) => {
         {/* #add video carousel here if resData?.reference === "odc-project-cargo" */}
         {resData?.reference === "odc-project-cargo" && (
           <Box py={20} mt={50} mb={20} style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", }}>
-            <Title tt="uppercase" size={'28px'} fw={800} lh={'lgx2'}>{highlightText("Our Cargo # Movement # Videos")}</Title>
+            <Title tt="uppercase" size={TYPOGRAPHY.h4.desktop} fw={800} lh={'lgx2'}>{highlightText("Our Cargo # Movement # Videos")}</Title>
             <VideoCarousel videos={cargoVideos} />
           </Box>
         )}

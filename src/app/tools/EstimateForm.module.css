@@ -12,7 +12,7 @@
 
 .label {
   padding: 4px;
-  font-size: 14px;
+  font-size: var(--fs-body-small);
 }
 .item {
   padding: 0;

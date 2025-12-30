@@ -2,6 +2,7 @@
 import { Box, Container, Group, Image, Text, Title } from "@mantine/core";
 import Images from "../utils/image";
 import { highlightText } from "../utils/highlightText";
+import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
 import { useMediaQuery } from "@mantine/hooks";
 
 const About = ({ title, content }) => {
@@ -38,7 +39,7 @@ const About = ({ title, content }) => {
             }}
           >
             <Title
-              size={isMobile ? "28px" : "40px"}
+              size={isMobile ? TYPOGRAPHY.h2.mobile : TYPOGRAPHY.h2.desktop}
               textWrap="balance"
               tt="uppercase"
               style={{

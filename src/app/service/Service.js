@@ -13,6 +13,7 @@ import {
 } from '@mantine/core';
 import Images from '../utils/image';
 import { COLORS } from '../utils/COLORS';
+import { TYPOGRAPHY } from '../utils/TYPOGRAPHY';
 import { highlightText } from '../utils/highlightText';
 import { useRouter } from 'next/navigation';
 import { useMediaQuery } from '@mantine/hooks';
@@ -75,7 +76,7 @@ function Service({ title, icon, iconTitle, content, backgroundImage }) {
           <Group align='center'>
             <Flex gap={'md'} align={'center'}>
               <Image src={icon || Images.sea_freight} alt="sea freight" w={35} h={35} radius={25} />
-              <Title tt="uppercase" size={'28px'} fw={800} lh={'lgx2'}>
+              <Title tt="uppercase" size={TYPOGRAPHY.h4.desktop} fw={800} lh={'lgx2'}>
                 {highlightText(title)}
               </Title>
             </Flex>
@@ -88,10 +89,10 @@ function Service({ title, icon, iconTitle, content, backgroundImage }) {
           </Group>
           <Text
             fs={'italic'}
-            size="sm"
             lh={isMobile ? '20px' : '28px'}
             style={{
               maxWidth: '100%',
+              fontSize: TYPOGRAPHY.body.large,
               whiteSpace: 'pre-wrap'
             }}
             // ta={'justify'}

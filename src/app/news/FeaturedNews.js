@@ -1,5 +1,6 @@
 import { Container, Grid, GridCol, Image, Text, Title } from '@mantine/core';
 import { COLORS } from '../utils/COLORS';
+import { TYPOGRAPHY } from '../utils/TYPOGRAPHY';
 
 const FeaturedNews = ({res}) => {
 
@@ -27,7 +28,7 @@ const FeaturedNews = ({res}) => {
                 color: COLORS.serviceColor,
                 textDecoration: 'underline',
                 cursor: 'pointer',
-                fontSize: '14px',
+                fontSize: TYPOGRAPHY.caption.normal,
               }}
             >
               Read More

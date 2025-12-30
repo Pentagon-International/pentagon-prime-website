@@ -13,6 +13,7 @@ import {
 } from '@mantine/core';
 import { client } from '../api/contentful';
 import { COLORS } from '../utils/COLORS';
+import { TYPOGRAPHY } from '../utils/TYPOGRAPHY';
 import Images from '../utils/image';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from '@mantine/hooks';
@@ -60,7 +61,7 @@ const QuoteCard = () => {
         {isMobile ? (
           <Box>
             <div style={{ backgroundImage: `url(${Images.quote})`, backgroundSize: 'cover', backgroundPosition: 'center', width: '30px', height: '30px' }} />
-            <Text mt={20} style={{ textWrap: 'balance', fontSize: isMobile ? '16px' : '20px', color: "white" }}>
+            <Text mt={20} style={{ textWrap: 'balance', fontSize: isMobile ? TYPOGRAPHY.body.normal : TYPOGRAPHY.h5.desktop, color: "white" }}>
               {quoteData?.quote}
             </Text>
             <Flex w={'100%'} align={'flex-end'} justify={'space-between'}>
@@ -98,7 +99,7 @@ const QuoteCard = () => {
               <GridCol span={1}>
                 <Group gap={0}>
                   <div style={{ backgroundImage: `url(${Images.quote})`, backgroundSize: 'cover', backgroundPosition: 'center', width: '30px', height: '30px' }} />
-                  <Text mt={20} style={{ textWrap: 'balance', fontSize: '20px' }}>
+                  <Text mt={20} style={{ textWrap: 'balance', fontSize: TYPOGRAPHY.h5.desktop }}>
                     {quoteData?.quote}
                   </Text>
                   <Flex w={'100%'} align={'flex-end'} justify={'space-between'}>

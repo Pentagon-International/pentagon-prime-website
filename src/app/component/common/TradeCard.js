@@ -1,5 +1,6 @@
 "use client";
 import { highlightText } from '@/app/utils/highlightText';
+import { TYPOGRAPHY } from '@/app/utils/TYPOGRAPHY';
 import { Flex, Text, Title, Container, Group, Box } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { memo, useMemo } from 'react';
@@ -33,7 +34,7 @@ const TradeCard = ({ title = '', item = [], background = '' }) => {
       <Box style={cardStyles}>
         <Flex align="center" justify="space-between" wrap="wrap" w="100%">
           {title && (
-            <Title tt={"uppercase"} c="rgb(0, 33, 95)" lh={isMobile ? "md" : "lgx2"} fw={800} size={isMobile ? "20px" : "34px"}>
+            <Title tt={"uppercase"} c="rgb(0, 33, 95)" lh={isMobile ? "md" : "lgx2"} fw={800} size={isMobile ? TYPOGRAPHY.h4.mobile : TYPOGRAPHY.h3.desktop}>
               {highlightText(title)}
             </Title>
           )}

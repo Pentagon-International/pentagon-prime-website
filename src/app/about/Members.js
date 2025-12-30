@@ -16,6 +16,7 @@ import {
 import { client } from "../api/contentful";
 import Images from "../utils/image";
 import { COLORS } from "../utils/COLORS";
+import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import { Carousel } from "@mantine/carousel";
@@ -49,7 +50,7 @@ const Members = () => {
           tt={"uppercase"}
           fw={800}
           lh={"lgx2"}
-          size={isMobile ? "28px" : "40px"}
+          size={isMobile ? TYPOGRAPHY.h2.mobile : TYPOGRAPHY.h2.desktop}
         >
           {/* <Title size={isMobile ? '30px' : '40px'} fw={800} tt={'uppercase'} lh={'lgx2'}> */}
           {highlightText("Message from the # chairman #")}
@@ -149,7 +150,7 @@ const Members = () => {
           mb={30}
           mt={50}
           ta="center"
-          size={isMobile ? "20px" : "34px"}
+          size={isMobile ? TYPOGRAPHY.h4.mobile : TYPOGRAPHY.h3.desktop}
         >
           {highlightText("Our # people # & technology")}
         </Title>
@@ -168,7 +169,7 @@ const Members = () => {
       </Box>
       <Flex justify="center" my={50}>
         <Title
-          size={isMobile ? "30px" : "40px"}
+          size={isMobile ? TYPOGRAPHY.h2.mobile : TYPOGRAPHY.h2.desktop}
           fw={800}
           tt={"uppercase"}
           lh={"lgx2"}

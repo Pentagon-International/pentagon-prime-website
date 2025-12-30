@@ -1,5 +1,6 @@
 'use client';
 import { Container, Flex, Group, Image, Stack, Text, Title, Box } from '@mantine/core';
+import { TYPOGRAPHY } from '../utils/TYPOGRAPHY';
 import { IconMail, IconPhone } from '@tabler/icons-react';
 import Images from '../utils/image';
 import { useMediaQuery } from '@mantine/hooks';
@@ -40,12 +41,12 @@ const Contact = () => {
         }}
       >
         <Stack p={isMobile ? 0 : 15} >
-          <Title size={isMobile ? '26px' : '40px'} lh={'lgx2'} fw={800} tt={'uppercase'}>Contact Us</Title>
+          <Title size={isMobile ? TYPOGRAPHY.h2.mobile : TYPOGRAPHY.h2.desktop} lh={'lgx2'} fw={800} tt={'uppercase'}>Contact Us</Title>
           <Text size={isMobile ? 'sm' : 'base'} lh={'28px'} fw={500} tw='balance' c={"rgb(53, 53, 53)"}>
             Ready to begin your journey with Pentagon Prime, have a question, or
             need assistance? <br />We're here to help.
           </Text>
-          <Text size={isMobile ? '18px' : 'base'} fw={700} mt={20} tt={'uppercase'}>Headquarters</Text>
+          <Text size={isMobile ? TYPOGRAPHY.h5.mobile : 'base'} fw={700} mt={20} tt={'uppercase'}>Headquarters</Text>
           <Text size='sm' tw="balance" maw={isMobile ? '100%' : '70%'} c={"rgb(53, 53, 53)"}>
             Unit No. 204 Satellite Silver, Marol Naka Andheri Kurla Road,
             <br />Andheri (East) Mumbai, Maharashtra – 400059, India

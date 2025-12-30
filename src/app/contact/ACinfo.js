@@ -11,6 +11,7 @@ import {
   Title,
 } from '@mantine/core';
 import { COLORS } from '../utils/COLORS';
+import { TYPOGRAPHY } from '../utils/TYPOGRAPHY';
 import Images from '../utils/image';
 import { theme } from '../utils/theme';
 import { useMediaQuery } from '@mantine/hooks';
@@ -45,7 +46,7 @@ const ACinfo = () => {
         <Grid columns={12}>
           <GridCol span={isMobile ? 12 : 6}>
             <Group>
-              <Title size={isMobile ? '28px' : '32px'} fw={800} lh={'lgx2'} tt={'uppercase'} textWrap="balance">
+              <Title size={isMobile ? TYPOGRAPHY.h2.mobile : TYPOGRAPHY.h1.mobile} fw={800} lh={'lgx2'} tt={'uppercase'} textWrap="balance">
                 Additional Contact Information
               </Title>
               <List c={COLORS.textColor} p={isMobile ? '10px 20px' : '0px 0px'} style={{

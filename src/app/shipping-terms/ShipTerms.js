@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { apiCallProtected } from "../api/api";
 import { COLORS } from "../utils/COLORS";
+import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconX } from "@tabler/icons-react";
 import description from "./shipTermDescription";
@@ -49,7 +50,7 @@ const ShipTerms = () => {
   return (
     <Container fluid px="7%" py="70px">
       <Title
-        size={isMobile ? "22px" : "lg"}
+        size={isMobile ? TYPOGRAPHY.h5.desktop : "lg"}
         lh={isMobile ? "md" : "lgx2"}
         tt={"uppercase"}
         fw={800}
@@ -142,7 +143,7 @@ const ShipTerms = () => {
         onClose={close}
         centered
         title={
-          <Text fw={800} size="22px" lh={1.4} c="#111F40" ta="left">
+          <Text fw={800} size={TYPOGRAPHY.h5.desktop} lh={1.4} c="#111F40" ta="left">
             {selectedTerm?.name}
           </Text>
         }
@@ -174,7 +175,7 @@ const ShipTerms = () => {
             lineHeight: 1.6,
             textAlign: "justify",
           }}
-          size="18px"
+          size={TYPOGRAPHY.body.large}
         >
           {description?.[selectedTerm?.name] || "No description available"}
         </Text>

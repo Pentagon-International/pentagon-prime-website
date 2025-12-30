@@ -47,29 +47,6 @@ const PrimeNetwork = ({content}) => {
           }}
         />
       </Flex>
-      <Box mt={60}>
-        <AspectRatio ratio={16/9} maw={1200} w="100%" mx="auto">
-          <video
-            preload="metadata"
-            autoPlay
-            muted
-            loop
-            playsInline
-            style={{
-              width: '100%',
-              height: 'auto',
-              borderRadius: '16px',
-              border: '5px solid #E0E0E0',
-              boxShadow: '0 1px 50px rgba(141, 141, 141, 0.8)',
-              objectFit: 'cover',
-              objectPosition: 'top',
-            }}
-          >
-            <source src="/Pentagon-Final.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </AspectRatio>
-      </Box>
     </Container>
   );
 };

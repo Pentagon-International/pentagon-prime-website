@@ -1,5 +1,6 @@
 'use client';
 import { COLORS } from '@/app/utils/COLORS';
+import { TYPOGRAPHY } from '@/app/utils/TYPOGRAPHY';
 import {
   BackgroundImage,
   Flex,
@@ -40,7 +41,7 @@ const Footer = () => {
     [
       { title: 'Consolidation Services', slug: 'consolidation-services' },
       { title: 'Value Added Services', slug: 'value-added-services' },
-      { title: 'Custom Clearing', slug: 'customs-clearance' },
+      { title: 'Custom Clearance', slug: 'customs-clearance' },
       { title: 'Break Bulk Cargo Services', slug: 'break-bulk-cargo' },
     ],
     [
@@ -91,7 +92,7 @@ const Footer = () => {
   );
 
   return (
-    <footer style={{ backgroundColor: '#111', color: 'white', padding: '50px 0' }}>
+    <footer style={{ backgroundColor: '#111', color: 'white', padding: '25px 0' }}>
       <Container fluid px="7%">
         {/* Top Section: Services on left, Company info on right */}
         <Flex
@@ -106,7 +107,7 @@ const Footer = () => {
               <Image src={Images.logo} alt="Logo" h={50} />
             </Flex>
 
-            <Text color="white" lh={1.6} mb={20} style={{ fontSize: isMobile ? 12 : 15 }}>
+            <Text color="white" lh={1.6} mb={20} style={{ fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.caption.large }}>
               Pentagon Prime, a unit of Pentagon Group, provides logistics and freight forwarding services.
               We enable our clients to enhance efficiency with cost-effective solutions, connecting them seamlessly with the world.
             </Text>
@@ -143,12 +144,6 @@ const Footer = () => {
                 <IconBrandFacebook size={22} />
               </Box>
             </Group>
-            <Link href="/privacy-policy/index.html" style={{ color: COLORS.primaryColor, marginTop: 20, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}>
-              <IconFileText size={18} color="#0EC9F2" />
-              <Text color="white" lh={1.6} style={{ fontSize: isMobile ? 12 : 15, cursor: 'pointer' }}>
-                Privacy Policy
-              </Text>
-            </Link>
           </Box>
 
           {/* Services - 3 Column Layout */}
@@ -177,7 +172,7 @@ const Footer = () => {
                             ...linkStyle,
                             lineHeight: 1.2,
                             padding: '2px 0',
-                            fontSize: 12,
+                            fontSize: TYPOGRAPHY.body.xsmall,
                             margin: 0,
                           }}
                           p={'0px'}
@@ -206,7 +201,7 @@ const Footer = () => {
                             lineHeight: 1.2,
                             padding: '2px 0',
                             margin: 0,
-                            fontSize: 15,
+                            fontSize: TYPOGRAPHY.caption.large,
                           }}
                         >
                           {item.title}
@@ -223,7 +218,7 @@ const Footer = () => {
         <Divider color="rgba(255,255,255,0.1)" my={30} />
 
         {/* Contact Section - Below */}
-        <Box>
+        {/* <Box>
           <Text fw={700} size="smx" style={{ textTransform: 'uppercase', color: '#666' }} mb={15}>
             Contact
           </Text>
@@ -252,7 +247,7 @@ const Footer = () => {
             >
               <IconMapPin size={18} color="#0EC9F2" style={{ flexShrink: 0, marginTop: 4 }} />
               <Text
-                style={{ fontSize: isMobile ? 12 : 15 }}
+                style={{ fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.caption.large }}
               >
                 Unit No. 204, Satellite Silver, Marol Naka, Andheri Kurla Road,
                 Andheri (East), Mumbai – 400059, India.
@@ -295,11 +290,18 @@ const Footer = () => {
               <Text color="white" style={{ fontSize: isMobile ? 12 : 15, transition: 'color 0.3s ease', whiteSpace: 'nowrap' }}>pentagon@pentagonindia.net</Text>
             </Group>
           </Flex>
-        </Box>
-
-        <Text size="sm" mt={40} c={COLORS.textColor}>
-          © 2024 Pentagon Prime. All Rights Reserved.
-        </Text>
+        </Box> */}
+        <Flex justify="space-between" align="center" mt={20}>
+          <Text size="sm" c={COLORS.textColor}>
+            © 2024 Pentagon Prime. All Rights Reserved.
+          </Text>
+          <Link href="/privacy-policy/index.html" style={{ color: COLORS.primaryColor,marginLeft:20, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}>
+            <IconFileText size={18} color="#0EC9F2" />
+            <Text color="white" lh={1.6} style={{ fontSize: isMobile ? 12 : 15, cursor: 'pointer' }}>
+              Privacy Policy
+            </Text>
+          </Link>
+        </Flex>
       </Container>
     </footer>
   );

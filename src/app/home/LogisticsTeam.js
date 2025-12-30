@@ -1,6 +1,7 @@
 'use client';
 import { client } from '@/app/api/contentful';
 import { COLORS } from '@/app/utils/COLORS';
+import { TYPOGRAPHY } from '@/app/utils/TYPOGRAPHY';
 import { highlightText } from '@/app/utils/highlightText';
 import {
   Container,
@@ -82,10 +83,10 @@ const LogisticsTeam = ({ title, content }) => {
 
   return (
     <Container fluid px={'7%'} py={'50px'}>
-      <Title size={isMobile ? '22px' : 'lg'} lh={isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800}>
+      <Title size={isMobile ? TYPOGRAPHY.h5.desktop : 'lg'} lh={isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800}>
         {highlightText(title)}
       </Title>
-        <Text size={isMobile ? "14px" : "sm"} lh={isMobile ? "md" : "sm"} py={'sm'} maw={isMobile ? '80%' : '55%'} c={COLORS.textColor}>
+        <Text size={isMobile ? TYPOGRAPHY.body.small : "sm"} lh={isMobile ? "md" : "sm"} py={'sm'} maw={isMobile ? '80%' : '55%'} c={COLORS.textColor}>
           {highlightText(content)}
         </Text>
         <Flex wrap="wrap" align="center" mt="30px" justify="center" gap="md">

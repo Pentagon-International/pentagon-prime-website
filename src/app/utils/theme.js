@@ -1,4 +1,5 @@
 import { Kumbh_Sans, Roboto, Poppins } from 'next/font/google';
+import { TYPOGRAPHY } from './TYPOGRAPHY';
 
 const kumbhSans = Kumbh_Sans({
     weight: ['400', '500', '600', '700', '800', '900'],
@@ -42,7 +43,7 @@ const theme = {
         TextInput: {
             styles: {
                 input: {
-                    fontSize: "14px",  // ~0.875rem
+                    fontSize: TYPOGRAPHY.input.small,
                 },
             },
         },

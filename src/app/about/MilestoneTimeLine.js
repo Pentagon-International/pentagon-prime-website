@@ -3,6 +3,7 @@
 import { Title, Card, Box, ActionIcon, Image } from "@mantine/core";
 import React, { useEffect, useState, useRef } from "react";
 import { COLORS } from "../utils/COLORS";
+import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import Images from "../utils/image";
@@ -284,7 +285,7 @@ const MilestoneTimeline = ({ milestones }) => {
                             <li
                               key={`${index}-${i}`}
                               style={{
-                                fontSize: "16px",
+                                fontSize: TYPOGRAPHY.body.normal,
                                 listStyleType: "disc",
                                 marginBottom: "8px",
                               }}
@@ -300,7 +301,7 @@ const MilestoneTimeline = ({ milestones }) => {
                     return (
                       <p
                         key={index}
-                        style={{ fontSize: "16px", marginBottom: "10px" }}
+                        style={{ fontSize: TYPOGRAPHY.body.normal, marginBottom: "10px" }}
                       >
                         {item.content[0]?.value || ""}
                       </p>
@@ -372,7 +373,7 @@ const MilestoneTimeline = ({ milestones }) => {
                           <li
                             key={`${index}-${i}`}
                             style={{
-                              fontSize: "16px",
+                              fontSize: TYPOGRAPHY.body.normal,
                               listStyleType: "disc",
                               marginBottom: "8px",
                             }}
@@ -388,7 +389,7 @@ const MilestoneTimeline = ({ milestones }) => {
                   return (
                     <p
                       key={index}
-                      style={{ fontSize: "16px", marginBottom: "10px" }}
+                      style={{ fontSize: TYPOGRAPHY.body.normal, marginBottom: "10px" }}
                     >
                       {item.content[0]?.value || ""}
                     </p>

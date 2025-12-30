@@ -10,6 +10,7 @@ import {
 } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "@/app/utils/COLORS";
+import { TYPOGRAPHY } from "@/app/utils/TYPOGRAPHY";
 import { useMediaQuery } from "@mantine/hooks";
 import { client } from "@/app/api/contentful";
 import * as TablerIcons from "@tabler/icons-react";
@@ -52,7 +53,7 @@ const PentagonPrime = ({ title, content, title2 }) => {
           mb={50}
           ta="center"
           fw={800}
-          size={isMobile ? "24px" : "32px"}
+          size={isMobile ? TYPOGRAPHY.h3.mobile : TYPOGRAPHY.h1.mobile}
         >
           {highlightText(title2)}
         </Title>

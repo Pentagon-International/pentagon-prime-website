@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { apiCallProtected } from '../api/api';
 import { COLORS } from '../utils/COLORS';
+import { TYPOGRAPHY } from '../utils/TYPOGRAPHY';
 import { useMediaQuery } from '@mantine/hooks';
 
 const dummyData = [
@@ -42,7 +43,7 @@ const ShipLines = () => {
 
   return (
     <Container fluid px="7%" py="70px">
-      <Title size={isMobile ? '22px' : 'lg'} lh={isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800} ta="center">
+      <Title size={isMobile ? TYPOGRAPHY.h5.desktop : 'lg'} lh={isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800} ta="center">
         {/* <Title size="lg" tt="uppercase" ta="center"> */}
         SHIPPING LINES
       </Title>

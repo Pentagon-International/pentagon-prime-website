@@ -1,6 +1,7 @@
 'use client'
 import { Box, Card, Container, Grid, Group, Image, Modal, SimpleGrid, Text, Title } from "@mantine/core";
 import { COLORS } from "../utils/COLORS";
+import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import Images from "../utils/image";
 import { IconCheck, IconX } from "@tabler/icons-react";
@@ -60,7 +61,7 @@ const StaticContents = () => {
                 <Grid.Col span={isMobile ? 12 : 6} p={isMobile ? '20px' : 'xl'}>
                     <Grid>
                         <Grid.Col span={12}>
-                            <Title size={isMobile ? '25px' : '20px'} tt="uppercase" className="tw-balance" fw={800}>
+                            <Title size={isMobile ? TYPOGRAPHY.h4.desktop : TYPOGRAPHY.h4.mobile} tt="uppercase" className="tw-balance" fw={800}>
                                 What do incoterms means?
                             </Title>
                         </Grid.Col>
@@ -73,7 +74,7 @@ const StaticContents = () => {
                 </Grid.Col> */}
         <Grid.Col span={12} mt={"xl"}>
           <Title
-            size={isMobile ? "22px" : "lg"}
+            size={isMobile ? TYPOGRAPHY.h5.desktop : "lg"}
             lh={isMobile ? "md" : "lgx2"}
             tt={"uppercase"}
             fw={800}
@@ -126,7 +127,7 @@ const StaticContents = () => {
         </Grid.Col>
         <Grid.Col span={12} mb={"lg"} mt={"xl"} ta={"center"}>
           <Title
-            size={isMobile ? "22px" : "lg"}
+            size={isMobile ? TYPOGRAPHY.h5.desktop : "lg"}
             lh={isMobile ? "md" : "lgx2"}
             tt={"uppercase"}
             fw={800}
@@ -153,7 +154,7 @@ const StaticContents = () => {
               <Grid.Col span={12} mb={"md"}>
                 <Text
                   fw={800}
-                  size={"20px"}
+                  size={TYPOGRAPHY.h4.mobile}
                   tt="uppercase"
                   lh="sm"
                   maw={isMobile ? "100%" : "80%"}
@@ -233,7 +234,7 @@ const StaticContents = () => {
               <Grid.Col span={12} mb={"md"}>
                 <Text
                   fw={800}
-                  size={"20px"}
+                  size={TYPOGRAPHY.h4.mobile}
                   tt="uppercase"
                   lh="sm"
                   maw={isMobile ? "100%" : "90%"}
@@ -323,7 +324,7 @@ const StaticContents = () => {
         onClose={close}
         centered
         title={
-          <Text fw={800} size="22px" lh={1.4} c="#111F40" ta="left">
+          <Text fw={800} size={TYPOGRAPHY.h5.desktop} lh={1.4} c="#111F40" ta="left">
             {selectedTerm}
           </Text>
         }
@@ -355,7 +356,7 @@ const StaticContents = () => {
             lineHeight: 1.6,
             textAlign: "justify",
           }}
-          size="18px"
+          size={TYPOGRAPHY.body.large}
         >
           {description?.[selectedTerm] || "No description available"}
         </Text>

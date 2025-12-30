@@ -22,6 +22,7 @@ import { IconChevronDown, IconPhone } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useLoading } from "../common/LoadingContext";
+import { TYPOGRAPHY } from "@/app/utils/TYPOGRAPHY";
 
 const navItems = [
   { label: "Home", links: "/", dropdown: false },
@@ -37,6 +38,7 @@ const Header = () => {
     useDisclosure(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  
   const currentPath = usePathname();
   const router = useRouter();
   const { startLoading } = useLoading();
@@ -63,6 +65,10 @@ const Header = () => {
     zIndex: 1000,
     padding: "8px 7%",
     color: COLORS.primaryColor,
+    height: "75px",
+    display:'flex',
+    alignItems:'center',
+    justifyContent:'space-between',
   }), []);
 
   const FeatureItem = memo(({ feature }) => {
@@ -78,10 +84,10 @@ const Header = () => {
           onClick={handleClick}
           style={{ textDecoration: "none", color: "inherit" }}
         >
-          <Text size="sm" fw={500} c={COLORS.secondaryColor}>
+          <Text size={TYPOGRAPHY.body.normal} fw={500} c={COLORS.secondaryColor}>
             {feature.title}
           </Text>
-          <Text size="xs" c="dimmed">
+          <Text size={TYPOGRAPHY.body.normal} c="dimmed">
             {feature.description}
           </Text>
         </Link>
@@ -143,20 +149,24 @@ const Header = () => {
     <Container fluid px="7%">
       <Box>
         <header style={headerStyle}>
-          <Flex justify="space-between" align="center" h="50">
-            <Link href="/" onClick={handleLogoClick} style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-              <Image src={Images.logo_only} alt="Logo" h={48} mb={5} />
-              <Text
-                className="logo-font"
-                fs="italic"
-                fz={22}
-                fw={700}
-                tw="balance"
-                pt={10}
-                c="#326b7d"
-              >
-                Pentagon Prime
-              </Text>
+          <Flex justify="space-between" align="center" h="50" w="100%">
+            <Link href="/" onClick={handleLogoClick} style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 5}}>
+              <Image src={Images.logo_only} alt="Logo" h={48} />
+              <Flex align="center" justify="center" style={{textDecoration: "none", flexDirection: "column", alignSelf: "flex-end"}}>
+                <Text
+                  className="logo-font"
+                  fs="italic"
+                  fz={22}
+                  fw={700}
+                  tw="balance"
+                  c="#326b7d"
+                >
+                  Pentagon Prime
+                </Text>
+                <Text size="xs" fw={500} c="rgb(0, 33, 95)" style={{alignSelf: 'flex-start'}}>
+                  Logistics Automated
+                </Text>
+              </Flex>
             </Link>
             <Flex h="100%" gap={30} align="center" visibleFrom="sm">
               {navItems.map((item) => (
@@ -167,7 +177,7 @@ const Header = () => {
             <Button
               variant="outline"
               size="md"
-              fz={"14px"}
+              fz={TYPOGRAPHY.body.normal}
               radius={"md"}
               leftSection={<IconPhone stroke={1.5} size={18} />}
               onClick={handleContactClick}
@@ -198,7 +208,8 @@ const Header = () => {
                 {navItems.map((item) => (
                   <Box key={item.label}>
                     <Text
-                      size="md"
+                      size={TYPOGRAPHY.body.normal}
+                      fw={500}
                       w="100%"
                       color={COLORS.secondaryColor}
                       style={{
@@ -236,6 +247,11 @@ const Header = () => {
                   size="sm"
                   radius={"md"}
                   fullWidth
+                  styles={{
+                    label: {
+                      fontSize: TYPOGRAPHY.body.normal,
+                    },
+                  }}
                   style={{
                     borderColor: COLORS.serviceColor,
                     color: COLORS.serviceColor,

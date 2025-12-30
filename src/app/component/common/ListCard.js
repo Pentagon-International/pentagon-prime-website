@@ -14,6 +14,7 @@ import {
   import { highlightText } from "@/app/utils/highlightText";    
   import { useMediaQuery } from "@mantine/hooks";
   import { COLORS } from "@/app/utils/COLORS";
+  import { TYPOGRAPHY } from "@/app/utils/TYPOGRAPHY";
   import { theme } from "@/app/utils/theme";
   import { memo, useMemo } from "react";
   
@@ -54,7 +55,7 @@ import {
             <Title
               order={4}
               fw={700}
-              size="20px"
+              size={TYPOGRAPHY.h4.mobile}
               mt={isMobile ? 0 : 20}
               lh="sm"
             >
@@ -94,7 +95,7 @@ import {
             mb={isMobile ? 20 : 30}
             ta="center"
             fw={800}
-            size={isMobile ? "20px" : "28px"}
+            size={isMobile ? TYPOGRAPHY.h4.mobile : TYPOGRAPHY.h4.desktop}
           >
             {highlightText(sectionTitle)}
           </Title>

@@ -13,6 +13,7 @@ import {
 import { theme } from "@/app/utils/theme";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "@/app/utils/COLORS";
+import { TYPOGRAPHY } from "@/app/utils/TYPOGRAPHY";
 import { useMediaQuery } from "@mantine/hooks";
 import { client } from "@/app/api/contentful";
 import * as TablerIcons from "@tabler/icons-react";
@@ -54,7 +55,7 @@ const CustomerBenefits = ({ title, content, title2 }) => {
           mb={50}
           ta="center"
           fw={800}
-          size={isMobile ? "20px" : "32px"}
+          size={isMobile ? TYPOGRAPHY.h4.mobile : TYPOGRAPHY.h1.mobile}
         >
           {highlightText("What customers get")}
         </Title>
@@ -103,7 +104,7 @@ const CustomerBenefits = ({ title, content, title2 }) => {
                         <Title
                           order={4}
                           fw={700}
-                          size="20px"
+                          size={TYPOGRAPHY.h4.mobile}
                           mt={isMobile ? 0 : 20}
                           c="rgb(0, 33, 95)"
                           lh="sm"

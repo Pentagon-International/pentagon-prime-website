@@ -12,6 +12,7 @@ import {
 } from '@mantine/core';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import { COLORS } from '@/app/utils/COLORS';
+import { TYPOGRAPHY } from '@/app/utils/TYPOGRAPHY';
 import Link from 'next/link';
 import { useMediaQuery } from '@mantine/hooks';
 import { Carousel } from '@mantine/carousel';
@@ -187,7 +188,7 @@ const styles = {
   readMore: {
     color: COLORS.serviceColor,
     fontWeight: 400,
-    fontSize: '14px',
+    fontSize: TYPOGRAPHY.caption.normal,
     display: 'flex',
     alignItems: 'center',
     gap: '6px',

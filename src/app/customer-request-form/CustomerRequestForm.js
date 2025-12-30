@@ -3,6 +3,7 @@
 import { ActionIcon, Alert, Anchor, Autocomplete, Button, Center, Checkbox, Container, FileButton, Flex, Grid, GridCol, Group, List, Modal, NumberInput, Radio, rem, ScrollArea, SegmentedControl, Select, Switch, Text, Textarea, TextInput, Title } from "@mantine/core";
 import { IconArrowRight, IconArrowsDownUp, IconArrowsLeftRight, IconBox, IconCalendar, IconFiles, IconMapPin, IconPaperclip, IconPlane, IconPlus, IconSquareHalf, IconTrash, IconUpload } from "@tabler/icons-react";
 import { COLORS } from "../utils/COLORS";
+import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import useTransportStore from "../store/transportStore";
 import React, { useEffect, useState } from "react";
@@ -369,7 +370,7 @@ const CustomerRequestForm = (data = {
 
   const CustomTitle = () => (
     <Flex align={"center"} gap={20}>
-      <div style={{ fontSize: 18 }}> Add Cargo Details </div>
+      <div style={{ fontSize: TYPOGRAPHY.body.large }}> Add Cargo Details </div>
     </Flex>
   );
 
@@ -996,16 +997,16 @@ const CustomerRequestForm = (data = {
                 }}
                 styles={{
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   option: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px', // Smaller error text
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small, // Smaller error text
                     marginTop: '4px',
                   },
 
@@ -1072,16 +1073,16 @@ const CustomerRequestForm = (data = {
                 }}
                 styles={{
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   option: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px', // Smaller error text
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small, // Smaller error text
                     marginTop: '4px',
                   },
 
@@ -1127,7 +1128,7 @@ const CustomerRequestForm = (data = {
                   }));
                 }}
                 fullWidth
-                size={isMobile ? '12px' : "14px"}
+                size={isMobile ? TYPOGRAPHY.button.small : TYPOGRAPHY.button.normal}
                 radius={'md'}
                 color={'#CDF6FF'}
                 data={segmantData}
@@ -1152,13 +1153,13 @@ const CustomerRequestForm = (data = {
                 withAsterisk
                 styles={{
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                   }
                 }}
                 radius="md"
@@ -1177,13 +1178,13 @@ const CustomerRequestForm = (data = {
                 radius="md"
                 styles={{
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
 
                   }
                 }}
@@ -1201,13 +1202,13 @@ const CustomerRequestForm = (data = {
                 radius="md"
                 styles={{
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                   }
                 }}
                 key={form.key('email')}
@@ -1252,16 +1253,16 @@ const CustomerRequestForm = (data = {
                 styles={{
                   dropdown: { maxHeight: 200, overflowY: 'auto' },
                   option: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                   }
                 }}
                 radius="md"
@@ -1293,25 +1294,25 @@ const CustomerRequestForm = (data = {
                 styles={{
                   dropdown: { maxHeight: 200, overflowY: 'auto' },
                   calendarHeaderLevel: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   weekday: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   option: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                   },
                   calendarHeader: {
-                    fontSize: isMobile ? '12px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.normal,
                   },
                 }}
                 label='Cargo Ready Date'
@@ -1358,19 +1359,19 @@ const CustomerRequestForm = (data = {
                     },
                     dropdown: { maxHeight: 200, overflowY: 'auto' },
                     option: {
-                      fontSize: isMobile ? '14px' : '16px',
+                      fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                     },
                     input: {
-                      fontSize: isMobile ? '14px' : '16px',
+                      fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                     },
                     label: {
-                      fontSize: isMobile ? '14px' : '16px',
+                      fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                     },
                     error: {
-                      fontSize: isMobile ? '12px' : '14px',
+                      fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                     },
                     description: {
-                      fontSize: isMobile ? '14px' : '14px',
+                      fontSize: TYPOGRAPHY.body.small,
                     }
                   }}
                 // checked = {form?.values?.result[0]?.origin?.pickup}
@@ -1401,13 +1402,13 @@ const CustomerRequestForm = (data = {
                   }}
                   styles={{
                     input: {
-                      fontSize: isMobile ? '14px' : '16px',
+                      fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                     },
                     label: {
-                      fontSize: isMobile ? '14px' : '16px',
+                      fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                     },
                     error: {
-                      fontSize: isMobile ? '12px' : '14px',
+                      fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                     }
                   }}
                 />
@@ -1447,19 +1448,19 @@ const CustomerRequestForm = (data = {
                   },
                   dropdown: { maxHeight: 200, overflowY: 'auto' },
                   option: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                   },
                   description: {
-                    fontSize: isMobile ? '14px' : '14px',
+                    fontSize: TYPOGRAPHY.body.small,
                   }
                 }}
               />
@@ -1487,13 +1488,13 @@ const CustomerRequestForm = (data = {
                 }}
                 styles={{
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                   }
                 }}
               />
@@ -1529,19 +1530,19 @@ const CustomerRequestForm = (data = {
                   },
                   dropdown: { maxHeight: 200, overflowY: 'auto' },
                   option: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                   },
                   description: {
-                    fontSize: isMobile ? '14px' : '14px',
+                    fontSize: TYPOGRAPHY.body.small,
                   }
                 }}
               />
@@ -1579,19 +1580,19 @@ const CustomerRequestForm = (data = {
                   },
                   dropdown: { maxHeight: 200, overflowY: 'auto' },
                   option: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                   },
                   description: {
-                    fontSize: isMobile ? '14px' : '14px',
+                    fontSize: TYPOGRAPHY.body.small,
                   }
                 }}
                 checked={form.values.customs}
@@ -1625,19 +1626,19 @@ const CustomerRequestForm = (data = {
                   },
                   dropdown: { maxHeight: 200, overflowY: 'auto' },
                   option: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                   },
                   description: {
-                    fontSize: isMobile ? '14px' : '14px',
+                    fontSize: TYPOGRAPHY.body.small,
                   }
                 }}
                 checked={form.values.isInsurance}
@@ -1676,19 +1677,19 @@ const CustomerRequestForm = (data = {
                   },
                   dropdown: { maxHeight: 200, overflowY: 'auto' },
                   option: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                   },
                   description: {
-                    fontSize: isMobile ? '14px' : '14px',
+                    fontSize: TYPOGRAPHY.body.small,
                   },
                 }}
               />
@@ -1746,16 +1747,16 @@ const CustomerRequestForm = (data = {
                     styles={{
                       dropdown: { maxHeight: 200, overflowY: 'auto' },
                       option: {
-                        fontSize: isMobile ? '14px' : '16px',
+                        fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                       },
                       input: {
-                        fontSize: isMobile ? '14px' : '16px',
+                        fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                       },
                       label: {
-                        fontSize: isMobile ? '14px' : '16px',
+                        fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                       },
                       error: {
-                        fontSize: isMobile ? '12px' : '14px',
+                        fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                       }
                     }}
                     radius="md"
@@ -1785,13 +1786,13 @@ const CustomerRequestForm = (data = {
                     }}
                     styles={{
                       input: {
-                        fontSize: isMobile ? '14px' : '16px',
+                        fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                       },
                       label: {
-                        fontSize: isMobile ? '14px' : '16px',
+                        fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                       },
                       error: {
-                        fontSize: isMobile ? '12px' : '14px',
+                        fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                       }
                     }}
                   />
@@ -1864,14 +1865,14 @@ const CustomerRequestForm = (data = {
                 {...form.getInputProps('unNo')}
                 styles={{
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                     height: 100
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                   }
                 }}
                 // onChange={(v) => {
@@ -1915,7 +1916,7 @@ const CustomerRequestForm = (data = {
                   radius={'8px'}
                   styles={{
                     label: {
-                      fontSize: '16px',
+                      fontSize: TYPOGRAPHY.button.large,
 
                     },
                   }}
@@ -1962,10 +1963,10 @@ const CustomerRequestForm = (data = {
                 radius="md"
                 styles={{
                   dropdown: { maxHeight: 200, overflowY: 'auto' },
-                  option: { fontSize: isMobile ? '14px' : '16px' },
-                  input: { fontSize: isMobile ? '14px' : '16px' },
-                  label: { fontSize: isMobile ? '14px' : '16px' },
-                  error: { fontSize: isMobile ? '12px' : '14px' }
+                  option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                  input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                  label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                  error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                 }}
               />
             </Grid.Col>
@@ -1979,9 +1980,9 @@ const CustomerRequestForm = (data = {
                 label="Commodity"
                 withAsterisk
                 styles={{
-                  input: { fontSize: isMobile ? '14px' : '16px' },
-                  label: { fontSize: isMobile ? '14px' : '16px' },
-                  error: { fontSize: isMobile ? '12px' : '14px' }
+                  input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                  label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                  error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                 }}
                 radius="md"
                 value={containerList.commodity || ""}
@@ -2006,10 +2007,10 @@ const CustomerRequestForm = (data = {
                 comboboxProps={{ shadow: 'md' }}
                 styles={{
                   dropdown: { maxHeight: 200, overflowY: 'auto' },
-                  option: { fontSize: isMobile ? '14px' : '16px' },
-                  input: { fontSize: isMobile ? '14px' : '16px' },
-                  label: { fontSize: isMobile ? '14px' : '16px' },
-                  error: { fontSize: isMobile ? '12px' : '14px' }
+                  option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                  input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                  label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                  error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                 }}
                 radius="md"
                 value={containerList.hs1 || []}
@@ -2041,10 +2042,10 @@ const CustomerRequestForm = (data = {
                   placeholder="Select HS Code"
                   styles={{
                     dropdown: { maxHeight: 200, overflowY: 'auto' },
-                    option: { fontSize: isMobile ? '14px' : '16px' },
-                    input: { fontSize: isMobile ? '14px' : '16px' },
-                    label: { fontSize: isMobile ? '14px' : '16px' },
-                    error: { fontSize: isMobile ? '12px' : '14px' }
+                    option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                    input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                    label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                    error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                   }}
                   radius="md"
                   value={containerList.hs2 || []}
@@ -2094,10 +2095,10 @@ const CustomerRequestForm = (data = {
                             required
                             styles={{
                               dropdown: { maxHeight: 200, overflowY: 'auto' },
-                              option: { fontSize: isMobile ? '14px' : '16px' },
-                              input: { fontSize: isMobile ? '14px' : '16px' },
-                              label: { fontSize: isMobile ? '14px' : '16px' },
-                              error: { fontSize: isMobile ? '12px' : '14px' }
+                    option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                    input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                    label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                    error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                             }}
                             radius="md"
                             size={isMobile ? "md" : "sm"}
@@ -2121,10 +2122,10 @@ const CustomerRequestForm = (data = {
                                   {...(field.options || {})}
                                   styles={{
                                     dropdown: { maxHeight: 200, overflowY: 'auto' },
-                                    option: { fontSize: isMobile ? '14px' : '16px' },
-                                    input: { fontSize: isMobile ? '14px' : '16px' },
-                                    label: { fontSize: isMobile ? '14px' : '16px' },
-                                    error: { fontSize: isMobile ? '12px' : '14px' }
+                    option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                    input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                    label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                    error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                                   }}
                                   radius="md"
                                   size={isMobile ? "md" : "sm"}
@@ -2146,10 +2147,10 @@ const CustomerRequestForm = (data = {
                                   onChange={handleFields(i, j)}
                                   {...(field.options || {})}
                                   styles={{
-                                    option: { fontSize: isMobile ? '14px' : '16px' },
-                                    input: { fontSize: isMobile ? '14px' : '16px' },
-                                    label: { fontSize: isMobile ? '14px' : '16px' },
-                                    error: { fontSize: isMobile ? '12px' : '14px' }
+                    option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                    input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                    label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                    error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                                   }}
                                   radius="md"
                                   size={isMobile ? "md" : "sm"}
@@ -2224,9 +2225,9 @@ const CustomerRequestForm = (data = {
                     label="No of Packages"
                     withAsterisk
                     styles={{
-                      input: { fontSize: isMobile ? '14px' : '16px' },
-                      label: { fontSize: isMobile ? '14px' : '16px' },
-                      error: { fontSize: isMobile ? '12px' : '14px' }
+                      input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                      label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                      error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                     }}
                     radius="md"
                     value={containerList.packages}
@@ -2243,9 +2244,9 @@ const CustomerRequestForm = (data = {
                     label="Gross Weight (Kgs)"
                     withAsterisk
                     styles={{
-                      input: { fontSize: isMobile ? '14px' : '16px' },
-                      label: { fontSize: isMobile ? '14px' : '16px' },
-                      error: { fontSize: isMobile ? '12px' : '14px' }
+                      input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                      label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                      error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                     }}
                     radius="md"
                     value={containerList.grossWeight}
@@ -2262,9 +2263,9 @@ const CustomerRequestForm = (data = {
                     label="Volume (CBM)"
                     withAsterisk
                     styles={{
-                      input: { fontSize: isMobile ? '14px' : '16px' },
-                      label: { fontSize: isMobile ? '14px' : '16px' },
-                      error: { fontSize: isMobile ? '12px' : '14px' }
+                      input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                      label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                      error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                     }}
                     radius="md"
                     value={containerList.volume || ''}
@@ -2286,9 +2287,9 @@ const CustomerRequestForm = (data = {
                     label="No of Packages"
                     withAsterisk
                     styles={{
-                      input: { fontSize: isMobile ? '14px' : '16px' },
-                      label: { fontSize: isMobile ? '14px' : '16px' },
-                      error: { fontSize: isMobile ? '12px' : '14px' }
+                      input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                      label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                      error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                     }}
                     radius="md"
                     value={containerList.no_of_packages || ''}
@@ -2305,9 +2306,9 @@ const CustomerRequestForm = (data = {
                     label="Gross Weight (Kgs)"
                     withAsterisk
                     styles={{
-                      input: { fontSize: isMobile ? '14px' : '16px' },
-                      label: { fontSize: isMobile ? '14px' : '16px' },
-                      error: { fontSize: isMobile ? '12px' : '14px' }
+                      input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                      label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                      error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                     }}
                     radius="md"
                     value={containerList.gross_weight || ''}
@@ -2324,9 +2325,9 @@ const CustomerRequestForm = (data = {
                     size={isMobile ? "md" : "lg"}
                     withAsterisk
                     styles={{
-                      input: { fontSize: isMobile ? '14px' : '16px' },
-                      label: { fontSize: isMobile ? '14px' : '16px' },
-                      error: { fontSize: isMobile ? '12px' : '14px' }
+                      input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                      label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                      error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                     }}
                     radius="md"
                     value={containerList.volume_weight || ''}

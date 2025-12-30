@@ -9,6 +9,7 @@ import {
   BackgroundImage,
 } from "@mantine/core";
 import { COLORS } from "../utils/COLORS";
+import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
 import { client } from "../api/contentful";
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@mantine/hooks";
@@ -43,7 +44,7 @@ const Mission = () => {
           lh={isMobile ? "md" : "lgx2"}
           fw={800}
           mb={30}
-          size={isMobile ? "20px" : "34px"}
+          size={isMobile ? TYPOGRAPHY.h4.mobile : TYPOGRAPHY.h3.desktop}
         >
           {highlightText("Our Edge: # Tech + People #")}
         </Title>
@@ -95,7 +96,7 @@ const Mission = () => {
                 tt={"uppercase"}
                 lh={isMobile ? "md" : "lgx2"}
                 fw={800}
-                size={isMobile ? "20px" : "34px"}
+                size={isMobile ? TYPOGRAPHY.h4.mobile : TYPOGRAPHY.h3.desktop}
                 c={COLORS.portColor}
               >
                 {/* <Title fw={800} size={'lg'} tt={'uppercase'} c={COLORS.portColor}> */}

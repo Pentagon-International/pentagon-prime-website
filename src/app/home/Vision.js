@@ -25,6 +25,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { COLORS } from "@/app/utils/COLORS";
+import { TYPOGRAPHY } from "@/app/utils/TYPOGRAPHY";
 import Images from "@/app/utils/image";
 import Trade from "../component/common/Trade";
 import { highlightText } from "../utils/highlightText";
@@ -179,7 +180,7 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
           p={'0 2%'}
           mt={isMobile && 50}
         >
-          <Title tt={"uppercase"} c="rgb(0, 33, 95)" fw={800} size={isMobile ? "20px" : "34px"} lh={1}>
+          <Title tt={"uppercase"} c="rgb(0, 33, 95)" fw={800} size={isMobile ? TYPOGRAPHY.h4.mobile : TYPOGRAPHY.h3.desktop} lh={1}>
             {highlightText(title)}
           </Title>
           <Text mt={'lg'} c="rgb(54, 54, 54)" ta={'justify'} maw={"100%"} lh={"sm"} size="sm">

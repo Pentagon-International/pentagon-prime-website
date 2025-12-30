@@ -1,5 +1,6 @@
 import { Box, Container, Grid, GridCol, Text, Title } from '@mantine/core';
 import { COLORS } from '../utils/COLORS';
+import { TYPOGRAPHY } from '../utils/TYPOGRAPHY';
 import { highlightText } from '../utils/highlightText';
 
 const Header = ({ title, content, top }) => {
@@ -34,7 +35,7 @@ const Header = ({ title, content, top }) => {
             <Text size="sm" mb={10}>
               {highlightText(top)}
             </Text>
-            <Title tt="uppercase" size="39px" fw={800} lh="lgx2">
+            <Title tt="uppercase" size={TYPOGRAPHY.h2.desktop} fw={800} lh="lgx2">
               {highlightText(title)}
             </Title>
             <Text mt={20} size="base">

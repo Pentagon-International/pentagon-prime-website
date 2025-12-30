@@ -1,10 +1,12 @@
 'use client';
 import { useEffect, useState, useMemo, memo, useCallback, useRef } from 'react';
 import { COLORS } from '@/app/utils/COLORS';
+import { TYPOGRAPHY } from '@/app/utils/TYPOGRAPHY';
 import Images from '@/app/utils/image';
 import {
   ActionIcon,
   Alert,
+  AspectRatio,
   Autocomplete,
   Box,
   Button,
@@ -60,8 +62,39 @@ const Hero = ({ title, content }) => {
   const { setFormValues } = useCustomerRequestStore();
   const router = useRouter();
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const isTabletOrBelow = useMediaQuery('(max-width: 1024px)');
   const Icon = isMobile ? IconArrowsDownUp : IconArrowsLeftRight;
   const notificationShownRef = useRef(false);
+  const [showVideo, setShowVideo] = useState(false);
+  const videoRef = useRef(null);
+  
+  useEffect(() => {
+    if (isMobile) return; // 🚀 stop everything on mobile
+  
+    const video = videoRef.current;
+    if (!video) return;
+  
+    let timer;
+  
+    const startCycle = () => {
+      setShowVideo(false);
+      timer = setTimeout(() => {
+        setShowVideo(true);
+        video.currentTime = 0;
+        video.play();
+      }, 5000);
+    };
+  
+    startCycle();
+  
+    video.addEventListener('ended', startCycle);
+  
+    return () => {
+      clearTimeout(timer);
+      video.removeEventListener('ended', startCycle);
+    };
+  }, [isMobile]);
+  
 
   // First, define the queries
   const { data: seaPortData } = useQuery({
@@ -267,13 +300,15 @@ const Hero = ({ title, content }) => {
 
   return (
     <Box style={styles.heroContainer}>
-      <Container fluid px={'7%'} mt={80} pt="60px" pb={20} style={{ height: '100%', minHeight: '650px', margin: '0 auto' }}>
-        {!isMobile && (
-          <Box style={styles.overlayContainer} pl={20}>
-            <Image src={Images.pentagon_freight} style={{ ...styles.overlayImage, width: '60%' }} h={!isMobile && 600} />
-          </Box>
-        )}
-        <Stack h={'100%'} gap={0} justify="flex-start">
+      <Container fluid px="7%" mt={isTabletOrBelow ? 60 : 20} pt="60px" pb={20}>
+        <Flex
+          align="center"
+          justify="space-between"
+          gap={40}
+          direction={isTabletOrBelow ? 'column' : 'row'}
+          mih={650}
+        >
+        <Stack h={'100%'} w={isTabletOrBelow ? '100%' : '55%'} gap={0} justify={isTabletOrBelow ? "center" : "flex-start"}>
           <Title
             c="rgb(0, 33, 95)"
             style={{ zIndex: 100 }}
@@ -281,15 +316,16 @@ const Hero = ({ title, content }) => {
             order={1}
             lh={isMobile ? 'md' : 'xl'}
             tt="uppercase"
-            size={isMobile ? '32px' : '48px'}
+            size={isMobile ? TYPOGRAPHY.h1.mobile : TYPOGRAPHY.h1.desktop}
+            ta={isTabletOrBelow ? "center" : "left"}
           >
             {highlightText(title)}
           </Title>
-          <Text lh={isMobile ? "md" : "lgx"}  size={isMobile ? '20px' : '24px'} maw={isMobile ? '80%' : '40%'} fw={600} mt={15}>
+          {/* <Text lh={isMobile ? "md" : "lgx"}  size={isMobile ? '20px' : '24px'} maw={isMobile ? '80%' : '40%'} fw={600} mt={15}>
             {highlightText(content)}
-          </Text>
-          <Box h={'100%'}>
-            <Stack mt={isMobile ? '15%' : '4.25%'} gap={0} w={isMobile ? '100%' : '45%'}
+          </Text> */}
+          <Box h={'100%'}  style={{display:"flex",justifyContent:isTabletOrBelow ? "center" : "flex-start"}}>
+            <Stack mt={isMobile ? '15%' : '4.25%'} gap={0} w={isMobile ? '100%' : '80%'}
               p={isMobile ? 20 : 25}
               style={styles.transportOptions} >
               <Flex gap={20} >
@@ -339,7 +375,7 @@ const Hero = ({ title, content }) => {
                       error={formErrors.origin ? 'Please Select origin' : null}
                       styles={{
                         input: {
-                          fontSize: '18px',
+                          fontSize: TYPOGRAPHY.input.large,
                           backgroundColor: '#ffffff45',
                           color: '#fff',
                           border: "2px solid white",
@@ -349,20 +385,20 @@ const Hero = ({ title, content }) => {
                           },
                         },
                         option: {
-                          fontSize: '16px',
+                          fontSize: TYPOGRAPHY.body.normal,
                           color: '#000'
                         },
                         dropdown: {
                           color: '#fff',
                         },
                         label: {
-                          fontSize: '16px',
+                          fontSize: TYPOGRAPHY.label.large,
                           fontWeight: '600',
                           color: '#fff',
                         },
                         error: {
                           padding:"10px 0",
-                          fontSize: '14px',
+                          fontSize: TYPOGRAPHY.caption.normal,
                           color: 'red',
                         },
                       }}
@@ -418,29 +454,29 @@ const Hero = ({ title, content }) => {
                       error={formErrors.destination ? 'Please select destination' : null}
                       styles={{
                         input: {
-                          fontSize: '18px',
+                          fontSize: TYPOGRAPHY.input.large,
                           backgroundColor: '#ffffff45',
                           color: '#fff',
                           border: "2px solid white",
                         },
                         item: {
-                          fontSize: '18px',
+                          fontSize: TYPOGRAPHY.input.large,
                         },
                         option: {
-                          fontSize: '16px',
+                          fontSize: TYPOGRAPHY.body.normal,
                           color: '#000'
                         },
                         dropdown: {
                           color: '#fff',
                         },
                         label: {
-                          fontSize: '16px',
+                          fontSize: TYPOGRAPHY.label.large,
                           fontWeight: '600',
                           color: '#fff',
                         },
                         error: {
                           padding:"10px 0",
-                          fontSize: '14px',
+                          fontSize: TYPOGRAPHY.caption.normal,
                           color: 'red',
                         },
                       }}
@@ -468,7 +504,7 @@ const Hero = ({ title, content }) => {
                     fw={600}
                     styles={{
                       label: {
-                        fontSize: '16px',
+                        fontSize: TYPOGRAPHY.button.large,
                       },
                     }}
                     bg={'#0AC1F1'}
@@ -489,6 +525,66 @@ const Hero = ({ title, content }) => {
             </Stack>
           </Box>
         </Stack>
+        {!isMobile && (
+          <Box
+            w={isTabletOrBelow ? '100%' : '45%'}
+            maw={650}
+            mx="auto"
+            pos="relative"
+            style={{
+              borderRadius: '16px',
+              border: '3px solid #E0E0E0',
+            }}
+          >
+            {/* TEXT */}
+            <Box
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: showVideo ? 0 : 1,
+                transform: showVideo ? 'translateY(-10px)' : 'translateY(0)',
+                transition: 'opacity 0.8s ease, transform 0.8s ease',
+                pointerEvents: 'none',
+                zIndex: 2,
+                padding: '0 20px',
+              }}
+            >
+              <Text size="lg" tt="uppercase" align="center" fw={700}>
+                {highlightText("#Book your shipment# as easy as booking an airline ticket")}
+              </Text>
+            </Box>
+
+            {/* VIDEO */}
+            <Box
+              style={{
+                width: '100%',
+                opacity: showVideo ? 1 : 0,
+                transition: 'opacity 1s ease',
+                borderRadius: '16px',
+              }}
+            >
+              <video
+                ref={videoRef}
+                muted
+                playsInline
+                preload="metadata"
+                style={{
+                  width: '100%',
+                  borderRadius: '16px',
+                  objectFit: 'cover',
+                }}
+              >
+                <source src="/Pentagon-Final.mp4" type="video/mp4" />
+              </video>
+            </Box>
+
+          </Box>
+        )}
+        </Flex>
       </Container>
     </Box>
   );
@@ -508,6 +604,7 @@ const styles = {
   overlayContainer: {
     position: 'relative',
     width: '100%',
+    maxWidth: '45vw',
     height: 'auto',
     display: 'flex',
     justifyContent: 'center',

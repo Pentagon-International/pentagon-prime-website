@@ -13,6 +13,7 @@ import {
   Title,
 } from '@mantine/core';
 import { COLORS } from '../utils/COLORS';
+import { TYPOGRAPHY } from '../utils/TYPOGRAPHY';
 import { highlightText } from '../utils/highlightText';
 import { useMediaQuery } from '@mantine/hooks';
 import { Carousel } from '@mantine/carousel';
@@ -35,10 +36,10 @@ const Ship = ({ first_title, first_content, serviceData }) => {
       <Stack gap={isMobile ? 20 : 100}>
         <Flex direction={'column'}>
           <Title fw={800} tt={'uppercase'}>{highlightText(first_title)}</Title>
-          <Text size='sm' c={COLORS.textColor} lh={isMobile ? '20px' : ''} mt={'lg'} w={isMobile ? '100%' : '100%'}>
+          <Text c={COLORS.textColor} lh={isMobile ? '20px' : ''} mt={'lg'} w={isMobile ? '100%' : '100%'} style={{ fontSize: TYPOGRAPHY.body.large }}>
             {highlightText(first_content)}
           </Text>
-          {isODCProjectCargo && <Text size='sm' c={COLORS.textColor} lh={isMobile ? '20px' : ''} mt={'lg'} w={isMobile ? '100%' : '100%'}>
+          {isODCProjectCargo && <Text style={{ fontSize: TYPOGRAPHY.body.large }} c={COLORS.textColor} lh={isMobile ? '20px' : ''} mt={'lg'} w={isMobile ? '100%' : '100%'}>
             {highlightText("Practical sustainability that is built into the operations! For many clients, ODC often includes renewable-energy equipment. We support the green economy by handling critical green-energy cargo with care and efficiency, while also:")}
           </Text>}
           {isODCProjectCargo && <Box mt={10} pl={40}>
@@ -51,13 +52,14 @@ const Ship = ({ first_title, first_content, serviceData }) => {
                   <IconCheck size={12} />
                 </ThemeIcon>
               }
+              style={{ fontSize: TYPOGRAPHY.body.large }}
             >
               <List.Item>Optimizing routes to reduce unnecessary mileage</List.Item>
               <List.Item>Planning multimodal combinations that lower emissions per ton moved</List.Item>
               <List.Item>Improving utilisation through back-haul planning and consolidation wherever possible</List.Item>
             </List>
           </Box>}
-          {isODCProjectCargo && <Text size='sm' c={COLORS.textColor} lh={isMobile ? '20px' : ''} mt={'lg'} w={isMobile ? '100%' : '100%'}>
+          {isODCProjectCargo && <Text style={{ fontSize: TYPOGRAPHY.body.large }} c={COLORS.textColor} lh={isMobile ? '20px' : ''} mt={'lg'} w={isMobile ? '100%' : '100%'}>
             {highlightText("When we say engineered certainty at every stage, we mean it!")}
             </Text>}
           {isMobile ? (
@@ -83,7 +85,7 @@ const Ship = ({ first_title, first_content, serviceData }) => {
                       <Text size="sm" fw={500} mt={20}>
                         {item.fields.title}
                       </Text>
-                      <Text size='smx' mt={10} c={COLORS.textColor} lh={'20px'}>
+                      <Text mt={10} c={COLORS.textColor} lh={'20px'} style={{ fontSize: TYPOGRAPHY.body.large }}>
                         {item.fields.description}
                       </Text>
                     </GridCol>
@@ -112,7 +114,7 @@ const Ship = ({ first_title, first_content, serviceData }) => {
                     <Text size="md" fw={500} mt={20}>
                       {item.fields.title}
                     </Text>
-                    <Text size='sm' mt={10} c={COLORS.textColor}>
+                    <Text mt={10} c={COLORS.textColor} style={{ fontSize: TYPOGRAPHY.body.large }}>
                       {item.fields.description}
                     </Text>
                   </GridCol>

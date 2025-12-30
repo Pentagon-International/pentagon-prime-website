@@ -6,14 +6,15 @@ const styles = {
   "#": COLORS.portColor,
   "%": COLORS.vision,
   "@": COLORS.primaryColor,
-  "!": theme.fontSizes.md
+  "!": theme.fontSizes.md,
+  "*": "bold",
 };
 
 export const highlightText = (text) => {
   return text
-    ?.split(/(\$[^$]+\$|#[^#]+#|%[^%]+%|@[^@]+@|![^!]+!)/g) // Handle '!' as well
+    ?.split(/(\$[^$]+\$|#[^#]+#|%[^%]+%|@[^@]+@|![^!]+!|\*[^*]+\*)/g)    // Handle '!' as well
     ?.map((part, index) => {
-      const match = part?.match(/^(\$|#|%|@|!)(.+)\1$/); // Match wrapped content
+      const match = part?.match(/^(\$|#|%|@|!|\*)(.+)\1$/); // Match wrapped content
 
       if (match) {
         const char = match[1]; // Extract special character
@@ -27,7 +28,13 @@ export const highlightText = (text) => {
             </span>
           );
         }
-
+        if (char === "*") {
+          return (
+            <span key={index} style={{ fontWeight: styles["*"], color: "#0a0a0a"  }}>
+              {highlightText(content)} {/* Recursive call to handle nested % */}
+            </span>
+          );
+        }
         return (
           <span key={index} style={{ color: styles[char] }}>
             {content?.split(/(<br\s*\/?>)/gi).map((seg, i) =>

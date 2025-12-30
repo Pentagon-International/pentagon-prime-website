@@ -4,6 +4,7 @@ import { IconCircleCheck, IconCircleDashedCheck } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
 import { customerCentricListData } from "../utils/llistData";
 import { COLORS } from "../utils/COLORS";
+import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
 import { useMediaQuery } from "@mantine/hooks";
 import { highlightText } from "../utils/highlightText";
 
@@ -20,7 +21,7 @@ const CustomerCentric = () => {
         lh={isMobile ? "md" : "lgx2"}
         fw={800}
         mb={40}
-        size={isMobile ? "20px" : "34px"}
+        size={isMobile ? TYPOGRAPHY.h4.mobile : TYPOGRAPHY.h3.desktop}
       >
         {highlightText("Built around you with a # customer-centric # approach")}
       </Title>

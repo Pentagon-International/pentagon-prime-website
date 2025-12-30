@@ -309,7 +309,7 @@ const WhatsAppButton = memo(() => {
       style={buttonStyle}
       color={'green'}
       radius={50}
-      size={65}
+      size={45}
     >
       <IconBrandWhatsapp size={30} />
     </ActionIcon>

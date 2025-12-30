@@ -5,6 +5,7 @@ import ServiceCard from "../component/common/ServiceCard";
 import { client } from "@/app/api/contentful";
 import { highlightText } from "../utils/highlightText";
 import { COLORS } from "../utils/COLORS";
+import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
 import { useMediaQuery } from "@mantine/hooks";
 import { Carousel } from "@mantine/carousel";
 
@@ -36,7 +37,7 @@ const LogisticsServices = ({ title }) => {
     <Container fluid px={"7%"} py={"70px"} >
       <Flex direction={'row'} align={'center'} gap={'lg'} justify={'space-between'}>
         <Stack>
-          <Title tt={"uppercase"} lh={  isMobile ? "md" : "lgx2"} fw={800} size={isMobile ? "20px" : "34px"}>
+          <Title tt={"uppercase"} lh={  isMobile ? "md" : "lgx2"} fw={800} size={isMobile ? TYPOGRAPHY.h4.mobile : TYPOGRAPHY.h3.desktop}>
             {highlightText(title)}
           </Title>
         </Stack>

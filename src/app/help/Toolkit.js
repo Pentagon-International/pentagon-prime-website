@@ -2,6 +2,7 @@ import { Center, Container, Grid, Text, Title } from '@mantine/core';
 import { client } from '../api/contentful';
 import ServiceCard from '../component/common/ServiceCard';
 import { highlightText } from '../utils/highlightText';
+import { TYPOGRAPHY } from '../utils/TYPOGRAPHY';
 
 const Toolkit = async ({ title, content }) => {
   const res = await client.getEntries({
@@ -14,7 +15,7 @@ const Toolkit = async ({ title, content }) => {
   return (
     <Container fluid px={'7%'} py={'70px'}>
       <Center>
-        <Title size={'40px'} fw={800} lh={'lgx2'} tt={'uppercase'}>{highlightText(title)}</Title>
+        <Title size={TYPOGRAPHY.h2.desktop} fw={800} lh={'lgx2'} tt={'uppercase'}>{highlightText(title)}</Title>
       </Center>
       <Center>
         <Text size='sm'>

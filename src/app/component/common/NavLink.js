@@ -1,5 +1,6 @@
 "use client";
 import { COLORS } from "@/app/utils/COLORS";
+import { TYPOGRAPHY } from "@/app/utils/TYPOGRAPHY";
 import {
   Anchor,
   Divider,
@@ -100,7 +101,7 @@ export const featuresMap = {
     },
     {
       icon: IconClipboard,
-      title: "Custom Clearing",
+      title: "Custom Clearance",
       link: "/service/customs-clearance",
     },
     {
@@ -241,7 +242,7 @@ const FeatureItem = memo(({ feature }) => {
           style={{
             letterSpacing: '0.1px',
             lineHeight: 1.2,
-            fontSize: 13,
+            fontSize: TYPOGRAPHY.body.small,
             textDecoration: 'none',
           }}
         >
@@ -289,7 +290,7 @@ export const NavLink = memo(({ item }) => {
     alignItems: "center",
     gap: 5,
     textDecoration: "none",
-    fontSize: "16px",
+    fontSize: TYPOGRAPHY.body.normal,
     fontWeight: 900,
     padding: "8px 16px",
     borderRadius: "20px",
@@ -358,10 +359,11 @@ export const NavLink = memo(({ item }) => {
           onMouseLeave={handleMouseLeave}
         >
           <Text 
-            size="16px" 
+            size={TYPOGRAPHY.body.normal} 
+            fw={500}
             style={{ 
               color: textColor,
-              fontSize: "16px"
+              fontSize: TYPOGRAPHY.body.normal
             }}
           >
             {item.label}
@@ -394,7 +396,7 @@ export const NavLink = memo(({ item }) => {
         }}
       >
         <Group gap={10} justify="space-between">
-          <Text fw={500} size="14px" color={COLORS.secondaryColor}>
+          <Text fw={500} size={TYPOGRAPHY.body.normal} color={COLORS.secondaryColor}>
             {item.label}
           </Text>
         </Group>
@@ -415,10 +417,11 @@ export const NavLink = memo(({ item }) => {
       onMouseLeave={handleNonDropdownMouseLeave}
     >
       <Text 
-        size="16px" 
+        size={TYPOGRAPHY.body.normal} 
+        fw={500}
         style={{ 
           color: textColor,
-          fontSize: "16px"
+          fontSize: TYPOGRAPHY.body.normal
         }}
       >
         {item.label}

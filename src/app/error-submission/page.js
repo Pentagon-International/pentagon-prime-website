@@ -1,6 +1,7 @@
 'use client'
 import { Button, Container, Image, Text, Title } from "@mantine/core";
 import { useRouter } from "next/navigation";
+import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
 
 const page = async () => {
     const router = useRouter();
@@ -42,7 +43,7 @@ const page = async () => {
                     style={{
                         marginTop: '16px',
                         color: '#555',
-                        fontSize: '16px',
+                        fontSize: TYPOGRAPHY.body.normal,
                         maxWidth: '600px',
                         margin: '16px auto',
                     }}

@@ -2,6 +2,7 @@
 import { Container, Title, Text, SimpleGrid, Image, Box, Group } from '@mantine/core';
 import React from 'react';
 import { COLORS } from '../utils/COLORS';
+import { TYPOGRAPHY } from '../utils/TYPOGRAPHY';
 import { useMediaQuery } from '@mantine/hooks';
 
 const dummyData = [
@@ -22,7 +23,7 @@ const Airlines = () => {
   return (
     <Container fluid px="7%" py="70px">
       {/* <Title size="lg" tt="uppercase" ta="center"> */}
-      <Title size={isMobile ? '22px' : 'lg'} lh={isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800} ta="center">
+      <Title size={isMobile ? TYPOGRAPHY.h5.desktop : 'lg'} lh={isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800} ta="center">
         AIR LINES
       </Title>
       <Text mt={10} size="sm" ta="center" c={COLORS.textColor}>

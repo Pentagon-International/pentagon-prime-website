@@ -10,6 +10,18 @@ const BottomCard = ({ title, text, button }) => {
 
   const isMobile = useMediaQuery('(max-width: 768px)');
 
+  const rootToWhatsApp = () => {
+    const isAndroid = /android/i.test(navigator.userAgent);
+  
+    // console.log("Is Android:", isAndroid);
+    const whatsappURL = isAndroid
+      ? `intent://send/?phone=917400425960#Intent;scheme=smsto;package=com.whatsapp;end`
+      : `https://wa.me/917400425960`;
+  
+    // window.location.href = whatsappURL;
+      window.open(whatsappURL, '_blank');
+  };
+
   return (
     <Box
       style={{
@@ -26,7 +38,7 @@ const BottomCard = ({ title, text, button }) => {
             <Text ta={isMobile && 'center'} size='sm' c={COLORS.textColor}>{text}</Text>
           </Stack>
           <Button mt={isMobile && '20px'} fz={'sm'} size='lg' fw={600} bg={COLORS.serviceColor}
-            onClick={() => router.push('/contact')}
+            onClick={() => rootToWhatsApp()}
           >
             {button}
           </Button>

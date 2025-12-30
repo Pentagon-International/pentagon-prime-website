@@ -3,6 +3,7 @@ import { ActionIcon, Autocomplete, Button, Center, Divider, Flex, Group, Modal, 
 import { IconArrowsDownUp, IconArrowsLeftRight, IconBox, IconMail, IconMapPin, IconPlane, IconSquareHalf } from '@tabler/icons-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { COLORS } from '../utils/COLORS';
+import { TYPOGRAPHY } from '../utils/TYPOGRAPHY';
 import { sendEnquiryEmail } from '../../../lib/sendEmail';
 import { validation } from '../utils/validateInput';
 import { notifications } from '@mantine/notifications';
@@ -152,13 +153,13 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook, t
           fw={500}
           styles={{
             input: {
-              fontSize: isMobile ? '14px' : '16px',
+              fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
             },
             option: {
-              fontSize: isMobile ? '14px' : '16px',
+              fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
             },
             label: {
-              fontSize: isMobile ? '14px' : '16px',
+              fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
             }
           }}
           radius="md"
@@ -188,13 +189,13 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook, t
           fw={500}
           styles={{
             input: {
-              fontSize: isMobile ? '14px' : '16px',
+              fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
             },
             option: {
-              fontSize: isMobile ? '14px' : '16px',
+              fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
             },
             label: {
-              fontSize: isMobile ? '14px' : '16px',
+              fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
             }
           }}
           radius="md"
@@ -218,7 +219,7 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook, t
               formHook.setFieldValue('typeOfBooking', val);
             }}
             fullWidth
-            size={isMobile ? '12px' : "14px"}
+            size={isMobile ? TYPOGRAPHY.button.small : TYPOGRAPHY.button.normal}
             radius={'md'}
             color={'#CDF6FF'}
             defaultValue="FCL"
@@ -244,13 +245,13 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook, t
                 withAsterisk
                 styles={{
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                   }
                 }}
                 radius="md"
@@ -267,13 +268,13 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook, t
                 radius="md"
                 styles={{
                   input: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? '12px' : '14px',
+                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
 
                   }
                 }}
@@ -290,13 +291,13 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook, t
               radius="md"
               styles={{
                 input: {
-                  fontSize: isMobile ? '14px' : '16px',
+                  fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                 },
                 label: {
-                  fontSize: isMobile ? '14px' : '16px',
+                  fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
                 },
                 error: {
-                  fontSize: isMobile ? '12px' : '14px',
+                  fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
                 }
               }}
               {...formHook.getInputProps('email')}
@@ -316,7 +317,7 @@ const PortComponent = ({ transportData, modalOpened, setModalOpened, formHook, t
           radius={'md'}
           styles={{
             label: {
-              fontSize: '16px',
+              fontSize: TYPOGRAPHY.button.large,
             },
           }}
           color={COLORS.serviceColor}

@@ -1,4 +1,5 @@
 import { COLORS } from "@/app/utils/COLORS";
+import { TYPOGRAPHY } from "@/app/utils/TYPOGRAPHY";
 import { theme } from "@/app/utils/theme";
 import { Card, Stack, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -30,7 +31,7 @@ const PrimeListCard = ({ item, backgroundColor, IconComponent, iconColor }) => {
         <Title
           order={4}
           fw={700}
-          size="20px"
+          size={TYPOGRAPHY.h4.mobile}
           mt={isMobile ? 0 : 20}
           c="rgb(0, 33, 95)"
           lh="sm"
