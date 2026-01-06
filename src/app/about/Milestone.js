@@ -31,7 +31,7 @@ const Milestone = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
-    <Container fluid px={'7%'}>
+    <Container fluid px={'4%'}>
       <Title tt={'uppercase'} fw={800} lh={'lgx2'} size={isMobile ? TYPOGRAPHY.h2.mobile : TYPOGRAPHY.h2.desktop}>{highlightText("#Our story #: Leadership & Milestones")}</Title>
                 {/* <Text c={COLORS.textColor} size="base" lh="sm" maw={ isMobile ? '100%' : '80%'} mt={14}> */}
       <Text size='md' mt={20} c="rgb(0, 33, 95)" fw={800}>Founded in 2007</Text>

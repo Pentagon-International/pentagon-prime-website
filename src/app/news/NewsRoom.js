@@ -6,7 +6,7 @@ import { highlightText } from '../utils/highlightText';
 const NewsRoom = ({ title, content }) => {
   return (
     <Box mt={60} style={{ maxHeight: '80vh', backgroundColor: '#0E53F2', overflow: 'hidden' }}>
-      <Container fluid px="7%" style={{ color: COLORS.primaryColor }}>
+      <Container fluid px="2%" style={{ color: COLORS.primaryColor }}>
         <Grid columns={2} style={{ alignItems: 'start' }}>
           <GridCol
             span={1}

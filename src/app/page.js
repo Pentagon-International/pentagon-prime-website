@@ -28,15 +28,15 @@ const Page = async () => {
   return (
     <div>
       <Hero title={heroData.title} content={heroData.content} />
-      <Vision title={visionData.title} content={visionData.content} tradeItems={tradeItems} tradeContent={tradeContent} />
       <PentagonPrime title={primeData.title} content={primeData.content} title2={primeData.title2}/>
       <LogisticsServices title={serviceData.title} />
+      <Vision title={visionData.title} content={visionData.content} tradeItems={tradeItems} tradeContent={tradeContent} />
       <LogisticsTeam title={teamData.title} content={teamData.content} />
+      <Partner title={partnerData.title} content={partnerData.content} />
       <CustomerCentric />
       <PrimeNetwork content={primeNetwork} />
       <Certificate />
       <News />
-      <Partner title={partnerData.title} content={partnerData.content} />
       <HighlightContent />
     </div>
   );

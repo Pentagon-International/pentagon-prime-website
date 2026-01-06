@@ -34,7 +34,7 @@ const LogisticsServices = ({ title }) => {
   const anchorText = "Know More";
 
   return (
-    <Container fluid px={"7%"} py={"70px"} >
+    <Container fluid px={"2%"} py={"70px"} >
       <Flex direction={'row'} align={'center'} gap={'lg'} justify={'space-between'}>
         <Stack>
           <Title tt={"uppercase"} lh={  isMobile ? "md" : "lgx2"} fw={800} size={isMobile ? TYPOGRAPHY.h4.mobile : TYPOGRAPHY.h3.desktop}>

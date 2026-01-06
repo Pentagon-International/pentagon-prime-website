@@ -43,7 +43,7 @@ const CustomerChoose = ({ title, content, title2 }) => {
   }, []);
 
   return (
-    <Container fluid px="7%" py="70px">
+    <Container fluid px="2%" py="70px">
       {/* Services Section */}
       <Box mt={40}>
         <Title

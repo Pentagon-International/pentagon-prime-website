@@ -3,7 +3,7 @@ import React from "react";
 
 const HighlightContent = () => {
   return (
-    <Container fluid px={"7%"} pb={"30px"}>
+    <Container fluid px={"2%"} pb={"30px"}>
       <Divider my="md" size="sm" />
       <Stack align="stretch" justify="center" w="100%" py="sm">
         <Text ta="center" fs="italic" fz={20}>Operating since 2007 - part of a multi-vertical logistics group</Text>

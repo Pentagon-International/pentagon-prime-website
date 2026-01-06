@@ -63,7 +63,7 @@ const Header = () => {
     boxShadow: "0 0 6px 3px rgba(0, 0, 0, 0.1)",
     backdropFilter: "blur(10px)",
     zIndex: 1000,
-    padding: "8px 7%",
+    padding: "8px 1%",
     color: COLORS.primaryColor,
     height: "75px",
     display:'flex',
@@ -146,7 +146,7 @@ const Header = () => {
   }, [isContactPage]);
 
   return (
-    <Container fluid px="7%">
+    <Container fluid px="2%">
       <Box>
         <header style={headerStyle}>
           <Flex justify="space-between" align="center" h="50" w="100%">
@@ -164,7 +164,7 @@ const Header = () => {
                   Pentagon Prime
                 </Text>
                 <Text size="xs" fw={500} c="rgb(0, 33, 95)" style={{alignSelf: 'flex-start'}}>
-                  Logistics Automated
+                  Logistics.Automated
                 </Text>
               </Flex>
             </Link>

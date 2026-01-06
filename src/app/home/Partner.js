@@ -14,7 +14,7 @@ import Autoplay from 'embla-carousel-autoplay';
 const Partner = ({ title, content }) => {
   const [partners, setPartners] = useState([]);
   const router = useRouter();
-  const autoplay = useRef(Autoplay({ delay: 2000 }));
+  const autoplay = useRef(Autoplay({ delay: 5000 }));
 
   const isMobile = useMediaQuery('(max-width:768px)');
 
@@ -35,7 +35,7 @@ const Partner = ({ title, content }) => {
   }, []);
 
   return (
-    <Container px={'7%'} py={'70px'} fluid>
+    <Container px={'4%'} pt={'40px'} pb={'70px'} fluid>
       <Flex align={'center'} justify={'space-between'} direction={isMobile ? 'column' : 'row'}>
         <Stack>
           <Title size="lg" tt={'uppercase'} fw={800}>
@@ -75,6 +75,7 @@ const Partner = ({ title, content }) => {
           containScroll="trimSnaps"
           align="start"
           loop
+          speed={1}
           className={isMobile && 'custom-carousel , indicator'}
           withIndicators
           plugins={[autoplay.current]}

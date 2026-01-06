@@ -42,7 +42,7 @@ const PentagonPrime = ({ title, content, title2 }) => {
   }, []);
 
   return (
-    <Container fluid px="7%" py="70px" >
+    <Container fluid px="2%" py="70px" >
 
       {/* Services Section */}
       <Box mt={20}>
@@ -59,7 +59,7 @@ const PentagonPrime = ({ title, content, title2 }) => {
         </Title>
 
         {/* Responsive Grid or Carousel */}
-        <Grid columns={9} mt="lg" gutter="xl" w="100%">
+        <Grid columns={9} mt="lg" gutter="xl" grow w="100%">
           {isMobile ? (
             <Carousel
               align="start"

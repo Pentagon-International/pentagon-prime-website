@@ -28,16 +28,15 @@ const BottomCard = ({ title, text, button }) => {
         backgroundImage: `url(${Images.tradeCard_background2})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        padding: isMobile ? '2px' : '30px',
       }}
     >
-      <Container fluid px="7%" py="lg">
-        <Flex direction={isMobile ? 'column' : 'row'} align={'center'} justify={'space-between'}>
+      <Container fluid px="2%" py="lg">
+        <Flex direction={isMobile ? 'column' : 'row'} align={'center'} gap={20} justify={'space-between'}>
           <Stack>
             <Title ta={isMobile && 'center'} size={'lg'} tt={'uppercase'}>{title}</Title>
             <Text ta={isMobile && 'center'} size='sm' c={COLORS.textColor}>{text}</Text>
           </Stack>
-          <Button mt={isMobile && '20px'} fz={'sm'} size='lg' fw={600} bg={COLORS.serviceColor}
+          <Button style={{width: 'fit-content', flexShrink: 0}} fz={'sm'} size='lg' fw={600} bg={COLORS.serviceColor}
             onClick={() => rootToWhatsApp()}
           >
             {button}

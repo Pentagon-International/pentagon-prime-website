@@ -32,7 +32,7 @@ const Ship = ({ first_title, first_content, serviceData }) => {
   const isODCProjectCargo = useMemo(() => pathname === "/service/odc-project-cargo/", [pathname]);
 
   return (
-    <Container fluid px={'7%'} py={isMobile ? 0 : '10px'} mb={isMobile ? 20 : 30}>
+    <Container fluid px={'4%'} py={isMobile ? 0 : '10px'} mb={isMobile ? 20 : 30}>
       <Stack gap={isMobile ? 20 : 100}>
         <Flex direction={'column'}>
           <Title fw={800} tt={'uppercase'}>{highlightText(first_title)}</Title>
@@ -68,17 +68,30 @@ const Ship = ({ first_title, first_content, serviceData }) => {
               {sortedServiceData.map((item) => (
                   <Carousel.Slide key={item.sys.id} w={'100%'}>
                     <GridCol key={item.sys.id} span={15} mt={'md'}>
-                      <Box style={{ overflow: 'hidden', transition: 'all 0.5s ease', borderRadius: '12px', width: '100%', height: '250px' }}>
+                      <Box style={{ overflow: 'hidden', transition: 'all 0.5s ease', borderRadius: '12px', width: '100%', height: '250px', position: 'relative', margin: 0, padding: 0 }}>
                         <Image
-                          h={250}
                           src={item.fields.image?.fields?.file?.url}
                           alt={item.name}
-                          style={{ transition: 'all 0.5s ease', overflow: 'hidden' }}
+                          fit="cover"
+                          style={{ 
+                            position: 'absolute',
+                            inset: 0,
+                            width: '100%', 
+                            height: '100%', 
+                            objectFit: 'cover',
+                            transition: 'transform 0.5s ease',
+                            transform: 'scale(1)',
+                            transformOrigin: 'center center',
+                            willChange: 'transform',
+                            margin: 0,
+                            padding: 0,
+                            display: 'block'
+                          }}
                           onMouseEnter={(e)=>{
-                            e.currentTarget.style.scale = "1.05";
+                            e.currentTarget.style.transform = "scale(1.05)";
                           }}
                           onMouseLeave={(e)=>{
-                            e.currentTarget.style.scale = "1";
+                            e.currentTarget.style.transform = "scale(1)";
                           }}
                         />
                       </Box>
@@ -97,17 +110,30 @@ const Ship = ({ first_title, first_content, serviceData }) => {
             <Grid columns={3} gutter={70} mt={60}>
               {sortedServiceData.map((item) => (
                   <GridCol key={item.sys.id} span={1} >
-                    <Box style={{ overflow: 'hidden', transition: 'all 0.5s ease', borderRadius: '12px', width: '100%', height: '270px', border: '1px solid #E0E0E0' }}>
+                    <Box style={{ overflow: 'hidden', transition: 'all 0.5s ease', borderRadius: '12px', width: '100%', height: '270px', border: '2px solid #E0E0E0', position: 'relative',cursor:'pointer', margin: 0, padding: 0, display:'flex', justifyContent:'center', alignItems:'center', boxShadow:'0 0 12px 0 rgba(0, 0, 0, 0.2)' }}>
                       <Image
-                        h={275}
                         src={item.fields.image?.fields?.file?.url}
                         alt={item.name}
-                        style={{ transition: 'all 0.5s ease', overflow: 'hidden' }}
+                        fit="cover"
+                        style={{ 
+                          position: 'absolute',
+                          inset: 0,
+                          width: '100%', 
+                          height: '100%', 
+                          objectFit: 'cover',
+                          transition: 'transform 0.5s ease',
+                          transform: 'scale(1)',
+                          transformOrigin: 'center center',
+                          willChange: 'transform',
+                          margin: 0,
+                          padding: 0,
+                          display: 'block'
+                        }}
                         onMouseEnter={(e)=>{
-                          e.currentTarget.style.scale = "1.05";
+                          e.currentTarget.style.transform = "scale(1.05)";
                         }}
                         onMouseLeave={(e)=>{
-                          e.currentTarget.style.scale = "1";
+                          e.currentTarget.style.transform = "scale(1)";
                         }}
                       />
                     </Box>

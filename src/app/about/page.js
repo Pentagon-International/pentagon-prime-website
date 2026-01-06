@@ -23,12 +23,12 @@ const page = async () => {
     <div style={{
       overflowX: 'hidden',
     }}>
-      <About title={aboutData.title} content={aboutData.content} />
+      {/* <About title={aboutData.title} content={aboutData.content} /> */}
       <Mission />
       {/* <Values /> */}
-      <CustomerBenefits />
+      {/* <CustomerBenefits /> */}
       <Milestone />
-      <CustomerChoose />
+      {/* <CustomerChoose /> */}
       <Members />
       <BottomCard title={title} text={text} button={button} />
     </div>

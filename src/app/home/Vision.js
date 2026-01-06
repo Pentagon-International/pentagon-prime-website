@@ -154,9 +154,9 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
   return (
     <Container
       fluid
-      px={"7%"}
+      px={"2%"}
       py={20}
-      pb={30}
+      pb={40}
       style={styles.container}
     >
       <Trade items={tradeItems} content={tradeContent} />

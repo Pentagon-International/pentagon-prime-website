@@ -23,7 +23,7 @@ const page = async () => {
   try {
     const res = await client.getEntries({
       content_type: 'newsEvents',
-      order: 'sys.createdAt',
+      order: '-sys.updatedAt',
     });
     blogItems = res.items || [];
   } catch (error) {

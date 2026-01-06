@@ -5,7 +5,7 @@ import Retail from "../Retail";
 import Ship from "../Ship";
 import AutoplayCarousel from "@/app/component/common/AutoplayCarousel";
 import { Box, Image, Title } from "@mantine/core";
-import VideoCarousel from "@/app/component/common/VideoCarousel/VideoCarousel";
+import MediaCarousel from "@/app/component/common/MediaCarousel/MediaCarousel";
 import { highlightText } from "../../utils/highlightText";
 import { TYPOGRAPHY } from "../../utils/TYPOGRAPHY";
 import ListCard from "@/app/component/common/ListCard";
@@ -47,8 +47,6 @@ const cargoSlides = [
   { src: "/cargo-images/cargo-movement-picture-1.jpg", alt: "cargo-movement-picture-1" },
   { src: "/cargo-images/cargo-movement-picture-2.jpg", alt: "cargo-movement-picture-2" },
   { src: "/cargo-images/cargo-project-picture.jpg", alt: "cargo-project-picture" },
-  { src: "/cargo-images/cargo-project-picture-1.jpg", alt: "cargo-project-picture-1" },
-  { src: "/cargo-images/cargo-project-picture-2.jpg", alt: "cargo-project-picture-2" },
   { src: "/cargo-images/cargo-project-picture-3.jpg", alt: "cargo-project-picture-3" },
   { src: "/cargo-images/cargo-project-picture-4.jpg", alt: "cargo-project-picture-4" },
   { src: "/cargo-images/cargo-project-picture-5.jpg", alt: "cargo-project-picture-5" },
@@ -66,9 +64,61 @@ const cargoVideos = [
   "/cargo-videos/cargo-video-4.mp4",
   "/cargo-videos/cargo-video-5.mp4",
   "/cargo-videos/cargo-video-6.mp4",
-  "/cargo-videos/cargo-video-7.mp4",
   "/cargo-videos/cargo-video-8.mp4"
 ];
+
+const charteringSlides = [
+  { src: "/chartering-coastal-movements/cargo-project-picture-1.jpg", alt: "cargo-project-picture-1" },
+  { src: "/chartering-coastal-movements/cargo-project-picture-2.jpg", alt: "cargo-project-picture-2" },
+  { src: "/chartering-coastal-movements/cargo-project-picture-5.jpg", alt: "cargo-project-picture-2" },
+];
+
+const charteringVideos = [
+  "/chartering-coastal-movements/cargo-video-7.mp4"
+];
+
+const charteringMedia = (() => {
+  const imageItems = charteringSlides.map(slide => ({ type: 'image', src: slide.src, alt: slide.alt }));
+  const videoItems = charteringVideos.map(video => ({ type: 'video', src: video }));
+  
+  // Interleave images and videos (mix them)
+  const mixed = [];
+  const maxLength = Math.max(imageItems.length, videoItems.length);
+  
+  for (let i = 0; i < maxLength; i++) {
+    if (i < imageItems.length) {
+      mixed.push(imageItems[i]);
+    }
+    if (i < videoItems.length) {
+      mixed.push(videoItems[i]);
+    }
+  }
+  
+  return mixed;
+})();
+
+// Combined media array for unified carousel (images + videos) - mixed order
+const cargoMedia = (() => {
+  const imageItems = cargoSlides.map(slide => ({ type: 'image', src: slide.src, alt: slide.alt }));
+  const videoItems = cargoVideos.map(video => ({ type: 'video', src: video }));
+  
+  // Interleave images and videos (mix them)
+  const mixed = [];
+  const maxLength = Math.max(imageItems.length, videoItems.length);
+  
+  for (let i = 0; i < maxLength; i++) {
+    if (i < imageItems.length) {
+      mixed.push(imageItems[i]);
+    }
+    if (i < videoItems.length) {
+      mixed.push(videoItems[i]);
+    }
+  }
+  
+  return mixed;
+})();
+
+const excludeShippingData = ["exhibition-cargo", "break-bulk-cargo", "cross-country-trade"];
 
 
 const ServicePage = async ({ params }) => {
@@ -108,11 +158,6 @@ const ServicePage = async ({ params }) => {
           <ListCard listData={odcProjectCargoList} sectionTitle={"we make it possible"} />
         </Box>
       )}
-      {resData?.reference === "odc-project-cargo" && (
-        <Box py={20} mb={50} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
-          <AutoplayCarousel slides={cargoSlides} interval={4000} height={450} />
-        </Box>
-      )}
       {resData?.reference === "customs-clearance" && (
         <Box py={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
           <ListCard listData={customClearanceList} sectionTitle={"What we do: end-to-end, shipper-first"} />
@@ -139,30 +184,37 @@ const ServicePage = async ({ params }) => {
         </Box>
       )}
 
-      <Ship
+      {resData?.reference === "chartering-and-coastal-movements" && (
+        <Box py={20} mt={20} mb={20} style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", }}>
+          <MediaCarousel items={charteringMedia} interval={4000} height={550} />
+        </Box>
+      )}
+      {!excludeShippingData.includes(resData?.reference) && (
+        <Ship
         first_title={resData?.title3}
         first_content={resData?.content2}
         serviceData={shippingData}
         />
-        {/* #add video carousel here if resData?.reference === "odc-project-cargo" */}
+      )}
+        {/* Unified media carousel (images + videos) for odc-project-cargo */}
         {resData?.reference === "odc-project-cargo" && (
           <Box py={20} mt={50} mb={20} style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", }}>
-            <Title tt="uppercase" size={TYPOGRAPHY.h4.desktop} fw={800} lh={'lgx2'}>{highlightText("Our Cargo # Movement # Videos")}</Title>
-            <VideoCarousel videos={cargoVideos} />
+            <Title tt="uppercase" size={TYPOGRAPHY.h4.desktop} fw={800} lh={'lgx2'} mb={20}>{highlightText("Our Cargo # Movements #")}</Title>
+            <MediaCarousel items={cargoMedia} interval={4000} height={550} />
           </Box>
         )}
-        {resData?.reference === "exhibition-cargo" && (
+        {/* {resData?.reference === "exhibition-cargo" && (
         <Box py={20} mb={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
           <ListCard listData={exhibitionCargoList2} sectionTitle={"Sustainability - practical, measurable steps"} />
         </Box>
-      )}
+      )} */}
         {resData?.reference === "break-bulk-cargo" && (
         <Box py={20} mb={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
           <ListCard listData={projectCargoList2} sectionTitle={"Why shippers choose Pentagon Prime"} />
         </Box>
       )}
         {resData?.reference === "cross-country-trade" && (
-        <Box py={20} mb={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+        <Box mb={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
           <ListCard listData={crossTradeList2} sectionTitle={"Why shippers choose Pentagon Prime"} />
         </Box>
       )}

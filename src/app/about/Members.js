@@ -44,7 +44,7 @@ const Members = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   return (
-    <Container fluid px={"7%"} pb={"lg"} my={0}>
+    <Container fluid px={"2%"} pb={"lg"} my={0}>
       <Flex justify="center" my={50}>
         <Title
           tt={"uppercase"}

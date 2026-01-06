@@ -5,12 +5,12 @@ import { TYPOGRAPHY } from '../utils/TYPOGRAPHY';
 const FeaturedNews = ({res}) => {
 
   return (
-    <Container fluid px={'7%'} py={'70px'}>
+    <Container fluid px={'4%'} py={'70px'}>
       <Title size={'lg'} tt={'uppercase'}>Featured in the News</Title>
       <Grid columns={3} gutter={'xl'} mt={30}>
         {res.items.map((item) => (
           <GridCol key={item.sys.id} span={1}>
-            <Image src={item.fields.image?.fields?.file?.url} alt={item.name} />
+            <Image src={item.fields.image?.fields?.file?.url} radius={'md'} alt={item.name} />
             <Text
               c={COLORS.textColor}
               tt={'uppercase'}
@@ -25,7 +25,7 @@ const FeaturedNews = ({res}) => {
               href={item.fields.knowmore}
               style={{
                 marginTop: '20px',
-                color: COLORS.serviceColor,
+                color: 'rgb(0, 33, 95)',
                 textDecoration: 'underline',
                 cursor: 'pointer',
                 fontSize: TYPOGRAPHY.caption.normal,

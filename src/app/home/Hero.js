@@ -82,7 +82,7 @@ const Hero = ({ title, content }) => {
         setShowVideo(true);
         video.currentTime = 0;
         video.play();
-      }, 5000);
+      }, 4000);
     };
   
     startCycle();
@@ -300,13 +300,13 @@ const Hero = ({ title, content }) => {
 
   return (
     <Box style={styles.heroContainer}>
-      <Container fluid px="7%" mt={isTabletOrBelow ? 60 : 20} pt="60px" pb={20}>
+      <Container fluid px="2%" mt={isTabletOrBelow ? 50 : 20} pt="60px" pb={20}>
         <Flex
           align="center"
           justify="space-between"
           gap={40}
           direction={isTabletOrBelow ? 'column' : 'row'}
-          mih={650}
+          mih={!isMobile && 550}
         >
         <Stack h={'100%'} w={isTabletOrBelow ? '100%' : '55%'} gap={0} justify={isTabletOrBelow ? "center" : "flex-start"}>
           <Title
@@ -316,7 +316,7 @@ const Hero = ({ title, content }) => {
             order={1}
             lh={isMobile ? 'md' : 'xl'}
             tt="uppercase"
-            size={isMobile ? TYPOGRAPHY.h1.mobile : TYPOGRAPHY.h1.desktop}
+            size={isMobile ? TYPOGRAPHY.h1.mobile : "44px"}
             ta={isTabletOrBelow ? "center" : "left"}
           >
             {highlightText(title)}
@@ -325,7 +325,7 @@ const Hero = ({ title, content }) => {
             {highlightText(content)}
           </Text> */}
           <Box h={'100%'}  style={{display:"flex",justifyContent:isTabletOrBelow ? "center" : "flex-start"}}>
-            <Stack mt={isMobile ? '15%' : '4.25%'} gap={0} w={isMobile ? '100%' : '80%'}
+            <Stack mt={isMobile ? '10%' : '4.25%'} gap={0} w={isMobile ? '100%' : '80%'}
               p={isMobile ? 20 : 25}
               style={styles.transportOptions} >
               <Flex gap={20} >
@@ -527,8 +527,8 @@ const Hero = ({ title, content }) => {
         </Stack>
         {!isMobile && (
           <Box
-            w={isTabletOrBelow ? '100%' : '45%'}
-            maw={650}
+            w={isTabletOrBelow ? '100%' : '50%'}
+            maw={800}
             mx="auto"
             pos="relative"
             style={{
@@ -595,7 +595,7 @@ export default Hero;
 const styles = {
   heroContainer: {
     color: 'rgb(1, 34, 95)',
-    minHeight: '650px',
+    minHeight: '550px',
     position: 'relative',
     overflowY: 'hidden',
     top: 0,
@@ -627,6 +627,7 @@ const styles = {
     borderRadius: '24px',
     backgroundColor: `#000000bf`,
     gap: '12px',
+    maxWidth: '450px',
   },
   groupstyle: {
     padding: '10px 16px',

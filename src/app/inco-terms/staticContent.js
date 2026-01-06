@@ -39,7 +39,7 @@ const StaticContents = () => {
     open();
   };
   return (
-    <Container fluid px="7%" py="70px">
+    <Container fluid px="2%" py="70px">
       <Grid align="center" justify="space-between">
         {/* <Grid.Col span={isMobile ? 12 : 6} p={'xl'}>
                     <Image

@@ -20,7 +20,7 @@ const PrimeNetwork = ({content}) => {
   const isMobile = useMediaQuery('(max-width:768px)');
 
   return (
-    <Container fluid px="7%" py="70px" mt={20} pb={0} mb={80}>
+    <Container fluid px="2%" py="70px" mt={20} pb={0} mb={80}>
       <Flex gap="md" wrap="nowrap" direction={isMobile ? 'column' : 'row'}>
         <Flex direction={'column'}>
           <Title tt="uppercase" tw="balance" fw={800}>

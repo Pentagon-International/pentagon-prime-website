@@ -14,7 +14,7 @@ const Header = ({ title, content, top }) => {
         alignItems: 'center',
       }}
     >
-      <Container fluid px="7%" style={{ color: COLORS.primaryColor, width: '100%' }}>
+      <Container fluid px="2%" style={{ color: COLORS.primaryColor, width: '100%' }}>
         <Grid
           columns={1}
           justify="center"

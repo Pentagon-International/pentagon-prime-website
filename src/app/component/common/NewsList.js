@@ -39,7 +39,7 @@ const NewsList = ({ newsItems }) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
-    <Container fluid px="7%" py={'70px'}>
+    <Container fluid px="2%" py={'70px'}>
       <Title mb="xl" size="lg" fw={800}>
         NEWS & EVENTS
       </Title>
@@ -71,14 +71,14 @@ const NewsList = ({ newsItems }) => {
                       src={fields.newsImage?.fields?.file?.url}
                       alt={fields.newsName || 'News image'}
                       fit="cover"
-                      style={{ borderRadius: '24px' }}
-                      mah={'250px'}
-                      mih={'250px'}
+                      style={{ borderRadius: '24px', border: '1px solid #E0E0E0' }}
+                      mah={'300px'}
+                      mih={'300px'}
                     />
                     <Text c="#999" fw={700} size="xs" mt={10} tt="uppercase">
                       {fields.newsName}
                     </Text>
-                    <Text fw={700} size="sm" maw={'72%'} c={COLORS.news_title}>
+                    <Text fw={700} size="sm" c={COLORS.news_title}>
                       {fields.newsTitle}
                     </Text>
                     <Text fw={700} size="xs" c={COLORS.news_title}>
@@ -99,7 +99,7 @@ const NewsList = ({ newsItems }) => {
               gutter="lg"
             >
               {currentItems.map(({ sys, fields }) => (
-                <GridCol span={1} key={sys.id} component={Link} href={fields.knowmore} target="_blank">
+                <GridCol span={1} key={sys.id}>
                   <Flex
                     direction="column"
                     h="100%"
@@ -113,19 +113,19 @@ const NewsList = ({ newsItems }) => {
                       src={fields.newsImage?.fields?.file?.url}
                       alt={fields.newsName || 'News image'}
                       fit="cover"
-                      style={{ borderRadius: '24px' }}
-                      mah={'250px'}
-                      mih={'250px'}
+                      style={{ borderRadius: '24px', border: '1px solid #E0E0E0' }}
+                      mah={'300px'}
+                      mih={'300px'}
                     />
                     <Text c="#999" fw={700} size="xs" mt={10} tt="uppercase">
                       {fields.newsName}
                     </Text>
-                    <Text fw={700} size="sm" maw={'72%'} c={COLORS.news_title}>
+                    <Text fw={700} size="sm" c={COLORS.news_title}>
                       {fields.newsTitle}
                     </Text>
 
-                    <Flex align="center" gap={4} style={[styles.readMore, { display: 'inline-flex', alignItems: 'center' }]}>
-                      Read more
+                    <Flex align="center" gap={4} style={[styles.readMore, { display: 'inline-flex', alignItems: 'center', justifyContent: 'flex-end'}]}>
+                      <a target='_blank' href={fields.knowmore}>Read more</a>
                     </Flex>
                   </Flex>
                 </GridCol>
@@ -186,7 +186,7 @@ const styles = {
     padding: '0 2%',
   },
   readMore: {
-    color: COLORS.serviceColor,
+    color: 'rgb(0, 33, 95)',
     fontWeight: 400,
     fontSize: TYPOGRAPHY.caption.normal,
     display: 'flex',

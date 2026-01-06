@@ -85,9 +85,9 @@ import {
     }) {
     const isMobile = useMediaQuery("(max-width: 768px)");
     return (
-      <Container fluid px="7%" py="70px">
+      <Container fluid px="2%" py="40px">
         {/* Section Heading */}
-        <Box mt={20}>
+        <Box>
           <Title
             tt="uppercase"
             c="#111f40"

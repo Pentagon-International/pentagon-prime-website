@@ -231,7 +231,7 @@ const CbmCalc = () => {
 
 
   return (
-    <Container fluid px="7%" h="100%" >
+    <Container fluid px="2%" h="100%" >
       <Grid mt={60}>
         <Grid.Col span={12} px={0} py={'lg'} mt={'md'}>
           <Flex justify={'flex-start'}>

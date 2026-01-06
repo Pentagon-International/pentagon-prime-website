@@ -15,7 +15,7 @@ const CustomerCentric = () => {
     setListData(customerCentricListData);
   }, []);
   return (
-    <Container fluid px={"7%"} py={"70px"}>
+    <Container fluid px={"2%"} py={"70px"}>
       <Title
         tt={"uppercase"}
         lh={isMobile ? "md" : "lgx2"}

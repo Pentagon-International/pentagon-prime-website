@@ -6,7 +6,7 @@ export default async function News() {
   try {
     const res = await client.getEntries({
       content_type: 'newsEvents',
-      order: 'sys.createdAt',
+      order: '-sys.updatedAt',
     });
     newsItems = res.items || [];
   } catch (error) {

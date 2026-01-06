@@ -57,7 +57,7 @@ const QuoteCard = () => {
 
   return (
     <Box mt={70} style={{ backgroundColor: '#111F40' }}>
-      <Container fluid px={isMobile ? "6%" : "7%"} py="lg">
+      <Container fluid px={"2%"} py="lg">
         {isMobile ? (
           <Box>
             <div style={{ backgroundImage: `url(${Images.quote})`, backgroundSize: 'cover', backgroundPosition: 'center', width: '30px', height: '30px' }} />

@@ -21,7 +21,7 @@ const dummyData = [
 const Airlines = () => {
   const isMobile = useMediaQuery('(max-width:768px)')
   return (
-    <Container fluid px="7%" py="70px">
+    <Container fluid px="2%" py="70px">
       {/* <Title size="lg" tt="uppercase" ta="center"> */}
       <Title size={isMobile ? TYPOGRAPHY.h5.desktop : 'lg'} lh={isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800} ta="center">
         AIR LINES

@@ -1,0 +1,97 @@
+.progress-bar {
+  position: absolute;
+  bottom: 15px;
+  left: 25px;
+  right: 25px;
+  height: 5px;
+  border-radius: 50px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00b4ff, #16e0b9);
+  transition: width 0.1s linear;
+}
+
+/* Smooth transitions for carousel viewport - consistent for all slide types */
+.mantine-Carousel-viewport {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Smooth transitions for carousel container - consistent for all slide types */
+.mantine-Carousel-container {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Consistent transitions for all carousel slides regardless of content type */
+.mantine-Carousel-slide {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Smooth transitions for carousel viewport */
+.mantine-Carousel-viewport {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Smooth transitions for carousel container */
+.mantine-Carousel-container {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Responsive styles for carousel navigation buttons */
+.carousel-nav-btn {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.carousel-nav-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Responsive styles for indicators */
+.carousel-indicators {
+  gap: 12px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .carousel-nav-btn {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .carousel-nav-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .carousel-indicators {
+    gap: 8px;
+    margin-left: 30px;
+    margin-right: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-nav-btn {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .carousel-nav-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .carousel-indicators {
+    gap: 6px;
+    margin-left: 25px;
+    margin-right: 25px;
+  }
+}
+

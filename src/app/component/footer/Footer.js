@@ -92,8 +92,8 @@ const Footer = () => {
   );
 
   return (
-    <footer style={{ backgroundColor: '#111', color: 'white', padding: '25px 0' }}>
-      <Container fluid px="7%">
+    <footer style={{ backgroundColor: 'white', color: '#111', padding: '25px 0'}}>
+      <Container fluid px="2%">
         {/* Top Section: Services on left, Company info on right */}
         <Flex
           direction={{ base: 'column', md: 'row' }}
@@ -107,7 +107,7 @@ const Footer = () => {
               <Image src={Images.logo} alt="Logo" h={50} />
             </Flex>
 
-            <Text color="white" lh={1.6} mb={20} style={{ fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.caption.large }}>
+            <Text lh={1.6} mb={20} style={{ fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.caption.large }}>
               Pentagon Prime, a unit of Pentagon Group, provides logistics and freight forwarding services.
               We enable our clients to enhance efficiency with cost-effective solutions, connecting them seamlessly with the world.
             </Text>
@@ -165,7 +165,7 @@ const Footer = () => {
                       <Link
                         key={index}
                         href={`/service/${item.slug}`}
-                        style={{ color: COLORS.primaryColor, textDecoration: 'none' }}
+                        style={{ textDecoration: 'none' }}
                       >
                         <Text
                           style={{
@@ -193,7 +193,7 @@ const Footer = () => {
                       <Link
                         key={index}
                         href={`/service/${item.slug}`}
-                        style={{ color: COLORS.primaryColor, textDecoration: 'none' }}
+                        style={{ textDecoration: 'none' }}
                       >
                         <Text
                           style={{
@@ -215,7 +215,7 @@ const Footer = () => {
           </Box>
         </Flex>
 
-        <Divider color="rgba(255,255,255,0.1)" my={30} />
+        <Divider color="#11111188" my={20} />
 
         {/* Contact Section - Below */}
         {/* <Box>
@@ -295,9 +295,9 @@ const Footer = () => {
           <Text size="sm" c={COLORS.textColor}>
             © 2024 Pentagon Prime. All Rights Reserved.
           </Text>
-          <Link href="/privacy-policy/index.html" style={{ color: COLORS.primaryColor,marginLeft:20, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}>
+          <Link href="/privacy-policy/index.html" style={{ marginLeft:20, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}>
             <IconFileText size={18} color="#0EC9F2" />
-            <Text color="white" lh={1.6} style={{ fontSize: isMobile ? 12 : 15, cursor: 'pointer' }}>
+            <Text lh={1.6} style={{ fontSize: isMobile ? 12 : 15, cursor: 'pointer' }}>
               Privacy Policy
             </Text>
           </Link>
