@@ -14,7 +14,7 @@ import Autoplay from 'embla-carousel-autoplay';
 const Partner = ({ title, content }) => {
   const [partners, setPartners] = useState([]);
   const router = useRouter();
-  const autoplay = useRef(Autoplay({ delay: 5000 }));
+  const autoplay = useRef(Autoplay({ delay: 3000 }));
 
   const isMobile = useMediaQuery('(max-width:768px)');
 

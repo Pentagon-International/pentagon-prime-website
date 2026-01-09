@@ -49,7 +49,7 @@ const cargoSlides = [
   { src: "/cargo-images/cargo-project-picture.jpg", alt: "cargo-project-picture" },
   { src: "/cargo-images/cargo-project-picture-3.jpg", alt: "cargo-project-picture-3" },
   { src: "/cargo-images/cargo-project-picture-4.jpg", alt: "cargo-project-picture-4" },
-  { src: "/cargo-images/cargo-project-picture-5.jpg", alt: "cargo-project-picture-5" },
+  // { src: "/cargo-images/cargo-project-picture-5.jpg", alt: "cargo-project-picture-5" },
   { src: "/cargo-images/cargo-project-picture-6.jpg", alt: "cargo-project-picture-6" },
   { src: "/cargo-images/cargo-project-picture-7.jpg", alt: "cargo-project-picture-7" },
   { src: "/cargo-images/cargo-project-picture-8.jpg", alt: "cargo-project-picture-8" },

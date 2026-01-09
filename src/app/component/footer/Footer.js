@@ -14,6 +14,7 @@ import {
   Image,
   SimpleGrid,
   Divider,
+  ActionIcon,
 } from '@mantine/core';
 import {
   IconAt,
@@ -23,6 +24,9 @@ import {
   IconBrandInstagram,
   IconBrandFacebook,
   IconFileText,
+  IconBrandLinkedinFilled,
+  IconBrandInstagramFilled,
+  IconBrandFacebookFilled,
 } from '@tabler/icons-react';
 import Images from "@/app/utils/image";
 import React, { memo, useMemo, useCallback } from 'react';
@@ -102,54 +106,65 @@ const Footer = () => {
           mb={40}
         >
           {/* Company Info */}
-          <Box style={{ flex: 2 }}>
+          <Box style={{ flex: 2}}>
             <Flex align="center" gap="xs" mb={20}>
-              <Image src={Images.logo} alt="Logo" h={50} />
+              <Image src={Images.logo} alt="Logo" h={60} />
             </Flex>
 
-            <Text lh={1.6} mb={20} style={{ fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.caption.large }}>
+            <Text lh={1.6} mb={20} fw={500} style={{ fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.caption.large }}>
               Pentagon Prime, a unit of Pentagon Group, provides logistics and freight forwarding services.
               We enable our clients to enhance efficiency with cost-effective solutions, connecting them seamlessly with the world.
             </Text>
 
             <Group>
-              <Box
-                style={{ cursor: 'pointer' }}
-                sx={{
-                  transition: 'transform 0.3s ease',
-                  '&:hover': { transform: 'translateY(-3px)', color: '#0E53F2' }
-                }}
+              <ActionIcon
+                size="lg"
+                variant="light"
                 onClick={handleLinkedInClick}
-              >
-                <IconBrandLinkedin size={22} />
-              </Box>
-              <Box
-                style={{ cursor: 'pointer' }}
-                sx={{
+                style={{
                   transition: 'transform 0.3s ease',
-                  '&:hover': { transform: 'translateY(-3px)', color: '#0E53F2' }
+                  backgroundColor:'transparent',
                 }}
-                onClick={handleInstagramClick}
+                onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-3px)')}
+                onMouseLeave={(e) => (e.currentTarget.style.transform = 'none')}
               >
-                <IconBrandInstagram size={22} />
-              </Box>
-              <Box
-                style={{ cursor: 'pointer' }}
-                sx={{
+                <IconBrandLinkedinFilled color="rgb(0, 43, 124)" size={32} />
+              </ActionIcon>
+              <ActionIcon
+                size="lg"
+                variant="light"
+                onClick={handleLinkedInClick}
+                style={{
                   transition: 'transform 0.3s ease',
-                  '&:hover': { transform: 'translateY(-3px)', color: '#0E53F2' }
+                  backgroundColor:'transparent',
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-3px)')}
+                onMouseLeave={(e) => (e.currentTarget.style.transform = 'none')}
+              >
+                <IconBrandInstagram color="rgb(170, 0, 113)" stroke={1.5} size={32} />
+              </ActionIcon>
+              <ActionIcon
+                size="lg"
+                variant="light"
                 onClick={handleFacebookClick}
+                style={{
+                  transition: 'transform 0.3s ease',
+                  backgroundColor:'transparent',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-3px)')}
+                onMouseLeave={(e) => (e.currentTarget.style.transform = 'none')}
               >
-                <IconBrandFacebook size={22} />
-              </Box>
+                <IconBrandFacebook color="#0E53F2" stroke={1.5} size={32} />
+              </ActionIcon>
             </Group>
           </Box>
+
+          <Divider orientation="vertical" my={50} color="#11111188" />
 
           {/* Services - 3 Column Layout */}
           <Box style={{ flex: 3 }} pt={14}>
             <Group justify='space-between'>
-              <Text fw={700} size="smx" style={{ textTransform: 'uppercase', color: '#666', width: '47%' }} mb={15}>
+              <Text fw={700} size="sm" style={{ textTransform: 'uppercase', color: 'rgb(0, 33, 95)', width: 'fit-content', borderBottom: '2px solid rgb(0, 33, 95)' }}  mb={25}>
                 Services
               </Text>
               {/* <Text fw={700} size="smx" style={{ textTransform: 'uppercase', color: '#666', width: '47%' }} mb={15}>
@@ -202,7 +217,15 @@ const Footer = () => {
                             padding: '2px 0',
                             margin: 0,
                             fontSize: TYPOGRAPHY.caption.large,
+                            transition: 'all 0.3s ease',
                           }}
+                          onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-2px)',
+                            e.currentTarget.style.color = 'rgb(0, 33, 95)'
+                          )}
+                          onMouseLeave={(e) => (e.currentTarget.style.transform = 'none',
+                            e.currentTarget.style.color = '#111111'
+                          )}
+                          fw={500}
                         >
                           {item.title}
                         </Text>
@@ -292,7 +315,7 @@ const Footer = () => {
           </Flex>
         </Box> */}
         <Flex justify="space-between" align="center" mt={20}>
-          <Text size="sm" c={COLORS.textColor}>
+          <Text size="sm" fw={500} c={COLORS.textColor}>
             © 2024 Pentagon Prime. All Rights Reserved.
           </Text>
           <Link href="/privacy-policy/index.html" style={{ marginLeft:20, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}>
