@@ -63,19 +63,19 @@ const Hero = ({ title, content }) => {
   const router = useRouter();
   const isMobile = useMediaQuery('(max-width: 768px)');
   const isTabletOrBelow = useMediaQuery('(max-width: 1024px)');
-  const Icon = isMobile ? IconArrowsDownUp : IconArrowsLeftRight;
+  const Icon = IconArrowsDownUp;
   const notificationShownRef = useRef(false);
   const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef(null);
-  
+
   useEffect(() => {
     if (isMobile) return; // 🚀 stop everything on mobile
-  
+
     const video = videoRef.current;
     if (!video) return;
-  
+
     let timer;
-  
+
     const startCycle = () => {
       setShowVideo(false);
       timer = setTimeout(() => {
@@ -84,17 +84,17 @@ const Hero = ({ title, content }) => {
         video.play();
       }, 4000);
     };
-  
+
     startCycle();
-  
+
     video.addEventListener('ended', startCycle);
-  
+
     return () => {
       clearTimeout(timer);
       video.removeEventListener('ended', startCycle);
     };
   }, [isMobile]);
-  
+
 
   // First, define the queries
   const { data: seaPortData } = useQuery({
@@ -294,8 +294,17 @@ const Hero = ({ title, content }) => {
     }
 
     // If all validations pass
-    setFormValues(formValue);
-    router.push('/customer-request-form');
+    // Ensure memoizedTransportData is set before navigation
+    const formDataToStore = {
+      ...formValue,
+      memoizedTransportData: formValue.memoizedTransportData || (formValue.activeTransport === 'sea' ? seaData : airData)
+    };
+    setFormValues(formDataToStore);
+    // Use trailing slash to match next.config.mjs trailingSlash: true
+    // Use setTimeout to ensure sessionStorage persistence completes
+    setTimeout(() => {
+      router.push('/customer-request-form/');
+    }, 50);
   };
 
   return (
@@ -308,282 +317,283 @@ const Hero = ({ title, content }) => {
           direction={isTabletOrBelow ? 'column' : 'row'}
           mih={!isMobile && 550}
         >
-        <Stack h={'100%'} w={isTabletOrBelow ? '100%' : '55%'} gap={0} justify={isTabletOrBelow ? "center" : "flex-start"}>
-          <Title
-            c="rgb(0, 33, 95)"
-            style={{ zIndex: 100 }}
-            fw={900}
-            order={1}
-            lh={isMobile ? 'md' : 'xl'}
-            tt="uppercase"
-            size={isMobile ? TYPOGRAPHY.h1.mobile : "44px"}
-            ta={isTabletOrBelow ? "center" : "left"}
-          >
-            {highlightText(title)}
-          </Title>
-          {/* <Text lh={isMobile ? "md" : "lgx"}  size={isMobile ? '20px' : '24px'} maw={isMobile ? '80%' : '40%'} fw={600} mt={15}>
+          <Stack h={'100%'} w={isTabletOrBelow ? '100%' : '55%'} gap={0} justify={isTabletOrBelow ? "center" : "flex-start"}>
+            <Title
+              c="rgb(0, 33, 95)"
+              style={{ zIndex: 100 }}
+              fw={900}
+              order={1}
+              lh={isMobile ? 'md' : 'xl'}
+              tt="uppercase"
+              size={isMobile ? TYPOGRAPHY.h1.mobile : "44px"}
+              ta={isTabletOrBelow ? "center" : "left"}
+            >
+              {highlightText(title)}
+            </Title>
+            {/* <Text lh={isMobile ? "md" : "lgx"}  size={isMobile ? '20px' : '24px'} maw={isMobile ? '80%' : '40%'} fw={600} mt={15}>
             {highlightText(content)}
           </Text> */}
-          <Box h={'100%'}  style={{display:"flex",justifyContent:isTabletOrBelow ? "center" : "flex-start"}}>
-            <Stack mt={isMobile ? '10%' : '4.25%'} gap={0} w={'100%'}
-              p={isMobile ? 20 : 25}
-              style={styles.transportOptions} >
-              <Flex gap={20} >
-                <TransportOption
-                  type="sea"
-                  icon={<IconShip size={20} color={COLORS.primaryColor} />}
-                  activeTransport={formValue?.activeTransport}
-                  onClick={() => setFormValue(prev => ({
-                    ...prev,
-                    typeOfBooking: 'FCL',
-                    activeTransport: 'sea',
-                    origin: { origin: null },
-                    destination: { destination: null },
-                  }))}
-                />
-                <TransportOption
-                  type="air"
-                  icon={<IconPlaneInflight size={20} color={COLORS.primaryColor} />}
-                  activeTransport={formValue?.activeTransport}
-                  onClick={() => setFormValue(prev => ({
-                    ...prev,
-                    origin: { origin: null },
-                    destination: { destination: null },
-                    typeOfBooking: 'AIR',
-                    activeTransport: 'air',
-                  }))}
-                />
-              </Flex>
-              <Flex direction="column" mt={20}>
-                <form>
-                  <Flex direction={isMobile ? 'column' : 'row'} w={'100%'} align='center' gap={isMobile ? 0 : '30'} justify='space-between'>
-                    <Select
-                      placeholder="Origin"
-                      size="lg"
-                      searchable
-                      clearable
-                      w={isMobile ? '100%' : '45%'}
-                      limit={5}
-                      data={filteredOriginOptions}
-                      className='custom-placeholder'
-                      radius="md"
-                      clearButtonProps={{
-                        style: {
-                          color: '#afb1b4',
-                        },
-                      }}
-                      error={formErrors.origin ? 'Please Select origin' : null}
-                      styles={{
-                        input: {
-                          fontSize: TYPOGRAPHY.input.large,
-                          backgroundColor: '#ffffff45',
-                          color: '#fff',
-                          border: "2px solid white",
-                          "::placeholder": {
-                            color: "#fff",
-                            opacity: 1,
-                          },
-                        },
-                        option: {
-                          fontSize: TYPOGRAPHY.body.normal,
-                          color: '#000'
-                        },
-                        dropdown: {
-                          color: '#fff',
-                        },
-                        label: {
-                          fontSize: TYPOGRAPHY.label.large,
-                          fontWeight: '600',
-                          color: '#fff',
-                        },
-                        error: {
-                          padding:"10px 0",
-                          fontSize: TYPOGRAPHY.caption.normal,
-                          color: 'red',
-                        },
-                      }}
-                      classNames={{
-                        input: 'autocomplete-input',
-                      }}
-                      autoComplete="off"
-                      leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
-                      value={formValue?.origin?.origin}
-                      onChange={(value, opt) => {
-                        setFormValue(prev => ({
-                          ...prev,
-                          origin: {
-                            origin: value,       // Use value instead of opt?.value
-                            port: value,         // Use value instead of opt?.value
-                            name: opt?.label || '',  // Provide fallback empty string
-                            code: opt?.code || ''    // Provide fallback empty string
+            <Box h={'100%'} style={{ display: "flex", justifyContent: isTabletOrBelow ? "center" : "flex-start" }}>
+              <Stack mt={isMobile ? '10%' : '4.25%'} gap={0} w={'100%'}
+                p={20}
+                style={styles.transportOptions} >
+                <Flex gap={10} >
+                  <TransportOption
+                    type="sea"
+                    icon={<IconShip size={20} color={COLORS.primaryColor} />}
+                    activeTransport={formValue?.activeTransport}
+                    onClick={() => setFormValue(prev => ({
+                      ...prev,
+                      typeOfBooking: 'FCL',
+                      activeTransport: 'sea',
+                      origin: { origin: null },
+                      destination: { destination: null },
+                    }))}
+                  />
+                  <TransportOption
+                    type="air"
+                    icon={<IconPlaneInflight size={20} color={COLORS.primaryColor} />}
+                    activeTransport={formValue?.activeTransport}
+                    onClick={() => setFormValue(prev => ({
+                      ...prev,
+                      origin: { origin: null },
+                      destination: { destination: null },
+                      typeOfBooking: 'AIR',
+                      activeTransport: 'air',
+                    }))}
+                  />
+                </Flex>
+                <Flex direction="column" mt={5}>
+                  <form>
+                    <Flex direction={'row'} w={'100%'} align='center' gap={'10'} justify='space-between'>
+                      <Box w={'100%'}>
+                        <Select
+                          placeholder="Origin"
+                          size="lg"
+                          searchable
+                          clearable
+                          w={'100%'}
+                          limit={5}
+                          data={filteredOriginOptions}
+                          className='custom-placeholder'
+                          radius="md"
+                          clearButtonProps={{
+                            style: {
+                              color: '#afb1b4',
+                            },
+                          }}
+                          error={formErrors.origin ? 'Please Select origin' : null}
+                          styles={{
+                            input: {
+                              fontSize: TYPOGRAPHY.input.large,
+                              backgroundColor: '#ffffff45',
+                              color: '#fff',
+                              border: "2px solid white",
+                              "::placeholder": {
+                                color: "#fff",
+                                opacity: 1,
+                              },
+                            },
+                            option: {
+                              fontSize: TYPOGRAPHY.body.normal,
+                              color: '#000'
+                            },
+                            dropdown: {
+                              color: '#fff',
+                            },
+                            label: {
+                              fontSize: TYPOGRAPHY.label.large,
+                              fontWeight: '600',
+                              color: '#fff',
+                            },
+                            error: {
+                              padding: "10px 0",
+                              fontSize: TYPOGRAPHY.caption.normal,
+                              color: 'red',
+                            },
+                          }}
+                          classNames={{
+                            input: 'autocomplete-input',
+                          }}
+                          autoComplete="off"
+                          leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
+                          value={formValue?.origin?.origin}
+                          onChange={(value, opt) => {
+                            setFormValue(prev => ({
+                              ...prev,
+                              origin: {
+                                origin: value,       // Use value instead of opt?.value
+                                port: value,         // Use value instead of opt?.value
+                                name: opt?.label || '',  // Provide fallback empty string
+                                code: opt?.code || ''    // Provide fallback empty string
+                              }
+                            }));
+                          }}
+                        />
+                        <Select
+                          mt={10}
+                          placeholder="Destination"
+                          searchable
+                          clearable
+                          clearButtonProps={{
+                            style: {
+                              color: '#afb1b4',
+                            },
+                          }}
+                          size="lg"
+                          limit={5}
+                          data={filteredDestinationOptions}
+                          radius="md"
+                          w={'100%'}
+                          error={formErrors.destination ? 'Please select destination' : null}
+                          styles={{
+                            input: {
+                              fontSize: TYPOGRAPHY.input.large,
+                              backgroundColor: '#ffffff45',
+                              color: '#fff',
+                              border: "2px solid white",
+                            },
+                            item: {
+                              fontSize: TYPOGRAPHY.input.large,
+                            },
+                            option: {
+                              fontSize: TYPOGRAPHY.body.normal,
+                              color: '#000'
+                            },
+                            dropdown: {
+                              color: '#fff',
+                            },
+                            label: {
+                              fontSize: TYPOGRAPHY.label.large,
+                              fontWeight: '600',
+                              color: '#fff',
+                            },
+                            error: {
+                              padding: "10px 0",
+                              fontSize: TYPOGRAPHY.caption.normal,
+                              color: 'red',
+                            },
+                          }}
+                          classNames={{
+                            input: 'autocomplete-input',
+                          }}
+                          autoComplete="off"
+                          leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
+                          value={formValue?.destination?.destination}
+                          onChange={(value, opt) => setFormValue(prev => ({
+                            ...prev,
+                            destination: {
+                              destination: value,  // Use value instead of opt.value
+                              port: value,        // Use value instead of opt?.value
+                              name: opt?.label || '',  // Provide fallback empty string
+                              code: opt?.code || ''    // Provide fallback empty string
+                            },
+                          }))}
+                        />
+                      </Box>
+                      <ActionIcon
+                        variant="default"
+                        size={32}
+                        radius="xl"
+                        bg={COLORS.secondaryColor}
+                        style={{ borderColor: COLORS.secondaryColor }}
+                        onClick={swapOriginDestination}
+                        styles={{
+                          root: {
+                            alignItems: isMobile ? 'center' : 'flex-end'
                           }
-                        }));
-                      }}
-                    />
-
-                    <ActionIcon
-                      variant="default"
-                      size={32}
-                      radius="xl"
-                      bg={COLORS.secondaryColor}
-                      style={{ borderColor: COLORS.secondaryColor }}
-                      onClick={swapOriginDestination}
+                        }}
+                      >
+                        <Icon size={20} color={COLORS.primaryColor} />
+                      </ActionIcon>
+                    </Flex>
+                    <Button
+                      fullWidth
+                      mt={25}
+                      size='lg'
+                      fw={600}
                       styles={{
-                        root: {
-                          alignItems: isMobile ? 'center' : 'flex-end'
-                        }
-                      }}
-                    >
-                      <Icon size={20} color={COLORS.primaryColor} />
-                    </ActionIcon>
-
-                    <Select
-                      placeholder="Destination"
-                      searchable
-                      clearable
-                      clearButtonProps={{
-                        style: {
-                          color: '#afb1b4',
-                        },
-                      }}
-                      size="lg"
-                      limit={5}
-                      data={filteredDestinationOptions}
-                      radius="md"
-                      w={isMobile ? '100%' : '45%'}
-                      error={formErrors.destination ? 'Please select destination' : null}
-                      styles={{
-                        input: {
-                          fontSize: TYPOGRAPHY.input.large,
-                          backgroundColor: '#ffffff45',
-                          color: '#fff',
-                          border: "2px solid white",
-                        },
-                        item: {
-                          fontSize: TYPOGRAPHY.input.large,
-                        },
-                        option: {
-                          fontSize: TYPOGRAPHY.body.normal,
-                          color: '#000'
-                        },
-                        dropdown: {
-                          color: '#fff',
-                        },
                         label: {
-                          fontSize: TYPOGRAPHY.label.large,
-                          fontWeight: '600',
-                          color: '#fff',
-                        },
-                        error: {
-                          padding:"10px 0",
-                          fontSize: TYPOGRAPHY.caption.normal,
-                          color: 'red',
+                          fontSize: TYPOGRAPHY.button.large,
                         },
                       }}
-                      classNames={{
-                        input: 'autocomplete-input',
+                      bg={'#0AC1F1'}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = "#09B1D1";
                       }}
-                      autoComplete="off"
-                      leftSection={<IconMapPin size={20} color={COLORS.primaryColor} />}
-                      value={formValue?.destination?.destination}
-                      onChange={(value, opt) => setFormValue(prev => ({
-                        ...prev,
-                        destination: {
-                          destination: value,  // Use value instead of opt.value
-                          port: value,        // Use value instead of opt?.value
-                          name: opt?.label || '',  // Provide fallback empty string
-                          code: opt?.code || ''    // Provide fallback empty string
-                        },
-                      }))}
-                    />
-                  </Flex>
-                  <Button
-                    fullWidth
-                    mt={30}
-                    size='lg'
-                    fw={600}
-                    styles={{
-                      label: {
-                        fontSize: TYPOGRAPHY.button.large,
-                      },
-                    }}
-                    bg={'#0AC1F1'}
-                    onMouseEnter={(e)=>{
-                      e.currentTarget.style.backgroundColor = "#09B1D1";
-                    }}
-                    onMouseLeave={(e)=>{
-                      e.currentTarget.style.backgroundColor = "#0AC1F1";
-                    }}
-                    radius={'md'}
-                    c={COLORS.primaryColor}
-                    onClick={handleGetQuote}
-                  >
-                    Get Quote
-                  </Button>
-                </form>
-              </Flex>
-            </Stack>
-          </Box>
-        </Stack>
-        {!isMobile && (
-          <Box
-            w={isTabletOrBelow ? '100%' : '50%'}
-            maw={800}
-            mx="auto"
-            pos="relative"
-            style={{
-              borderRadius: '16px',
-              border: '3px solid #E0E0E0',
-            }}
-          >
-            {/* TEXT */}
-            <Box
-              style={{
-                position: 'absolute',
-                inset: 0,
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                opacity: showVideo ? 0 : 1,
-                transform: showVideo ? 'translateY(-10px)' : 'translateY(0)',
-                transition: 'opacity 0.8s ease, transform 0.8s ease',
-                pointerEvents: 'none',
-                zIndex: 2,
-                padding: '0 20px',
-              }}
-            >
-              <Text size="lg" tt="uppercase" align="center" fw={700}>
-                {highlightText("#Book your shipment# as easy as booking an airline ticket")}
-              </Text>
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = "#0AC1F1";
+                      }}
+                      radius={'md'}
+                      c={COLORS.primaryColor}
+                      onClick={handleGetQuote}
+                    >
+                      Get Quote
+                    </Button>
+                  </form>
+                </Flex>
+              </Stack>
             </Box>
-
-            {/* VIDEO */}
+          </Stack>
+          {!isMobile && (
             <Box
+              w={isTabletOrBelow ? '100%' : '50%'}
+              maw={800}
+              mx="auto"
+              pos="relative"
               style={{
-                width: '100%',
-                opacity: showVideo ? 1 : 0,
-                transition: 'opacity 1s ease',
                 borderRadius: '16px',
+                border: '3px solid #E0E0E0',
               }}
             >
-              <video
-                ref={videoRef}
-                muted
-                playsInline
-                preload="metadata"
+              {/* TEXT */}
+              <Box
                 style={{
+                  position: 'absolute',
+                  inset: 0,
                   width: '100%',
-                  borderRadius: '16px',
-                  objectFit: 'cover',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  opacity: showVideo ? 0 : 1,
+                  transform: showVideo ? 'translateY(-10px)' : 'translateY(0)',
+                  transition: 'opacity 0.8s ease, transform 0.8s ease',
+                  pointerEvents: 'none',
+                  zIndex: 2,
+                  padding: '0 20px',
                 }}
               >
-                <source src="/Pentagon-Final.mp4" type="video/mp4" />
-              </video>
-            </Box>
+                <Text size="lg" tt="uppercase" align="center" fw={700}>
+                  {highlightText("#Book your shipment# as easy as booking an airline ticket")}
+                </Text>
+              </Box>
 
-          </Box>
-        )}
+              {/* VIDEO */}
+              <Box
+                style={{
+                  width: '100%',
+                  opacity: showVideo ? 1 : 0,
+                  transition: 'opacity 1s ease',
+                  borderRadius: '16px',
+                }}
+              >
+                <video
+                  ref={videoRef}
+                  muted
+                  playsInline
+                  preload="metadata"
+                  style={{
+                    width: '100%',
+                    borderRadius: '16px',
+                    objectFit: 'cover',
+                  }}
+                >
+                  <source src="/Pentagon-Final.mp4" type="video/mp4" />
+                </video>
+              </Box>
+
+            </Box>
+          )}
         </Flex>
       </Container>
     </Box>
@@ -626,8 +636,8 @@ const styles = {
     color: '#fff',
     borderRadius: '24px',
     backgroundColor: `#000000bf`,
-    gap: '12px',
-    maxWidth: '600px',
+    gap: '10px',
+    maxWidth: '500px',
   },
   groupstyle: {
     padding: '10px 16px',

@@ -1,7 +1,14 @@
 import { Flex, Text } from "@mantine/core";
 import { COLORS } from "../utils/COLORS";
 
-const options = ["GC", "OT", "REEF", "FR", "FB", "TANK"];
+const options = [
+  { label: "General Container / Standard (Dry)", value: "GC" },
+  { label: "Refrigerated Container (Reefer)", value: "REEF" },
+  { label: "Flat Rack Container", value: "FR" },
+  { label: "Flat Bed Container", value: "FB" },
+  { label: "Open Top Container", value: "OT" },
+  { label: "ISO Tank Container", value: "TANK" }
+];
 const contSize = [
   {
     label: `20 GP`,

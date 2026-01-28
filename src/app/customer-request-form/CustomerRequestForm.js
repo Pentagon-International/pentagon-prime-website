@@ -1,6 +1,6 @@
 'use client'
 
-import { ActionIcon, Alert, Anchor, Autocomplete, Button, Center, Checkbox, Container, FileButton, Flex, Grid, GridCol, Group, List, Modal, NumberInput, Radio, rem, ScrollArea, SegmentedControl, Select, Switch, Text, Textarea, TextInput, Title } from "@mantine/core";
+import { ActionIcon, Alert, Anchor, Autocomplete, Button, Center, Checkbox, Container, FileButton, Flex, Grid, GridCol, Group, List, Loader, Modal, NumberInput, Radio, rem, ScrollArea, SegmentedControl, Select, Switch, Text, Textarea, TextInput, Title } from "@mantine/core";
 import { IconArrowRight, IconArrowsDownUp, IconArrowsLeftRight, IconBox, IconCalendar, IconFiles, IconMapPin, IconPaperclip, IconPlane, IconPlus, IconSquareHalf, IconTrash, IconUpload } from "@tabler/icons-react";
 import { COLORS } from "../utils/COLORS";
 import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
@@ -131,14 +131,13 @@ const CustomerRequestForm = (data = {
   containerCount: null,
   list: [],
 }, defaultSize = `20GP`, submitCallback = () => null) => {
-  const { formValues } = useCustomerRequestStore();
+  const { formValues, _hasHydrated } = useCustomerRequestStore();
   const { seaData, airData, setSeaData, setAirData } = useTransportStore();
   const selectData = formValues?.typeOfBooking === 'air' ? airData : seaData
   const router = useRouter();
-  if (!formValues) {
-    return <div>Loading...</div>;
-  }
-
+  const [isCheckingData, setIsCheckingData] = useState(true);
+  
+  // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS
   const [filteredOriginData, setFilteredOriginData] = useState(formValues?.memoizedTransportData || []);
   const [filteredDestinationData, setFilteredDestinationData] = useState(formValues?.memoizedTransportData || []);
 
@@ -506,6 +505,35 @@ const CustomerRequestForm = (data = {
         },
       ];
   }, [formValues?.activeTransport]);
+
+  // Wait for store hydration and check data - MUST BE AFTER ALL HOOKS
+  React.useEffect(() => {
+    // Wait for store to hydrate from sessionStorage
+    if (!_hasHydrated) {
+      return;
+    }
+
+    const hasRequiredData = formValues && 
+      formValues.origin && 
+      formValues.destination && 
+      formValues.memoizedTransportData && 
+      Array.isArray(formValues.memoizedTransportData) &&
+      formValues.memoizedTransportData.length > 0;
+    
+    if (!hasRequiredData) {
+      // Redirect to home if data is missing after hydration
+      router.replace('/');
+    } else {
+      setIsCheckingData(false);
+    }
+  }, [formValues, _hasHydrated, router]);
+
+  const hasRequiredData = formValues && 
+    formValues.origin && 
+    formValues.destination && 
+    formValues.memoizedTransportData && 
+    Array.isArray(formValues.memoizedTransportData) &&
+    formValues.memoizedTransportData.length > 0;
 
   const handleAddCargoClick = () => {
     setModalErrors({}); // Clear previous errors
@@ -979,6 +1007,18 @@ const CustomerRequestForm = (data = {
     return errors;
   };
 
+  // Show loader until store is hydrated and data is verified
+  if (!_hasHydrated || isCheckingData || !hasRequiredData) {
+    return (
+      <Container fluid style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Flex direction="column" align="center" gap="md">
+          <Loader size="xl" color={COLORS.primaryColor} />
+          <Text size="lg" fw={500}>Loading form...</Text>
+        </Flex>
+      </Container>
+    );
+  }
+
   return (
     <>
       <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -988,7 +1028,7 @@ const CustomerRequestForm = (data = {
           {/* <Title tt="uppercase" tw="balance" fw={800}> Featured articles </Title> */}
           <Title mb="lg" mt={'xl'} tt="uppercase" tw="balance" fw={800}>Fare Calculation</Title>
 
-          <Grid px={'13%'}>
+          <Grid>
             <Grid.Col span={isMobile ? 12 : 5}>
               <Select
                 error={form.errors?.result?.[0]?.find(item => item?.origin)?.origin?.origin || null}
