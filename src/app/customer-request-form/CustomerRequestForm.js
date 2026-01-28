@@ -362,6 +362,7 @@ const CustomerRequestForm = (data = {
     containerCount: data?.containerCount || null,
     list: data?.list || [],
   });
+  console.log("container details-------------------------",containerList);
 
   const [activeType, setActiveType] = useState(data?.type || "GC");
   const [activeSize, setActiveSize] = useState(defaultSize);
@@ -413,6 +414,35 @@ const CustomerRequestForm = (data = {
       }));
     }
   }, [activeType, activeDimension]);
+
+  // When modal opens, sync containerList (and related state) from form so UI shows saved data
+  useEffect(() => {
+    if (!openedModal) return;
+    const cd = form.values?.result?.[0]?.container_details;
+    if (!cd) return;
+    setContainerList((prev) => ({
+      ...prev,
+      commodity: cd.commodity ?? prev.commodity,
+      type: cd.type ?? prev.type,
+      dimension: cd.dimension ?? prev.dimension,
+      weight: cd.weight ?? prev.weight,
+      hsCode: cd.hsCode ?? prev.hsCode,
+      hsCode2: cd.hsCode2 ?? prev.hsCode2,
+      hs1: cd.hs1 ?? prev.hs1,
+      hs2: cd.hs2 ?? prev.hs2,
+      size: cd.size ?? prev.size,
+      containerCount: cd.containerCount ?? prev.containerCount,
+      list: cd.list?.length ? cd.list : prev.list,
+      no_of_packages: cd.no_of_packages ?? prev.no_of_packages,
+      gross_weight: cd.gross_weight ?? prev.gross_weight,
+      volume: cd.volume ?? prev.volume,
+      volume_weight: cd.volume_weight ?? prev.volume_weight,
+    }));
+    if (cd.type) setActiveType(cd.type);
+    if (cd.dimension) setActiveDimension(cd.dimension);
+    if (cd.size) setActiveSize(cd.size);
+    if (cd.list?.length) setSelectedSize(cd.list.map((_, idx) => idx));
+  }, [openedModal]);
 
   const salesPersonQuery = useQuery({
     queryKey: ['sales-person-query'],
@@ -575,41 +605,32 @@ const CustomerRequestForm = (data = {
 
   const handleFields = (containerNo, fieldPosition) => (event) => {
     setContainerList((st) => {
-      const l = st.list;
-      const curField = l[containerNo].fields[fieldPosition];
-      if (curField.type === types.NUMBER) {
-        l[containerNo].fields[fieldPosition].value = event;
-      }
-      if (curField.type === types.OPTIONS) {
-        l[containerNo].fields[fieldPosition].value = event;
-      }
-      if (curField.type === types.CHECKBOX) {
-        l[containerNo].fields[fieldPosition].checked = event.target.checked;
-      }
-      if (curField.type === types.DROPDOWN) {
-        l[containerNo].fields[fieldPosition].value = event;
-      }
-      return {
-        ...st,
-        list: l,
-      };
+      const list = st.list?.map((item, idx) => {
+        if (idx !== containerNo) return item;
+        const curField = item.fields[fieldPosition];
+        const fields = item.fields.map((f, j) => {
+          if (j !== fieldPosition) return f;
+          if (curField.type === types.NUMBER || curField.type === types.OPTIONS || curField.type === types.DROPDOWN) {
+            return { ...f, value: event };
+          }
+          if (curField.type === types.CHECKBOX) {
+            return { ...f, checked: event?.target?.checked ?? event };
+          }
+          return f;
+        });
+        return { ...item, fields };
+      });
+      return { ...st, list: list ?? st.list };
     });
   };
 
   const handleSizeChange = (i, v) => {
     setActiveSize(v);
-    setContainerList((st) => {
-      return {
-        ...st,
-        size: v,
-        list: st.list?.map((item, index) => {
-          if (index === i) {
-            item.size = v;
-          }
-          return item;
-        }),
-      };
-    });
+    setContainerList((st) => ({
+      ...st,
+      size: v,
+      list: st.list?.map((item, index) => (index === i ? { ...item, size: v } : item)) ?? st.list,
+    }));
   };
 
   useEffect(() => {
@@ -902,10 +923,7 @@ const CustomerRequestForm = (data = {
       errors.commodity = 'Please enter the Commodity';
     }
 
-    if (containerList.hs1 && !containerList.hs2) {
-      errors.hs2 = 'Please enter the HS Code';
-    }
-
+    // hs2 (specific HS Code) is optional when category (hs1) is selected
     if (bookingType === 'FCL') {
       if (!containerList.list || containerList.list.length === 0) {
         errors.list = 'Please enter the valid Container';
@@ -919,23 +937,18 @@ const CustomerRequestForm = (data = {
           // Validate each field in the container
           item.fields?.forEach((field, j) => {
             const errorKey = `container_${i}_field_${j}`;
-            const fieldValue = field?.value || null;
+            const fieldValue = field?.value ?? null;
+            const isEmpty = fieldValue === null || fieldValue === undefined || fieldValue === '';
 
             if (field.label === 'Count') {
-              if (field.required && (fieldValue === null || fieldValue === undefined || fieldValue === '')) {
-                errors[errorKey] = 'Please enter the valid Count';
-              } else if (fieldValue < 1) {
+              if (isEmpty || Number(fieldValue) < 1) {
                 errors[errorKey] = 'Please enter the valid Count';
               }
-            }
-            // else if (field.label === 'Weight (mt)') {
-            //   if (field.required && (fieldValue === null || fieldValue === undefined || fieldValue === '')) {
-            //     errors[errorKey] = 'Please enter the valid Weight';
-            //   } else if (fieldValue <= 0) {
-            //     errors[errorKey] = 'Please enter the valid Weight';
-            //   }
-            // }
-            else if (field.required && (fieldValue === null || fieldValue === undefined || fieldValue === '')) {
+            } else if (field.label === 'Weight (mt)') {
+              // optional
+            } else if (field.type === types.CHECKBOX) {
+              // checkbox has no required validation
+            } else if (isEmpty) {
               errors[errorKey] = `Please enter the valid ${field.label}`;
             }
           });
@@ -2090,15 +2103,15 @@ const CustomerRequestForm = (data = {
                             label="Container Size"
                             w="auto"
                             data={contSize}
-                            value={item.size || []}
+                            value={item.size ?? ''}
                             onChange={(v) => handleSizeChange(i, v)}
                             required
                             styles={{
                               dropdown: { maxHeight: 200, overflowY: 'auto' },
-                    option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                    input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                    label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                    error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                              option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                              input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                              label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                              error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                             }}
                             radius="md"
                             size={isMobile ? "md" : "sm"}
@@ -2117,15 +2130,15 @@ const CustomerRequestForm = (data = {
                                   error={fieldError}
                                   w={inputSize}
                                   label={field.label}
-                                  value={field.value || []}
-                                  onChange={handleFields(i, j)}
+                                  value={field.value ?? ''}
+                                  onChange={(v) => handleFields(i, j)(v)}
                                   {...(field.options || {})}
                                   styles={{
                                     dropdown: { maxHeight: 200, overflowY: 'auto' },
-                    option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                    input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                    label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                    error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                                    option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                                    input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                                    label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                                    error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                                   }}
                                   radius="md"
                                   size={isMobile ? "md" : "sm"}
@@ -2142,15 +2155,15 @@ const CustomerRequestForm = (data = {
                                   w={inputSize}
                                   hideControls
                                   label={field.label}
-                                  value={field.value}
+                                  value={field.value ?? ''}
                                   withAsterisk={field.label === 'Weight (mt)' ? false : true}
-                                  onChange={handleFields(i, j)}
+                                  onChange={(v) => handleFields(i, j)(v)}
                                   {...(field.options || {})}
                                   styles={{
-                    option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                    input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                    label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                    error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                                    option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                                    input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
+                                    label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
+                                    error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                                   }}
                                   radius="md"
                                   size={isMobile ? "md" : "sm"}
@@ -2166,7 +2179,7 @@ const CustomerRequestForm = (data = {
                                   <Checkbox
                                     size="sm"
                                     label={field.label}
-                                    checked={field.checked}
+                                    checked={field.checked ?? false}
                                     onChange={handleFields(i, j)}
                                   />
                                 </Flex>
@@ -2178,7 +2191,8 @@ const CustomerRequestForm = (data = {
                             return (
                               <Grid.Col span={3} key={j}>
                                 <Radio.Group
-                                  onChange={(value) => handleFields(i, j, value)}
+                                  value={field.value ?? ''}
+                                  onChange={(value) => handleFields(i, j)(value)}
                                   label="Unit of Volume"
                                   color={COLORS.primaryColor}
                                 >
@@ -2230,7 +2244,7 @@ const CustomerRequestForm = (data = {
                       error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                     }}
                     radius="md"
-                    value={containerList.packages}
+                    value={containerList.no_of_packages ?? ''}
                     onChange={(e) => setContainerList((st) => ({ ...st, no_of_packages: e.target.value }))}
                   />
                 </Grid.Col>
@@ -2249,7 +2263,7 @@ const CustomerRequestForm = (data = {
                       error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                     }}
                     radius="md"
-                    value={containerList.grossWeight}
+                    value={containerList.gross_weight ?? ''}
                     onChange={(e) => setContainerList((st) => ({ ...st, gross_weight: e.target.value }))}
                   />
                 </Grid.Col>

@@ -325,7 +325,7 @@ const Hero = ({ title, content }) => {
             {highlightText(content)}
           </Text> */}
           <Box h={'100%'}  style={{display:"flex",justifyContent:isTabletOrBelow ? "center" : "flex-start"}}>
-            <Stack mt={isMobile ? '10%' : '4.25%'} gap={0} w={isMobile ? '100%' : '80%'}
+            <Stack mt={isMobile ? '10%' : '4.25%'} gap={0} w={'100%'}
               p={isMobile ? 20 : 25}
               style={styles.transportOptions} >
               <Flex gap={20} >
@@ -627,7 +627,7 @@ const styles = {
     borderRadius: '24px',
     backgroundColor: `#000000bf`,
     gap: '12px',
-    maxWidth: '450px',
+    maxWidth: '600px',
   },
   groupstyle: {
     padding: '10px 16px',
