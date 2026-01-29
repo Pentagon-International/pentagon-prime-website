@@ -1988,10 +1988,10 @@ const CustomerRequestForm = (data = {
           //  
           opened={openedModal !== null}
           onClose={closeModal}
-          size="70%"
+          size="xl"
           styles={{
             content: {
-              height: '60vh', // or '50vh', '100%', etc.
+              height: '70vh', // or '50vh', '100%', etc.
             },
           }}
           title={<CustomTitle />}
@@ -2025,21 +2025,49 @@ const CustomerRequestForm = (data = {
             </Grid.Col>
 
             <Grid.Col span={isMobile ? 12 : 6}>
-              <TextInput
+              <Select
                 error={modalErrors.commodity}
                 color={COLORS.portColor}
-                placeholder="Enter Commodity"
+                placeholder="Select Commodity"
                 size={isMobile ? "md" : "lg"}
                 label="Commodity"
                 withAsterisk
+                searchable
+                clearable
+                data={[
+                  { label: 'General', value: 'General', displayLabel: 'Commodity: General' },
+                  { label: 'White Goods', value: 'White Goods', displayLabel: 'Commodity: White Goods' },
+                  { label: 'PTA', value: 'PTA', displayLabel: 'Commodity: PTA' },
+                  { label: 'Cotton and yarn', value: 'Cotton and yarn', displayLabel: 'Commodity: Cotton and yarn' },
+                  { label: 'Fabric and textiles', value: 'Fabric and textiles', displayLabel: 'Commodity: Fabric and textiles' },
+                  { label: 'Sugar Rice', value: 'Sugar Rice', displayLabel: 'Commodity: Sugar Rice' },
+                  { label: 'Millets', value: 'Millets', displayLabel: 'Commodity: Millets' },
+                  { label: 'Tiles', value: 'Tiles', displayLabel: 'Commodity: Tiles' },
+                  { label: 'Corrosive 8', value: 'Corrosive 8', displayLabel: 'Commodity: Corrosive 8' },
+                  { label: 'Miscellaneous dangerous goods', value: 'Miscellaneous dangerous goods', displayLabel: 'Commodity: Miscellaneous dangerous goods' },
+                  { label: 'Freight all kinds', value: 'Freight all kinds', displayLabel: 'Freight all kinds' }
+                ]}
+                clearButtonProps={{
+                  style: {
+                    color: '#afb1b4',
+                  },
+                }}
+                renderOption={({ option }) => option.displayLabel || option.label}
+                comboboxProps={{
+                  shadow: 'md',
+                }}
                 styles={{
+                  dropdown: { maxHeight: 200, overflowY: 'auto' },
+                  option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
                   input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
                   label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
                   error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
                 }}
                 radius="md"
-                value={containerList.commodity || ""}
-                onChange={(e) => setContainerList((st) => ({ ...st, commodity: e.target.value }))}
+                value={containerList.commodity || null}
+                onChange={(value) => {
+                  setContainerList((st) => ({ ...st, commodity: value || "" }));
+                }}
               />
             </Grid.Col>
 

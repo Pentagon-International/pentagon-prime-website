@@ -309,7 +309,17 @@ const Hero = ({ title, content }) => {
 
   return (
     <Box style={styles.heroContainer}>
-      <Container fluid px="2%" mt={isTabletOrBelow ? 50 : 20} pt="60px" pb={20}>
+      <Box
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundColor: 'rgba(255,255,255,0.70)',
+          boxShadow: "inset 0 -8px 20px -8px rgba(0, 0, 0, 0.25)",
+          zIndex: 1,
+          pointerEvents: 'none'
+        }}
+      />
+      <Container fluid px="2%" mt={isTabletOrBelow ? 50 : 20} pt="60px" pb={20} style={{ position: 'relative', zIndex: 2 }}>
         <Flex
           align="center"
           justify="space-between"
@@ -551,6 +561,7 @@ const Hero = ({ title, content }) => {
                 style={{
                   position: 'absolute',
                   inset: 0,
+                  backgroundColor: '#fff',
                   width: '100%',
                   display: 'flex',
                   alignItems: 'center',
@@ -561,9 +572,10 @@ const Hero = ({ title, content }) => {
                   pointerEvents: 'none',
                   zIndex: 2,
                   padding: '0 20px',
+                  borderRadius: '16px',
                 }}
               >
-                <Text size="lg" tt="uppercase" align="center" fw={700}>
+                <Text size="lg" tt="uppercase" align="center" c="rgb(0, 33, 95)" fw={700}>
                   {highlightText("#Book your shipment# as easy as booking an airline ticket")}
                 </Text>
               </Box>
@@ -604,12 +616,14 @@ export default Hero;
 
 const styles = {
   heroContainer: {
-    color: 'rgb(1, 34, 95)',
-    minHeight: '550px',
     position: 'relative',
-    overflowY: 'hidden',
-    top: 0,
-    left: 0,
+    height: '100vh',  
+    minHeight: '550px',
+    backgroundImage: 'url(/images/hero_background_3.jpeg)',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    overflow: 'hidden',
   },
   overlayContainer: {
     position: 'relative',
@@ -635,7 +649,7 @@ const styles = {
   transportOptions: {
     color: '#fff',
     borderRadius: '24px',
-    backgroundColor: `#000000bf`,
+    backgroundColor: '#222',
     gap: '10px',
     maxWidth: '500px',
   },
