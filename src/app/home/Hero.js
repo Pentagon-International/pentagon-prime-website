@@ -109,6 +109,8 @@ const Hero = ({ title, content }) => {
         label: `${item.name} - (${item.code})`,
         value: String(item.id),
         code: item.code,
+        name: item.name,
+        country: item.country,
       })) || [],
   });
 
@@ -124,6 +126,8 @@ const Hero = ({ title, content }) => {
         label: `${item.name} - (${item.code})`,
         value: String(item.id),
         code: item.code,
+        name: item.name,
+        country: item.country,
       })) || []
     }
   });
@@ -241,13 +245,15 @@ const Hero = ({ title, content }) => {
         ...prevValues.destination,
         origin: prevValues.destination.destination,
         name: prevValues.destination.name,
-        code: prevValues.destination.code
+        code: prevValues.destination.code,
+        country: prevValues.destination.country
       },
       destination: {
         ...prevValues.origin,
         destination: prevValues.origin.origin,
         name: prevValues.origin.name,
-        code: prevValues.origin.code
+        code: prevValues.origin.code,
+        country: prevValues.origin.country
       },
     }));
   }, [formValue]);
@@ -292,6 +298,7 @@ const Hero = ({ title, content }) => {
       });
       return;
     }
+    console.log("formValue------------------",formValue)
 
     // If all validations pass
     // Ensure memoizedTransportData is set before navigation
@@ -303,7 +310,7 @@ const Hero = ({ title, content }) => {
     // Use trailing slash to match next.config.mjs trailingSlash: true
     // Use setTimeout to ensure sessionStorage persistence completes
     setTimeout(() => {
-      router.push('/customer-request-form/');
+      router.push(`/customer-request-form/`);
     }, 50);
   };
 
@@ -432,10 +439,11 @@ const Hero = ({ title, content }) => {
                             setFormValue(prev => ({
                               ...prev,
                               origin: {
-                                origin: value,       // Use value instead of opt?.value
-                                port: value,         // Use value instead of opt?.value
-                                name: opt?.label || '',  // Provide fallback empty string
-                                code: opt?.code || ''    // Provide fallback empty string
+                                origin: value,
+                                port: value,
+                                name: opt?.name || '',
+                                code: opt?.code || '',
+                                country: opt?.country || ''
                               }
                             }));
                           }}
@@ -493,10 +501,11 @@ const Hero = ({ title, content }) => {
                           onChange={(value, opt) => setFormValue(prev => ({
                             ...prev,
                             destination: {
-                              destination: value,  // Use value instead of opt.value
-                              port: value,        // Use value instead of opt?.value
-                              name: opt?.label || '',  // Provide fallback empty string
-                              code: opt?.code || ''    // Provide fallback empty string
+                              destination: value,
+                              port: value,
+                              name: opt?.name || '',
+                              code: opt?.code || '',
+                              country: opt?.country || ''
                             },
                           }))}
                         />

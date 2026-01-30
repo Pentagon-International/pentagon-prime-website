@@ -1,6 +1,6 @@
 'use client'
 
-import { ActionIcon, Alert, Anchor, Autocomplete, Button, Center, Checkbox, Container, FileButton, Flex, Grid, GridCol, Group, List, Loader, Modal, NumberInput, Radio, rem, ScrollArea, SegmentedControl, Select, Switch, Text, Textarea, TextInput, Title } from "@mantine/core";
+import { ActionIcon, Alert, Anchor, Autocomplete, Box, Button, Center, Checkbox, Container, FileButton, Flex, Grid, GridCol, Group, List, Loader, Modal, NumberInput, Radio, rem, ScrollArea, SegmentedControl, Select, Switch, Text, Textarea, TextInput, Title } from "@mantine/core";
 import { IconArrowRight, IconArrowsDownUp, IconArrowsLeftRight, IconBox, IconCalendar, IconFiles, IconMapPin, IconPaperclip, IconPlane, IconPlus, IconSquareHalf, IconTrash, IconUpload } from "@tabler/icons-react";
 import { COLORS } from "../utils/COLORS";
 import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
@@ -17,9 +17,10 @@ import { imoClass } from "../utils/imoClass";
 import { contSize, getContainerFields, options, types, TypesWithContainers } from "../tools/containerDetails";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { result } from "lodash";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { notifications } from "@mantine/notifications";
 import { Transition } from '@mantine/core';
+import RouteMap from "../component/route-map/RouteMap";
 
 function CargoButton({
   hasContainerDetailsError,
@@ -131,12 +132,13 @@ const CustomerRequestForm = (data = {
   containerCount: null,
   list: [],
 }, defaultSize = `20GP`, submitCallback = () => null) => {
+
   const { formValues, _hasHydrated } = useCustomerRequestStore();
   const { seaData, airData, setSeaData, setAirData } = useTransportStore();
   const selectData = formValues?.typeOfBooking === 'air' ? airData : seaData
   const router = useRouter();
   const [isCheckingData, setIsCheckingData] = useState(true);
-  
+
   // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS
   const [filteredOriginData, setFilteredOriginData] = useState(formValues?.memoizedTransportData || []);
   const [filteredDestinationData, setFilteredDestinationData] = useState(formValues?.memoizedTransportData || []);
@@ -361,7 +363,7 @@ const CustomerRequestForm = (data = {
     containerCount: data?.containerCount || null,
     list: data?.list || [],
   });
-  console.log("container details-------------------------",containerList);
+  console.log("container details-------------------------", containerList);
 
   const [activeType, setActiveType] = useState(data?.type || "GC");
   const [activeSize, setActiveSize] = useState(defaultSize);
@@ -513,13 +515,13 @@ const CustomerRequestForm = (data = {
       return;
     }
 
-    const hasRequiredData = formValues && 
-      formValues.origin && 
-      formValues.destination && 
-      formValues.memoizedTransportData && 
+    const hasRequiredData = formValues &&
+      formValues.origin &&
+      formValues.destination &&
+      formValues.memoizedTransportData &&
       Array.isArray(formValues.memoizedTransportData) &&
       formValues.memoizedTransportData.length > 0;
-    
+
     if (!hasRequiredData) {
       // Redirect to home if data is missing after hydration
       router.replace('/');
@@ -528,10 +530,10 @@ const CustomerRequestForm = (data = {
     }
   }, [formValues, _hasHydrated, router]);
 
-  const hasRequiredData = formValues && 
-    formValues.origin && 
-    formValues.destination && 
-    formValues.memoizedTransportData && 
+  const hasRequiredData = formValues &&
+    formValues.origin &&
+    formValues.destination &&
+    formValues.memoizedTransportData &&
     Array.isArray(formValues.memoizedTransportData) &&
     formValues.memoizedTransportData.length > 0;
 
@@ -1018,10 +1020,16 @@ const CustomerRequestForm = (data = {
       </Container>
     );
   }
-
+  console.log("form------------------", form)
   return (
     <>
       <form onSubmit={form.onSubmit(handleSubmit)}>
+        <Box mt={60}>
+          <RouteMap
+            origin={form?.values?.result?.[0]?.origin}
+            destination={form?.values?.result?.[0]?.destination}
+          />
+        </Box>
         <Container
           fluid px={'7%'} py={'70px'}
         >
@@ -1078,7 +1086,9 @@ const CustomerRequestForm = (data = {
                             ...prevValues.result[0]?.origin,
                             origin: value?.value,
                             port: value?.value,
-                            name: value?.label,
+                            name: value?.name || '',
+                            code: value?.code || '',
+                            country: value?.country || '',
                           },
                         },
                       ]
@@ -1152,7 +1162,9 @@ const CustomerRequestForm = (data = {
                           destination: {
                             ...prevValues.result[0]?.destination,
                             destination: value?.value,
-                            name: value?.label,
+                            name: value?.name || '',
+                            code: value?.code || '',
+                            country: value?.country || '',
                             port: value?.value,
                           },
                         },
