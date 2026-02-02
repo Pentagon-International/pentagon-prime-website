@@ -6,7 +6,7 @@ import { COLORS } from '../utils/COLORS';
 import { TYPOGRAPHY } from '../utils/TYPOGRAPHY';
 import { sendEnquiryEmail } from '../../../lib/sendEmail';
 import { validation } from '../utils/validateInput';
-import { notifications } from '@mantine/notifications';
+import { Notifications, notifications } from '@mantine/notifications';
 import { useMediaQuery } from '@mantine/hooks';
 import useTransportStore from '../store/transportStore';
 

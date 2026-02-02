@@ -1,6 +1,8 @@
+import { Box } from '@mantine/core';
 import News from './component/common/News';
 import Certificate from './home/Certificate';
 import CustomerCentric from './home/CustomerCentric';
+import FreightLanesMarquee from './home/FreightLanesMarquee';
 import Hero from './home/Hero';
 import HighlightContent from './home/HighlightContent';
 import LogisticsServices from './home/LogisticServices';
@@ -26,8 +28,9 @@ const Page = async () => {
   ]);
     
   return (
-    <div>
+    <Box>
       <Hero title={heroData.title} content={heroData.content} />
+      <FreightLanesMarquee />
       <PentagonPrime title={primeData.title} content={primeData.content} title2={primeData.title2}/>
       <LogisticsServices title={serviceData.title} />
       <Vision title={visionData.title} content={visionData.content} tradeItems={tradeItems} tradeContent={tradeContent} />
@@ -38,7 +41,7 @@ const Page = async () => {
       <Certificate />
       <News />
       <HighlightContent />
-    </div>
+    </Box>
   );
 };
 

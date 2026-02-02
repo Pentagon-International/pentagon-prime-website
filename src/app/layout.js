@@ -7,7 +7,7 @@ import '@mantine/core/styles.css';
 import '@mantine/carousel/styles.css';
 import { kumbhSans, theme } from './utils/theme';
 import QueryProvider from './api/QueryProvider';
-import { Notifications } from "@mantine/notifications";
+import { Notifications, notifications } from "@mantine/notifications";
 import '@mantine/notifications/styles.css';
 import '@mantine/dates/styles.css';
 import { baseURL } from './api/api';

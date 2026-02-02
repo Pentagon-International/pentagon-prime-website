@@ -1,14 +1,13 @@
-import React from 'react';
+'use client';
+
+import { Suspense } from 'react';
 import CustomerRequestForm from './CustomerRequestForm';
+import Loader from '../component/common/Loader';
 
-const page = () => {
-  
-  
+export default function Page() {
   return (
-    <>
-    <CustomerRequestForm/>
-    </>
+    <Suspense fallback={<Loader />}>
+      <CustomerRequestForm />
+    </Suspense>
   );
-};
-
-export default page;
+}

@@ -1,0 +1,8 @@
+# Dependencies and build output (reduces lint scope for faster runs)
+node_modules
+.next
+out
+build
+
+# Static assets (not app source)
+public

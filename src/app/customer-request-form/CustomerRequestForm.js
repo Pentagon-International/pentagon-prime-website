@@ -1,7 +1,50 @@
-'use client'
+"use client";
 
-import { ActionIcon, Alert, Anchor, Autocomplete, Box, Button, Center, Checkbox, Container, FileButton, Flex, Grid, GridCol, Group, List, Loader, Modal, NumberInput, Radio, rem, ScrollArea, SegmentedControl, Select, Switch, Text, Textarea, TextInput, Title } from "@mantine/core";
-import { IconArrowRight, IconArrowsDownUp, IconArrowsLeftRight, IconBox, IconCalendar, IconFiles, IconMapPin, IconPaperclip, IconPlane, IconPlus, IconSquareHalf, IconTrash, IconUpload } from "@tabler/icons-react";
+import {
+  ActionIcon,
+  Alert,
+  Anchor,
+  Autocomplete,
+  Box,
+  Button,
+  Center,
+  Checkbox,
+  Container,
+  FileButton,
+  Flex,
+  Grid,
+  GridCol,
+  Group,
+  List,
+  Loader,
+  Modal,
+  NumberInput,
+  Radio,
+  rem,
+  ScrollArea,
+  SegmentedControl,
+  Select,
+  Switch,
+  Text,
+  Textarea,
+  TextInput,
+  Title,
+} from "@mantine/core";
+import {
+  IconArrowRight,
+  IconArrowsDownUp,
+  IconArrowsLeftRight,
+  IconBox,
+  IconCalendar,
+  IconFiles,
+  IconMapPin,
+  IconPaperclip,
+  IconPlane,
+  IconPlus,
+  IconSquareHalf,
+  IconTrash,
+  IconUpload,
+} from "@tabler/icons-react";
 import { COLORS } from "../utils/COLORS";
 import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
@@ -14,19 +57,21 @@ import { useForm } from "@mantine/form";
 import { DateInput } from "@mantine/dates";
 import dayjs from "dayjs";
 import { imoClass } from "../utils/imoClass";
-import { contSize, getContainerFields, options, types, TypesWithContainers } from "../tools/containerDetails";
+import {
+  contSize,
+  getContainerFields,
+  options,
+  types,
+  TypesWithContainers,
+} from "../tools/containerDetails";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { result } from "lodash";
-import { useRouter, useSearchParams } from "next/navigation";
-import { notifications } from "@mantine/notifications";
-import { Transition } from '@mantine/core';
-import RouteMap from "../component/route-map/RouteMap";
+import result from "lodash/result";
+import { useRouter } from "next/navigation";
+import { Notifications, notifications } from "@mantine/notifications";
+import { Transition } from "@mantine/core";
+import dynamic from "next/dynamic";
 
-function CargoButton({
-  hasContainerDetailsError,
-  form,
-  handleAddCargoClick,
-}) {
+function CargoButton({ hasContainerDetailsError, form, handleAddCargoClick }) {
   const [pulse, setPulse] = useState(false);
 
   // Toggle "pulse" flag every 700 ms while the error is active
@@ -44,11 +89,11 @@ function CargoButton({
 
   // Two inline‑style states to alternate between
   const baseStyle = {
-    transform: 'scale(1)',
+    transform: "scale(1)",
   };
   const pulsedStyle = {
-    transform: 'scale(1)',
-    boxShadow: '0 0 8px rgba(255, 0, 0, 0.45)',
+    transform: "scale(1)",
+    boxShadow: "0 0 8px rgba(255, 0, 0, 0.45)",
   };
 
   return (
@@ -57,27 +102,31 @@ function CargoButton({
         <Button
           style={{
             ...styles, // from Transition fade‑in/out
-            ...(hasContainerDetailsError ? (pulse ? pulsedStyle : baseStyle) : {}),
+            ...(hasContainerDetailsError
+              ? pulse
+                ? pulsedStyle
+                : baseStyle
+              : {}),
           }}
-          color={hasContainerDetailsError ? 'red' : ''}
-          variant={hasContainerDetailsError ? 'outline' : 'filled'}
+          color={hasContainerDetailsError ? "red" : ""}
+          variant={hasContainerDetailsError ? "outline" : "filled"}
           fullWidth
           onClick={handleAddCargoClick}
           leftSection={<IconPlus />}
         >
-          Add Cargo Details{' '}
+          Add Cargo Details{" "}
           {containerDetails
-            ? `(${containerDetails.type} – ${containerDetails.list?.length ?? containerDetails.containerCount
-            })`
-            : ''}
+            ? `(${containerDetails.type} – ${
+                containerDetails.list?.length ?? containerDetails.containerCount
+              })`
+            : ""}
         </Button>
       )}
     </Transition>
   );
 }
 
-
-const today = dayjs()
+const today = dayjs();
 
 const ListAttachments = ({ data = [], onDelete }) => {
   if (!data || data?.length === 0) {
@@ -86,7 +135,7 @@ const ListAttachments = ({ data = [], onDelete }) => {
 
   // Filter out duplicates by URL
   const uniqueFiles = data.reduce((acc, current) => {
-    const x = acc.find(item => item.url === current.url);
+    const x = acc.find((item) => item.url === current.url);
     if (!x) {
       return acc.concat([current]);
     } else {
@@ -97,17 +146,18 @@ const ListAttachments = ({ data = [], onDelete }) => {
   return (
     <List
       center
-      size='sm'
-      spacing={'xs'}
+      size="sm"
+      spacing={"xs"}
       icon={<IconPaperclip style={{ width: rem(16), height: rem(16) }} />}
     >
-      {uniqueFiles?.map((attachment, index) => (
+      {uniqueFiles?.map((attachment, index) =>
         attachment?.url ? (
-          <List.Item key={index} py={'xs'}>
+          <List.Item key={index} py={"xs"}>
             <Group gap="sm">
-              <Anchor href={attachment.url} target='_blank' size='sm'>
+              <Anchor href={attachment.url} target="_blank" size="sm">
                 {attachment.displayName ||
-                  (attachment.url.split('/').pop()?.split('?')[0] || 'Document')}
+                  attachment.url.split("/").pop()?.split("?")[0] ||
+                  "Document"}
               </Anchor>
               <ActionIcon
                 variant="subtle"
@@ -119,56 +169,67 @@ const ListAttachments = ({ data = [], onDelete }) => {
               </ActionIcon>
             </Group>
           </List.Item>
-        ) : null
-      ))}
+        ) : null,
+      )}
     </List>
   );
 };
 
-const CustomerRequestForm = (data = {
-  type: undefined,
-  weight: null,
-  size: "20GP",
-  containerCount: null,
-  list: [],
-}, defaultSize = `20GP`, submitCallback = () => null) => {
-
+const CustomerRequestForm = (
+  data = {
+    type: undefined,
+    weight: null,
+    size: "20GP",
+    containerCount: null,
+    list: [],
+  },
+  defaultSize = `20GP`,
+  submitCallback = () => null,
+) => {
   const { formValues, _hasHydrated } = useCustomerRequestStore();
   const { seaData, airData, setSeaData, setAirData } = useTransportStore();
-  const selectData = formValues?.typeOfBooking === 'air' ? airData : seaData
+  const selectData = formValues?.typeOfBooking === "air" ? airData : seaData;
   const router = useRouter();
   const [isCheckingData, setIsCheckingData] = useState(true);
 
   // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS
-  const [filteredOriginData, setFilteredOriginData] = useState(formValues?.memoizedTransportData || []);
-  const [filteredDestinationData, setFilteredDestinationData] = useState(formValues?.memoizedTransportData || []);
+  const [filteredOriginData, setFilteredOriginData] = useState(
+    formValues?.memoizedTransportData || [],
+  );
+  const [filteredDestinationData, setFilteredDestinationData] = useState(
+    formValues?.memoizedTransportData || [],
+  );
+
+  const RouteMap = dynamic(() => import("../component/route-map/RouteMap"), {
+    ssr: false,
+  });
 
   const form = useForm({
-    mode: 'controlled',
+    mode: "controlled",
     initialValues: {
-      typeofBooking: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
-      category: formValues?.activeTransport === "sea" ? 'FCL' : 'AIR',
-      customer_name: '',
-      contact_number: '',
-      email: '',
+      typeofBooking: formValues?.activeTransport === "sea" ? "FCL" : "AIR",
+      category: formValues?.activeTransport === "sea" ? "FCL" : "AIR",
+      customer_name: "",
+      contact_number: "",
+      email: "",
       result: [
         {
           origin: {
-            ...(formValues?.origin || {})
+            ...(formValues?.origin || {}),
           },
           destination: formValues?.destination || {},
           cargo: {
             isDangerous: false,
-            remarks: '',
+            remarks: "",
           },
           unNo: null,
           imo: null,
           agents: ["55bf1d1d-66ad-4726-8d72-8b39308792e1"],
           stackable: true,
           documents: [],
-          container_details: null
-        }
-      ]
+          container_details: null,
+        },
+      ],
     },
     validate: (values) => {
       const errors = {};
@@ -177,19 +238,19 @@ const CustomerRequestForm = (data = {
 
       // Basic fields validation
       if (!values.customer_name) {
-        errors.customer_name = 'Please enter the Name';
+        errors.customer_name = "Please enter the Name";
       }
 
       if (!values.contact_number) {
-        errors.contact_number = 'Please enter the valid Mobile number';
+        errors.contact_number = "Please enter the valid Mobile number";
       } else if (!phoneRegex.test(values.contact_number)) {
-        errors.contact_number = 'Please enter the valid Mobile number';
+        errors.contact_number = "Please enter the valid Mobile number";
       }
 
       if (!values.email) {
-        errors.email = 'Please enter the valid Email';
+        errors.email = "Please enter the valid Email";
       } else if (!emailRegex.test(values.email)) {
-        errors.email = 'Please enter the valid Email';
+        errors.email = "Please enter the valid Email";
       }
 
       // Result array validation
@@ -201,46 +262,53 @@ const CustomerRequestForm = (data = {
 
         // Origin validation
         if (!origin?.origin) {
-          resultErrors.push({ origin: { origin: 'Please enter the Origin' } });
+          resultErrors.push({ origin: { origin: "Please enter the Origin" } });
         }
         if (!firstResult.origin?.shipment_type) {
           resultErrors.origin = {
             ...resultErrors.origin,
-            shipment_type: 'Please enter the Shipment terms'
+            shipment_type: "Please enter the Shipment terms",
           };
         }
         if (!firstResult.origin?.ready_date) {
           resultErrors.origin = {
             ...resultErrors.origin,
-            ready_date: 'Please enter the Cargo ready date'
+            ready_date: "Please enter the Cargo ready date",
           };
         }
 
         // Destination validation
         if (!destination?.destination) {
-          resultErrors.push({ destination: { destination: 'Please enter the Destination' } });
+          resultErrors.push({
+            destination: { destination: "Please enter the Destination" },
+          });
         }
 
         // Container details validation
         if (!container_details) {
-          resultErrors.push({ container_details: 'Please enter the valid Cargo details' });
+          resultErrors.push({
+            container_details: "Please enter the valid Cargo details",
+          });
         } else {
           switch (bookingType) {
-            case 'FCL':
+            case "FCL":
               if (!container_details.list?.length) {
-                resultErrors.push({ container_details: 'Please enter at least one valid Container' });
+                resultErrors.push({
+                  container_details:
+                    "Please enter at least one valid Container",
+                });
               } else {
                 container_details.list.forEach((container, index) => {
                   if (!container.size) {
                     resultErrors.push({
-                      container_details: `Please enter the valid Size for Container ${index + 1}`
+                      container_details: `Please enter the valid Size for Container ${index + 1}`,
                     });
                   }
 
-                  container.fields?.forEach(field => {
+                  container.fields?.forEach((field) => {
                     if (field.required && !field.value) {
                       resultErrors.push({
-                        container_details: `Please enter the valid ${field.label} for Container ${index + 1}`
+                        container_details: `Please enter the valid ${field.label} for Container ${index + 1}`,
                       });
                     }
                   });
@@ -248,39 +316,53 @@ const CustomerRequestForm = (data = {
               }
               break;
 
-            case 'LCL':
+            case "LCL":
               if (!container_details.no_of_packages) {
-                resultErrors.push({ container_details: 'Please enter the Number of packages' });
+                resultErrors.push({
+                  container_details: "Please enter the Number of packages",
+                });
               }
               if (!container_details.gross_weight) {
-                resultErrors.push({ container_details: 'Please enter the Gross weight' });
+                resultErrors.push({
+                  container_details: "Please enter the Gross weight",
+                });
               }
               if (!container_details.volume) {
-                resultErrors.push({ container_details: 'Please enter the Volume' });
+                resultErrors.push({
+                  container_details: "Please enter the Volume",
+                });
               }
               break;
 
-            case 'AIR':
+            case "AIR":
               if (!container_details.no_of_packages) {
-                resultErrors.push({ container_details: 'Please enter the Number of packages' });
+                resultErrors.push({
+                  container_details: "Please enter the Number of packages",
+                });
               }
               if (!container_details.gross_weight) {
-                resultErrors.push({ container_details: 'Please enter the Gross weight' });
+                resultErrors.push({
+                  container_details: "Please enter the Gross weight",
+                });
               }
               if (!container_details.volume_weight) {
-                resultErrors.push({ container_details: 'Please enter the Volume weight' });
+                resultErrors.push({
+                  container_details: "Please enter the Volume weight",
+                });
               }
               break;
 
             default:
-              resultErrors.push({ container_details: `Please enter the valid Booking type` });
+              resultErrors.push({
+                container_details: `Please enter the valid Booking type`,
+              });
           }
         }
 
         // Dangerous cargo validation
         if (cargo?.isDangerous) {
           if (!firstResult.imo) {
-            resultErrors.push({ imo: 'Please enter the IMO class' });
+            resultErrors.push({ imo: "Please enter the IMO class" });
           }
           // if (!firstResult.unNo) {
           //   resultErrors.push({ unNo: 'Please enter the valid UN number' });
@@ -294,13 +376,12 @@ const CustomerRequestForm = (data = {
       }
 
       return errors;
-    }
-
+    },
   });
-  console.log('form errors', form.errors);
+  console.log("form errors", form.errors);
 
   const hasContainerDetailsError = form.errors?.result?.[0]?.some(
-    error => error?.container_details !== undefined
+    (error) => error?.container_details !== undefined,
   );
   console.log("hasContainerDetailsError", hasContainerDetailsError);
 
@@ -314,7 +395,7 @@ const CustomerRequestForm = (data = {
       return data?.data?.map((item) => ({
         label: `${item.code} - ${item.description}`,
         value: item.category,
-      }))
+      }));
     },
     onError: (error) => {
       console.log(error);
@@ -325,7 +406,7 @@ const CustomerRequestForm = (data = {
   useEffect(() => {
     if (form.values.result?.[0]?.origin?.origin) {
       const filteredDestinations = formValues?.memoizedTransportData?.filter(
-        item => item.value !== form.values.result?.[0]?.origin?.origin
+        (item) => item.value !== form.values.result?.[0]?.origin?.origin,
       );
       setFilteredDestinationData(filteredDestinations || []);
     }
@@ -335,15 +416,18 @@ const CustomerRequestForm = (data = {
   useEffect(() => {
     if (form.values.result?.[0]?.destination?.destination) {
       const filteredOrigins = formValues?.memoizedTransportData?.filter(
-        item => item.value !== form.values.result?.[0]?.destination?.destination
+        (item) =>
+          item.value !== form.values.result?.[0]?.destination?.destination,
       );
       setFilteredOriginData(filteredOrigins || []);
     }
   }, [form.values.result?.[0]?.destination?.destination]);
 
   const [uploadingFile, setUploadingFile] = useState(false);
-  const [errors, setErrors] = useState({})
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const [errors, setErrors] = useState({});
+  const isMobile =
+    typeof window !== "undefined" ? useMediaQuery("(max-width: 768px)") : false;
+
   const [openedModal, setOpenedModal] = useState(null);
   const openModal = (type) => setOpenedModal(type);
   const closeModal = () => setOpenedModal(null);
@@ -368,7 +452,9 @@ const CustomerRequestForm = (data = {
   const [activeType, setActiveType] = useState(data?.type || "GC");
   const [activeSize, setActiveSize] = useState(defaultSize);
   const [selectedSize, setSelectedSize] = useState([]);
-  const [activeDimension, setActiveDimension] = useState(data?.dimension || "M");
+  const [activeDimension, setActiveDimension] = useState(
+    data?.dimension || "M",
+  );
 
   const CustomTitle = () => (
     <Flex align={"center"} gap={20}>
@@ -376,7 +462,7 @@ const CustomerRequestForm = (data = {
     </Flex>
   );
 
-  const Icon = isMobile ? IconArrowsDownUp : IconArrowsLeftRight
+  const Icon = isMobile ? IconArrowsDownUp : IconArrowsLeftRight;
 
   useEffect(() => {
     if (TypesWithContainers.includes(activeType)) {
@@ -397,7 +483,7 @@ const CustomerRequestForm = (data = {
         const newList = changeDimensions(
           containerList.list,
           activeDimension,
-          `(${containerList.dimension})`
+          `(${containerList.dimension})`,
         );
         setContainerList((ct) => ({
           ...ct,
@@ -446,8 +532,8 @@ const CustomerRequestForm = (data = {
   }, [openedModal]);
 
   const salesPersonQuery = useQuery({
-    queryKey: ['sales-person-query'],
-    queryFn: () => apiCallProtected.get('/pentagon/salesPerson'),
+    queryKey: ["sales-person-query"],
+    queryFn: () => apiCallProtected.get("/pentagon/salesPerson"),
     select: ({ data }) => {
       return data.data?.map((salesperson) => ({
         value: `${salesperson.id}`,
@@ -465,8 +551,8 @@ const CustomerRequestForm = (data = {
     select: ({ data }) => {
       return data?.map((item) => ({
         label: item.name,
-        value: item.name
-      }))
+        value: item.name,
+      }));
     },
     onError: (error) => {
       console.log(error);
@@ -476,36 +562,36 @@ const CustomerRequestForm = (data = {
   const segmantData = React.useMemo(() => {
     return formValues?.activeTransport === "sea"
       ? [
-        {
-          value: 'FCL',
-          label: (
-            <Center style={{ gap: 10 }}>
-              <IconBox size={20} stroke={1.5} />
-              <span>FCL</span>
-            </Center>
-          ),
-        },
-        {
-          value: 'LCL',
-          label: (
-            <Center style={{ gap: 10 }}>
-              <IconSquareHalf size={20} stroke={1.5} />
-              <span>LCL</span>
-            </Center>
-          ),
-        },
-      ]
+          {
+            value: "FCL",
+            label: (
+              <Center style={{ gap: 10 }}>
+                <IconBox size={20} stroke={1.5} />
+                <span>FCL</span>
+              </Center>
+            ),
+          },
+          {
+            value: "LCL",
+            label: (
+              <Center style={{ gap: 10 }}>
+                <IconSquareHalf size={20} stroke={1.5} />
+                <span>LCL</span>
+              </Center>
+            ),
+          },
+        ]
       : [
-        {
-          value: 'AIR',
-          label: (
-            <Center style={{ gap: 10 }}>
-              <IconPlane size={20} stroke={1.5} />
-              <span>Air</span>
-            </Center>
-          ),
-        },
-      ];
+          {
+            value: "AIR",
+            label: (
+              <Center style={{ gap: 10 }}>
+                <IconPlane size={20} stroke={1.5} />
+                <span>Air</span>
+              </Center>
+            ),
+          },
+        ];
   }, [formValues?.activeTransport]);
 
   // Wait for store hydration and check data - MUST BE AFTER ALL HOOKS
@@ -515,7 +601,8 @@ const CustomerRequestForm = (data = {
       return;
     }
 
-    const hasRequiredData = formValues &&
+    const hasRequiredData =
+      formValues &&
       formValues.origin &&
       formValues.destination &&
       formValues.memoizedTransportData &&
@@ -524,13 +611,14 @@ const CustomerRequestForm = (data = {
 
     if (!hasRequiredData) {
       // Redirect to home if data is missing after hydration
-      router.replace('/');
+      router.replace("/");
     } else {
       setIsCheckingData(false);
     }
   }, [formValues, _hasHydrated, router]);
 
-  const hasRequiredData = formValues &&
+  const hasRequiredData =
+    formValues &&
     formValues.origin &&
     formValues.destination &&
     formValues.memoizedTransportData &&
@@ -540,12 +628,12 @@ const CustomerRequestForm = (data = {
   const handleAddCargoClick = () => {
     setModalErrors({}); // Clear previous errors
     const bookingType = form.values.typeofBooking;
-    if (bookingType === 'FCL') {
-      openModal('FCL');
-    } else if (bookingType === 'LCL') {
-      openModal('LCL');
-    } else if (bookingType === 'AIR') {
-      openModal('AIR');
+    if (bookingType === "FCL") {
+      openModal("FCL");
+    } else if (bookingType === "LCL") {
+      openModal("LCL");
+    } else if (bookingType === "AIR") {
+      openModal("AIR");
     }
   };
 
@@ -590,12 +678,13 @@ const CustomerRequestForm = (data = {
   };
   const HsCodeQuery = useQuery({
     queryKey: ["Hs-code", containerList.hs1],
-    queryFn: async () => apiCallProtected.get(`/pentagon/categories/h2/${containerList.hs1}`),
+    queryFn: async () =>
+      apiCallProtected.get(`/pentagon/categories/h2/${containerList.hs1}`),
     select: (data) => {
       return data.data?.map((item) => ({
         label: `${item.code} - ${item.description}`,
         value: `${item.code}`,
-      }))
+      }));
     },
     onError: (error) => {
       console.log(error);
@@ -640,7 +729,11 @@ const CustomerRequestForm = (data = {
         const curField = item.fields[fieldPosition];
         const fields = item.fields.map((f, j) => {
           if (j !== fieldPosition) return f;
-          if (curField.type === types.NUMBER || curField.type === types.OPTIONS || curField.type === types.DROPDOWN) {
+          if (
+            curField.type === types.NUMBER ||
+            curField.type === types.OPTIONS ||
+            curField.type === types.DROPDOWN
+          ) {
             return { ...f, value: event };
           }
           if (curField.type === types.CHECKBOX) {
@@ -659,7 +752,10 @@ const CustomerRequestForm = (data = {
     setContainerList((st) => ({
       ...st,
       size: v,
-      list: st.list?.map((item, index) => (index === i ? { ...item, size: v } : item)) ?? st.list,
+      list:
+        st.list?.map((item, index) =>
+          index === i ? { ...item, size: v } : item,
+        ) ?? st.list,
     }));
   };
 
@@ -667,13 +763,13 @@ const CustomerRequestForm = (data = {
     submitCallback(containerList);
   }, [containerList]);
 
-  const { mutate: fileUpload, isPending: isUploading, } = useMutation({
-    mutationFn: data =>
-      apiCallProtected.post('/pentagon/file/upload', data, {
+  const { mutate: fileUpload, isPending: isUploading } = useMutation({
+    mutationFn: (data) =>
+      apiCallProtected.post("/pentagon/file/upload", data, {
         headers: {
-          'Content-Type': 'multipart/form-data',
-          'x-client-secret': process.env.NEXT_PUBLIC_X_CLIENT_SECRET
-        }
+          "Content-Type": "multipart/form-data",
+          "x-client-secret": process.env.NEXT_PUBLIC_X_CLIENT_SECRET,
+        },
       }),
     onSuccess: (values) => {
       try {
@@ -701,34 +797,35 @@ const CustomerRequestForm = (data = {
         console.log(e);
       }
     },
-    onError: error => {
-      console.error('Upload Error >> ', error)
+    onError: (error) => {
+      console.error("Upload Error >> ", error);
       notifications.show({
-        message: 'Try again later.',
-        color: 'red',
-        title: 'Unable to upload!'
-      })
-    }
-  })
+        message: "Try again later.",
+        color: "red",
+        title: "Unable to upload!",
+      });
+    },
+  });
 
   const submitCustomerRequest = useMutation({
-    mutationFn: (data) => apiCallProtected.post('/pentagon/createQuote', data, {
-      headers: {
-        'x-client-secret': process.env.NEXT_PUBLIC_X_CLIENT_SECRET
-      }
-    }),
+    mutationFn: (data) =>
+      apiCallProtected.post("/pentagon/createQuote", data, {
+        headers: {
+          "x-client-secret": process.env.NEXT_PUBLIC_X_CLIENT_SECRET,
+        },
+      }),
     onSuccess: (res) => {
-      router.push('/submitted');
+      router.push("/submitted");
     },
     onError: (error) => {
-      console.error('Submission error:', error);
+      console.error("Submission error:", error);
     },
   });
   console.log("isUploading for fileupload:::  ", isUploading);
 
-  const handleFileUpload = category => files => {
+  const handleFileUpload = (category) => (files) => {
     const fileObj = new FormData();
-    fileObj.append('file', files[0]);
+    fileObj.append("file", files[0]);
 
     // Store the original filename for display
     const originalFilename = files[0].name;
@@ -740,16 +837,16 @@ const CustomerRequestForm = (data = {
 
         if (url) {
           // Extract just the filename part from the URL (before query params)
-          const urlParts = url.split('/');
+          const urlParts = url.split("/");
           const lastPart = urlParts[urlParts.length - 1];
-          displayName = lastPart.split('?')[0] || originalFilename;
+          displayName = lastPart.split("?")[0] || originalFilename;
         }
 
         form.setValues((prevValues) => {
           const existingDocuments = prevValues?.result?.[0]?.documents || [];
 
           // Check if this file already exists in documents
-          const fileExists = existingDocuments.some(doc => doc.url === url);
+          const fileExists = existingDocuments.some((doc) => doc.url === url);
 
           if (!fileExists) {
             const updatedResult = [
@@ -761,7 +858,7 @@ const CustomerRequestForm = (data = {
                     category: category, // Only use the provided category
                     url: url,
                     displayName: displayName,
-                    originalName: originalFilename
+                    originalName: originalFilename,
                   },
                 ],
               },
@@ -777,11 +874,11 @@ const CustomerRequestForm = (data = {
       },
       onError: (error) => {
         notifications.show({
-          title: 'Upload failed',
-          message: 'Could not upload file. Please try again.',
-          color: 'red',
+          title: "Upload failed",
+          message: "Could not upload file. Please try again.",
+          color: "red",
         });
-      }
+      },
     });
   };
   const handleDeleteFile = (index) => {
@@ -809,16 +906,18 @@ const CustomerRequestForm = (data = {
       // Focus the first invalid field
       const firstError = Object.keys(form.errors)[0];
       if (firstError) {
-        document.querySelector(`[name="${firstError}"]`)?.focus();
+        if (typeof window !== "undefined") {
+          document.querySelector(`[name="${firstError}"]`)?.focus();
+        }
       }
       return; // Stop submission
     }
 
     // Proceed with submission logic
     const bookingType = values.typeofBooking;
-    const isAir = bookingType === 'AIR';
-    const isFCL = bookingType === 'FCL';
-    const isLCL = bookingType === 'LCL';
+    const isAir = bookingType === "AIR";
+    const isFCL = bookingType === "FCL";
+    const isLCL = bookingType === "LCL";
 
     // ... rest of your payload construction
     const payload = {
@@ -859,10 +958,12 @@ const CustomerRequestForm = (data = {
           stackable: values.result[0]?.stackable || true,
           imo: values.result[0]?.imo,
           unNo: values.result[0]?.unNo,
-          agents: values.result[0]?.agents || ["55bf1d1d-66ad-4726-8d72-8b39308792e1"],
+          agents: values.result[0]?.agents || [
+            "55bf1d1d-66ad-4726-8d72-8b39308792e1",
+          ],
           documents: values.result[0]?.documents || [],
-        }
-      ]
+        },
+      ],
     };
 
     // Add booking type specific fields
@@ -878,20 +979,20 @@ const CustomerRequestForm = (data = {
         hs2: containerList.hs2,
         size: containerList.size,
         containerCount: containerList.containerCount,
-        list: containerList.list?.map(item => ({
+        list: containerList.list?.map((item) => ({
           size: item.size,
-          fields: item.fields?.map(field => ({
+          fields: item.fields?.map((field) => ({
             label: field.label,
             value: field.value,
             checked: field.checked,
-            type: field.type
-          }))
-        }))
+            type: field.type,
+          })),
+        })),
       };
     } else if (isLCL) {
       payload.result[0].container_details = {
         commodity: containerList.commodity,
-        type: 'LCL',
+        type: "LCL",
         dimension: containerList.dimension,
         weight: containerList.weight,
         hsCode: containerList.hsCode,
@@ -902,16 +1003,16 @@ const CustomerRequestForm = (data = {
         containerCount: containerList.containerCount,
         list: [
           {
-            "no_of_package": containerList.no_of_packages,
-            "gross_weight": containerList.gross_weight,
-            "volume": containerList.volume
-          }
-        ]
+            no_of_package: containerList.no_of_packages,
+            gross_weight: containerList.gross_weight,
+            volume: containerList.volume,
+          },
+        ],
       };
     } else if (isAir) {
       payload.result[0].container_details = {
         commodity: containerList.commodity,
-        type: 'AIR',
+        type: "AIR",
         dimension: containerList.dimension,
         weight: containerList.weight,
         hsCode: containerList.hsCode,
@@ -922,11 +1023,11 @@ const CustomerRequestForm = (data = {
         containerCount: containerList.containerCount,
         list: [
           {
-            "no_of_package": containerList.no_of_packages,
-            "gross_weight": containerList.gross_weight,
-            "volume_weight": containerList.volume_weight
-          }
-        ]
+            no_of_package: containerList.no_of_packages,
+            gross_weight: containerList.gross_weight,
+            volume_weight: containerList.volume_weight,
+          },
+        ],
       };
     }
 
@@ -934,15 +1035,14 @@ const CustomerRequestForm = (data = {
   };
   useEffect(() => {
     if (formValues?.activeTransport) {
-      const bookingType = formValues.activeTransport === "sea" ? 'FCL' : 'AIR';
+      const bookingType = formValues.activeTransport === "sea" ? "FCL" : "AIR";
       form.setValues({
         ...form.values,
         typeofBooking: bookingType,
-        category: bookingType
+        category: bookingType,
       });
     }
   }, [formValues?.activeTransport]);
-
 
   const validateCargoDetails = () => {
     const bookingType = form.values.typeofBooking;
@@ -950,31 +1050,39 @@ const CustomerRequestForm = (data = {
 
     // Common validation for all types
     if (!containerList.commodity) {
-      errors.commodity = 'Please enter the Commodity';
+      errors.commodity = "Please enter the Commodity";
     }
 
     // hs2 (specific HS Code) is optional when category (hs1) is selected
-    if (bookingType === 'FCL') {
+    if (bookingType === "FCL") {
       if (!containerList.list || containerList.list.length === 0) {
-        errors.list = 'Please enter the valid Container';
+        errors.list = "Please enter the valid Container";
       } else {
         containerList.list.forEach((item, i) => {
           // Validate container size
-          if (item.size === undefined || item.size === null || item.size === '') {
-            errors[`container_${i}_size`] = 'Please enter the valid Container size';
+          if (
+            item.size === undefined ||
+            item.size === null ||
+            item.size === ""
+          ) {
+            errors[`container_${i}_size`] =
+              "Please enter the valid Container size";
           }
 
           // Validate each field in the container
           item.fields?.forEach((field, j) => {
             const errorKey = `container_${i}_field_${j}`;
             const fieldValue = field?.value ?? null;
-            const isEmpty = fieldValue === null || fieldValue === undefined || fieldValue === '';
+            const isEmpty =
+              fieldValue === null ||
+              fieldValue === undefined ||
+              fieldValue === "";
 
-            if (field.label === 'Count') {
+            if (field.label === "Count") {
               if (isEmpty || Number(fieldValue) < 1) {
-                errors[errorKey] = 'Please enter the valid Count';
+                errors[errorKey] = "Please enter the valid Count";
               }
-            } else if (field.label === 'Weight (mt)') {
+            } else if (field.label === "Weight (mt)") {
               // optional
             } else if (field.type === types.CHECKBOX) {
               // checkbox has no required validation
@@ -984,25 +1092,25 @@ const CustomerRequestForm = (data = {
           });
         });
       }
-    } else if (bookingType === 'LCL') {
+    } else if (bookingType === "LCL") {
       if (!containerList.no_of_packages) {
-        errors.no_of_packages = 'Please enter the Number of packages';
+        errors.no_of_packages = "Please enter the Number of packages";
       }
       if (!containerList.gross_weight) {
-        errors.gross_weight = 'Please enter the Gross weight';
+        errors.gross_weight = "Please enter the Gross weight";
       }
       if (!containerList.volume) {
-        errors.volume = 'Please enter the Volume';
+        errors.volume = "Please enter the Volume";
       }
-    } else if (bookingType === 'AIR') {
+    } else if (bookingType === "AIR") {
       if (!containerList.no_of_packages) {
-        errors.no_of_packages = 'Please enter the Number of packages';
+        errors.no_of_packages = "Please enter the Number of packages";
       }
       if (!containerList.gross_weight) {
-        errors.gross_weight = 'Please enter the Gross weight';
+        errors.gross_weight = "Please enter the Gross weight";
       }
       if (!containerList.volume_weight) {
-        errors.volume_weight = 'Please enter the Volume weight';
+        errors.volume_weight = "Please enter the Volume weight";
       }
     }
 
@@ -1012,15 +1120,25 @@ const CustomerRequestForm = (data = {
   // Show loader until store is hydrated and data is verified
   if (!_hasHydrated || isCheckingData || !hasRequiredData) {
     return (
-      <Container fluid style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Container
+        fluid
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <Flex direction="column" align="center" gap="md">
           <Loader size="xl" color={COLORS.primaryColor} />
-          <Text size="lg" fw={500}>Loading form...</Text>
+          <Text size="lg" fw={500}>
+            Loading form...
+          </Text>
         </Flex>
       </Container>
     );
   }
-  console.log("form------------------", form)
+  console.log("form------------------", form);
   return (
     <>
       <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -1030,18 +1148,21 @@ const CustomerRequestForm = (data = {
             destination={form?.values?.result?.[0]?.destination}
           />
         </Box>
-        <Container
-          fluid px={'7%'} py={'70px'}
-        >
+        <Container fluid px={"7%"} py={"70px"}>
           {/* <Title tt="uppercase" tw="balance" fw={800}> Featured articles </Title> */}
-          <Title mb="lg" mt={'xl'} tt="uppercase" tw="balance" fw={800}>Fare Calculation</Title>
+          <Title mb="lg" mt={"xl"} tt="uppercase" tw="balance" fw={800}>
+            Fare Calculation
+          </Title>
 
           <Grid>
             <Grid.Col span={isMobile ? 12 : 5}>
               <Select
-                error={form.errors?.result?.[0]?.find(item => item?.origin)?.origin?.origin || null}
+                error={
+                  form.errors?.result?.[0]?.find((item) => item?.origin)?.origin
+                    ?.origin || null
+                }
                 withAsterisk
-                label={'Origin'}
+                label={"Origin"}
                 searchable
                 color={COLORS.secondaryColor}
                 placeholder="Select Origin"
@@ -1053,52 +1174,61 @@ const CustomerRequestForm = (data = {
                 clearable
                 clearButtonProps={{
                   style: {
-                    color: '#afb1b4',
+                    color: "#afb1b4",
                   },
                 }}
                 styles={{
                   input: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   option: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small, // Smaller error text
-                    marginTop: '4px',
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small, // Smaller error text
+                    marginTop: "4px",
                   },
-
                 }}
                 radius="md"
                 value={form?.values?.result?.[0]?.origin?.origin || []}
-                leftSection={<IconMapPin size={20} color={COLORS.secondaryColor} />}
+                leftSection={
+                  <IconMapPin size={20} color={COLORS.secondaryColor} />
+                }
                 onChange={(origin, value) => {
                   form.setValues((prevValues) => ({
                     ...prevValues,
                     result: prevValues.result
                       ? [
-                        {
-                          ...prevValues.result[0],
-                          origin: {
-                            ...prevValues.result[0]?.origin,
-                            origin: value?.value,
-                            port: value?.value,
-                            name: value?.name || '',
-                            code: value?.code || '',
-                            country: value?.country || '',
+                          {
+                            ...prevValues.result[0],
+                            origin: {
+                              ...prevValues.result[0]?.origin,
+                              origin: value?.value,
+                              port: value?.value,
+                              name: value?.name || "",
+                              code: value?.code || "",
+                              country: value?.country || "",
+                            },
                           },
-                        },
-                      ]
+                        ]
                       : [],
                   }));
                 }}
               />
             </Grid.Col>
             <Grid.Col span={isMobile ? 12 : 2}>
-              <Flex w={'100%'} h={'100%'} justify={'center'} align={'center'}>
+              <Flex w={"100%"} h={"100%"} justify={"center"} align={"center"}>
                 <ActionIcon
                   mt={32}
                   // withAsterisk
@@ -1113,11 +1243,14 @@ const CustomerRequestForm = (data = {
                 </ActionIcon>
               </Flex>
             </Grid.Col>
-            <Grid.Col span={isMobile ? 12 : 5} >
+            <Grid.Col span={isMobile ? 12 : 5}>
               <Select
                 // error={form.errors?.result?.[0]?.destination?.destination}
-                error={form.errors?.result?.[0]?.find(item => item?.destination)?.destination?.destination || null}
-                label={'Destination'}
+                error={
+                  form.errors?.result?.[0]?.find((item) => item?.destination)
+                    ?.destination?.destination || null
+                }
+                label={"Destination"}
                 withAsterisk
                 searchable
                 color={COLORS.secondaryColor}
@@ -1127,87 +1260,98 @@ const CustomerRequestForm = (data = {
                 // data={formValues?.memoizedTransportData}
                 limit={5}
                 fw={500}
-                value={form?.values?.result?.[0]?.destination?.destination || []}
+                value={
+                  form?.values?.result?.[0]?.destination?.destination || []
+                }
                 clearable
                 clearButtonProps={{
                   style: {
-                    color: '#afb1b4',
+                    color: "#afb1b4",
                   },
                 }}
                 styles={{
                   input: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   option: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small, // Smaller error text
-                    marginTop: '4px',
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small, // Smaller error text
+                    marginTop: "4px",
                   },
-
                 }}
                 radius="md"
-                leftSection={<IconMapPin size={20} color={COLORS.secondaryColor} />}
+                leftSection={
+                  <IconMapPin size={20} color={COLORS.secondaryColor} />
+                }
                 onChange={(destination, value) => {
                   form.setValues((prevValues) => ({
                     ...prevValues,
                     result: prevValues.result
                       ? [
-                        {
-                          ...prevValues.result[0],
-                          destination: {
-                            ...prevValues.result[0]?.destination,
-                            destination: value?.value,
-                            name: value?.name || '',
-                            code: value?.code || '',
-                            country: value?.country || '',
-                            port: value?.value,
+                          {
+                            ...prevValues.result[0],
+                            destination: {
+                              ...prevValues.result[0]?.destination,
+                              destination: value?.value,
+                              name: value?.name || "",
+                              code: value?.code || "",
+                              country: value?.country || "",
+                              port: value?.value,
+                            },
                           },
-                        },
-                      ]
+                        ]
                       : [],
                   }));
                 }}
               />
             </Grid.Col>
 
-
             <Grid.Col span={12}>
-              <Text size="sm" fw={500} mb={3} mt={'xs'}>
+              <Text size="sm" fw={500} mb={3} mt={"xs"}>
                 Type of Booking
               </Text>
               <SegmentedControl
                 name="typeofBooking"
-                key={form.key('typeofBooking')}
-                {...form.getInputProps('typeofBooking')}
+                key={form.key("typeofBooking")}
+                {...form.getInputProps("typeofBooking")}
                 value={form.values.typeofBooking}
                 onChange={(typeofBooking) => {
                   form.setValues((prevValues) => ({
                     ...prevValues,
                     typeofBooking: typeofBooking,
-                    category: typeofBooking
+                    category: typeofBooking,
                   }));
                 }}
                 fullWidth
-                size={isMobile ? TYPOGRAPHY.button.small : TYPOGRAPHY.button.normal}
-                radius={'md'}
-                color={'#CDF6FF'}
+                size={
+                  isMobile ? TYPOGRAPHY.button.small : TYPOGRAPHY.button.normal
+                }
+                radius={"md"}
+                color={"#CDF6FF"}
                 data={segmantData}
                 styles={{
                   indicator: {
-                    backgroundColor: '#CDF6FF',
+                    backgroundColor: "#CDF6FF",
                   },
                   innerLabel: {
-                    color: COLORS.secondaryColor
-                  }
+                    color: COLORS.secondaryColor,
+                  },
                 }}
               />
             </Grid.Col>
-
 
             <Grid.Col span={isMobile ? 12 : 6}>
               <TextInput
@@ -1218,18 +1362,24 @@ const CustomerRequestForm = (data = {
                 withAsterisk
                 styles={{
                   input: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
-                  }
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small,
+                  },
                 }}
                 radius="md"
-                key={form.key('customer_name')}
-                {...form.getInputProps('customer_name')}
+                key={form.key("customer_name")}
+                {...form.getInputProps("customer_name")}
                 error={form.errors.customer_name}
               />
             </Grid.Col>
@@ -1243,18 +1393,23 @@ const CustomerRequestForm = (data = {
                 radius="md"
                 styles={{
                   input: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
-
-                  }
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small,
+                  },
                 }}
-                key={form.key('contact_number')}
-                {...form.getInputProps('contact_number')}
+                key={form.key("contact_number")}
+                {...form.getInputProps("contact_number")}
               />
             </Grid.Col>
             <Grid.Col span={12}>
@@ -1267,18 +1422,24 @@ const CustomerRequestForm = (data = {
                 radius="md"
                 styles={{
                   input: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
-                  }
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small,
+                  },
                 }}
-                key={form.key('email')}
-                {...form.getInputProps('email')}
-              // error={errors.email}
+                key={form.key("email")}
+                {...form.getInputProps("email")}
+                // error={errors.email}
               />
             </Grid.Col>
 
@@ -1295,40 +1456,48 @@ const CustomerRequestForm = (data = {
                 value={form.values.result?.[0]?.origin?.shipment_type || null} // Add this line
                 clearButtonProps={{
                   style: {
-                    color: '#afb1b4',
+                    color: "#afb1b4",
                   },
                 }}
-                comboboxProps={{ shadow: 'md' }}
+                comboboxProps={{ shadow: "md" }}
                 onChange={(shipment_type) => {
                   form.setValues((prevValues) => ({
                     ...prevValues,
                     result: prevValues.result
                       ? [
-                        {
-                          ...prevValues.result[0],
-                          origin: {
-                            ...prevValues.result[0]?.origin,
-                            shipment_type: shipment_type,
+                          {
+                            ...prevValues.result[0],
+                            origin: {
+                              ...prevValues.result[0]?.origin,
+                              shipment_type: shipment_type,
+                            },
                           },
-                        },
-                      ]
+                        ]
                       : [],
                   }));
                 }}
                 styles={{
-                  dropdown: { maxHeight: 200, overflowY: 'auto' },
+                  dropdown: { maxHeight: 200, overflowY: "auto" },
                   option: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   input: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
-                  }
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small,
+                  },
                 }}
                 radius="md"
                 error={form.errors?.result?.[0]?.origin?.shipment_type}
@@ -1338,63 +1507,81 @@ const CustomerRequestForm = (data = {
             <Grid.Col span={6}>
               <DateInput
                 size={isMobile ? "md" : "lg"}
-                name={'cargoReadyDate'}
+                name={"cargoReadyDate"}
                 onChange={(ready_date) => {
                   form.setValues((prevValues) => ({
                     ...prevValues,
                     result: prevValues.result
                       ? [
-                        {
-                          ...prevValues.result[0],
-                          origin: {
-                            ...prevValues.result[0]?.origin,
-                            ready_date: new Date(ready_date)
+                          {
+                            ...prevValues.result[0],
+                            origin: {
+                              ...prevValues.result[0]?.origin,
+                              ready_date: new Date(ready_date),
+                            },
                           },
-                        },
-                      ]
+                        ]
                       : [],
                   }));
                 }}
                 radius="md"
                 styles={{
-                  dropdown: { maxHeight: 200, overflowY: 'auto' },
+                  dropdown: { maxHeight: 200, overflowY: "auto" },
                   calendarHeaderLevel: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   weekday: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   option: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   input: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small,
                   },
                   calendarHeader: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.normal,
                   },
                 }}
-                label='Cargo Ready Date'
-                placeholder='select date'
+                label="Cargo Ready Date"
+                placeholder="select date"
                 withAsterisk
-                valueFormat='DD/MM/YYYY'
-                minDate={today.add(1, 'day').toDate()}
-                maxDate={today.add(1, 'year').toDate()}
+                valueFormat="DD/MM/YYYY"
+                minDate={today.add(1, "day").toDate()}
+                maxDate={today.add(1, "year").toDate()}
                 rightSection={<IconCalendar stroke={1.5} />}
                 error={form.errors?.result?.[0]?.origin?.ready_date}
               />
             </Grid.Col>
-            <Grid.Col span={6} >
-              <Flex direction={'column'} justify={'space-between'} h={isMobile ? null : 158}>
+            <Grid.Col span={6}>
+              <Flex
+                direction={"column"}
+                justify={"space-between"}
+                h={isMobile ? null : 158}
+              >
                 <Switch
-                  mt={'md'}
-                  mb={'md'}
+                  mt={"md"}
+                  mb={"md"}
                   // key={form.key('pickup')}
                   // {...form.getInputProps('pickup')}
                   onChange={(pickup) => {
@@ -1402,48 +1589,56 @@ const CustomerRequestForm = (data = {
                       ...prevValues,
                       result: prevValues.result
                         ? [
-                          {
-                            ...prevValues.result[0],
-                            origin: {
-                              ...prevValues.result[0]?.origin,
-                              pickup: pickup.currentTarget.checked,
+                            {
+                              ...prevValues.result[0],
+                              origin: {
+                                ...prevValues.result[0]?.origin,
+                                pickup: pickup.currentTarget.checked,
+                              },
                             },
-                          },
-                        ]
+                          ]
                         : [],
                     }));
                   }}
-                  name={'pickup'}
-                  size='sm'
-                  labelPosition='left'
-                  label='Origin Pickup ?'
-                  description='Local charges included (BL fee, document charges & terminal handling charges). Enable this to enter pickup address below.     '
+                  name={"pickup"}
+                  size="sm"
+                  labelPosition="left"
+                  label="Origin Pickup ?"
+                  description="Local charges included (BL fee, document charges & terminal handling charges). Enable this to enter pickup address below.     "
                   styles={{
                     body: {
-                      justifyContent: 'space-between'
+                      justifyContent: "space-between",
                     },
-                    dropdown: { maxHeight: 200, overflowY: 'auto' },
+                    dropdown: { maxHeight: 200, overflowY: "auto" },
                     option: {
-                      fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                      fontSize: isMobile
+                        ? TYPOGRAPHY.body.small
+                        : TYPOGRAPHY.body.normal,
                     },
                     input: {
-                      fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                      fontSize: isMobile
+                        ? TYPOGRAPHY.body.small
+                        : TYPOGRAPHY.body.normal,
                     },
                     label: {
-                      fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                      fontSize: isMobile
+                        ? TYPOGRAPHY.body.small
+                        : TYPOGRAPHY.body.normal,
                     },
                     error: {
-                      fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
+                      fontSize: isMobile
+                        ? TYPOGRAPHY.body.xsmall
+                        : TYPOGRAPHY.body.small,
                     },
                     description: {
                       fontSize: TYPOGRAPHY.body.small,
-                    }
+                    },
                   }}
-                // checked = {form?.values?.result[0]?.origin?.pickup}
-                // checked={form.values.pickup}
+                  // checked = {form?.values?.result[0]?.origin?.pickup}
+                  // checked={form.values.pickup}
                 />
                 <TextInput
-                  name={'pickupAddress'}
+                  name={"pickupAddress"}
                   disabled={!form?.values?.result?.[0]?.origin?.pickup || false}
                   // label='Pickup Address'
                   size={isMobile ? "md" : "lg"}
@@ -1454,27 +1649,33 @@ const CustomerRequestForm = (data = {
                       ...prevValues,
                       result: prevValues.result
                         ? [
-                          {
-                            ...prevValues.result[0],
-                            origin: {
-                              ...prevValues.result[0]?.origin,
-                              address: address.target.value,
+                            {
+                              ...prevValues.result[0],
+                              origin: {
+                                ...prevValues.result[0]?.origin,
+                                address: address.target.value,
+                              },
                             },
-                          },
-                        ]
+                          ]
                         : [],
                     }));
                   }}
                   styles={{
                     input: {
-                      fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                      fontSize: isMobile
+                        ? TYPOGRAPHY.body.small
+                        : TYPOGRAPHY.body.normal,
                     },
                     label: {
-                      fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                      fontSize: isMobile
+                        ? TYPOGRAPHY.body.small
+                        : TYPOGRAPHY.body.normal,
                     },
                     error: {
-                      fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
-                    }
+                      fontSize: isMobile
+                        ? TYPOGRAPHY.body.xsmall
+                        : TYPOGRAPHY.body.small,
+                    },
                   }}
                 />
               </Flex>
@@ -1482,55 +1683,65 @@ const CustomerRequestForm = (data = {
 
             <Grid.Col span={6}>
               <Switch
-                mt={'md'}
-                mb={'md'}
+                mt={"md"}
+                mb={"md"}
                 onChange={(delivery) => {
                   form.setValues((prevValues) => ({
                     ...prevValues,
                     result: prevValues.result
                       ? [
-                        {
-                          ...prevValues.result[0],
-                          destination: {
-                            ...prevValues.result[0]?.destination,
-                            delivery: delivery.currentTarget.checked,
+                          {
+                            ...prevValues.result[0],
+                            destination: {
+                              ...prevValues.result[0]?.destination,
+                              delivery: delivery.currentTarget.checked,
+                            },
                           },
-                        },
-                      ]
+                        ]
                       : [],
                   }));
                 }}
-                size='sm'
-                description='Local charges included (BL fee, document charges & terminal handling charges). Enable this to enter delivery address below'
-                labelPosition='left'
-                label='Door Delivery ?'
+                size="sm"
+                description="Local charges included (BL fee, document charges & terminal handling charges). Enable this to enter delivery address below"
+                labelPosition="left"
+                label="Door Delivery ?"
                 styles={{
                   body: {
-                    justifyContent: 'space-between',
+                    justifyContent: "space-between",
                     // alignItems: 'center',
                     // display: 'flex',
                     // height: '100%'
                   },
-                  dropdown: { maxHeight: 200, overflowY: 'auto' },
+                  dropdown: { maxHeight: 200, overflowY: "auto" },
                   option: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   input: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small,
                   },
                   description: {
                     fontSize: TYPOGRAPHY.body.small,
-                  }
+                  },
                 }}
               />
               <TextInput
-                disabled={!form?.values?.result?.[0]?.destination?.delivery || false}
+                disabled={
+                  !form?.values?.result?.[0]?.destination?.delivery || false
+                }
                 // label='Delivery Address'
                 placeholder="Enter Door Delivery"
                 size={isMobile ? "md" : "lg"}
@@ -1540,100 +1751,114 @@ const CustomerRequestForm = (data = {
                     ...prevValues,
                     result: prevValues.result
                       ? [
-                        {
-                          ...prevValues.result[0],
-                          destination: {
-                            ...prevValues.result[0]?.destination,
-                            address: address.target.value,
+                          {
+                            ...prevValues.result[0],
+                            destination: {
+                              ...prevValues.result[0]?.destination,
+                              address: address.target.value,
+                            },
                           },
-                        },
-                      ]
+                        ]
                       : [],
                   }));
                 }}
                 styles={{
                   input: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
-                  }
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small,
+                  },
                 }}
               />
             </Grid.Col>
             <Grid.Col span={6}>
               <Switch
-                mt={'md'}
-                mb={'md'}
-                name={'isOriginCustoms'}
-                size='sm'
-                labelPosition='left'
-                label='Origin Customs Clearance ?'
+                mt={"md"}
+                mb={"md"}
+                name={"isOriginCustoms"}
+                size="sm"
+                labelPosition="left"
+                label="Origin Customs Clearance ?"
                 onChange={(customs) => {
                   form.setValues((prevValues) => ({
                     ...prevValues,
                     result: prevValues.result
                       ? [
-                        {
-                          ...prevValues.result[0],
-                          origin: {
-                            ...prevValues.result[0]?.origin,
-                            customs: customs.currentTarget.checked,
+                          {
+                            ...prevValues.result[0],
+                            origin: {
+                              ...prevValues.result[0]?.origin,
+                              customs: customs.currentTarget.checked,
+                            },
                           },
-                        },
-                      ]
+                        ]
                       : [],
                   }));
                 }}
                 styles={{
                   body: {
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   },
-                  dropdown: { maxHeight: 200, overflowY: 'auto' },
+                  dropdown: { maxHeight: 200, overflowY: "auto" },
                   option: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   input: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small,
                   },
                   description: {
                     fontSize: TYPOGRAPHY.body.small,
-                  }
+                  },
                 }}
               />
             </Grid.Col>
 
             <Grid.Col span={6}>
               <Switch
-                size='sm'
-                name='isDestinationCustoms'
-                labelPosition='left'
-                label='Destination Customs Clearance ?'
-                mt={'md'}
-                mb={'md'}
+                size="sm"
+                name="isDestinationCustoms"
+                labelPosition="left"
+                label="Destination Customs Clearance ?"
+                mt={"md"}
+                mb={"md"}
                 onChange={(customs) => {
                   form.setValues((prevValues) => ({
                     ...prevValues,
                     result: prevValues.result
                       ? [
-                        {
-                          ...prevValues.result[0],
-                          destination: {
-                            ...prevValues.result[0]?.destination,
-                            customs: customs.currentTarget.checked,
+                          {
+                            ...prevValues.result[0],
+                            destination: {
+                              ...prevValues.result[0]?.destination,
+                              customs: customs.currentTarget.checked,
+                            },
                           },
-                        },
-                      ]
+                        ]
                       : [],
                   }));
                 }}
@@ -1641,76 +1866,91 @@ const CustomerRequestForm = (data = {
                 // {...form.getInputProps('destination_customs')}
                 styles={{
                   body: {
-                    justifyContent: 'space-between'
+                    justifyContent: "space-between",
                   },
-                  dropdown: { maxHeight: 200, overflowY: 'auto' },
+                  dropdown: { maxHeight: 200, overflowY: "auto" },
                   option: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   input: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small,
                   },
                   description: {
                     fontSize: TYPOGRAPHY.body.small,
-                  }
+                  },
                 }}
                 checked={form.values.customs}
               />
             </Grid.Col>
             <Grid.Col span={6}>
               <Switch
-                size='sm'
-                name='isInsurance'
-                labelPosition='left'
-                label='Insurance Covered ?'
-                description='Insurance covered ( Provided by Pentagon Prime Global )'
-                mt={'md'}
-                mb={'md'}
+                size="sm"
+                name="isInsurance"
+                labelPosition="left"
+                label="Insurance Covered ?"
+                description="Insurance covered ( Provided by Pentagon Prime Global )"
+                mt={"md"}
+                mb={"md"}
                 onChange={(customs) => {
                   form.setValues((prevValues) => ({
                     ...prevValues,
                     result: prevValues.result
                       ? [
-                        {
-                          ...prevValues.result[0],
-                          isInsurance: customs.currentTarget.checked,
-                        },
-                      ]
+                          {
+                            ...prevValues.result[0],
+                            isInsurance: customs.currentTarget.checked,
+                          },
+                        ]
                       : [],
                   }));
                 }}
                 styles={{
                   body: {
-                    justifyContent: 'space-between'
+                    justifyContent: "space-between",
                   },
-                  dropdown: { maxHeight: 200, overflowY: 'auto' },
+                  dropdown: { maxHeight: 200, overflowY: "auto" },
                   option: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   input: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small,
                   },
                   description: {
                     fontSize: TYPOGRAPHY.body.small,
-                  }
+                  },
                 }}
                 checked={form.values.isInsurance}
               />
             </Grid.Col>
             <Grid.Col span={6}>
-
               <Switch
                 size="sm"
                 name="isDangerous"
@@ -1725,40 +1965,47 @@ const CustomerRequestForm = (data = {
                     ...prevValues,
                     result: prevValues.result
                       ? [
-                        {
-                          ...prevValues.result[0],
-                          cargo: {
-                            ...prevValues.result[0]?.cargo,
-                            isDangerous,
+                          {
+                            ...prevValues.result[0],
+                            cargo: {
+                              ...prevValues.result[0]?.cargo,
+                              isDangerous,
+                            },
                           },
-                        },
-                      ]
+                        ]
                       : [],
                   }));
                 }}
                 styles={{
                   body: {
-                    justifyContent: 'space-between',
+                    justifyContent: "space-between",
                   },
-                  dropdown: { maxHeight: 200, overflowY: 'auto' },
+                  dropdown: { maxHeight: 200, overflowY: "auto" },
                   option: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   input: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   label: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small,
                   },
                   description: {
                     fontSize: TYPOGRAPHY.body.small,
                   },
                 }}
               />
-
             </Grid.Col>
             <Grid.Col span={12}>
               {/* <Button color={hasContainerDetailsError ? 'red' : ''}
@@ -1773,7 +2020,11 @@ const CustomerRequestForm = (data = {
                   })`
                   : ''}
               </Button> */}
-              <CargoButton hasContainerDetailsError={hasContainerDetailsError} form={form} handleAddCargoClick={handleAddCargoClick} />
+              <CargoButton
+                hasContainerDetailsError={hasContainerDetailsError}
+                form={form}
+                handleAddCargoClick={handleAddCargoClick}
+              />
             </Grid.Col>
             {form?.values?.result?.[0]?.cargo?.isDangerous ? (
               <>
@@ -1781,7 +2032,10 @@ const CustomerRequestForm = (data = {
                 <Grid.Col span={6}>
                   <Select
                     withAsterisk
-                    error={form.errors?.result?.[0]?.find(item => item?.imo)?.imo || null}
+                    error={
+                      form.errors?.result?.[0]?.find((item) => item?.imo)
+                        ?.imo || null
+                    }
                     label="IMO class"
                     placeholder="Select IMO class"
                     size={isMobile ? "md" : "lg"}
@@ -1791,38 +2045,46 @@ const CustomerRequestForm = (data = {
                     clearable
                     clearButtonProps={{
                       style: {
-                        color: '#afb1b4',
+                        color: "#afb1b4",
                       },
                     }}
-                    comboboxProps={{ shadow: 'md' }}
+                    comboboxProps={{ shadow: "md" }}
                     value={form?.values?.result?.[0]?.imo || []}
                     onChange={(imo) => {
                       form.setValues((prevValues) => ({
                         ...prevValues,
                         result: prevValues.result
                           ? [
-                            {
-                              ...prevValues.result[0],
-                              imo: imo
-                            },
-                          ]
+                              {
+                                ...prevValues.result[0],
+                                imo: imo,
+                              },
+                            ]
                           : [],
                       }));
                     }}
                     styles={{
-                      dropdown: { maxHeight: 200, overflowY: 'auto' },
+                      dropdown: { maxHeight: 200, overflowY: "auto" },
                       option: {
-                        fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.small
+                          : TYPOGRAPHY.body.normal,
                       },
                       input: {
-                        fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.small
+                          : TYPOGRAPHY.body.normal,
                       },
                       label: {
-                        fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.small
+                          : TYPOGRAPHY.body.normal,
                       },
                       error: {
-                        fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
-                      }
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.xsmall
+                          : TYPOGRAPHY.body.small,
+                      },
                     }}
                     radius="md"
                   />
@@ -1831,9 +2093,9 @@ const CustomerRequestForm = (data = {
                 <Grid.Col span={6}>
                   <TextInput
                     // withAsterisk
-                    value={form?.values?.result?.[0]?.unNo || ''}
+                    value={form?.values?.result?.[0]?.unNo || ""}
                     size={isMobile ? "md" : "lg"}
-                    label='UN No'
+                    label="UN No"
                     placeholder="Enter UN Number"
                     radius="md"
                     onChange={(e) => {
@@ -1841,24 +2103,30 @@ const CustomerRequestForm = (data = {
                         ...prevValues,
                         result: prevValues.result
                           ? [
-                            {
-                              ...prevValues.result[0],
-                              unNo: e.target.value
-                            },
-                          ]
+                              {
+                                ...prevValues.result[0],
+                                unNo: e.target.value,
+                              },
+                            ]
                           : [],
                       }));
                     }}
                     styles={{
                       input: {
-                        fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.small
+                          : TYPOGRAPHY.body.normal,
                       },
                       label: {
-                        fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.small
+                          : TYPOGRAPHY.body.normal,
                       },
                       error: {
-                        fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
-                      }
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.xsmall
+                          : TYPOGRAPHY.body.small,
+                      },
                     }}
                   />
                 </Grid.Col>
@@ -1866,15 +2134,16 @@ const CustomerRequestForm = (data = {
                 {/* MSDS Upload - only shown when cargo is dangerous */}
                 <Grid.Col>
                   <FileButton
-                    name='msds'
-                    accept='image/png,image/jpeg,application/pdf'
-                    onChange={handleFileUpload('msds')}
+                    name="msds"
+                    accept="image/png,image/jpeg,application/pdf"
+                    onChange={handleFileUpload("msds")}
                     multiple
                   >
                     {(props) => (
-                      <Button loading={isUploading}
+                      <Button
+                        loading={isUploading}
                         fullWidth
-                        variant='outline'
+                        variant="outline"
                         leftSection={<IconUpload stroke={1.5} />}
                         {...props}
                       >
@@ -1889,15 +2158,16 @@ const CustomerRequestForm = (data = {
                 {/* Regular documents upload */}
                 <Grid.Col>
                   <FileButton
-                    name='docs'
-                    accept='image/png,image/jpeg,application/pdf'
-                    onChange={handleFileUpload('docs')}
+                    name="docs"
+                    accept="image/png,image/jpeg,application/pdf"
+                    onChange={handleFileUpload("docs")}
                     multiple
                   >
-                    {props => (
-                      <Button loading={isUploading}
+                    {(props) => (
+                      <Button
+                        loading={isUploading}
                         fullWidth
-                        variant='outline'
+                        variant="outline"
                         leftSection={<IconFiles stroke={1.5} />}
                         {...props}
                       >
@@ -1911,14 +2181,17 @@ const CustomerRequestForm = (data = {
             <ErrorBoundary
               fallback={
                 <Alert
-                  my={'sm'}
-                  variant='light'
-                  color='red'
-                  title={'Something went wrong!'}
+                  my={"sm"}
+                  variant="light"
+                  color="red"
+                  title={"Something went wrong!"}
                 />
               }
             >
-              <ListAttachments data={form?.values?.result?.[0]?.documents} onDelete={handleDeleteFile} />
+              <ListAttachments
+                data={form?.values?.result?.[0]?.documents}
+                onDelete={handleDeleteFile}
+              />
             </ErrorBoundary>
             <Grid.Col>
               <Textarea
@@ -1927,18 +2200,24 @@ const CustomerRequestForm = (data = {
                 // h={100}
                 radius="md"
                 // minRows={isMobile ? 3 : 10}
-                {...form.getInputProps('unNo')}
+                {...form.getInputProps("unNo")}
                 styles={{
                   input: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
-                    height: 100
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
+                    height: 100,
                   },
                   label: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal,
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
                   },
                   error: {
-                    fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small,
-                  }
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small,
+                  },
                 }}
                 // onChange={(v) => {
                 //   setportList((st) => ({
@@ -1954,40 +2233,45 @@ const CustomerRequestForm = (data = {
                     ...prevValues,
                     result: prevValues.result
                       ? [
-                        {
-                          ...prevValues.result[0],
-                          cargo: {
-                            ...prevValues.result[0]?.cargo,
-                            remarks: remarks.target.value,
+                          {
+                            ...prevValues.result[0],
+                            cargo: {
+                              ...prevValues.result[0]?.cargo,
+                              remarks: remarks.target.value,
+                            },
                           },
-                        },
-                      ]
+                        ]
                       : [],
                   }));
                 }}
               />
-
             </Grid.Col>
             <Grid.Col span={12}>
-              <Flex justify={'flex-end'} w={'100%'} align={'center'} gap={'md'}>
-                <Button size="sm" variant="outline" color="red" radius={'8px'} onClick={() => router.back()}>
+              <Flex justify={"flex-end"} w={"100%"} align={"center"} gap={"md"}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  color="red"
+                  radius={"8px"}
+                  onClick={() => router.back()}
+                >
                   Cancel
                 </Button>
-                <Button t={30}
+                <Button
+                  t={30}
                   loading={submitCustomerRequest.isPending}
                   // size='lg'
                   fw={600}
                   // disabled={!form.isValid()}
-                  radius={'8px'}
+                  radius={"8px"}
                   styles={{
                     label: {
                       fontSize: TYPOGRAPHY.button.large,
-
                     },
                   }}
-                  bg={'##CDF6FF'}
+                  bg={"##CDF6FF"}
                   c={COLORS.primaryColor}
-                  type='submit'
+                  type="submit"
                 >
                   Submit
                 </Button>
@@ -1997,13 +2281,13 @@ const CustomerRequestForm = (data = {
         </Container>
 
         <Modal
-          //  
+          //
           opened={openedModal !== null}
           onClose={closeModal}
           size="xl"
           styles={{
             content: {
-              height: '70vh', // or '50vh', '100%', etc.
+              height: "70vh", // or '50vh', '100%', etc.
             },
           }}
           title={<CustomTitle />}
@@ -2027,11 +2311,27 @@ const CustomerRequestForm = (data = {
                 data={options || []}
                 radius="md"
                 styles={{
-                  dropdown: { maxHeight: 200, overflowY: 'auto' },
-                  option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                  input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                  label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                  error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                  dropdown: { maxHeight: 200, overflowY: "auto" },
+                  option: {
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
+                  },
+                  input: {
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
+                  },
+                  label: {
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.label.small
+                      : TYPOGRAPHY.label.large,
+                  },
+                  error: {
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small,
+                  },
                 }}
               />
             </Grid.Col>
@@ -2047,33 +2347,95 @@ const CustomerRequestForm = (data = {
                 searchable
                 clearable
                 data={[
-                  { label: 'General', value: 'General', displayLabel: 'Commodity: General' },
-                  { label: 'White Goods', value: 'White Goods', displayLabel: 'Commodity: White Goods' },
-                  { label: 'PTA', value: 'PTA', displayLabel: 'Commodity: PTA' },
-                  { label: 'Cotton and yarn', value: 'Cotton and yarn', displayLabel: 'Commodity: Cotton and yarn' },
-                  { label: 'Fabric and textiles', value: 'Fabric and textiles', displayLabel: 'Commodity: Fabric and textiles' },
-                  { label: 'Sugar Rice', value: 'Sugar Rice', displayLabel: 'Commodity: Sugar Rice' },
-                  { label: 'Millets', value: 'Millets', displayLabel: 'Commodity: Millets' },
-                  { label: 'Tiles', value: 'Tiles', displayLabel: 'Commodity: Tiles' },
-                  { label: 'Corrosive 8', value: 'Corrosive 8', displayLabel: 'Commodity: Corrosive 8' },
-                  { label: 'Miscellaneous dangerous goods', value: 'Miscellaneous dangerous goods', displayLabel: 'Commodity: Miscellaneous dangerous goods' },
-                  { label: 'Freight all kinds', value: 'Freight all kinds', displayLabel: 'Freight all kinds' }
+                  {
+                    label: "General",
+                    value: "General",
+                    displayLabel: "Commodity: General",
+                  },
+                  {
+                    label: "White Goods",
+                    value: "White Goods",
+                    displayLabel: "Commodity: White Goods",
+                  },
+                  {
+                    label: "PTA",
+                    value: "PTA",
+                    displayLabel: "Commodity: PTA",
+                  },
+                  {
+                    label: "Cotton and yarn",
+                    value: "Cotton and yarn",
+                    displayLabel: "Commodity: Cotton and yarn",
+                  },
+                  {
+                    label: "Fabric and textiles",
+                    value: "Fabric and textiles",
+                    displayLabel: "Commodity: Fabric and textiles",
+                  },
+                  {
+                    label: "Sugar Rice",
+                    value: "Sugar Rice",
+                    displayLabel: "Commodity: Sugar Rice",
+                  },
+                  {
+                    label: "Millets",
+                    value: "Millets",
+                    displayLabel: "Commodity: Millets",
+                  },
+                  {
+                    label: "Tiles",
+                    value: "Tiles",
+                    displayLabel: "Commodity: Tiles",
+                  },
+                  {
+                    label: "Corrosive 8",
+                    value: "Corrosive 8",
+                    displayLabel: "Commodity: Corrosive 8",
+                  },
+                  {
+                    label: "Miscellaneous dangerous goods",
+                    value: "Miscellaneous dangerous goods",
+                    displayLabel: "Commodity: Miscellaneous dangerous goods",
+                  },
+                  {
+                    label: "Freight all kinds",
+                    value: "Freight all kinds",
+                    displayLabel: "Freight all kinds",
+                  },
                 ]}
                 clearButtonProps={{
                   style: {
-                    color: '#afb1b4',
+                    color: "#afb1b4",
                   },
                 }}
-                renderOption={({ option }) => option.displayLabel || option.label}
+                renderOption={({ option }) =>
+                  option.displayLabel || option.label
+                }
                 comboboxProps={{
-                  shadow: 'md',
+                  shadow: "md",
                 }}
                 styles={{
-                  dropdown: { maxHeight: 200, overflowY: 'auto' },
-                  option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                  input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                  label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                  error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                  dropdown: { maxHeight: 200, overflowY: "auto" },
+                  option: {
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
+                  },
+                  input: {
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
+                  },
+                  label: {
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.label.small
+                      : TYPOGRAPHY.label.large,
+                  },
+                  error: {
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small,
+                  },
                 }}
                 radius="md"
                 value={containerList.commodity || null}
@@ -2094,16 +2456,32 @@ const CustomerRequestForm = (data = {
                 clearable
                 clearButtonProps={{
                   style: {
-                    color: '#afb1b4',
+                    color: "#afb1b4",
                   },
                 }}
-                comboboxProps={{ shadow: 'md' }}
+                comboboxProps={{ shadow: "md" }}
                 styles={{
-                  dropdown: { maxHeight: 200, overflowY: 'auto' },
-                  option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                  input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                  label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                  error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                  dropdown: { maxHeight: 200, overflowY: "auto" },
+                  option: {
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
+                  },
+                  input: {
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.small
+                      : TYPOGRAPHY.body.normal,
+                  },
+                  label: {
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.label.small
+                      : TYPOGRAPHY.label.large,
+                  },
+                  error: {
+                    fontSize: isMobile
+                      ? TYPOGRAPHY.body.xsmall
+                      : TYPOGRAPHY.body.small,
+                  },
                 }}
                 radius="md"
                 value={containerList.hs1 || []}
@@ -2124,7 +2502,7 @@ const CustomerRequestForm = (data = {
                   clearable
                   clearButtonProps={{
                     style: {
-                      color: '#afb1b4',
+                      color: "#afb1b4",
                     },
                   }}
                   withAsterisk
@@ -2134,11 +2512,27 @@ const CustomerRequestForm = (data = {
                   data={HsCodeQuery?.data || []}
                   placeholder="Select HS Code"
                   styles={{
-                    dropdown: { maxHeight: 200, overflowY: 'auto' },
-                    option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                    input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                    label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                    error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                    dropdown: { maxHeight: 200, overflowY: "auto" },
+                    option: {
+                      fontSize: isMobile
+                        ? TYPOGRAPHY.body.small
+                        : TYPOGRAPHY.body.normal,
+                    },
+                    input: {
+                      fontSize: isMobile
+                        ? TYPOGRAPHY.body.small
+                        : TYPOGRAPHY.body.normal,
+                    },
+                    label: {
+                      fontSize: isMobile
+                        ? TYPOGRAPHY.label.small
+                        : TYPOGRAPHY.label.large,
+                    },
+                    error: {
+                      fontSize: isMobile
+                        ? TYPOGRAPHY.body.xsmall
+                        : TYPOGRAPHY.body.small,
+                    },
                   }}
                   radius="md"
                   value={containerList.hs2 || []}
@@ -2154,7 +2548,7 @@ const CustomerRequestForm = (data = {
             ) : null}
 
             {/* FCL Specific Fields */}
-            {openedModal === 'FCL' && (
+            {openedModal === "FCL" && (
               <ScrollArea mah={250} mih={0} type="always" w="100%">
                 <Grid.Col span={12}>
                   <Flex justify="space-between" align="center" mb="xs">
@@ -2183,15 +2577,31 @@ const CustomerRequestForm = (data = {
                             label="Container Size"
                             w="auto"
                             data={contSize}
-                            value={item.size ?? ''}
+                            value={item.size ?? ""}
                             onChange={(v) => handleSizeChange(i, v)}
                             required
                             styles={{
-                              dropdown: { maxHeight: 200, overflowY: 'auto' },
-                              option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                              input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                              label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                              error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                              dropdown: { maxHeight: 200, overflowY: "auto" },
+                              option: {
+                                fontSize: isMobile
+                                  ? TYPOGRAPHY.body.small
+                                  : TYPOGRAPHY.body.normal,
+                              },
+                              input: {
+                                fontSize: isMobile
+                                  ? TYPOGRAPHY.body.small
+                                  : TYPOGRAPHY.body.normal,
+                              },
+                              label: {
+                                fontSize: isMobile
+                                  ? TYPOGRAPHY.label.small
+                                  : TYPOGRAPHY.label.large,
+                              },
+                              error: {
+                                fontSize: isMobile
+                                  ? TYPOGRAPHY.body.xsmall
+                                  : TYPOGRAPHY.body.small,
+                              },
                             }}
                             radius="md"
                             size={isMobile ? "md" : "sm"}
@@ -2199,7 +2609,7 @@ const CustomerRequestForm = (data = {
                         </Grid.Col>
 
                         {item?.fields?.map((field, j, arr) => {
-                          const inputSize = arr.length > 2 ? 'auto' : 'auto';
+                          const inputSize = arr.length > 2 ? "auto" : "auto";
                           const errorKey = `container_${i}_field_${j}`;
                           const fieldError = modalErrors[errorKey];
 
@@ -2210,15 +2620,34 @@ const CustomerRequestForm = (data = {
                                   error={fieldError}
                                   w={inputSize}
                                   label={field.label}
-                                  value={field.value ?? ''}
+                                  value={field.value ?? ""}
                                   onChange={(v) => handleFields(i, j)(v)}
                                   {...(field.options || {})}
                                   styles={{
-                                    dropdown: { maxHeight: 200, overflowY: 'auto' },
-                                    option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                                    input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                                    label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                                    error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                                    dropdown: {
+                                      maxHeight: 200,
+                                      overflowY: "auto",
+                                    },
+                                    option: {
+                                      fontSize: isMobile
+                                        ? TYPOGRAPHY.body.small
+                                        : TYPOGRAPHY.body.normal,
+                                    },
+                                    input: {
+                                      fontSize: isMobile
+                                        ? TYPOGRAPHY.body.small
+                                        : TYPOGRAPHY.body.normal,
+                                    },
+                                    label: {
+                                      fontSize: isMobile
+                                        ? TYPOGRAPHY.label.small
+                                        : TYPOGRAPHY.label.large,
+                                    },
+                                    error: {
+                                      fontSize: isMobile
+                                        ? TYPOGRAPHY.body.xsmall
+                                        : TYPOGRAPHY.body.small,
+                                    },
                                   }}
                                   radius="md"
                                   size={isMobile ? "md" : "sm"}
@@ -2235,15 +2664,33 @@ const CustomerRequestForm = (data = {
                                   w={inputSize}
                                   hideControls
                                   label={field.label}
-                                  value={field.value ?? ''}
-                                  withAsterisk={field.label === 'Weight (mt)' ? false : true}
+                                  value={field.value ?? ""}
+                                  withAsterisk={
+                                    field.label === "Weight (mt)" ? false : true
+                                  }
                                   onChange={(v) => handleFields(i, j)(v)}
                                   {...(field.options || {})}
                                   styles={{
-                                    option: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                                    input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                                    label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                                    error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                                    option: {
+                                      fontSize: isMobile
+                                        ? TYPOGRAPHY.body.small
+                                        : TYPOGRAPHY.body.normal,
+                                    },
+                                    input: {
+                                      fontSize: isMobile
+                                        ? TYPOGRAPHY.body.small
+                                        : TYPOGRAPHY.body.normal,
+                                    },
+                                    label: {
+                                      fontSize: isMobile
+                                        ? TYPOGRAPHY.label.small
+                                        : TYPOGRAPHY.label.large,
+                                    },
+                                    error: {
+                                      fontSize: isMobile
+                                        ? TYPOGRAPHY.body.xsmall
+                                        : TYPOGRAPHY.body.small,
+                                    },
                                   }}
                                   radius="md"
                                   size={isMobile ? "md" : "sm"}
@@ -2271,14 +2718,20 @@ const CustomerRequestForm = (data = {
                             return (
                               <Grid.Col span={3} key={j}>
                                 <Radio.Group
-                                  value={field.value ?? ''}
-                                  onChange={(value) => handleFields(i, j)(value)}
+                                  value={field.value ?? ""}
+                                  onChange={(value) =>
+                                    handleFields(i, j)(value)
+                                  }
                                   label="Unit of Volume"
                                   color={COLORS.primaryColor}
                                 >
                                   <Group justify="space-between" p="sm">
                                     {field.options?.map((option) => (
-                                      <Radio value={option.value} label={option.label} key={option.value} />
+                                      <Radio
+                                        value={option.value}
+                                        label={option.label}
+                                        key={option.value}
+                                      />
                                     ))}
                                   </Group>
                                 </Radio.Group>
@@ -2308,7 +2761,7 @@ const CustomerRequestForm = (data = {
             )}
 
             {/* LCL Specific Fields */}
-            {openedModal === 'LCL' && (
+            {openedModal === "LCL" && (
               <>
                 <Grid.Col span={isMobile ? 12 : 6}>
                   <TextInput
@@ -2319,13 +2772,30 @@ const CustomerRequestForm = (data = {
                     label="No of Packages"
                     withAsterisk
                     styles={{
-                      input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                      label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                      error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                      input: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.small
+                          : TYPOGRAPHY.body.normal,
+                      },
+                      label: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.label.small
+                          : TYPOGRAPHY.label.large,
+                      },
+                      error: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.xsmall
+                          : TYPOGRAPHY.body.small,
+                      },
                     }}
                     radius="md"
-                    value={containerList.no_of_packages ?? ''}
-                    onChange={(e) => setContainerList((st) => ({ ...st, no_of_packages: e.target.value }))}
+                    value={containerList.no_of_packages ?? ""}
+                    onChange={(e) =>
+                      setContainerList((st) => ({
+                        ...st,
+                        no_of_packages: e.target.value,
+                      }))
+                    }
                   />
                 </Grid.Col>
 
@@ -2338,13 +2808,30 @@ const CustomerRequestForm = (data = {
                     label="Gross Weight (Kgs)"
                     withAsterisk
                     styles={{
-                      input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                      label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                      error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                      input: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.small
+                          : TYPOGRAPHY.body.normal,
+                      },
+                      label: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.label.small
+                          : TYPOGRAPHY.label.large,
+                      },
+                      error: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.xsmall
+                          : TYPOGRAPHY.body.small,
+                      },
                     }}
                     radius="md"
-                    value={containerList.gross_weight ?? ''}
-                    onChange={(e) => setContainerList((st) => ({ ...st, gross_weight: e.target.value }))}
+                    value={containerList.gross_weight ?? ""}
+                    onChange={(e) =>
+                      setContainerList((st) => ({
+                        ...st,
+                        gross_weight: e.target.value,
+                      }))
+                    }
                   />
                 </Grid.Col>
 
@@ -2357,20 +2844,37 @@ const CustomerRequestForm = (data = {
                     label="Volume (CBM)"
                     withAsterisk
                     styles={{
-                      input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                      label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                      error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                      input: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.small
+                          : TYPOGRAPHY.body.normal,
+                      },
+                      label: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.label.small
+                          : TYPOGRAPHY.label.large,
+                      },
+                      error: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.xsmall
+                          : TYPOGRAPHY.body.small,
+                      },
                     }}
                     radius="md"
-                    value={containerList.volume || ''}
-                    onChange={(e) => setContainerList((st) => ({ ...st, volume: e.target.value }))}
+                    value={containerList.volume || ""}
+                    onChange={(e) =>
+                      setContainerList((st) => ({
+                        ...st,
+                        volume: e.target.value,
+                      }))
+                    }
                   />
                 </Grid.Col>
               </>
             )}
 
             {/* AIR Specific Fields */}
-            {openedModal === 'AIR' && (
+            {openedModal === "AIR" && (
               <>
                 <Grid.Col span={isMobile ? 12 : 6}>
                   <TextInput
@@ -2381,13 +2885,30 @@ const CustomerRequestForm = (data = {
                     label="No of Packages"
                     withAsterisk
                     styles={{
-                      input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                      label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                      error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                      input: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.small
+                          : TYPOGRAPHY.body.normal,
+                      },
+                      label: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.label.small
+                          : TYPOGRAPHY.label.large,
+                      },
+                      error: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.xsmall
+                          : TYPOGRAPHY.body.small,
+                      },
                     }}
                     radius="md"
-                    value={containerList.no_of_packages || ''}
-                    onChange={(e) => setContainerList((st) => ({ ...st, no_of_packages: e.target.value }))}
+                    value={containerList.no_of_packages || ""}
+                    onChange={(e) =>
+                      setContainerList((st) => ({
+                        ...st,
+                        no_of_packages: e.target.value,
+                      }))
+                    }
                   />
                 </Grid.Col>
 
@@ -2400,13 +2921,30 @@ const CustomerRequestForm = (data = {
                     label="Gross Weight (Kgs)"
                     withAsterisk
                     styles={{
-                      input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                      label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                      error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                      input: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.small
+                          : TYPOGRAPHY.body.normal,
+                      },
+                      label: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.label.small
+                          : TYPOGRAPHY.label.large,
+                      },
+                      error: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.xsmall
+                          : TYPOGRAPHY.body.small,
+                      },
                     }}
                     radius="md"
-                    value={containerList.gross_weight || ''}
-                    onChange={(e) => setContainerList((st) => ({ ...st, gross_weight: e.target.value }))}
+                    value={containerList.gross_weight || ""}
+                    onChange={(e) =>
+                      setContainerList((st) => ({
+                        ...st,
+                        gross_weight: e.target.value,
+                      }))
+                    }
                   />
                 </Grid.Col>
 
@@ -2419,13 +2957,30 @@ const CustomerRequestForm = (data = {
                     size={isMobile ? "md" : "lg"}
                     withAsterisk
                     styles={{
-                      input: { fontSize: isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal },
-                      label: { fontSize: isMobile ? TYPOGRAPHY.label.small : TYPOGRAPHY.label.large },
-                      error: { fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small }
+                      input: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.small
+                          : TYPOGRAPHY.body.normal,
+                      },
+                      label: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.label.small
+                          : TYPOGRAPHY.label.large,
+                      },
+                      error: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.xsmall
+                          : TYPOGRAPHY.body.small,
+                      },
                     }}
                     radius="md"
-                    value={containerList.volume_weight || ''}
-                    onChange={(e) => setContainerList((st) => ({ ...st, volume_weight: e.target.value }))}
+                    value={containerList.volume_weight || ""}
+                    onChange={(e) =>
+                      setContainerList((st) => ({
+                        ...st,
+                        volume_weight: e.target.value,
+                      }))
+                    }
                   />
                 </Grid.Col>
               </>
@@ -2446,14 +3001,14 @@ const CustomerRequestForm = (data = {
                       ...prevValues,
                       result: prevValues.result
                         ? [
-                          {
-                            ...prevValues.result[0],
-                            container_details: {
-                              ...prevValues.result[0]?.container_details,
-                              ...containerList,
+                            {
+                              ...prevValues.result[0],
+                              container_details: {
+                                ...prevValues.result[0]?.container_details,
+                                ...containerList,
+                              },
                             },
-                          },
-                        ]
+                          ]
                         : [],
                     }));
                     closeModal();
@@ -2465,22 +3020,12 @@ const CustomerRequestForm = (data = {
             </Grid.Col>
           </Grid>
         </Modal>
-
-
-
       </form>
     </>
   );
 };
 
 export default CustomerRequestForm;
-
-
-
-
-
-
-
 
 // const form = useForm({
 //   mode: 'controlled',

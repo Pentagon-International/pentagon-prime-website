@@ -32,12 +32,12 @@ import { useQuery } from '@tanstack/react-query';
 import { apiCallProtected } from '../api/api';
 import { useForm } from '@mantine/form';
 import PortComponent from '../component/PortComponent';
-import { notifications } from '@mantine/notifications';
+import { Notifications, notifications } from '@mantine/notifications';
 import { useMediaQuery } from '@mantine/hooks';
 import useTransportStore from '../store/transportStore';
 import { useRouter } from 'next/navigation';
 import useCustomerRequestStore from '../store/customerRequestStore';
-import { values } from 'lodash';
+import values from 'lodash/values';
 
 const TransportOption = memo(({ type, icon, activeTransport, onClick }) => (
   <Group
@@ -326,13 +326,13 @@ const Hero = ({ title, content }) => {
           pointerEvents: 'none'
         }}
       />
-      <Container fluid px="2%" mt={isTabletOrBelow ? 50 : 20} pt="60px" pb={20} style={{ position: 'relative', zIndex: 2 }}>
+      <Container fluid px="2%" mt={isTabletOrBelow ? 50 : 20} pt="60px" pb={20} style={{ position: 'relative', zIndex: 2, display:"flex", alignItems:"center", height:"100%", width:"100%", justifyContent:"center" }}>
         <Flex
           align="center"
           justify="space-between"
           gap={40}
           direction={isTabletOrBelow ? 'column' : 'row'}
-          mih={!isMobile && 550}
+          mih={!isMobile && 500}
         >
           <Stack h={'100%'} w={isTabletOrBelow ? '100%' : '55%'} gap={0} justify={isTabletOrBelow ? "center" : "flex-start"}>
             <Title
