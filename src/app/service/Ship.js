@@ -32,7 +32,7 @@ const Ship = ({ first_title, first_content, serviceData }) => {
   const isODCProjectCargo = useMemo(() => pathname === "/service/odc-project-cargo/", [pathname]);
 
   return (
-    <Container fluid px={'4%'} py={isMobile ? 0 : '10px'} mb={isMobile ? 20 : 30}>
+    <Container fluid px={'4%'} py={isMobile ? 20 : 30} bg={COLORS.backgroundColor}>
       <Stack gap={isMobile ? 20 : 100}>
         <Flex direction={'column'}>
           <Title fw={800} tt={'uppercase'}>{highlightText(first_title)}</Title>

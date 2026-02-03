@@ -231,7 +231,7 @@ const CbmCalc = () => {
 
 
   return (
-    <Container fluid px="2%" h="100%" >
+    <Container fluid px="2%" h="100%" bg={COLORS.backgroundColor}>
       <Grid mt={60}>
         <Grid.Col span={12} px={0} py={'lg'} mt={'md'}>
           <Flex justify={'flex-start'}>
@@ -248,7 +248,7 @@ const CbmCalc = () => {
       </Grid>
       {tools == 'CBM' &&
         <>
-          <Grid mb={theme?.lineHeights.lg}>
+          <Grid pb={theme?.lineHeights.lg}>
             <Grid.Col span={7}>
               <Title mb="lg" mt={'xl'}>Cubic Meter Calculator</Title>
               <Box mb={'md'}>

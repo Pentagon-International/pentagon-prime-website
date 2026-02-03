@@ -37,7 +37,7 @@ const CertificateList = ({ certificateItems }) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
 
     return (
-        <Container fluid py={'70px'} bg={COLORS.background}>
+        <Container fluid py={'70px'} bg={"#e0f1ff"}>
             <Stack spacing="lg">
                 <Center>
                     <Title size="lg" fw={800} tt="uppercase">

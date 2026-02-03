@@ -38,7 +38,7 @@ const TradeCard = ({ title = '', item = [], background = '' }) => {
               {highlightText(title)}
             </Title>
           )}
-          <Group w={"100%"} align='center' justify='space-between' mt={50} ml={isMobile && 0} >
+          <Group w={"100%"} align='center' justify='space-between' mt={20} ml={isMobile && 0} px="md" py="xl" style={{background:"linear-gradient(90deg, #9dd5fe, #e2f2ff)", borderRadius:"8px"}}>
             {item.map(({ sys, fields }) => (
               <TradeItem
                 key={sys.id}

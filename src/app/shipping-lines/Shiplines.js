@@ -42,7 +42,7 @@ const ShipLines = () => {
 
 
   return (
-    <Container fluid px="2%" py="70px">
+    <Container fluid px="2%" py="70px" bg={COLORS.backgroundColor}>
       <Title size={isMobile ? TYPOGRAPHY.h5.desktop : 'lg'} lh={isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800} ta="center">
         {/* <Title size="lg" tt="uppercase" ta="center"> */}
         SHIPPING LINES
@@ -60,7 +60,7 @@ const ShipLines = () => {
           <Box
             key={item.id}
             p="md"
-            bg="#F2F7FC"
+            bg="#FFF"
             style={{ borderRadius: 8 }}
           >
             {/* <Group align="center" justify="flex-start"> */}

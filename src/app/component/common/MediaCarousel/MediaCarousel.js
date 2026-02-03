@@ -6,6 +6,7 @@ import { Box, Image, ActionIcon } from "@mantine/core";
 import Autoplay from "embla-carousel-autoplay";
 import { IconPlayerPlay, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import "./index.css";
+import { COLORS } from "@/app/utils/COLORS";
 
 export default function MediaCarousel({
   items = [],
@@ -204,7 +205,7 @@ export default function MediaCarousel({
         width: "90%", 
         maxWidth: "1200px",
         margin: "0 auto",
-        backgroundColor: bgColor 
+        backgroundColor: COLORS.backgroundColor 
       }}
     >
       <Box

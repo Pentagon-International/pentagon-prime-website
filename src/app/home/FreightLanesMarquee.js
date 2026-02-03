@@ -3,6 +3,7 @@
 import { Box, Container, Text, Title, Group } from "@mantine/core";
 import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
 import { useLayoutEffect, useRef, useState } from "react";
+import { COLORS } from "../utils/COLORS";
 
 const lanesRow1 = [
   "Shanghai → Mundra",
@@ -50,19 +51,17 @@ function LanePill({ item, onHoverStart, onHoverEnd }) {
       onMouseUp={() => setActive(false)}
       style={{
         borderRadius: 999,
-        background: "#EFF6FF",
+        background: "linear-gradient(90deg, #f0fbfd, #dcf8f7 )",
         outline:
           hovered || active
             ? "2px solid rgb(0, 33, 95)"
             : "1px solid rgb(0, 33, 95)",
         cursor: "pointer",
-        boxShadow: active
-          ? "0 4px 12px rgba(0, 33, 95, 0.35)"
-          : hovered
-            ? "0 6px 18px rgba(0, 33, 95, 0.25)"
-            : "none",
+        boxShadow: active || hovered
+          ? "0 3px 8px rgba(0, 0, 0, 0.3)"
+          : "0 2px 6px rgba(0, 0, 0, 0.3)",
         transform: hovered && !active ? "translateY(-1px)" : "translateY(0)",
-        transition: "all 150ms ease",
+        transition: "all 150ms ease-in-out",
         userSelect: "none",
         flexShrink: 0,
       }}
@@ -144,7 +143,7 @@ export default function FreightLanesMarquee() {
     <Box
       py={80}
       style={{
-        backgroundColor: "#EFF6FF",
+        backgroundColor: COLORS.backgroundColor,
       }}
     >
       <Container size="xl">

@@ -15,7 +15,7 @@ const CustomerCentric = () => {
     setListData(customerCentricListData);
   }, []);
   return (
-    <Container fluid px={"2%"} py={"70px"}>
+    <Container fluid px={"2%"} py={"70px"} bg={COLORS.backgroundColor}>
       <Title
         tt={"uppercase"}
         lh={isMobile ? "md" : "lgx2"}
@@ -45,10 +45,10 @@ const CustomerCentric = () => {
                   alignItems: "center",
                   gap: "1rem",
                   justifyContent: "flex-start",
-                  backgroundColor:"#F2F7FC",
+                  backgroundColor:"#FFF",
                   color: COLORS.textColor,
-                  borderRadius: "20px",
-                  boxShadow: "0 2px 5px lightgray",
+                  borderRadius: "16px",
+                  boxShadow: "0 3px 8px rgba(0, 0, 0, 0.3)",
                 }}
               >
                 <IconCircleCheck stroke={2.5} color="rgb(0, 33, 95)" style={{width: "36px", flexShrink: 0, height: "36px"}} />

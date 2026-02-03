@@ -5,6 +5,7 @@ import { Carousel } from "@mantine/carousel";
 import { Box, Image, ActionIcon } from "@mantine/core";
 import Autoplay from "embla-carousel-autoplay";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { COLORS } from "@/app/utils/COLORS";
 
 export default function MantineAutoplayCarousel({
   slides,
@@ -76,7 +77,7 @@ export default function MantineAutoplayCarousel({
         width: "85%", 
         maxWidth: "1200px",
         margin: "0 auto",
-        backgroundColor: bgColor 
+        backgroundColor: COLORS.backgroundColor 
       }}
     >
       <Box

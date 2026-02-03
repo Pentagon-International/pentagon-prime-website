@@ -2,13 +2,14 @@ import React from 'react';
 import Contact from './Contact';
 import Global from './Global';
 import ACinfo from './ACinfo';
+import { COLORS } from '../utils/COLORS';
 
 const page = () => {
   return (
     <>
       <div
         style={{
-          backgroundColor: "#FFF",
+          backgroundColor: COLORS.backgroundColor,
           color: "#000",
           height: '100vh',
         }}

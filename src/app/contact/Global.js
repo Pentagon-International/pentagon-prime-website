@@ -179,7 +179,7 @@ const Global = () => {
   );
 
   return (
-    <Container fluid px={"7%"} py={"70px"}>
+    <Container fluid px={"7%"} py={"70px"} bg={COLORS.backgroundColor}>
       {/* Header */}
       <Center tt={"uppercase"}>
         <Title size={isMobile ? "lg" : "xl"} fw={800} lh={"lgx2"}>
@@ -189,11 +189,11 @@ const Global = () => {
       </Center>
 
       {/* Map Section */}
-      <Box pos="relative" w="100%" mx="auto">
+      <Box pos="relative" w="100%" mx="auto" py="lg" style={{borderRadius:"16px"}}>
         <Image
           src="/images/worldMap.png"
           alt="World Map"
-          style={{ width: "100%", height: "auto" }}
+          style={{ width: "100%", height: "auto", borderRadius:"16px" }}
         />
         {places.map((place, idx) => (
           <Tooltip

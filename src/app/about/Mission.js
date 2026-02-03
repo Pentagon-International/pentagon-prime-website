@@ -37,7 +37,7 @@ const Mission = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   return (
-    <Container fluid px={"2%"} py={"50px"} mt={50}>
+    <Container fluid px={"2%"} pb={"50px"} pt={100} bg={COLORS.backgroundColor}>
       <Box mb={50}>
         <Title
           tt={"uppercase"}

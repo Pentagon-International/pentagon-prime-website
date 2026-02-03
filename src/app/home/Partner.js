@@ -35,7 +35,7 @@ const Partner = ({ title, content }) => {
   }, []);
 
   return (
-    <Container px={'4%'} pt={'40px'} pb={'70px'} fluid>
+    <Container px={'4%'} pt={'40px'} pb={'70px'} fluid bg={COLORS.backgroundColor}>
       <Flex align={'center'} justify={'space-between'} direction={isMobile ? 'column' : 'row'}>
         <Stack>
           <Title size="lg" tt={'uppercase'} fw={800}>
@@ -95,6 +95,7 @@ const Partner = ({ title, content }) => {
                   borderRadius: isMobile ? '22px' : '54px',
                   overflow: 'hidden',
                   position: 'relative',
+                  
                 }}
               >
                 <Box
@@ -107,6 +108,7 @@ const Partner = ({ title, content }) => {
                     backgroundImage: isMobile ? `url(${item.fields.mobImage.fields.file.url})` : `url(${item.fields.image.fields.file.url})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
+                    boxShadow:"0 3px 8px rgba(0, 0, 0, 0.3)"
                   }}
                 />
                 <Box

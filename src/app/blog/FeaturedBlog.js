@@ -5,7 +5,7 @@ import { TYPOGRAPHY } from '../utils/TYPOGRAPHY';
 const FeaturedBlog = ({ res }) => {
 
   return (
-    <Container fluid px={'4%'} py={'70px'}>
+    <Container fluid px={'4%'} py={'70px'} bg={COLORS.backgroundColor}>
       <Title tt="uppercase" tw="balance" fw={800}>
         {/* <Title size={'lg'} tt={'uppercase'}> */}
         Featured articles</Title>

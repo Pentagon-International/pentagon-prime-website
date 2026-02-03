@@ -38,10 +38,10 @@ import {
 
     return (
       <Card
-        bg={"#F2F7FC"}
+        bg={"#FFF"}
         p="20px"
         radius={15}
-        style={cardStyle}
+        style={{...cardStyle, boxShadow:"0 3px 8px rgba(0, 0, 0, 0.3)"}}
       >
         <Stack gap="sm" justify="space-between" h="100%">
           {iconName && (
@@ -85,7 +85,7 @@ import {
     }) {
     const isMobile = useMediaQuery("(max-width: 768px)");
     return (
-      <Container fluid px="2%" py="40px">
+      <Container fluid px="2%" py="40px" bg={COLORS.backgroundColor}>
         {/* Section Heading */}
         <Box>
           <Title

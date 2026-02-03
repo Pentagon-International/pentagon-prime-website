@@ -35,7 +35,7 @@ import { client } from "../api/contentful";
 
 const styles = {
   container: {
-    background: "white",
+    background: COLORS.backgroundColor,
     color: "rgb(0, 34, 95)",
     padding: "4rem 2rem",
     paddingLeft: "0",
@@ -159,6 +159,17 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
       pb={40}
       style={styles.container}
     >
+      <Title
+        tt="uppercase"
+        c={COLORS.headerBackground}
+        lh="md"
+        mt={50}
+        ta="center"
+        fw={800}
+        size={isMobile ? TYPOGRAPHY.h3.mobile : TYPOGRAPHY.h1.mobile}
+      >
+        {highlightText("Why Pentagon Prime ?")}
+      </Title>
       <Trade items={tradeItems} content={tradeContent} />
       <Flex
         direction={{ base: "column", md: "row" }}
@@ -208,7 +219,7 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
                         key={item.sys.id}
                       >
                         <Card
-                          bg={'#F2F7FC'}
+                          bg={'#FFF'}
                           display={"flex"}
                           direction={"column"}
                           justify={"flex-start"}
@@ -316,7 +327,7 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
                       key={item.sys.id}
                     >
                       <Card
-                        bg={'#F2F7FC'}
+                        bg={'#FFF'}
                         display={"flex"}
                         direction={"column"}
                         justify={"flex-start"}

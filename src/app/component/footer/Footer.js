@@ -96,7 +96,7 @@ const Footer = () => {
   );
 
   return (
-    <footer style={{ backgroundColor: 'white', color: '#111', padding: '25px 0'}}>
+    <footer style={{ backgroundColor: COLORS.backgroundColor, color: '#111', padding: '25px 0'}}>
       <Container fluid px="2%">
         {/* Top Section: Services on left, Company info on right */}
         <Flex
@@ -133,7 +133,7 @@ const Footer = () => {
               <ActionIcon
                 size="lg"
                 variant="light"
-                onClick={handleLinkedInClick}
+                onClick={handleInstagramClick}
                 style={{
                   transition: 'transform 0.3s ease',
                   backgroundColor:'transparent',

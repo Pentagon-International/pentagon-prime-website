@@ -37,13 +37,13 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
   }, [router, startLoading]);
 
   const handleMouseEnter = useCallback((e) => {
-    e.currentTarget.style.border = "3px solid rgb(0, 33, 95)";
+    e.currentTarget.style.border = "2px solid rgb(0, 33, 95)";
     e.currentTarget.style.backgroundColor = "rgb(0, 33, 95)";
     e.currentTarget.style.color = "#FFF";
   }, []);
 
   const handleMouseLeave = useCallback((e) => {
-    e.currentTarget.style.border = "3px solid #E0E0E0";
+    e.currentTarget.style.border = "2px solid #E0E0E0";
     e.currentTarget.style.backgroundColor = "#FFF";
     e.currentTarget.style.color = "#000";
   }, []);
@@ -60,7 +60,7 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
         shadow="md"
         radius={20}
         h={isMobile ? "240px" : "250px"}
-        style={{ cursor: "pointer", border:"3px solid #E0E0E0", transition:"all 0.5s ease"}}
+        style={{ cursor: "pointer", border:"2px solid #E0E0E0", transition:"all 0.5s ease"}}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >

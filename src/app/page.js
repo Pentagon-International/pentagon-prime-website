@@ -31,9 +31,9 @@ const Page = async () => {
     <Box>
       <Hero title={heroData.title} content={heroData.content} />
       <FreightLanesMarquee />
-      <PentagonPrime title={primeData.title} content={primeData.content} title2={primeData.title2}/>
-      <LogisticsServices title={serviceData.title} />
+      {/* <PentagonPrime title={primeData.title} content={primeData.content} title2={primeData.title2}/> */}
       <Vision title={visionData.title} content={visionData.content} tradeItems={tradeItems} tradeContent={tradeContent} />
+      <LogisticsServices title={serviceData.title} />
       <LogisticsTeam title={teamData.title} content={teamData.content} />
       <Partner title={partnerData.title} content={partnerData.content} />
       <CustomerCentric />

@@ -20,8 +20,8 @@ const PrimeNetwork = ({content}) => {
   const isMobile = useMediaQuery('(max-width:768px)');
 
   return (
-    <Container fluid px="2%" py="70px" mt={20} pb={0} mb={80}>
-      <Flex gap="md" wrap="nowrap" direction={isMobile ? 'column' : 'row'}>
+    <Container fluid px="2%" py="70px" bg={COLORS.backgroundColor}>
+      <Flex gap="md" wrap="nowrap" direction={isMobile ? 'column' : 'row'} align={"center"}>
         <Flex direction={'column'}>
           <Title tt="uppercase" tw="balance" fw={800}>
           {highlightText(title)}
@@ -30,22 +30,22 @@ const PrimeNetwork = ({content}) => {
           {highlightText(description)}
           </Text>
         </Flex>
-
-        <Image
-          src={ isMobile ? Images.mob_prime_network : Images.pentagon_zig_zag}
-          alt="PentagonPrime Logo"
-          h={isMobile ? "auto" : "auto"}
-          w={isMobile ? "100%" : "40%"}
-          mt={isMobile ? 70 : 0}
-          fit={'contain'}
-          style={{
-            position: 'relative',
-            // transform: 'translateY(-50%)',
-            // top: '10px',
-            maxWidth: !isMobile && '50%',
-            // height: '10%',
-          }}
-        />
+        <Box p="lg" bg="white" w={"100%"} pt={isMobile ? 70 : 0} style={{borderRadius:"16px", display:"flex", alignItems:"center", justifyContent:"center"}}>
+          <Image
+            src={ isMobile ? Images.mob_prime_network : Images.pentagon_zig_zag}
+            alt="PentagonPrime Logo"
+            h={isMobile ? "auto" : "auto"}
+            p="sm"
+            pt="md"
+            fit={'contain'}
+            style={{
+              position: 'relative',
+              // transform: 'translateY(-50%)',
+              // top: '10px',
+              // height: '10%',
+            }}
+          />
+        </Box>
       </Flex>
     </Container>
   );

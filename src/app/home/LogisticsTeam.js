@@ -44,6 +44,7 @@ const TeamMember = ({ image, title, description, reverse }) => {
               objectFit: 'cover',
               position: 'absolute',
               zIndex: 1,
+              boxShadow:"0 3px 8px rgba(0, 0, 0, 0.3)"
             }}
           />
         </Box>
@@ -82,7 +83,7 @@ const LogisticsTeam = ({ title, content }) => {
   }, []);
 
   return (
-    <Container fluid px={'4%'} py={'50px'}>
+    <Container fluid px={'4%'} py={'50px'} bg={COLORS.backgroundColor}>
       <Title size={isMobile ? TYPOGRAPHY.h5.desktop : 'lg'} lh={isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800}>
         {highlightText(title)}
       </Title>

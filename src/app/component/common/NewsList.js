@@ -39,7 +39,7 @@ const NewsList = ({ newsItems }) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
-    <Container fluid px="2%" py={'70px'}>
+    <Container fluid px="2%" py={'70px'} bg={COLORS.backgroundColor}>
       <Title mb="xl" size="lg" fw={800}>
         NEWS & EVENTS
       </Title>
@@ -71,7 +71,7 @@ const NewsList = ({ newsItems }) => {
                       src={fields.newsImage?.fields?.file?.url}
                       alt={fields.newsName || 'News image'}
                       fit="cover"
-                      style={{ borderRadius: '24px', border: '1px solid #E0E0E0' }}
+                      style={{ borderRadius: '24px', border: '1px solid #E0E0E0', boxShadow:"0 3px 8px rgba(0, 0, 0, 0.3)" }}
                       mah={'300px'}
                       mih={'300px'}
                     />
@@ -113,7 +113,7 @@ const NewsList = ({ newsItems }) => {
                       src={fields.newsImage?.fields?.file?.url}
                       alt={fields.newsName || 'News image'}
                       fit="cover"
-                      style={{ borderRadius: '24px', border: '1px solid #E0E0E0' }}
+                      style={{ borderRadius: '24px', border: '1px solid #E0E0E0', boxShadow:"0 3px 8px rgba(0, 0, 0, 0.3)" }}
                       mah={'300px'}
                       mih={'300px'}
                     />
@@ -153,7 +153,7 @@ const NewsList = ({ newsItems }) => {
                         backgroundColor:
                           index === Math.floor(startIndex / ITEMS_PER_VIEW)
                             ? '#46DABE'
-                            : '#F3F3F3',
+                            : '#EAEAEA',
                       }}
                     />
                   )

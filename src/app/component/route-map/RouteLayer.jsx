@@ -1,82 +1,122 @@
 "use client";
 
-import { Marker, Polyline, Tooltip, useMap } from "react-leaflet";
+import { Marker, Polyline, useMap } from "react-leaflet";
 import { useEffect, useState } from "react";
-import { PORT_COORDINATES } from "./portCoordinates";
 import { createSimpleMarker } from "./markerIcon";
-import L from "leaflet"
+import L from "leaflet";
 import { resolvePortCoords } from "./getPortCoords";
 
-export default function RouteLayer({ origin, destination }) {
+export default function RouteLayer({ origin, destination, onLoadingChange }) {
   const map = useMap();
   const [originCoords, setOriginCoords] = useState(null);
   const [destinationCoords, setDestinationCoords] = useState(null);
 
   useEffect(() => {
+    const hasSelection =
+      (origin?.name || origin?.city || origin?.country) &&
+      (destination?.name || destination?.city || destination?.country);
+
+    if (!hasSelection) {
+      setOriginCoords(null);
+      setDestinationCoords(null);
+      onLoadingChange?.(false);
+      return;
+    }
+
+    // Show loader immediately (sync) so it appears before any async work
+    onLoadingChange?.(true);
+    setOriginCoords(null);
+    setDestinationCoords(null);
+
+    let cancelled = false;
     async function load() {
-      const originData = await resolvePortCoords({
-        code: origin.code,
-        name: origin.name,
-        country: origin.country,
-      });
+      try {
+        const originData = await resolvePortCoords({
+          name: origin?.name,
+          city: origin?.city,
+          country: origin?.country,
+        });
+        if (cancelled) return;
+        const destinationData = await resolvePortCoords({
+          name: destination?.name,
+          city: destination?.city,
+          country: destination?.country,
+        });
+        if (cancelled) return;
 
-      const destinationData = await resolvePortCoords({
-        code: destination.code,
-        name: destination.name,
-        country: destination.country,
-      });
-
-      setOriginCoords(originData);
-      setDestinationCoords(destinationData);
+        setOriginCoords(originData);
+        setDestinationCoords(destinationData);
+      } finally {
+        if (!cancelled) onLoadingChange?.(false);
+      }
     }
 
     load();
-  }, []);
-  console.log("coordinates", originCoords, destinationCoords)
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    origin?.name,
+    origin?.city,
+    origin?.country,
+    origin?.origin,
+    origin?.code,
+    destination?.name,
+    destination?.city,
+    destination?.country,
+    destination?.destination,
+    destination?.code,
+  ]);
+
   const originName = origin?.name || origin;
   const destinationName = destination?.name || destination;
 
-    useEffect(() => {
+  useEffect(() => {
     if (!map || !originCoords || !destinationCoords) return;
 
     const bounds = L.latLngBounds(
-        [originCoords.lat, originCoords.lng],
-        [destinationCoords.lat, destinationCoords.lng]
+      [originCoords.lat, originCoords.lng],
+      [destinationCoords.lat, destinationCoords.lng]
     );
 
+    // Ensure map has layout then center on route with padding
+    map.invalidateSize();
     map.fitBounds(bounds, {
-        padding: [120, 120],  // 👈 space around markers
-        maxZoom: 5,           // 👈 prevent over-zoom
-        animate: true,
+      padding: [80, 80],
+      maxZoom: 5,
+      animate: true,
     });
-    }, [
+  }, [
     map,
     originCoords?.lat,
     originCoords?.lng,
     destinationCoords?.lat,
     destinationCoords?.lng,
-    ]);
-
+  ]);
 
   if (!originCoords || !destinationCoords) return null;
 
   return (
     <>
       {/* ORIGIN */}
-      <Marker 
-        position={[originCoords.lat, originCoords.lng]} 
+      <Marker
+        position={[originCoords.lat, originCoords.lng]}
         icon={createSimpleMarker({
-            color: "#2e7d32",
-            label: origin?.country ? `${origin.name}, ${origin.country}` : originName
+          color: "#2e7d32",
+          label: origin?.country
+            ? `${origin.name}, ${origin.country}`
+            : originName,
         })}
-        />
+      />
 
       {/* DESTINATION */}
-      <Marker 
+      <Marker
         position={[destinationCoords.lat, destinationCoords.lng]}
         icon={createSimpleMarker({
-            color: "#C40C0C",
-            label: destination?.country ? `${destination.name}, ${destination.country}` : destinationName
+          color: "#C40C0C",
+          label: destination?.country
+            ? `${destination.name}, ${destination.country}`
+            : destinationName,
         })}
       />
 

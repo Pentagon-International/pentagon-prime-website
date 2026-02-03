@@ -1,24 +1,25 @@
-const GEOAPIFY_KEY = '12b6a6c3fbc5430f81447de300d4c563';
+const GEOAPIFY_KEY = "12b6a6c3fbc5430f81447de300d4c563";
 
-export async function fetchPortCoordinates({name, country = ""}) {
-  const query = encodeURIComponent(`${name} Port ${country}`);
+export async function fetchPortCoordinates({ city, country = "", name = "" }) {
+  const locationPart = city || name || "";
+  const query = encodeURIComponent(
+    [locationPart, country].filter(Boolean).join(", ")
+  );
 
   const res = await fetch(
     `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1`,
     {
       headers: {
-        "User-Agent": "Pentagon-Prime-Logistics-App"
-      }
+        "User-Agent": "Pentagon-Prime-Logistics-App",
+      },
     }
   );
 
   const data = await res.json();
   if (!data.length) return null;
-  console.log("data------------",data)
+  console.log("data------------", data);
   return {
     lat: parseFloat(data[0].lat),
     lng: parseFloat(data[0].lon),
   };
 }
-
-

@@ -10,6 +10,7 @@ import { highlightText } from "../../utils/highlightText";
 import { TYPOGRAPHY } from "../../utils/TYPOGRAPHY";
 import ListCard from "@/app/component/common/ListCard";
 import { customClearanceList, exhibitionCargoList, exhibitionCargoList2, projectCargoList, projectCargoList2, crossTradeList, crossTradeList2, odcProjectCargoList } from "@/app/utils/llistData";
+import { COLORS } from "@/app/utils/COLORS";
 
 
 export async function generateStaticParams() {
@@ -154,38 +155,38 @@ const ServicePage = async ({ params }) => {
         }
       />
       {resData?.reference === "odc-project-cargo" && (
-        <Box style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+        <Box style={{display:"flex", justifyContent:"center", alignItems:"center", backgroundColor:COLORS.backgroundColor }}>
           <ListCard listData={odcProjectCargoList} sectionTitle={"we make it possible"} />
         </Box>
       )}
       {resData?.reference === "customs-clearance" && (
-        <Box py={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+        <Box py={20} style={{display:"flex", justifyContent:"center", alignItems:"center",backgroundColor:COLORS.backgroundColor }}>
           <ListCard listData={customClearanceList} sectionTitle={"What we do: end-to-end, shipper-first"} />
         </Box>
       )}
       {resData?.reference === "exhibition-cargo" && (
-        <Box py={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+        <Box py={20} style={{display:"flex", justifyContent:"center", alignItems:"center",backgroundColor:COLORS.backgroundColor }}>
           <ListCard listData={exhibitionCargoList} sectionTitle={"What we handle"} />
         </Box>
       )}
       {resData?.reference === "break-bulk-cargo" && (
-        <Box py={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+        <Box py={20} style={{display:"flex", justifyContent:"center", alignItems:"center", backgroundColor:COLORS.backgroundColor }}>
           <ListCard listData={projectCargoList} sectionTitle={"What we do"} />
         </Box>
       )}
       {resData?.reference === "break-bulk-cargo" && (
-        <Box py={20} mb={50} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+        <Box py={20} pb={60} style={{display:"flex", justifyContent:"center", alignItems:"center", backgroundColor:COLORS.backgroundColor }}>
           <AutoplayCarousel slides={breakBulkCargoSlides} interval={4000} height={450} />
         </Box>
       )}
       {resData?.reference === "cross-country-trade" && (
-        <Box py={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+        <Box py={20} style={{display:"flex", justifyContent:"center", alignItems:"center", backgroundColor:COLORS.backgroundColor}}>
           <ListCard listData={crossTradeList} sectionTitle={"What we deliver"} />
         </Box>
       )}
 
       {resData?.reference === "chartering-and-coastal-movements" && (
-        <Box py={20} mt={20} mb={20} style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", }}>
+        <Box py={40} style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", backgroundColor:COLORS.backgroundColor}}>
           <MediaCarousel items={charteringMedia} interval={4000} height={550} />
         </Box>
       )}
@@ -198,7 +199,7 @@ const ServicePage = async ({ params }) => {
       )}
         {/* Unified media carousel (images + videos) for odc-project-cargo */}
         {resData?.reference === "odc-project-cargo" && (
-          <Box py={20} mt={50} mb={20} style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", }}>
+          <Box pt={60} pb={30} style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center",backgroundColor:COLORS.backgroundColor }}>
             <Title tt="uppercase" size={TYPOGRAPHY.h4.desktop} fw={800} lh={'lgx2'} mb={20}>{highlightText("Our Cargo # Movements #")}</Title>
             <MediaCarousel items={cargoMedia} interval={4000} height={550} />
           </Box>
@@ -209,12 +210,12 @@ const ServicePage = async ({ params }) => {
         </Box>
       )} */}
         {resData?.reference === "break-bulk-cargo" && (
-        <Box py={20} mb={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+        <Box py={20} pb={40} style={{display:"flex", justifyContent:"center", alignItems:"center", backgroundColor:COLORS.backgroundColor}}>
           <ListCard listData={projectCargoList2} sectionTitle={"Why shippers choose Pentagon Prime"} />
         </Box>
       )}
         {resData?.reference === "cross-country-trade" && (
-        <Box mb={20} style={{display:"flex", justifyContent:"center", alignItems:"center", }}>
+        <Box pb={20} style={{display:"flex", justifyContent:"center", alignItems:"center",backgroundColor:COLORS.backgroundColor }}>
           <ListCard listData={crossTradeList2} sectionTitle={"Why shippers choose Pentagon Prime"} />
         </Box>
       )}

@@ -1,8 +1,10 @@
+import { Box } from "@mantine/core";
 import { client } from "../api/contentful";
 import BottomCard from "../component/common/BottomCard";
 import NewsRoom from "../news/NewsRoom";
 import { fetchEntries } from "../utils/fetchEntries";
 import FeaturedBlog from "./FeaturedBlog";
+import { COLORS } from "../utils/COLORS";
 
 const page = async () => {
   const title = 'Ready to get started?';
@@ -31,11 +33,11 @@ const page = async () => {
   }
 
   return (
-    <>
+    <Box bg={COLORS.backgroundColor} >
       <NewsRoom title={newsData.title} content={newsData.content} />
       <FeaturedBlog res={blogItems || []} />
       <BottomCard title={title} text={text} button={button} />
-    </>
+    </Box>
   );
 };
 

@@ -49,7 +49,7 @@ import { COLORS } from "../utils/COLORS";
 import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import useTransportStore from "../store/transportStore";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import useCustomerRequestStore from "../store/customerRequestStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiCallProtected } from "../api/api";
@@ -70,6 +70,10 @@ import { useRouter } from "next/navigation";
 import { Notifications, notifications } from "@mantine/notifications";
 import { Transition } from "@mantine/core";
 import dynamic from "next/dynamic";
+
+const RouteMap = dynamic(() => import("../component/route-map/RouteMap"), {
+  ssr: false,
+});
 
 function CargoButton({ hasContainerDetailsError, form, handleAddCargoClick }) {
   const [pulse, setPulse] = useState(false);
@@ -169,7 +173,7 @@ const ListAttachments = ({ data = [], onDelete }) => {
               </ActionIcon>
             </Group>
           </List.Item>
-        ) : null,
+        ) : null
       )}
     </List>
   );
@@ -184,9 +188,15 @@ const CustomerRequestForm = (
     list: [],
   },
   defaultSize = `20GP`,
-  submitCallback = () => null,
+  submitCallback = () => null
 ) => {
-  const { formValues, _hasHydrated } = useCustomerRequestStore();
+  const {
+    formValues,
+    _hasHydrated,
+    setMapOrigin,
+    setMapDestination,
+    setMapLoading,
+  } = useCustomerRequestStore();
   const { seaData, airData, setSeaData, setAirData } = useTransportStore();
   const selectData = formValues?.typeOfBooking === "air" ? airData : seaData;
   const router = useRouter();
@@ -194,15 +204,11 @@ const CustomerRequestForm = (
 
   // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS
   const [filteredOriginData, setFilteredOriginData] = useState(
-    formValues?.memoizedTransportData || [],
+    formValues?.memoizedTransportData || []
   );
   const [filteredDestinationData, setFilteredDestinationData] = useState(
-    formValues?.memoizedTransportData || [],
+    formValues?.memoizedTransportData || []
   );
-
-  const RouteMap = dynamic(() => import("../component/route-map/RouteMap"), {
-    ssr: false,
-  });
 
   const form = useForm({
     mode: "controlled",
@@ -301,14 +307,18 @@ const CustomerRequestForm = (
                 container_details.list.forEach((container, index) => {
                   if (!container.size) {
                     resultErrors.push({
-                      container_details: `Please enter the valid Size for Container ${index + 1}`,
+                      container_details: `Please enter the valid Size for Container ${
+                        index + 1
+                      }`,
                     });
                   }
 
                   container.fields?.forEach((field) => {
                     if (field.required && !field.value) {
                       resultErrors.push({
-                        container_details: `Please enter the valid ${field.label} for Container ${index + 1}`,
+                        container_details: `Please enter the valid ${
+                          field.label
+                        } for Container ${index + 1}`,
                       });
                     }
                   });
@@ -381,7 +391,7 @@ const CustomerRequestForm = (
   console.log("form errors", form.errors);
 
   const hasContainerDetailsError = form.errors?.result?.[0]?.some(
-    (error) => error?.container_details !== undefined,
+    (error) => error?.container_details !== undefined
   );
   console.log("hasContainerDetailsError", hasContainerDetailsError);
 
@@ -406,7 +416,7 @@ const CustomerRequestForm = (
   useEffect(() => {
     if (form.values.result?.[0]?.origin?.origin) {
       const filteredDestinations = formValues?.memoizedTransportData?.filter(
-        (item) => item.value !== form.values.result?.[0]?.origin?.origin,
+        (item) => item.value !== form.values.result?.[0]?.origin?.origin
       );
       setFilteredDestinationData(filteredDestinations || []);
     }
@@ -417,7 +427,7 @@ const CustomerRequestForm = (
     if (form.values.result?.[0]?.destination?.destination) {
       const filteredOrigins = formValues?.memoizedTransportData?.filter(
         (item) =>
-          item.value !== form.values.result?.[0]?.destination?.destination,
+          item.value !== form.values.result?.[0]?.destination?.destination
       );
       setFilteredOriginData(filteredOrigins || []);
     }
@@ -453,7 +463,7 @@ const CustomerRequestForm = (
   const [activeSize, setActiveSize] = useState(defaultSize);
   const [selectedSize, setSelectedSize] = useState([]);
   const [activeDimension, setActiveDimension] = useState(
-    data?.dimension || "M",
+    data?.dimension || "M"
   );
 
   const CustomTitle = () => (
@@ -483,7 +493,7 @@ const CustomerRequestForm = (
         const newList = changeDimensions(
           containerList.list,
           activeDimension,
-          `(${containerList.dimension})`,
+          `(${containerList.dimension})`
         );
         setContainerList((ct) => ({
           ...ct,
@@ -559,6 +569,20 @@ const CustomerRequestForm = (
     },
   });
 
+  const memoOrigin = useMemo(() => {
+    const o = form.values?.result?.[0]?.origin;
+    return o?.origin
+      ? { name: o.name, city: o.city, country: o.country }
+      : null;
+  }, [form.values?.result?.[0]?.origin?.name]);
+
+  const memoDestination = useMemo(() => {
+    const d = form.values?.result?.[0]?.destination;
+    return d?.destination
+      ? { name: d.name, city: d.city, country: d.country }
+      : null;
+  }, [form.values?.result?.[0]?.destination?.name]);
+
   const segmantData = React.useMemo(() => {
     return formValues?.activeTransport === "sea"
       ? [
@@ -617,6 +641,30 @@ const CustomerRequestForm = (
     }
   }, [formValues, _hasHydrated, router]);
 
+  // Sync store map origin/destination once when hydrated with data (e.g. from Hero)
+  React.useEffect(() => {
+    if (!_hasHydrated) return;
+    const o = formValues?.result?.[0]?.origin ?? formValues?.origin;
+    const d = formValues?.result?.[0]?.destination ?? formValues?.destination;
+    if (o?.origin ?? o?.code ?? o?.name) {
+      setMapOrigin(o);
+      setMapLoading(true);
+    }
+    if (d?.destination ?? d?.code ?? d?.name) {
+      setMapDestination(d);
+      setMapLoading(true);
+    }
+  }, [
+    _hasHydrated,
+    formValues?.origin?.origin,
+    formValues?.origin?.code,
+    formValues?.destination?.destination,
+    formValues?.destination?.code,
+    setMapOrigin,
+    setMapDestination,
+    setMapLoading,
+  ]);
+
   const hasRequiredData =
     formValues &&
     formValues.origin &&
@@ -646,24 +694,39 @@ const CustomerRequestForm = (
       return;
     }
 
+    const swappedOrigin = {
+      ...currentDestination,
+      origin: currentDestination.destination,
+      name: currentDestination.name,
+      code: currentDestination.code,
+      country: currentDestination.country,
+      city: currentDestination.city,
+      port: currentDestination.port,
+      shipment_type: currentOrigin.shipment_type,
+      ready_date: currentOrigin.ready_date,
+      pickup: currentOrigin.pickup,
+    };
+    const swappedDestination = {
+      ...currentOrigin,
+      destination: currentOrigin.origin,
+      name: currentOrigin.name,
+      code: currentOrigin.code,
+      country: currentOrigin.country,
+      city: currentOrigin.city,
+      port: currentOrigin.port,
+      delivery: currentDestination.delivery,
+      customs: currentDestination.customs,
+      address: currentDestination.address,
+    };
+    setMapOrigin(swappedOrigin);
+    setMapDestination(swappedDestination);
+    setMapLoading(true);
     form.setValues((prevValues) => {
       const updatedResult = [
         {
           ...prevValues.result[0],
-          origin: {
-            ...currentDestination,
-            origin: currentDestination.destination,
-            shipment_type: currentOrigin.shipment_type,
-            ready_date: currentOrigin.ready_date,
-            pickup: currentOrigin.pickup,
-          },
-          destination: {
-            ...currentOrigin,
-            destination: currentOrigin.origin,
-            delivery: currentDestination.delivery,
-            customs: currentDestination.customs,
-            address: currentDestination.address,
-          },
+          origin: swappedOrigin,
+          destination: swappedDestination,
         },
       ];
 
@@ -754,7 +817,7 @@ const CustomerRequestForm = (
       size: v,
       list:
         st.list?.map((item, index) =>
-          index === i ? { ...item, size: v } : item,
+          index === i ? { ...item, size: v } : item
         ) ?? st.list,
     }));
   };
@@ -1138,15 +1201,16 @@ const CustomerRequestForm = (
       </Container>
     );
   }
-  console.log("form------------------", form);
+  console.log("form------------------", memoOrigin, memoDestination);
+
   return (
     <>
-      <form onSubmit={form.onSubmit(handleSubmit)}>
+      <form
+        onSubmit={form.onSubmit(handleSubmit)}
+        style={{ backgroundColor: COLORS.backgroundColor }}
+      >
         <Box mt={60}>
-          <RouteMap
-            origin={form?.values?.result?.[0]?.origin}
-            destination={form?.values?.result?.[0]?.destination}
-          />
+          <RouteMap />
         </Box>
         <Container fluid px={"7%"} py={"70px"}>
           {/* <Title tt="uppercase" tw="balance" fw={800}> Featured articles </Title> */}
@@ -1179,6 +1243,7 @@ const CustomerRequestForm = (
                 }}
                 styles={{
                   input: {
+                    backgroundColor: "white",
                     fontSize: isMobile
                       ? TYPOGRAPHY.body.small
                       : TYPOGRAPHY.body.normal,
@@ -1206,20 +1271,30 @@ const CustomerRequestForm = (
                   <IconMapPin size={20} color={COLORS.secondaryColor} />
                 }
                 onChange={(origin, value) => {
+                  const nextOrigin = value
+                    ? {
+                        origin: value?.value,
+                        port: value?.value,
+                        name: value?.name || "",
+                        code: value?.code || "",
+                        country: value?.country || "",
+                        city: value?.city || value?.name || "",
+                      }
+                    : null;
+                  setMapOrigin(nextOrigin);
+                  setMapLoading(!!nextOrigin);
                   form.setValues((prevValues) => ({
                     ...prevValues,
                     result: prevValues.result
                       ? [
                           {
                             ...prevValues.result[0],
-                            origin: {
-                              ...prevValues.result[0]?.origin,
-                              origin: value?.value,
-                              port: value?.value,
-                              name: value?.name || "",
-                              code: value?.code || "",
-                              country: value?.country || "",
-                            },
+                            origin: nextOrigin
+                              ? {
+                                  ...prevValues.result[0]?.origin,
+                                  ...nextOrigin,
+                                }
+                              : {},
                           },
                         ]
                       : [],
@@ -1297,20 +1372,30 @@ const CustomerRequestForm = (
                   <IconMapPin size={20} color={COLORS.secondaryColor} />
                 }
                 onChange={(destination, value) => {
+                  const nextDestination = value
+                    ? {
+                        destination: value?.value,
+                        port: value?.value,
+                        name: value?.name || "",
+                        code: value?.code || "",
+                        country: value?.country || "",
+                        city: value?.city || value?.name || "",
+                      }
+                    : null;
+                  setMapDestination(nextDestination);
+                  setMapLoading(!!nextDestination);
                   form.setValues((prevValues) => ({
                     ...prevValues,
                     result: prevValues.result
                       ? [
                           {
                             ...prevValues.result[0],
-                            destination: {
-                              ...prevValues.result[0]?.destination,
-                              destination: value?.value,
-                              name: value?.name || "",
-                              code: value?.code || "",
-                              country: value?.country || "",
-                              port: value?.value,
-                            },
+                            destination: nextDestination
+                              ? {
+                                  ...prevValues.result[0]?.destination,
+                                  ...nextDestination,
+                                }
+                              : {},
                           },
                         ]
                       : [],
@@ -2007,7 +2092,7 @@ const CustomerRequestForm = (
                 }}
               />
             </Grid.Col>
-            <Grid.Col span={12}>
+            <Grid.Col span={6}>
               {/* <Button color={hasContainerDetailsError ? 'red' : ''}
                 variant={hasContainerDetailsError ? "outline" : "filled"}
                 fullWidth
@@ -2156,7 +2241,7 @@ const CustomerRequestForm = (
             ) : (
               <>
                 {/* Regular documents upload */}
-                <Grid.Col>
+                <Grid.Col span={6}>
                   <FileButton
                     name="docs"
                     accept="image/png,image/jpeg,application/pdf"
@@ -2253,6 +2338,7 @@ const CustomerRequestForm = (
                   variant="outline"
                   color="red"
                   radius={"8px"}
+                  bg="white"
                   onClick={() => router.back()}
                 >
                   Cancel

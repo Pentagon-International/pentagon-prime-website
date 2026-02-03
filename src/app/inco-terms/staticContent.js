@@ -39,7 +39,7 @@ const StaticContents = () => {
     open();
   };
   return (
-    <Container fluid px="2%" py="70px">
+    <Container fluid px="2%" py="70px" bg={COLORS.backgroundColor}>
       <Grid align="center" justify="space-between">
         {/* <Grid.Col span={isMobile ? 12 : 6} p={'xl'}>
                     <Image
@@ -95,7 +95,7 @@ const StaticContents = () => {
             spacing={{ base: "sm", sm: "md", md: "lg", lg: "xl" }}
           >
             {shipmentTermsQuery?.data?.map((item, id) => (
-              <Box key={id} p="md" bg="#F2F7FC" style={{ borderRadius: 8 }}>
+              <Box key={id} p="md" bg="#FFF" style={{ borderRadius: 8 }}>
                 <Group wrap="nowrap">
                   <Image
                     src={item.logo}
@@ -141,7 +141,7 @@ const StaticContents = () => {
         </Grid.Col>
         <Grid.Col span={isMobile ? 12 : 6} mt="40px">
           <Card
-            bg={"#F2F7FC"}
+            bg={"#FFF"}
             display={"flex"}
             direction={"column"}
             justify={"flex-start"}
@@ -221,7 +221,7 @@ const StaticContents = () => {
         </Grid.Col>
         <Grid.Col span={isMobile ? 12 : 6} mt="40px">
           <Card
-            bg={"#F2F7FC"}
+            bg={"#FFF"}
             display={"flex"}
             direction={"column"}
             justify={"flex-start"}

@@ -48,7 +48,7 @@ const ShipTerms = () => {
   };
 
   return (
-    <Container fluid px="2%" py="70px">
+    <Container fluid px="2%" py="70px" bg={COLORS.backgroundColor}>
       <Title
         size={isMobile ? TYPOGRAPHY.h5.desktop : "lg"}
         lh={isMobile ? "md" : "lgx2"}
@@ -70,6 +70,7 @@ const ShipTerms = () => {
         {shipmentTermsQuery?.data?.map((group) => (
           <Box
             key={group.label}
+            bg={"#FFF"}
             style={{
               borderRadius: 8,
               border: "1px solid #e0e0e0",
@@ -110,7 +111,7 @@ const ShipTerms = () => {
             </Box>
 
             {/* Scrollable Content */}
-            <ScrollArea style={{ flex: 1, padding: "0 16px" }}>
+            <ScrollArea style={{ flex: 1, padding: "0 16px", backgroundColor:"#FFF" }}>
               {group?.terms?.map((term, index) => (
                 <Box
                   key={index}

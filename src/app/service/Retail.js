@@ -51,7 +51,7 @@ const Retail = ({ first_title, first_content, second_title, second_content, illu
     //     </Flex>
     //     <Image src={isMobile ? Images.mob_prime_network : Images.pentagon_zig_zag} w={isMobile ? '100%' : '50%'} mx={'auto'} alt="prime_network" />
     //   </Group>
-    <Container fluid px="2%" py="70px" my={40} pb={0} >
+    <Container fluid px="2%" py="70px" bg={COLORS.backgroundColor}>
       <Flex gap="md" wrap="nowrap" direction={isMobile ? 'column' : 'row'} >
         <Flex direction={'column'} >
           <Title tt="uppercase" fw={800}>

@@ -44,8 +44,8 @@ const Members = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   return (
-    <Container fluid px={"2%"} pb={"lg"} my={0}>
-      <Flex justify="center" my={50}>
+    <Container fluid px={"2%"} py={"lg"} my={0} bg={COLORS.backgroundColor}>
+      <Flex justify="center" py={50}>
         <Title
           tt={"uppercase"}
           fw={800}
@@ -63,7 +63,7 @@ const Members = () => {
         style={{ width: "100%" }}
       >
         <Card
-          bg={"#F2F7FC"}
+          bg={"#FCFCFC"}
           padding="lg"
           radius="lg"
           style={{
@@ -206,6 +206,7 @@ const Members = () => {
                     h={"100%"}
                     src={item.fields.image?.fields?.file?.url}
                     alt={item.fields.name}
+                    style={{boxShadow:"0 3px 8px rgba(0, 0, 0, 0.3)"}}
                   />
                   <Text fw={700} size="md" mt={"md"}>
                     {item.fields.name}
@@ -220,7 +221,7 @@ const Members = () => {
         ) : (
           members.map((item) => (
             <GridCol key={item.sys.id} span={1} mb={"xl"} px={isMobile ? 0 : 20} style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-              <Box style={{ width: "80%", maxHeight:"450px", overflow: "hidden", borderRadius: "12px", transition: "all 0.5s ease" }}>
+              <Box style={{ width: "80%", maxHeight:"450px", overflow: "hidden", borderRadius: "12px", transition: "all 0.5s ease", boxShadow:"0 3px 8px rgba(0, 0, 0, 0.3)" }}>
                 <Image
                   style={{ maxHeight: "450px", transition: "all 0.5s ease" }}
                   src={item.fields.image?.fields?.file?.url}
