@@ -39,7 +39,6 @@ const ShipTerms = () => {
       }));
     },
   });
-  console.log("ShipTerms?.data :: :: :::: ", shipmentTermsQuery?.data);
   const isMobile = useMediaQuery("(max-width:768px)");
 
   const handleOpen = (term) => {

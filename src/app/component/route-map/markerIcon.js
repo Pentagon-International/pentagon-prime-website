@@ -1,15 +1,13 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./map.css";
+import getEmojiFlag from "@/app/utils/isoMap";
 
-export const createSimpleMarker = ({
-  color = "#e53935",
-  label = "",
-}) => {
+export const createSimpleMarker = ({ color = "#e53935", label = "", country }) => {
   return L.divIcon({
     className: "custom-div-marker",
-    iconSize: [50, 80],      // 👈 important
-    iconAnchor: [25, 70],   // 👈 tip of pin
+    iconSize: [50, 80], // 👈 important
+    iconAnchor: [25, 70], // 👈 tip of pin
     popupAnchor: [0, -60],
     html: `
       <div style="
@@ -18,27 +16,38 @@ export const createSimpleMarker = ({
         align-items:center;
       ">
         ${
-            label
+          label
             ? `<div style="
-                min-width:75px;
-                margin-top:6px;
-                padding:4px 8px;
-                font-size:13px;
-                font-weight:500;
-                background:#222;
-                color:white;
-                border-radius:6px;
-                box-shadow:0 3px 8px rgba(0,0,0,0.35);
-                white-space:nowrap;
-                text-align:center;
+                  min-width:75px;
+                  padding:4px 8px;
+                  font-size:13px;
+                  font-weight:500;
+                  background:#222;
+                  color:white;
+                  border-radius:6px;
+                  box-shadow:0 3px 8px rgba(0,0,0,0.35);
+                  white-space:nowrap;
+                  text-align:center;
+                  display: flex;
+                  align-items:center;
+                  gap:8px;
                 ">
-                ${label}
-                </div>`
+                  ${
+                    country
+                      ? `<img 
+                          src="https://flagcdn.com/${getEmojiFlag(country)}.svg"
+                          alt=""
+                          style="width:20px;height:16px;"
+                        />`
+                      : ""
+                  }
+                  <p>${label}</p>
+              </div>`
             : ""
-        }
+          }
         <svg 
           xmlns="http://www.w3.org/2000/svg"
-          width="40" 
+          width="40"
           height="40"
           viewBox="0 0 24 24"
           fill="${color}"

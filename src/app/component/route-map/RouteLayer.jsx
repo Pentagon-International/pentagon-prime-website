@@ -6,48 +6,39 @@ import { createSimpleMarker } from "./markerIcon";
 import L from "leaflet";
 import { resolvePortCoords } from "./getPortCoords";
 
-export default function RouteLayer({ origin, destination, onLoadingChange }) {
+export default function RouteLayer({ origin, destination, setLoading }) {
   const map = useMap();
   const [originCoords, setOriginCoords] = useState(null);
   const [destinationCoords, setDestinationCoords] = useState(null);
 
   useEffect(() => {
-    const hasSelection =
-      (origin?.name || origin?.city || origin?.country) &&
-      (destination?.name || destination?.city || destination?.country);
-
-    if (!hasSelection) {
+    if (!origin?.country || !destination?.country) {
       setOriginCoords(null);
       setDestinationCoords(null);
-      onLoadingChange?.(false);
+      setLoading(false);
       return;
     }
 
-    // Show loader immediately (sync) so it appears before any async work
-    onLoadingChange?.(true);
-    setOriginCoords(null);
-    setDestinationCoords(null);
-
     let cancelled = false;
+
+    setLoading(true);
+
     async function load() {
       try {
-        const originData = await resolvePortCoords({
-          name: origin?.name,
-          city: origin?.city,
-          country: origin?.country,
-        });
+        const originData = await resolvePortCoords(origin);
         if (cancelled) return;
-        const destinationData = await resolvePortCoords({
-          name: destination?.name,
-          city: destination?.city,
-          country: destination?.country,
-        });
+
+        const destinationData = await resolvePortCoords(destination);
         if (cancelled) return;
 
         setOriginCoords(originData);
         setDestinationCoords(destinationData);
       } finally {
-        if (!cancelled) onLoadingChange?.(false);
+        if (!cancelled) {
+          requestAnimationFrame(() => {
+            setLoading(false);
+          });
+        }
       }
     }
 
@@ -55,18 +46,7 @@ export default function RouteLayer({ origin, destination, onLoadingChange }) {
     return () => {
       cancelled = true;
     };
-  }, [
-    origin?.name,
-    origin?.city,
-    origin?.country,
-    origin?.origin,
-    origin?.code,
-    destination?.name,
-    destination?.city,
-    destination?.country,
-    destination?.destination,
-    destination?.code,
-  ]);
+  }, [origin?.country, destination?.country]);
 
   const originName = origin?.name || origin;
   const destinationName = destination?.name || destination;
@@ -106,6 +86,7 @@ export default function RouteLayer({ origin, destination, onLoadingChange }) {
           label: origin?.country
             ? `${origin.name}, ${origin.country}`
             : originName,
+          country: origin?.country
         })}
       />
 
@@ -117,6 +98,7 @@ export default function RouteLayer({ origin, destination, onLoadingChange }) {
           label: destination?.country
             ? `${destination.name}, ${destination.country}`
             : destinationName,
+          country: destination?.country
         })}
       />
 

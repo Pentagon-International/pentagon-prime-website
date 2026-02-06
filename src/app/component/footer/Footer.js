@@ -111,7 +111,7 @@ const Footer = () => {
               <Image src={Images.logo} alt="Logo" h={60} />
             </Flex>
 
-            <Text lh={1.6} mb={20} fw={500} style={{ fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.caption.large }}>
+            <Text lh={1.6} mb={20} fw={500} style={{ fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.normal }}>
               Pentagon Prime, a unit of Pentagon Group, provides logistics and freight forwarding services.
               We enable our clients to enhance efficiency with cost-effective solutions, connecting them seamlessly with the world.
             </Text>
@@ -164,7 +164,7 @@ const Footer = () => {
           {/* Services - 3 Column Layout */}
           <Box style={{ flex: 3 }} pt={14}>
             <Group justify='space-between'>
-              <Text fw={700} size="sm" style={{ textTransform: 'uppercase', color: 'rgb(0, 33, 95)', width: 'fit-content', borderBottom: '2px solid rgb(0, 33, 95)' }}  mb={25}>
+              <Text fw={700} fz={16} style={{ textTransform: 'uppercase', color: 'rgb(0, 33, 95)', width: 'fit-content', borderBottom: '2px solid rgb(0, 33, 95)' }}  mb={25}>
                 Services
               </Text>
               {/* <Text fw={700} size="smx" style={{ textTransform: 'uppercase', color: '#666', width: '47%' }} mb={15}>
@@ -216,7 +216,7 @@ const Footer = () => {
                             lineHeight: 1.2,
                             padding: '2px 0',
                             margin: 0,
-                            fontSize: TYPOGRAPHY.caption.large,
+                            fontSize: TYPOGRAPHY.body.normal,
                             transition: 'all 0.3s ease',
                           }}
                           onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-2px)',
@@ -315,12 +315,12 @@ const Footer = () => {
           </Flex>
         </Box> */}
         <Flex justify="space-between" align="center" mt={20}>
-          <Text size="sm" fw={500} c={COLORS.textColor}>
+          <Text fz={isMobile ? 12 : 16} fw={500} c={COLORS.textColor}>
             © 2024 Pentagon Prime. All Rights Reserved.
           </Text>
           <Link href="/privacy-policy/index.html" style={{ marginLeft:20, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}>
-            <IconFileText size={18} color="#0EC9F2" />
-            <Text lh={1.6} style={{ fontSize: isMobile ? 12 : 15, cursor: 'pointer' }}>
+            <IconFileText size={18} color="rgb(0,33,95)" />
+            <Text lh={1.6} fw={500} style={{ fontSize: isMobile ? 12 : 16, cursor: 'pointer' }}>
               Privacy Policy
             </Text>
           </Link>

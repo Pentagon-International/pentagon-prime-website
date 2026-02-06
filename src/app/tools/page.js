@@ -424,7 +424,6 @@ const CbmCalc = () => {
                       {/* <Text c={COLORS.primaryColor} ta={'right'} >40 Feet </Text> */}
                     </Grid.Col>
                     <Grid.Col span={6}>
-                      {console.log("container40ft : ", container40ft)}
                       <Text c={COLORS.primaryColor} ta={'right'} size={'sm'}>{container40ft == 'Infinity' ? 0 : container40ft} items</Text>
                     </Grid.Col>
                     <Grid.Col span={6}>

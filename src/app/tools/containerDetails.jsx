@@ -71,7 +71,6 @@ const lengthInputOptions = {
 };
 
 const getContainerFields = (type, dimension) => {
-  console.log("TYPE", type, dimension);
   switch (type) {
     case "GC":
     case "TANK":

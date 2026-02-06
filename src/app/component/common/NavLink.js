@@ -390,7 +390,7 @@ export const NavLink = memo(({ item }) => {
       <HoverCardDropdown
         style={{
           overflow: "hidden",
-          zIndex: 1100,
+          zIndex: 10000,
           color: COLORS.primaryColor,
           padding: "10px 20px",
         }}

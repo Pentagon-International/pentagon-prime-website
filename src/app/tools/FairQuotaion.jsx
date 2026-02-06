@@ -517,7 +517,6 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
     validateOnChange: false,
     validateOnBlur: true,
     onSubmit: (values) => {
-      console.log("values -->", values);
       const body = {
         category: values.typeOfBooking,
         origin: {
@@ -562,7 +561,6 @@ const FairQuotation = ({ onSubmit, formHook, accordion, setAccordion }) => {
         value: `${item.id}`,
       })),
     onSuccess: ({ data }) => {
-      console.log("shipment types >>", data);
     },
     onError: (error) => {
       console.log(error);

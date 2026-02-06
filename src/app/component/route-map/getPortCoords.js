@@ -1,4 +1,3 @@
-import { PORT_COORDINATES } from "./portCoordinates";
 import { fetchPortCoordinates } from "./geoapify";
 
 export async function resolvePortCoords(port) {

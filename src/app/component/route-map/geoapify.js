@@ -1,5 +1,3 @@
-const GEOAPIFY_KEY = "12b6a6c3fbc5430f81447de300d4c563";
-
 export async function fetchPortCoordinates({ city, country = "", name = "" }) {
   const locationPart = city || name || "";
   const query = encodeURIComponent(
@@ -17,7 +15,7 @@ export async function fetchPortCoordinates({ city, country = "", name = "" }) {
 
   const data = await res.json();
   if (!data.length) return null;
-  console.log("data------------", data);
+  
   return {
     lat: parseFloat(data[0].lat),
     lng: parseFloat(data[0].lon),

@@ -7,6 +7,8 @@ import useCustomerRequestStore from "@/app/store/customerRequestStore";
 import "leaflet/dist/leaflet.css";
 import "./map.css";
 import L from "leaflet";
+import { COLORS } from "@/app/utils/COLORS";
+import { useState } from "react";
 
 /* FIX MARKER ICONS (NEXT.JS ISSUE) */
 delete L.Icon.Default.prototype._getIconUrl;
@@ -20,30 +22,12 @@ L.Icon.Default.mergeOptions({
 export default function RouteMap() {
   const mapOrigin = useCustomerRequestStore((s) => s.mapOrigin);
   const mapDestination = useCustomerRequestStore((s) => s.mapDestination);
-  const mapLoading = useCustomerRequestStore((s) => s.mapLoading);
-  const setMapLoading = useCustomerRequestStore((s) => s.setMapLoading);
 
-  const maxBounds = [
-    [-90, 68],
-    [90, 97.5],
-  ];
+  const [isMapLoading, setIsMapLoading] = useState(false);
 
   return (
-    <div
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        padding: "0 24px",
-      }}
-    >
-      <div
-        style={{
-          position: "relative",
-          height: "80vh",
-          width: "100%",
-        }}
-      >
+    <div style={{ backgroundColor: COLORS.backgroundColor, padding: "0 24px" }}>
+      <div style={{ position: "relative", height: "80vh", width: "100%",boxShadow:"0 0 8px rgba(0, 0, 0, 0.3)",borderRadius: "16px", }}>
         <MapContainer
           zoom={2}
           minZoom={2}
@@ -59,7 +43,6 @@ export default function RouteMap() {
             height: "100%",
             width: "100%",
             borderRadius: "16px",
-            overflow: "hidden",
           }}
         >
           <ZoomControl position="bottomright" />
@@ -69,17 +52,15 @@ export default function RouteMap() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
+          {/* 🔥 ONLY ONE LOADING CHANNEL */}
           <RouteLayer
-            key={`${mapOrigin?.origin ?? mapOrigin?.code ?? ""}-${
-              mapDestination?.destination ?? mapDestination?.code ?? ""
-            }`}
             origin={mapOrigin}
             destination={mapDestination}
-            onLoadingChange={setMapLoading}
+            setLoading={setIsMapLoading}
           />
         </MapContainer>
 
-        {mapLoading && (
+        {isMapLoading && (
           <div
             style={{
               position: "absolute",
@@ -87,15 +68,16 @@ export default function RouteMap() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "rgba(255, 255, 255, 0.85)",
-              zIndex: 10,
+              backgroundColor: "rgba(255,255,255,0.6)",
+              zIndex: 1000,
               pointerEvents: "none",
             }}
           >
-            <MantineLoader size="xl" color="rgb(0, 33, 95)" type="dots" />
+            <MantineLoader size="xl" color="#0d6efd" type="dots" />
           </div>
         )}
       </div>
     </div>
   );
 }
+

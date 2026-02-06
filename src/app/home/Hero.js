@@ -38,6 +38,7 @@ import useTransportStore from "../store/transportStore";
 import { useRouter } from "next/navigation";
 import useCustomerRequestStore from "../store/customerRequestStore";
 import values from "lodash/values";
+import getEmojiFlag from "../utils/isoMap";
 
 const TransportOption = memo(({ type, icon, activeTransport, onClick }) => (
   <Group
@@ -312,7 +313,6 @@ const Hero = ({ title, content }) => {
       });
       return;
     }
-    console.log("formValue------------------", formValue);
 
     // If all validations pass
     // Ensure memoizedTransportData is set before navigation
@@ -449,6 +449,7 @@ const Hero = ({ title, content }) => {
                           placeholder="Origin"
                           size="lg"
                           searchable
+                          spellCheck={false}
                           clearable
                           w={"100%"}
                           limit={5}
@@ -497,7 +498,15 @@ const Hero = ({ title, content }) => {
                           }}
                           autoComplete="off"
                           leftSection={
-                            <IconMapPin size={20} color={COLORS.primaryColor} />
+                            formValue?.origin?.country ? (
+                              <img
+                                src={`https://flagcdn.com/${getEmojiFlag(formValue?.origin?.country)}.svg`}
+                                alt=""
+                                style={{ width: 24, height:20 }}
+                              />
+                            ) : (
+                              <IconMapPin size={20} color={"white"} />
+                            )
                           }
                           value={formValue?.origin?.origin}
                           onChange={(value, opt) => {
@@ -518,6 +527,7 @@ const Hero = ({ title, content }) => {
                           mt={10}
                           placeholder="Destination"
                           searchable
+                          spellCheck={false}
                           clearable
                           clearButtonProps={{
                             style: {
@@ -540,6 +550,7 @@ const Hero = ({ title, content }) => {
                               backgroundColor: "#ffffff45",
                               color: "#fff",
                               border: "2px solid white",
+                              textDecoration:"none"
                             },
                             item: {
                               fontSize: TYPOGRAPHY.input.large,
@@ -567,7 +578,15 @@ const Hero = ({ title, content }) => {
                           }}
                           autoComplete="off"
                           leftSection={
-                            <IconMapPin size={20} color={COLORS.primaryColor} />
+                            formValue?.destination?.country ? (
+                              <img
+                                src={`https://flagcdn.com/${getEmojiFlag(formValue?.destination?.country)}.svg`}
+                                alt=""
+                                style={{ width: 24, height:20}}
+                              />
+                            ) : (
+                              <IconMapPin size={20} color={"white"} />
+                            )
                           }
                           value={formValue?.destination?.destination}
                           onChange={(value, opt) =>

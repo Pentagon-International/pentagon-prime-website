@@ -507,8 +507,6 @@ const ChargesTable = ({
     saveList: st.saveList,
   }));
 
-  console.log("estimateStore?.list : ", estimateStore?.list)
-
   const list = estimateStore?.list?.filter((charge) => {
     return charge.size === size;
   });
@@ -582,7 +580,6 @@ const ChargesTable = ({
       );
 
       estimateStore.saveList(summedData);
-      console.log("summedData : ", summedData)
     }
   }, []);
 
@@ -715,8 +712,6 @@ export const EstimateFormCalculation = ({
   loading,
 }) => {
 
-  console.log("chargesMasterList : ", chargesMasterList);
-
   const estimateCallback = useEstimationStore((st) => ({
     list: st.list,
     saveList: st.saveList,
@@ -730,18 +725,11 @@ export const EstimateFormCalculation = ({
     refetchOnWindowFocus: false,
   });
 
-  console.log('>< quotation', quoteData)
-
   const quotationData = quoteData?.container_details?.list
     ? quoteData?.container_details?.list
     : quoteData?.list;
 
   useEffect(() => {
-    console.log("quotationData : ", quotationData)
-    console.log('>>', chargesList?.length);
-    console.log(frightData?.data?.data?.length > 0);
-
-
     // debugger;
     if (
       quotationData &&

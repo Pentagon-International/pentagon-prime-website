@@ -62,7 +62,7 @@ const Header = () => {
     backgroundColor: "#FFFFFF",
     boxShadow: "0 0 6px 3px rgba(0, 0, 0, 0.1)",
     backdropFilter: "blur(10px)",
-    zIndex: 1000,
+    zIndex: 9999,
     padding: "8px 1%",
     color: COLORS.primaryColor,
     height: "75px",
