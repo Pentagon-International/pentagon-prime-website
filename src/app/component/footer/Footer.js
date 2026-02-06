@@ -108,7 +108,24 @@ const Footer = () => {
           {/* Company Info */}
           <Box style={{ flex: 2}}>
             <Flex align="center" gap="xs" mb={20}>
-              <Image src={Images.logo} alt="Logo" h={60} />
+              <Box style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 5}}>
+                <Image src={Images.logo_only} alt="Logo" h={48} />
+                <Flex align="center" justify="center" style={{textDecoration: "none", flexDirection: "column", alignSelf: "flex-end"}}>
+                  <Text
+                    className="logo-font"
+                    fs="italic"
+                    fz={22}
+                    fw={700}
+                    tw="balance"
+                    c="#326b7d"
+                  >
+                    Pentagon Prime
+                  </Text>
+                  <Text size="xs" fw={500} c="rgb(0, 33, 95)" style={{alignSelf: 'flex-start'}}>
+                    Logistics.Automated
+                  </Text>
+                </Flex>
+              </Box>
             </Flex>
 
             <Text lh={1.6} mb={20} fw={500} style={{ fontSize: isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.normal }}>
