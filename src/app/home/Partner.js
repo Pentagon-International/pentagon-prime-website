@@ -1,33 +1,42 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { COLORS } from '@/app/utils/COLORS';
-import { Carousel, CarouselSlide } from '@mantine/carousel';
-import { Box, Button, Container, Flex, Stack, Text, Title } from '@mantine/core';
-import { IconArrowNarrowLeft, IconArrowNarrowRight } from '@tabler/icons-react';
-import { useRouter } from 'next/navigation';
-import { client } from '../api/contentful';
-import { highlightText } from '../utils/highlightText';
-import { useMediaQuery } from '@mantine/hooks';
-import Autoplay from 'embla-carousel-autoplay';
+import { useState, useEffect, useRef } from "react";
+import { COLORS } from "@/app/utils/COLORS";
+import { Carousel, CarouselSlide } from "@mantine/carousel";
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Image,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
+import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
+import { client } from "../api/contentful";
+import { highlightText } from "../utils/highlightText";
+import { useMediaQuery } from "@mantine/hooks";
+import Autoplay from "embla-carousel-autoplay";
 
 const Partner = ({ title, content }) => {
   const [partners, setPartners] = useState([]);
   const router = useRouter();
   const autoplay = useRef(Autoplay({ delay: 3000 }));
 
-  const isMobile = useMediaQuery('(max-width:768px)');
+  const isMobile = useMediaQuery("(max-width:768px)");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await client.getEntries({
-          content_type: 'partners',
-          order: 'sys.createdAt',
+          content_type: "partners",
+          order: "sys.createdAt",
         });
         setPartners(res.items);
       } catch (error) {
-        console.error('Error fetching partners:', error);
+        console.error("Error fetching partners:", error);
       }
     };
 
@@ -35,10 +44,20 @@ const Partner = ({ title, content }) => {
   }, []);
 
   return (
-    <Container px={'4%'} pt={'40px'} pb={'70px'} fluid bg={COLORS.backgroundColor}>
-      <Flex align={'center'} justify={'space-between'} direction={isMobile ? 'column' : 'row'}>
+    <Container
+      px={"4%"}
+      pt={"40px"}
+      pb={"70px"}
+      fluid
+      bg={COLORS.backgroundColor}
+    >
+      <Flex
+        align={"center"}
+        justify={"space-between"}
+        direction={isMobile ? "column" : "row"}
+      >
         <Stack>
-          <Title size="lg" tt={'uppercase'} fw={800}>
+          <Title size="lg" tt={"uppercase"} fw={800}>
             {highlightText(title)}
           </Title>
           <Text c={COLORS.textColor} size="base" lh="sm">
@@ -61,82 +80,101 @@ const Partner = ({ title, content }) => {
         </Button> */}
       </Flex>
 
-      <Box mt={50} pos={'relative'}
-        // p={isMobile ? 0 : 20}   
-        w={isMobile ? '100%' : '100%'}
-      // m={'0 auto'}
+      <Box
+        mt={50}
+        pos={"relative"}
+        // p={isMobile ? 0 : 20}
+        w={isMobile ? "100%" : "100%"}
+        // m={'0 auto'}
       >
         <Carousel
           slideSize="100%"
           slideGap="xs"
-          controlsOffset={0}
-          controlSize={35}
-          dragFree={false}
-          containScroll="trimSnaps"
-          align="start"
           loop
-          speed={1}
-          className={isMobile && 'custom-carousel , indicator'}
+          align="start"
           withIndicators
+          withControls={false}
+          pb={30}
+          styles={{
+            indicators: {
+              bottom: 10,
+            },
+            indicator: {
+              backgroundColor: "#A1A1A1",
+              width: 8,
+              height: 8,
+            },
+            indicatorActive: {
+              backgroundColor: "#FCFCFC",
+            },
+          }}
           plugins={[autoplay.current]}
           onMouseEnter={autoplay.current.stop}
           onMouseLeave={autoplay.current.reset}
-          withControls={false}
         >
           {partners.map((item, index) => (
             <CarouselSlide key={index}>
               <Flex
-                w={'100%'}
-                h={isMobile ? '100%' : '400px'}
-                align={'center'}
-                pos={'relative'}
-                direction={'column'}
+                w={"100%"}
+                h={isMobile ? "100%" : "400px"}
+                align={"center"}
+                pos={"relative"}
+                direction={"row"}
                 style={{
-                  borderRadius: isMobile ? '22px' : '54px',
-                  overflow: 'hidden',
-                  position: 'relative',
-                  
+                  backgroundColor: "white",
+                  borderRadius: isMobile ? "22px" : "54px",
+                  overflow: "hidden",
+                  position: "relative",
                 }}
               >
                 <Box
-                  pos={'absolute'}
-                  top={0}
-                  left={0}
-                  w={'100%'}
-                  h={'100%'}
+                  p={20}
+                  maw={isMobile ? "100%" : "65%"}
+                  ml={"auto"}
+                  mt={isMobile ? "450px" : 0}
                   style={{
-                    backgroundImage: isMobile ? `url(${item.fields.mobImage.fields.file.url})` : `url(${item.fields.image.fields.file.url})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    boxShadow:"0 3px 8px rgba(0, 0, 0, 0.3)"
+                    borderRadius: "10px",
+                    zIndex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    height: "100%",
                   }}
-                />
+                >
+                  <Image
+                    w={"100%"}
+                    maw={200}
+                    h="auto"
+                    alt={item.fields.image.fields.title}
+                    pos={"relative"}
+                    src={item.fields.image.fields.file.url}
+                  />
+                </Box>
                 <Box
                   p={20}
-                  c={COLORS.primaryColor}
-                  maw={isMobile ? '100%' : '65%'}
-                  ml={'auto'}
-                  mt={isMobile ? '450px' : 0}
+                  // c={}
+                  maw={isMobile ? "100%" : "65%"}
+                  ml={"auto"}
+                  mt={isMobile ? "450px" : 0}
                   style={{
-                    borderRadius: '10px',
-                    backdropFilter: 'blur(5px)',
+                    borderRadius: "10px",
                     zIndex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    height: '100%',
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    height: "100%",
                   }}
-                >                  
-                  <Text  size="base" lh="sm" maw={'90%'} tw="balance" >
+                >
+                  <Text size="base" lh="sm" maw={"90%"} tw="balance">
                     {/* <Text size="16px" lh={'sm'} maw={'90%'} tw="balance"> */}
-                      {highlightText(item.fields.content)}
-                    </Text>
-                    <Text size="base" fw={700} c={COLORS.portColor} mt={20}>
-                      {highlightText(item.fields.shortvalue)}
-                    </Text>
+                    {highlightText(item.fields.content)}
+                  </Text>
+                  <Text size="base" fw={700} c={COLORS.portColor} mt={20}>
+                    {highlightText(item.fields.shortvalue)}
+                  </Text>
                 </Box>
               </Flex>
-
             </CarouselSlide>
           ))}
         </Carousel>

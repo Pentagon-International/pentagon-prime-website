@@ -192,6 +192,8 @@ const CustomerRequestForm = (
     formValues,
     _hasHydrated,
     setMapOrigin,
+    mapOrigin,
+    mapDestination,
     setMapDestination,
     setMapLoading,
   } = useCustomerRequestStore();
@@ -1306,7 +1308,7 @@ const CustomerRequestForm = (
                     leftSection={
                       form?.values?.result?.[0]?.origin?.country ? (
                         <img
-                          src={`https://flagcdn.com/${getEmojiFlag(form?.values?.result?.[0]?.origin?.country)}.svg`}
+                          src={`https://flagcdn.com/${getEmojiFlag(formValues?.origin?.country)}.svg`}
                           alt=""
                           style={{ width: 24, height: 20 }}
                         />
@@ -1424,7 +1426,7 @@ const CustomerRequestForm = (
                     leftSection={
                       form?.values?.result?.[0]?.destination?.country ? (
                         <img
-                          src={`https://flagcdn.com/${getEmojiFlag(form?.values?.result?.[0]?.destination?.country)}.svg`}
+                          src={`https://flagcdn.com/${getEmojiFlag(formValues?.destination?.country)}.svg`}
                           alt=""
                           style={{ width: 24, height: 20 }}
                         />

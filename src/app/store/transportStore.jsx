@@ -1,24 +1,61 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
-// Create Zustand store with persist
 const useTransportStore = create(
   persist(
     (set) => ({
       seaData: [],
       airData: [],
 
-      // Action to set sea data
-      setSeaData: (data) => set({ seaData: data }),
+      // Maps auto-generated
+      seaPortMap: {},
+      airPortMap: {},
 
-      // Action to set air data
-      setAirData: (data) => set({ airData: data }),
+      // ✔ Do not change functionality BUT add map generation inside
+      setSeaData: (data) =>
+        set((state) => {
+          const map = {};
+          data.forEach((item) => {
+            map[item.code] = {
+              code: item.code,
+              city: item.city,
+              country: item.country,
+              name: item.name,
+            };
+          });
+
+          return {
+            seaData: data,
+            seaPortMap: map, // auto update
+          };
+        }),
+
+      // ✔ Automatically create map when setting airData
+      setAirData: (data) =>
+        set((state) => {
+          const map = {};
+          data.forEach((item) => {
+            if (!map[item.code]) {
+              map[item.code] = {
+                code: item.code,
+                city: item.city,
+                country: item.country,
+                name: item.name,
+              };
+            }
+          });
+
+          return {
+            airData: data,
+            airPortMap: map, // auto update
+          };
+        }),
     }),
     {
-      name: '@transport-store', // Key for storage
-      storage: createJSONStorage(() => sessionStorage), // Use sessionStorage
-    }
-  )
+      name: "@transport-store",
+      storage: createJSONStorage(() => sessionStorage),
+    },
+  ),
 );
 
 export default useTransportStore;
