@@ -26,7 +26,7 @@ export default function RouteMap() {
   const [isMapLoading, setIsMapLoading] = useState(false);
 
   return (
-    <div style={{ backgroundColor: COLORS.backgroundColor, padding: "0 24px" }}>
+    <div style={{ backgroundColor: COLORS.backgroundColor, padding: "0" }}>
       <div style={{ position: "relative", height: "80vh", width: "100%",boxShadow:"0 0 8px rgba(0, 0, 0, 0.3)",borderRadius: "16px", }}>
         <MapContainer
           zoom={2}

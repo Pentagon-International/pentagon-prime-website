@@ -9,6 +9,7 @@ import {
   Grid,
   GridCol,
   Image,
+  Modal,
   Stack,
   Text,
   Title,
@@ -18,13 +19,16 @@ import Images from "../utils/image";
 import { COLORS } from "../utils/COLORS";
 import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
 import { useEffect, useState } from "react";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { Carousel } from "@mantine/carousel";
 import { theme } from "../utils/theme";
 import { highlightText } from "../utils/highlightText";
+import { IconX } from "@tabler/icons-react";
 
 const Members = () => {
   const [members, setMembers] = useState([]);
+  const [opened, { open, close }] = useDisclosure(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +44,11 @@ const Members = () => {
     };
     fetchData();
   }, []);
+
+  const handleOpen = (item) => {
+    setSelectedItem(item);
+    open();
+  };
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -71,8 +80,13 @@ const Members = () => {
             width: "100%",
           }}
         >
-          <Grid gutter="60" dir={isMobile ? "column" : "row"} align="center">
-            <GridCol span={isMobile ? 12 : 4} pr={0}>
+          <Grid
+            gutter="60"
+            columns={12}
+            dir={isMobile ? "column" : "row"}
+            align="center"
+          >
+            <Grid.Col span={isMobile ? 12 : 4} pr={0}>
               <CardSection>
                 <Image
                   src={Images.chairman}
@@ -84,8 +98,12 @@ const Members = () => {
                   }}
                 />
               </CardSection>
-            </GridCol>
-            <GridCol span={isMobile ? 12 : 8} pl={0} pr={65}>
+            </Grid.Col>
+            <Grid.Col
+              span={isMobile ? 12 : 8}
+              pl={isMobile ? 20 : 0}
+              pr={isMobile ? 20 : 65}
+            >
               <Stack spacing="md">
                 <Text
                   size={20}
@@ -94,10 +112,16 @@ const Members = () => {
                   tw="balance"
                   c={COLORS.textColor}
                   ta={"justify"}
-
                 >
-                  "We started with a single aim - to make trade easier!
-                  Today, Pentagon Group combines disciplined operations with practical digital tools to deliver visibility, predictability, and sustainable choices. As the world shifts to green energy, logistics must follow: we're building tech-enabled green logistics that safely and efficiently move renewable-energy supply chains. Our goal is simple: a comprehensive, low-friction solution that makes booking cargo as easy as booking a flight."
+                  "We started with a single aim - to make trade easier! Today,
+                  Pentagon Group combines disciplined operations with practical
+                  digital tools to deliver visibility, predictability, and
+                  sustainable choices. As the world shifts to green energy,
+                  logistics must follow: we're building tech-enabled green
+                  logistics that safely and efficiently move renewable-energy
+                  supply chains. Our goal is simple: a comprehensive,
+                  low-friction solution that makes booking cargo as easy as
+                  booking a flight."
                 </Text>
               </Stack>
               <Flex>
@@ -126,19 +150,14 @@ const Members = () => {
                   <Text size={theme?.fontSizes?.lg} c="rgb(0, 33, 95)" fw={700}>
                     Paresh Bhanushali
                   </Text>
-                  <Text
-                    size={20}
-                    mt={-10}
-                    c={COLORS.textColor}
-                    lh={1.5}
-                  >
+                  <Text size={20} mt={-10} c={COLORS.textColor} lh={1.5}>
                     <b>Chairman & Managing Director</b>
                     <br />
                     <i>Pentagon Group of Companies</i>
                   </Text>
                 </Stack>
               </Flex>
-            </GridCol>
+            </Grid.Col>
           </Grid>
         </Card>
       </Flex>
@@ -163,8 +182,10 @@ const Members = () => {
             whiteSpace: "pre-line",
           }}
         >
-          Our strength is the combination of specialist teams and a product-driven mindset.
-          Operations, customs, engineering & project teams collaborate closely with IT to transform processes into platform features - enabling faster decisions and dependable execution.
+          Our strength is the combination of specialist teams and a
+          product-driven mindset. Operations, customs, engineering & project
+          teams collaborate closely with IT to transform processes into platform
+          features - enabling faster decisions and dependable execution.
         </Text>
       </Box>
       <Flex justify="center" my={50}>
@@ -179,7 +200,13 @@ const Members = () => {
         </Title>
       </Flex>
 
-      <Grid columns={3} gutter="xl" px={isMobile ? 0 : 40} justify="start" align="center">
+      <Grid
+        columns={3}
+        gutter="xl"
+        px={isMobile ? 0 : 40}
+        justify="start"
+        align="center"
+      >
         {isMobile ? (
           <Carousel
             align={"start"}
@@ -201,12 +228,16 @@ const Members = () => {
               <Carousel.Slide w={"100%"} key={item.sys.id}>
                 <GridCol w={"100%"} span={12}>
                   <Image
+                    onClick={() => handleOpen(item)}
                     radius={"lg"}
                     w={"100%"}
                     h={"100%"}
                     src={item.fields.image?.fields?.file?.url}
                     alt={item.fields.name}
-                    style={{boxShadow:"0 3px 8px rgba(0, 0, 0, 0.3)"}}
+                    style={{
+                      cursor: "pointer",
+                      boxShadow: "0 3px 8px rgba(0, 0, 0, 0.3)",
+                    }}
                   />
                   <Text fw={700} size="md" mt={"md"}>
                     {item.fields.name}
@@ -220,16 +251,40 @@ const Members = () => {
           </Carousel>
         ) : (
           members.map((item) => (
-            <GridCol key={item.sys.id} span={1} mb={"xl"} px={isMobile ? 0 : 20} style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-              <Box style={{ width: "80%", maxHeight:"450px", overflow: "hidden", borderRadius: "12px", transition: "all 0.5s ease", boxShadow:"0 3px 8px rgba(0, 0, 0, 0.3)" }}>
+            <GridCol
+              key={item.sys.id}
+              span={1}
+              mb={"xl"}
+              px={isMobile ? 0 : 20}
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <Box
+                onClick={() => handleOpen(item)}
+                style={{
+                  cursor: "pointer",
+                  width: "80%",
+                  maxHeight: "450px",
+                  overflow: "hidden",
+                  borderRadius: "12px",
+                  transition: "all 0.5s ease",
+                  boxShadow: "0 3px 8px rgba(0, 0, 0, 0.3)",
+                }}
+              >
                 <Image
                   style={{ maxHeight: "450px", transition: "all 0.5s ease" }}
                   src={item.fields.image?.fields?.file?.url}
                   alt={item.fields.name}
-                  onMouseEnter={(e)=>{
+                  onMouseEnter={(e) => {
                     e.currentTarget.style.scale = "1.05";
                   }}
-                  onMouseLeave={(e)=>{
+                  onMouseLeave={(e) => {
                     e.currentTarget.style.scale = "1";
                   }}
                 />
@@ -244,6 +299,80 @@ const Members = () => {
           ))
         )}
       </Grid>
+
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered
+        title={<Text fw={600} c="#111F40" ta="left">View Detail</Text>}
+        transitionProps={{
+          transition: "fade",
+          duration: 200,
+          timingFunction: "linear",
+        }}
+        overlayProps={{
+          backgroundOpacity: 0.6,
+          blur: 3,
+        }}
+        closeButtonProps={{
+          icon: <IconX size={24} stroke={2} color={COLORS.textColor} />,
+        }}
+        radius={10}
+        styles={{
+          content: {
+            padding: "15px",
+          },
+        }}
+        size="60vw"
+      >
+        <Box mt={"xl"} style={{ display: "flex", gap: "16px" }}>
+          <Box
+            style={{
+              width: "250px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Image
+              radius={"lg"}
+              w={"250px"}
+              src={selectedItem?.fields.image?.fields?.file?.url}
+              alt={selectedItem?.fields.name}
+              style={{ boxShadow: "0 3px 8px rgba(0, 0, 0, 0.3)" }}
+            />
+          </Box>
+          <Box
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              justifyContent: "flex-start",
+            }}
+          >
+            <Text fw={700} size="md">
+              {selectedItem?.fields.name}
+            </Text>
+            <Text size="sm" c={COLORS.textColor}>
+              {selectedItem?.fields.role}
+            </Text>
+            <Text
+              c={COLORS.textColor}
+              mt="md"
+              style={{
+                textIndent: "3rem",
+                paddingTop: "8px",
+                lineHeight: 1.6,
+                textAlign: "justify",
+              }}
+              size={TYPOGRAPHY.body.large}
+            >
+              {selectedItem?.fields.description || "No description available"}
+            </Text>
+          </Box>
+        </Box>
+      </Modal>
     </Container>
   );
 };

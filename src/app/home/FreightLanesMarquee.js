@@ -73,7 +73,7 @@ function LanePill({ item, onHoverStart, onHoverEnd, onLaneClick }) {
           style={{ width: 24 }}
         />
         <Text size="sm" fw={500} c="rgb(0, 33, 95)">
-          {item.origin_name}
+          {item.origin_name} ({item.origin_code})
         </Text>
       </Box>
       <IconArrowNarrowRight color="rgb(0, 33, 95)" />
@@ -84,7 +84,7 @@ function LanePill({ item, onHoverStart, onHoverEnd, onLaneClick }) {
           style={{ width: 24 }}
         />
         <Text size="sm" fw={500} c="rgb(0, 33, 95)">
-          {item.destination_name}
+          {item.destination_name} ({item.destination_code})
         </Text>
       </Box>
     </Group>

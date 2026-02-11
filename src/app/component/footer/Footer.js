@@ -176,7 +176,7 @@ const Footer = () => {
             </Group>
           </Box>
 
-          <Divider orientation="vertical" my={50} color="#11111188" />
+          <Divider orientation="vertical" my={50} color="#11111188" display={{ base: "none", md: "block" }} />
 
           {/* Services - 3 Column Layout */}
           <Box style={{ flex: 3 }} pt={14}>

@@ -66,9 +66,9 @@ const ShipTerms = () => {
         cols={{ base: 1, sm: 2, md: 3, lg: 4 }}
         spacing={{ base: "sm", sm: "md", md: "lg", lg: "xl" }}
       >
-        {shipmentTermsQuery?.data?.map((group) => (
+        {shipmentTermsQuery?.data?.map((group,index) => (
           <Box
-            key={group.label}
+            key={index}
             bg={"#FFF"}
             style={{
               borderRadius: 8,

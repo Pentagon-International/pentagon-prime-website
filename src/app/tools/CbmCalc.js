@@ -570,7 +570,7 @@ const CbmCalc = () => {
 
                   <Box>
                     <NumberInput
-                      label="Quality / Pallets"
+                      label="Pallets / Packages"
                       placeholder="Enter quantity"
                       value={quantity}
                       onChange={(value) => handleChange("quantity", value)}
@@ -977,7 +977,7 @@ const CbmCalc = () => {
                   </Box>
                   <Box>
                     <NumberInput
-                      label="Quality / Pallets"
+                      label="Pallets / Packages"
                       value={formData.quantity}
                       onChange={(value) => handleInputChange("quantity", value)}
                       min={0}

@@ -6,9 +6,12 @@ import { Carousel, CarouselSlide } from "@mantine/carousel";
 import {
   Box,
   Button,
+  Center,
   Container,
   Flex,
   Image,
+  Paper,
+  SimpleGrid,
   Stack,
   Text,
   Title,
@@ -20,6 +23,8 @@ import { highlightText } from "../utils/highlightText";
 import { useMediaQuery } from "@mantine/hooks";
 import Autoplay from "embla-carousel-autoplay";
 
+import { useMantineTheme } from "@mantine/core";
+
 const Partner = ({ title, content }) => {
   const [partners, setPartners] = useState([]);
   const router = useRouter();
@@ -27,6 +32,12 @@ const Partner = ({ title, content }) => {
 
   const isMobile = useMediaQuery("(max-width:768px)");
 
+  const isXL = useMediaQuery("(min-width: 1200px)");
+  const isLG = useMediaQuery("(min-width: 992px)");
+  const isMD = useMediaQuery("(min-width: 768px)");
+  const isSM = useMediaQuery("(min-width: 576px)");
+
+  const columns = isXL ? 6 : isLG ? 4 : isMD ? 3 : isSM ? 2 : 1;
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -87,7 +98,7 @@ const Partner = ({ title, content }) => {
         w={isMobile ? "100%" : "100%"}
         // m={'0 auto'}
       >
-        <Carousel
+        {/* <Carousel
           slideSize="100%"
           slideGap="xs"
           loop
@@ -115,69 +126,131 @@ const Partner = ({ title, content }) => {
           {partners.map((item, index) => (
             <CarouselSlide key={index}>
               <Flex
-                w={"100%"}
-                h={isMobile ? "100%" : "400px"}
-                align={"center"}
-                pos={"relative"}
-                direction={"row"}
+                w="100%"
+                h={isMobile ? "100%" : 400}
+                direction={isMobile ? "column" : "row"}
+                align="stretch"
                 style={{
                   backgroundColor: "white",
-                  borderRadius: isMobile ? "22px" : "54px",
+                  borderRadius: isMobile ? 22 : 54,
                   overflow: "hidden",
-                  position: "relative",
                 }}
               >
                 <Box
+                  w={isMobile ? "100%" : "40%"}
                   p={20}
-                  maw={isMobile ? "100%" : "65%"}
-                  ml={"auto"}
-                  mt={isMobile ? "450px" : 0}
+                  display="flex"
                   style={{
-                    borderRadius: "10px",
-                    zIndex: 1,
-                    display: "flex",
-                    flexDirection: "column",
                     justifyContent: "center",
-                    alignContent: "center",
-                    height: "100%",
+                    alignItems: "center",
                   }}
                 >
                   <Image
-                    w={"100%"}
-                    maw={200}
-                    h="auto"
-                    alt={item.fields.image.fields.title}
-                    pos={"relative"}
                     src={item.fields.image.fields.file.url}
+                    alt={item.fields.image.fields.title}
+                    w="100%"
+                    maw={isMobile ? 260 : 220}
+                    h="auto"
+                    fit="contain"
                   />
                 </Box>
                 <Box
+                  w={isMobile ? "100%" : "60%"}
                   p={20}
-                  // c={}
-                  maw={isMobile ? "100%" : "65%"}
-                  ml={"auto"}
-                  mt={isMobile ? "450px" : 0}
+                  display="flex"
                   style={{
-                    borderRadius: "10px",
-                    zIndex: 1,
-                    display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
-                    height: "100%",
                   }}
                 >
-                  <Text size="base" lh="sm" maw={"90%"} tw="balance">
-                    {/* <Text size="16px" lh={'sm'} maw={'90%'} tw="balance"> */}
+                  <Text
+                    size="base"
+                    lh="sm"
+                    maw={isMobile ? "100%" : "90%"}
+                    tw="balance"
+                  >
                     {highlightText(item.fields.content)}
                   </Text>
-                  <Text size="base" fw={700} c={COLORS.portColor} mt={20}>
+
+                  <Text size="base" fw={700} c={COLORS.portColor} mt={16}>
                     {highlightText(item.fields.shortvalue)}
                   </Text>
                 </Box>
               </Flex>
             </CarouselSlide>
           ))}
-        </Carousel>
+        </Carousel> */}
+        <SimpleGrid
+          cols={{ base: 1, sm: 2, md: 3, lg: 4, xl: 6 }}
+          spacing={{ base: 10, md: 16 }}
+        >
+          {partners.map((item, index) => {
+            return (
+              <Paper
+                key={index}
+                radius="lg"
+                p={"lg"}
+                shadow="sm"
+                withBorder
+                style={{
+                  maxHeight: "250px",
+                  height: "100%",
+                  textAlign: "center",
+                  backgroundColor: index%2!==0 ? "#e2f2ff02" : "#ffffff",
+                  transition: "all 0.3s ease",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-6px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 12px 30px rgba(0,0,0,0.08)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "none";
+                  e.currentTarget.style.boxShadow = "";
+                }}
+              >
+                <Center
+                  mb={16}
+                  maw={180}
+
+                  style={{
+                    flex: 3.5,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Image
+                    src={item.fields.image.fields.file.url}
+                    alt={item.fields.image.fields.title}
+                    w="100%"
+                    h="100px"
+                    fit="contain"
+                  />
+                </Center>
+                {/* <Center
+                  mb={16}
+                  maw={180}
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <Text size="base" fw={700} c={COLORS.portColor}>
+                    {highlightText(item.fields.shortvalue)}
+                  </Text>
+                </Center> */}
+              </Paper>
+            );
+          })}
+        </SimpleGrid>
       </Box>
     </Container>
   );

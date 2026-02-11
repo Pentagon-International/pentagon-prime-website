@@ -15,6 +15,10 @@ const useCustomerRequestStore = create(
       setMapOrigin: (v) => set({ mapOrigin: v }),
       setMapDestination: (v) => set({ mapDestination: v }),
       setMapLoading: (v) => set({ mapLoading: Boolean(v) }),
+      // Tariff check response – not persisted, used for tariff-results page
+      tariffResult: null,
+      setTariffResult: (result) => set({ tariffResult: result }),
+      clearTariffResult: () => set({ tariffResult: null }),
     }),
     {
       name: "customer-request-store",

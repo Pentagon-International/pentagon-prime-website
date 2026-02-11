@@ -353,7 +353,7 @@ const Hero = ({ title, content }) => {
           zIndex: 2,
           display: "flex",
           alignItems: "center",
-          height: "100%",
+          minHeight: "100vh",
           width: "100%",
           justifyContent: "center",
         }}
@@ -727,8 +727,7 @@ export default Hero;
 const styles = {
   heroContainer: {
     position: "relative",
-    height: "100vh",
-    minHeight: "550px",
+    minHeight: "100vh",
     backgroundImage: "url(/images/hero_background_3.jpeg)",
     backgroundSize: "cover",
     backgroundPosition: "center",
