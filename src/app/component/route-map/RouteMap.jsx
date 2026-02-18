@@ -27,7 +27,7 @@ export default function RouteMap() {
 
   return (
     <div style={{ backgroundColor: COLORS.backgroundColor, padding: "0" }}>
-      <div style={{ position: "relative", height: "80vh", width: "100%",boxShadow:"0 0 8px rgba(0, 0, 0, 0.3)",borderRadius: "16px", }}>
+      <div style={{ position: "relative", height: "80vh", width: "100%",boxShadow:"0 0 8px rgba(0, 0, 0, 0.3)",borderRadius: "16px", zIndex:10 }}>
         <MapContainer
           zoom={2}
           minZoom={2}

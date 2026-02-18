@@ -5,11 +5,13 @@ import {
   Alert,
   Anchor,
   Autocomplete,
+  Badge,
   Box,
   Button,
   Center,
   Checkbox,
   Container,
+  Divider,
   FileButton,
   Flex,
   Grid,
@@ -33,11 +35,13 @@ import {
 } from "@mantine/core";
 import {
   IconArrowRight,
+  IconPlaneTilt,
   IconArrowsDownUp,
   IconArrowsLeftRight,
   IconBox,
   IconCalendar,
   IconFiles,
+  IconInfoCircle,
   IconMapPin,
   IconPaperclip,
   IconPlane,
@@ -45,6 +49,8 @@ import {
   IconSquareHalf,
   IconTrash,
   IconUpload,
+  IconShip,
+  IconMapPinFilled,
 } from "@tabler/icons-react";
 import { COLORS } from "../utils/COLORS";
 import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
@@ -204,6 +210,10 @@ const CustomerRequestForm = (
   const router = useRouter();
   const [isCheckingData, setIsCheckingData] = useState(true);
   const [isTariffChecking, setIsTariffChecking] = useState(false);
+  const [estimatedPriceRange, setEstimatedPriceRange] = useState({
+    min_total_rate: null,
+    max_total_rate: null,
+  });
 
   // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS
   const [filteredOriginData, setFilteredOriginData] = useState(
@@ -457,8 +467,9 @@ const CustomerRequestForm = (
     hs1: data?.hs1 || null,
     hs2: data?.hs2 || null,
     size: data?.size || null,
-    containerCount: data?.containerCount || null,
+    containerCount: data?.containerCount ?? 1,
     list: data?.list || [],
+    no_of_packages: data?.no_of_packages ?? 1,
   });
 
   const [activeType, setActiveType] = useState(data?.type || "GC");
@@ -554,6 +565,83 @@ const CustomerRequestForm = (
     if (cd.size) setActiveSize(cd.size);
     if (cd.list?.length) setSelectedSize(cd.list.map((_, idx) => idx));
   }, [openedModal]);
+
+  // Fetch estimated freight price range whenever payload-relevant form/container values change
+  const originCode = form.values?.result?.[0]?.origin?.code;
+  const destinationCode = form.values?.result?.[0]?.destination?.code;
+  const serviceForPayload =
+    form.values?.typeofBooking ??
+    (formValues?.activeTransport === "sea" ? "FCL" : "AIR");
+  const firstContainerSize =
+    containerList.list?.[0]?.size ?? containerList.size ?? activeSize;
+  const noContainer =
+    containerList.list?.length ?? containerList.containerCount ?? 10;
+
+  useEffect(() => {
+    if (!originCode || !destinationCode) {
+      setEstimatedPriceRange({ min_total_rate: null, max_total_rate: null });
+      return;
+    }
+    setEstimatedPriceRange({ min_total_rate: null, max_total_rate: null });
+    let unit;
+    if (serviceForPayload === "FCL") {
+      const cargoType = containerList.type ?? activeType ?? "GC";
+      unit = getUnitCode(cargoType, firstContainerSize) || "22G0";
+    } else if (serviceForPayload === "AIR") {
+      unit = "KG";
+    } else if (serviceForPayload === "LCL") {
+      const volCbm = parseFloat(containerList.volume) || 0;
+      const volWeightKg = parseFloat(containerList.volume_weight) || 0;
+      unit = volCbm < volWeightKg ? "KG" : "CBM";
+    } else {
+      unit = "KG";
+    }
+    const readyDate = form.values?.result?.[0]?.origin?.ready_date;
+    const payload = {
+      origin_code: originCode,
+      destination_code: destinationCode,
+      service: serviceForPayload,
+      unit,
+      ...(readyDate && { date: dayjs(readyDate).format("YYYY-MM-DD") }),
+    };
+    const tariffApiBase = "https://pulse.pentagonindia.net";
+    const url = `${tariffApiBase}/api/check-tariff-charges/`;
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => res.json().catch(() => null))
+      .then((data) => {
+        const minVal =
+          data?.freight_min_total_rate ?? data?.min_total_rate;
+        const maxVal =
+          data?.freight_max_total_rate ?? data?.max_total_rate;
+        const minRate = minVal != null ? Number(minVal) : NaN;
+        const maxRate = maxVal != null ? Number(maxVal) : NaN;
+        if (!Number.isNaN(minRate) && !Number.isNaN(maxRate)) {
+          setEstimatedPriceRange({
+            min_total_rate: minRate,
+            max_total_rate: maxRate,
+          });
+        } else {
+          setEstimatedPriceRange({ min_total_rate: null, max_total_rate: null });
+        }
+      })
+      .catch(() => {
+        setEstimatedPriceRange({ min_total_rate: null, max_total_rate: null });
+      });
+  }, [
+    originCode,
+    destinationCode,
+    serviceForPayload,
+    containerList.type,
+    containerList.volume,
+    containerList.volume_weight,
+    activeType,
+    firstContainerSize,
+    form.values?.result?.[0]?.origin?.ready_date,
+  ]);
 
   const salesPersonQuery = useQuery({
     queryKey: ["sales-person-query"],
@@ -1123,18 +1211,31 @@ const CustomerRequestForm = (
     const originCode = values.result[0]?.origin?.code;
     const destinationCode = values.result[0]?.destination?.code;
     const service = values.typeofBooking;
-    const cargoType = containerList.type ?? null;
-    const size = containerList.list?.[0]?.size ?? containerList.size ?? null;
-    const unit = getUnitCode(cargoType, size) ?? (size || "");
+    let unit;
+    if (service === "FCL") {
+      const cargoType = containerList.type ?? null;
+      const size = containerList.list?.[0]?.size ?? containerList.size ?? null;
+      unit = getUnitCode(cargoType, size) ?? size ?? "22G0";
+    } else if (service === "AIR") {
+      unit = "KG";
+    } else if (service === "LCL") {
+      const volCbm = parseFloat(containerList.volume) || 0;
+      const volWeightKg = parseFloat(containerList.volume_weight) || 0;
+      unit = volCbm > volWeightKg ? "CBM" : "KG";
+    } else {
+      unit = "KG";
+    }
 
+    const readyDate = values.result?.[0]?.origin?.ready_date;
     const tariffPayload = {
       origin_code: originCode,
       destination_code: destinationCode,
       service: service,
-      unit: unit,
+      unit,
+      ...(readyDate && { date: dayjs(readyDate).format("YYYY-MM-DD") }),
     };
 
-    const tariffApiBase = "http://127.0.0.1:8000";
+    const tariffApiBase = "https://pulse.pentagonindia.net";
     const tariffUrl = `${tariffApiBase}/api/check-tariff-charges/`;
 
     setIsTariffChecking(true);
@@ -1256,14 +1357,14 @@ const CustomerRequestForm = (
         fluid
         style={{
           minHeight: "100vh",
-  background:
-    'linear-gradient(rgba(8,20,50,.4),rgba(8,20,50,.6)), url("https://images.unsplash.com/photo-1670121180583-39ab653a071c?w=1920")',
-  backgroundSize: "cover",
-  backgroundPosition: "right center",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  fontFamily: "'Inter', sans-serif",
+          background:
+            'linear-gradient(rgba(8,20,50,.4),rgba(8,20,50,.6)), url("https://images.unsplash.com/photo-1670121180583-39ab653a071c?w=1920")',
+          backgroundSize: "cover",
+          backgroundPosition: "right center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          fontFamily: "'Inter', sans-serif",
           justifyContent: "center",
         }}
       >
@@ -1283,15 +1384,239 @@ const CustomerRequestForm = (
         onSubmit={form.onSubmit(handleSubmit)}
         style={{ backgroundColor: COLORS.backgroundColor }}
       >
-        <Container fluid px={"4%"} py={"70px"} style={{ zIndex: 0,minHeight: "100vh",
-  background:
-    'linear-gradient(rgba(8,20,50,.4),rgba(8,20,50,.6)), url("https://images.unsplash.com/photo-1670121180583-39ab653a071c?w=1920")',
-  backgroundSize: "cover",
-  backgroundPosition: "right center",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  fontFamily: "'Inter', sans-serif", }}>
+        <Container
+          fluid
+          px={"4%"}
+          style={{
+            zIndex: 0,
+            minHeight: "100vh",
+            background:
+              'linear-gradient(rgba(8,20,50,.4),rgba(8,20,50,.6)), url("https://images.unsplash.com/photo-1670121180583-39ab653a071c?w=1920")',
+            backgroundSize: "cover",
+            backgroundPosition: "right center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 20,
+            fontFamily: "'Inter', sans-serif",
+          }}
+        >
+          <Flex
+            justify="space-between"
+            align="stretch"
+            gap={{base:"", md:"lg"}}
+            w={"100%"}
+            style={{
+              transform: "translateY(-100px)",
+              backgroundColor: "white",
+              borderRadius: "16px",
+              boxShadow: "0 10px 30px rgba(0, 0, 0, 0.08)",
+              zIndex: 100,
+            }}
+            direction={{ base: "column", md: "row" }} // ✅ Responsive
+          >
+            {/* LEFT SECTION */}
+            <Flex
+              direction="column"
+              justify="space-between"
+              flex={3.5}
+              py="lg"
+              px="xl"
+              style={{
+                backgroundColor: "white",
+                borderRadius: "16px",
+              }}
+            >
+              {/* Top Row */}
+              <Flex justify="flex-end" align="center" flex={1} gap={10}>
+                <Box>
+                  <Box
+                    style={{
+                      display: "flex",
+                      gap: 5,
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <Text fw={600} fz={24} size="md" c="rgb(0,33,95)">
+                      {form?.values?.result?.[0]?.origin?.name}
+                    </Text>
+                    <IconMapPinFilled size={28} color="#2e7d32" />
+                  </Box>
+                  <Box
+                    style={{ display: "flex", gap: 5, alignItems: "center" }}
+                  >
+                    {form?.values?.result?.[0]?.origin?.country && (
+                      <img
+                        src={`https://flagcdn.com/${getEmojiFlag(form?.values?.result?.[0]?.origin?.country)}.svg`}
+                        alt=""
+                        style={{ height: 20 }}
+                      />
+                    )}
+                    <Text size={"sm"} fz={14} c="dimmed" fw={600}>
+                      {`${form?.values?.result?.[0]?.origin?.country}`}
+                    </Text>
+                    <Text size={"sm"} fz={14} c="dimmed" fw={600}>
+                      {`(${form?.values?.result?.[0]?.origin?.code})`}
+                    </Text>
+                  </Box>
+                </Box>
+                <Divider size={"md"} style={{ flex: 1 }} />
+                <Box>
+                  <Box
+                    style={{
+                      display: "flex",
+                      gap: 5,
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <Text fw={600} fz={24} size="md" c="rgb(0,33,95)">
+                      {form?.values?.result?.[0]?.destination?.name}
+                    </Text>
+                    <IconMapPinFilled size={28} color="#c40c0c" />
+                  </Box>
+                  <Box
+                    style={{ display: "flex", gap: 5, alignItems: "center" }}
+                  >
+                    {form?.values?.result?.[0]?.destination?.country && (
+                      <img
+                        src={`https://flagcdn.com/${getEmojiFlag(form?.values?.result?.[0]?.destination?.country)}.svg`}
+                        alt=""
+                        style={{ height: 20 }}
+                      />
+                    )}
+                    <Text size={"sm"} fz={14} c="dimmed" fw={600}>
+                      {`${form?.values?.result?.[0]?.destination?.country}`}
+                    </Text>
+                    <Text size={"sm"} fz={14} c="dimmed" fw={600}>
+                      {`(${form?.values?.result?.[0]?.destination?.code})`}
+                    </Text>
+                  </Box>
+                </Box>
+              </Flex>
+
+              {/* Bottom Row Badges */}
+              <Flex gap="sm" mt="md" wrap="wrap" align="center">
+                <Badge
+                  radius="xl"
+                  size="lg"
+                  styles={{
+                    root: {
+                      backgroundColor: "rgba(0,33,95)",
+                      color: "#fcfcfc",
+                    },
+                  }}
+                >
+                  <Box style={{ display: "flex", alignItems: "center" }}>
+                    {form.values.typeofBooking === "AIR" ? (
+                      <>
+                        <IconPlaneTilt size={16} style={{ marginRight: 6 }} />
+                        Air Freight
+                      </>
+                    ) : (
+                      <>
+                        <IconShip size={16} style={{ marginRight: 6 }} />
+                        Ocean Freight
+                      </>
+                    )}
+                  </Box>
+                </Badge>
+                {form.values.typeofBooking === "FCL" && (
+                  <Badge
+                    radius="xl"
+                    size="lg"
+                    variant="light"
+                    color="rgb(80,80,80)"
+                  >
+                    {`${contSize?.find((item) => item.value === activeSize)?.label} | ${
+                      options?.find((item) => item.value === activeType)?.label
+                    }`}
+                  </Badge>
+                )}
+                {(() => {
+                  const isFCL = form.values.typeofBooking === "FCL";
+                  const fclTotalCount =
+                    containerList.list?.length > 0
+                      ? containerList.list.reduce((sum, item) => {
+                          const countField = item.fields?.find(
+                            (f) => f.label === "Count",
+                          );
+                          const n =
+                            countField != null
+                              ? parseInt(countField.value, 10) || 0
+                              : 1;
+                          return sum + n;
+                        }, 0)
+                      : (containerList.containerCount ?? 1);
+                  const packagesValue = containerList.no_of_packages;
+                  const displayValue = isFCL ? fclTotalCount : packagesValue;
+                  const valueExists = isFCL
+                    ? fclTotalCount != null && Number(fclTotalCount) >= 0
+                    : packagesValue != null &&
+                      String(packagesValue).trim() !== "";
+                  return valueExists ? (
+                    <Badge
+                      radius="xl"
+                      size="lg"
+                      variant="light"
+                      color="rgb(100,100,100)"
+                    >
+                      {`${isFCL ? "No of Container" : "No of Packages"} : ${displayValue}`}
+                    </Badge>
+                  ) : null;
+                })()}
+                <img src="/images/cargo-ship.png" width={84} ml={20} mb={16} />
+              </Flex>
+            </Flex>
+            <Divider
+              size="xs"
+              orientation="vertical"
+              my={16}
+              color={"rgb(0,33,95)"}
+              display={{base: "none", md: "block"}}
+            />
+            {/* RIGHT PRICE SECTION */}
+            <Box
+              p="lg"
+              style={{
+                minWidth: "280px",
+                backgroundColor: "white",
+                borderRadius: "16px",
+                border: "1px solid #fff",
+                color: "rgb(0,33,95)",
+                flex: 1.5,
+              }}
+            >
+              <Text fw={600} mb={8} fz={20} c="rgb(0,33,95)">
+                Estimated Freight Price Range
+              </Text>
+              {estimatedPriceRange.min_total_rate &&
+              estimatedPriceRange.max_total_rate ? (
+                <Text fw={800} size="md">
+                  ₹{estimatedPriceRange.min_total_rate.toLocaleString()}{" "}
+                  <Text span size="sm">
+                    {form.values.typeofBooking === "FCL" ? "/ctr" : form.values.typeofBooking === "LCL" ? "/cbm" : "/kg"}
+                  </Text>
+                  {"  -  "}₹
+                  {estimatedPriceRange.max_total_rate.toLocaleString()}{" "}
+                  <Text span size="sm">
+                    {form.values.typeofBooking === "FCL" ? "/ctr" : form.values.typeofBooking === "LCL" ? "/cbm" : "/kg"}
+                  </Text>
+                </Text>
+              ) : (
+                <Text fw={600} size="sm" c="rgba(0,0,0,0.8)">
+                  No Freight Price available for this route
+                </Text>
+              )}
+              <Flex mt="sm" gap={6} align="flex-start">
+                <IconInfoCircle size={16} style={{ marginTop: 2 }} />
+                <Text size="xs" c="rgba(0,0,0,0.6)">
+                  Based on current market trends. Share your cargo details to
+                  get an exact quote tailored to your shipment.
+                </Text>
+              </Flex>
+            </Box>
+          </Flex>
+
           <Box
             py="lg"
             px="xl"
@@ -1300,10 +1625,12 @@ const CustomerRequestForm = (
               backgroundColor: "white",
               borderRadius: "16px",
               boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
-              overflow: "hidden", // IMPORTANT
+              overflow: "hidden",
+              transform: "translateY(-100px)",
+              zIndex: 100,
             }}
           >
-            {/* ✅ Background layer */}
+            {/* ✅ Background layer
             <Box
               style={{
                 position: "absolute",
@@ -1322,22 +1649,22 @@ const CustomerRequestForm = (
                   maxHeight: 300,
                 }}
               />
-            </Box>
+            </Box> */}
             <Box style={{ position: "relative", zIndex: 1 }}>
               {/* <Title tt="uppercase" tw="balance" fw={800}> Featured articles </Title> */}
               <Title mt={"xl"} tt="uppercase" tw="balance" fw={800}>
                 Fare Calculation
               </Title>
               <Text
-                  size="sm"
-                  mb="lg"
-                  style={{
-                    color: "rgba(0,0,0,.85)",
-                    fontSize: "14px",
-                  }}
-                >
-                  Enter your shipment details below
-                </Text>
+                size="sm"
+                mb="lg"
+                style={{
+                  color: "rgba(0,0,0,.85)",
+                  fontSize: "14px",
+                }}
+              >
+                Enter your shipment details below
+              </Text>
 
               <Grid>
                 <Grid.Col span={isMobile ? 12 : 5}>
@@ -1391,7 +1718,7 @@ const CustomerRequestForm = (
                     leftSection={
                       form?.values?.result?.[0]?.origin?.country ? (
                         <img
-                              src={`https://flagcdn.com/${getEmojiFlag(form?.values?.result?.[0]?.origin?.country)}.svg`}
+                          src={`https://flagcdn.com/${getEmojiFlag(form?.values?.result?.[0]?.origin?.country)}.svg`}
                           alt=""
                           style={{ width: 24, height: 20 }}
                         />
@@ -1440,19 +1767,42 @@ const CustomerRequestForm = (
                     h={"100%"}
                     justify={"center"}
                     align={"center"}
+                    flex={1}
+                    gap={8}
                   >
-                    <ActionIcon
+                    <Box
+                      mt={32}
+                      style={{
+                        height: 3,
+                        borderRadius: 10,
+                        backgroundColor: "#505050",
+                        width: "100%",
+                        flex: 1,
+                      }}
+                    />
+                    <Box
                       mt={32}
                       // withAsterisk
                       variant="default"
                       size={28}
+                      miw={84}
                       radius="xl"
-                      bg={COLORS.secondaryColor}
-                      style={{ borderColor: COLORS.secondaryColor }}
+                      bg={"transparent"}
+                      style={{ cursor: "pointer" }}
                       onClick={swapOriginDestination}
                     >
-                      <Icon size={18} color={COLORS.primaryColor} />
-                    </ActionIcon>
+                      <img src="/images/cargo-ship.png" width={84} />
+                    </Box>
+                    <Box
+                      mt={32}
+                      style={{
+                        height: 3,
+                        borderRadius: 10,
+                        backgroundColor: "#505050",
+                        width: "100%",
+                        flex: 1,
+                      }}
+                    />
                   </Flex>
                 </Grid.Col>
                 <Grid.Col span={isMobile ? 12 : 5}>
@@ -1510,7 +1860,7 @@ const CustomerRequestForm = (
                     leftSection={
                       form?.values?.result?.[0]?.destination?.country ? (
                         <img
-                              src={`https://flagcdn.com/${getEmojiFlag(form?.values?.result?.[0]?.destination?.country)}.svg`}
+                          src={`https://flagcdn.com/${getEmojiFlag(form?.values?.result?.[0]?.destination?.country)}.svg`}
                           alt=""
                           style={{ width: 24, height: 20 }}
                         />
@@ -1584,6 +1934,7 @@ const CustomerRequestForm = (
                         backgroundColor: "#CDF6FF",
                       },
                       innerLabel: {
+                        fontWeight: 600,
                         color: COLORS.secondaryColor,
                       },
                     }}
@@ -1743,7 +2094,7 @@ const CustomerRequestForm = (
                   />
                 </Grid.Col>
 
-                <Grid.Col span={6}>
+                <Grid.Col span={isMobile ? 12 : 6}>
                   <DateInput
                     size={isMobile ? "md" : "lg"}
                     name={"cargoReadyDate"}
@@ -1806,7 +2157,7 @@ const CustomerRequestForm = (
                     placeholder="select date"
                     withAsterisk
                     valueFormat="DD/MM/YYYY"
-                    minDate={today.add(1, "day").toDate()}
+                    // minDate={today.add(1, "day").toDate()}
                     maxDate={today.add(1, "year").toDate()}
                     rightSection={<IconCalendar stroke={1.5} />}
                     error={form.errors?.result?.[0]?.origin?.ready_date}
@@ -1923,104 +2274,111 @@ const CustomerRequestForm = (
                 </Grid.Col>
 
                 <Grid.Col span={6}>
-                  <Switch
-                    mt={"md"}
-                    mb={"md"}
-                    onChange={(delivery) => {
-                      form.setValues((prevValues) => ({
-                        ...prevValues,
-                        result: prevValues.result
-                          ? [
-                              {
-                                ...prevValues.result[0],
-                                destination: {
-                                  ...prevValues.result[0]?.destination,
-                                  delivery: delivery.currentTarget.checked,
+                  <Flex
+                    direction={"column"}
+                    justify={"space-between"}
+                    h={isMobile ? null : 158}
+                  >
+                    <Switch
+                      mt={"md"}
+                      mb={"md"}
+                      onChange={(delivery) => {
+                        form.setValues((prevValues) => ({
+                          ...prevValues,
+                          result: prevValues.result
+                            ? [
+                                {
+                                  ...prevValues.result[0],
+                                  destination: {
+                                    ...prevValues.result[0]?.destination,
+                                    delivery: delivery.currentTarget.checked,
+                                  },
                                 },
-                              },
-                            ]
-                          : [],
-                      }));
-                    }}
-                    size="sm"
-                    description="Local charges included (BL fee, document charges & terminal handling charges). Enable this to enter delivery address below"
-                    labelPosition="left"
-                    label="Door Delivery ?"
-                    styles={{
-                      body: {
-                        justifyContent: "space-between",
-                        // alignItems: 'center',
-                        // display: 'flex',
-                        // height: '100%'
-                      },
-                      dropdown: { maxHeight: 200, overflowY: "auto" },
-                      option: {
-                        fontSize: isMobile
-                          ? TYPOGRAPHY.body.small
-                          : TYPOGRAPHY.body.normal,
-                      },
-                      input: {
-                        fontSize: isMobile
-                          ? TYPOGRAPHY.body.small
-                          : TYPOGRAPHY.body.normal,
-                      },
-                      label: {
-                        fontSize: isMobile
-                          ? TYPOGRAPHY.body.small
-                          : TYPOGRAPHY.body.normal,
-                      },
-                      error: {
-                        fontSize: isMobile
-                          ? TYPOGRAPHY.body.xsmall
-                          : TYPOGRAPHY.body.small,
-                      },
-                      description: {
-                        fontSize: TYPOGRAPHY.body.small,
-                      },
-                    }}
-                  />
-                  <TextInput
-                    disabled={
-                      !form?.values?.result?.[0]?.destination?.delivery || false
-                    }
-                    // label='Delivery Address'
-                    placeholder="Enter Door Delivery"
-                    size={isMobile ? "md" : "lg"}
-                    radius="md"
-                    onChange={(address) => {
-                      form.setValues((prevValues) => ({
-                        ...prevValues,
-                        result: prevValues.result
-                          ? [
-                              {
-                                ...prevValues.result[0],
-                                destination: {
-                                  ...prevValues.result[0]?.destination,
-                                  address: address.target.value,
+                              ]
+                            : [],
+                        }));
+                      }}
+                      size="sm"
+                      description="Local charges included (BL fee, document charges & terminal handling charges). Enable this to enter delivery address below"
+                      labelPosition="left"
+                      label="Door Delivery ?"
+                      styles={{
+                        body: {
+                          justifyContent: "space-between",
+                          // alignItems: 'center',
+                          // display: 'flex',
+                          // height: '100%'
+                        },
+                        dropdown: { maxHeight: 200, overflowY: "auto" },
+                        option: {
+                          fontSize: isMobile
+                            ? TYPOGRAPHY.body.small
+                            : TYPOGRAPHY.body.normal,
+                        },
+                        input: {
+                          fontSize: isMobile
+                            ? TYPOGRAPHY.body.small
+                            : TYPOGRAPHY.body.normal,
+                        },
+                        label: {
+                          fontSize: isMobile
+                            ? TYPOGRAPHY.body.small
+                            : TYPOGRAPHY.body.normal,
+                        },
+                        error: {
+                          fontSize: isMobile
+                            ? TYPOGRAPHY.body.xsmall
+                            : TYPOGRAPHY.body.small,
+                        },
+                        description: {
+                          fontSize: TYPOGRAPHY.body.small,
+                        },
+                      }}
+                    />
+                    <TextInput
+                      disabled={
+                        !form?.values?.result?.[0]?.destination?.delivery ||
+                        false
+                      }
+                      // label='Delivery Address'
+                      placeholder="Enter Door Delivery"
+                      size={isMobile ? "md" : "lg"}
+                      radius="md"
+                      onChange={(address) => {
+                        form.setValues((prevValues) => ({
+                          ...prevValues,
+                          result: prevValues.result
+                            ? [
+                                {
+                                  ...prevValues.result[0],
+                                  destination: {
+                                    ...prevValues.result[0]?.destination,
+                                    address: address.target.value,
+                                  },
                                 },
-                              },
-                            ]
-                          : [],
-                      }));
-                    }}
-                    styles={{
-                      input: {
-                        fontSize: isMobile
-                          ? TYPOGRAPHY.body.small
-                          : TYPOGRAPHY.body.normal,
-                      },
-                      label: {
-                        fontSize: isMobile
-                          ? TYPOGRAPHY.body.small
-                          : TYPOGRAPHY.body.normal,
-                      },
-                      error: {
-                        fontSize: isMobile
-                          ? TYPOGRAPHY.body.xsmall
-                          : TYPOGRAPHY.body.small,
-                      },
-                    }}
-                  />
+                              ]
+                            : [],
+                        }));
+                      }}
+                      styles={{
+                        input: {
+                          fontSize: isMobile
+                            ? TYPOGRAPHY.body.small
+                            : TYPOGRAPHY.body.normal,
+                        },
+                        label: {
+                          fontSize: isMobile
+                            ? TYPOGRAPHY.body.small
+                            : TYPOGRAPHY.body.normal,
+                        },
+                        error: {
+                          fontSize: isMobile
+                            ? TYPOGRAPHY.body.xsmall
+                            : TYPOGRAPHY.body.small,
+                        },
+                      }}
+                    />
+                  </Flex>
                 </Grid.Col>
                 <Grid.Col span={6}>
                   <Switch
@@ -2250,25 +2608,7 @@ const CustomerRequestForm = (
                     }}
                   />
                 </Grid.Col>
-                <Grid.Col span={6}>
-                  {/* <Button color={hasContainerDetailsError ? 'red' : ''}
-                  variant={hasContainerDetailsError ? "outline" : "filled"}
-                  fullWidth
-                  onClick={handleAddCargoClick}
-                  leftSection={<IconPlus />}
-                >
-                  Add Cargo Details {form?.values?.result?.[0]?.container_details
-                    ? `(${form?.values?.result?.[0]?.container_details?.type} - ${form?.values?.result?.[0]?.container_details?.list?.length ||
-                    form?.values?.result?.[0]?.container_details?.containerCount
-                    })`
-                    : ''}
-                </Button> */}
-                  <CargoButton
-                    hasContainerDetailsError={hasContainerDetailsError}
-                    form={form}
-                    handleAddCargoClick={handleAddCargoClick}
-                  />
-                </Grid.Col>
+
                 {form?.values?.result?.[0]?.cargo?.isDangerous ? (
                   <>
                     {/* Dangerous goods fields */}
@@ -2375,7 +2715,7 @@ const CustomerRequestForm = (
                     </Grid.Col>
 
                     {/* MSDS Upload - only shown when cargo is dangerous */}
-                    <Grid.Col>
+                    <Grid.Col span={6}>
                       <FileButton
                         name="msds"
                         accept="image/png,image/jpeg,application/pdf"
@@ -2421,6 +2761,25 @@ const CustomerRequestForm = (
                     </Grid.Col>
                   </>
                 )}
+                <Grid.Col span={6}>
+                  {/* <Button color={hasContainerDetailsError ? 'red' : ''}
+                  variant={hasContainerDetailsError ? "outline" : "filled"}
+                  fullWidth
+                  onClick={handleAddCargoClick}
+                  leftSection={<IconPlus />}
+                >
+                  Add Cargo Details {form?.values?.result?.[0]?.container_details
+                    ? `(${form?.values?.result?.[0]?.container_details?.type} - ${form?.values?.result?.[0]?.container_details?.list?.length ||
+                    form?.values?.result?.[0]?.container_details?.containerCount
+                    })`
+                    : ''}
+                </Button> */}
+                  <CargoButton
+                    hasContainerDetailsError={hasContainerDetailsError}
+                    form={form}
+                    handleAddCargoClick={handleAddCargoClick}
+                  />
+                </Grid.Col>
                 <ErrorBoundary
                   fallback={
                     <Alert
@@ -2493,36 +2852,36 @@ const CustomerRequestForm = (
                   <Box
                     style={{
                       width: "100%",
-                          borderRadius: "16px",
+                      borderRadius: "16px",
                       overflow: "hidden",
-                          border: "1px solid rgba(255,255,255,0.15)",
+                      border: "1px solid rgba(255,255,255,0.15)",
                     }}
                   >
-                        {/* Aspect ratio wrapper */}
+                    {/* Aspect ratio wrapper */}
                     <Box
                       style={{
-                            width: "100%",
-                            aspectRatio: "16 / 4",
+                        width: "100%",
+                        aspectRatio: "16 / 4",
                         display: "flex",
-                          }}
-                        >
-                          {/* Image box */}
-                          <Box
-                            style={{
-                              flex: 1,
-                              height: "100%",
-                              background: `
+                      }}
+                    >
+                      {/* Image box */}
+                      <Box
+                        style={{
+                          flex: 1,
+                          height: "100%",
+                          background: `
                                 linear-gradient(
                                   rgba(0,0,0,0.25),
                                   rgba(0,0,0,0.15)
                                 ),
                                 url("/images/customer-request-form-image.jpg")
                               `,
-                              backgroundSize: "cover", // 🔑 shows full image
-                              backgroundPosition: "bottom",
-                              backgroundRepeat: "no-repeat",
-                            }}
-                        />
+                          backgroundSize: "cover", // 🔑 shows full image
+                          backgroundPosition: "bottom",
+                          backgroundRepeat: "no-repeat",
+                        }}
+                      />
                     </Box>
                   </Box>
                 </Grid.Col>
@@ -2546,8 +2905,8 @@ const CustomerRequestForm = (
                     <Button
                       t={30}
                       loading={
-                            isTariffChecking || submitCustomerRequest.isPending
-                          }
+                        isTariffChecking || submitCustomerRequest.isPending
+                      }
                       // size='lg'
                       fw={600}
                       // disabled={!form.isValid()}
@@ -2602,44 +2961,46 @@ const CustomerRequestForm = (
             </Alert>
           )}
           <Grid gutter="sm">
-            {/* Common Fields */}
-            <Grid.Col span={6}>
-              <Select
-                size={isMobile ? "md" : "lg"}
-                placeholder="Choose cargo type"
-                onChange={(v) => setActiveType(v)}
-                searchable
-                label="Cargo Type"
-                value={activeType}
-                data={options || []}
-                radius="md"
-                styles={{
-                  dropdown: { maxHeight: 200, overflowY: "auto" },
-                  option: {
-                    fontSize: isMobile
-                      ? TYPOGRAPHY.body.small
-                      : TYPOGRAPHY.body.normal,
-                  },
-                  input: {
-                    fontSize: isMobile
-                      ? TYPOGRAPHY.body.small
-                      : TYPOGRAPHY.body.normal,
-                  },
-                  label: {
-                    fontSize: isMobile
-                      ? TYPOGRAPHY.label.small
-                      : TYPOGRAPHY.label.large,
-                  },
-                  error: {
-                    fontSize: isMobile
-                      ? TYPOGRAPHY.body.xsmall
-                      : TYPOGRAPHY.body.small,
-                  },
-                }}
-              />
-            </Grid.Col>
+            {/* Common Fields — Cargo Type only for FCL */}
+            {openedModal === "FCL" && (
+              <Grid.Col span={6}>
+                <Select
+                  size={isMobile ? "md" : "lg"}
+                  placeholder="Choose cargo type"
+                  onChange={(v) => setActiveType(v)}
+                  searchable
+                  label="Cargo Type"
+                  value={activeType}
+                  data={options || []}
+                  radius="md"
+                  styles={{
+                    dropdown: { maxHeight: 200, overflowY: "auto" },
+                    option: {
+                      fontSize: isMobile
+                        ? TYPOGRAPHY.body.small
+                        : TYPOGRAPHY.body.normal,
+                    },
+                    input: {
+                      fontSize: isMobile
+                        ? TYPOGRAPHY.body.small
+                        : TYPOGRAPHY.body.normal,
+                    },
+                    label: {
+                      fontSize: isMobile
+                        ? TYPOGRAPHY.label.small
+                        : TYPOGRAPHY.label.large,
+                    },
+                    error: {
+                      fontSize: isMobile
+                        ? TYPOGRAPHY.body.xsmall
+                        : TYPOGRAPHY.body.small,
+                    },
+                  }}
+                />
+              </Grid.Col>
+            )}
 
-            <Grid.Col span={isMobile ? 12 : 6}>
+            <Grid.Col span={openedModal === "FCL" ? (isMobile ? 12 : 6) : 12}>
               <Select
                 error={modalErrors.commodity}
                 color={COLORS.portColor}
@@ -2852,11 +3213,11 @@ const CustomerRequestForm = (
 
             {/* FCL Specific Fields */}
             {openedModal === "FCL" && (
-              <Box mih={0} w="100%">
+              <Box mih={0} w="100%" mt={"sm"}>
                 <Grid.Col span={12}>
                   <Flex justify="space-between" align="center">
                     <Text size="sm" fw={500}>
-                      Containers
+                      Container Details
                     </Text>
 
                     {selectedSize.length - 1 < filteredContSize.length && (
@@ -2874,7 +3235,7 @@ const CustomerRequestForm = (
                   {containerList?.list?.map((item, i) => {
                     if (!item) return null;
                     return (
-                      <Grid key={i} w="100%" p="xs">
+                      <Grid key={i} w="100%">
                         <Grid.Col span={3}>
                           <Select
                             label="Container Size"
@@ -3092,7 +3453,7 @@ const CustomerRequestForm = (
                       },
                     }}
                     radius="md"
-                    value={containerList.no_of_packages ?? ""}
+                    value={containerList.no_of_packages ?? "1"}
                     onChange={(e) =>
                       setContainerList((st) => ({
                         ...st,
@@ -3205,7 +3566,7 @@ const CustomerRequestForm = (
                       },
                     }}
                     radius="md"
-                    value={containerList.no_of_packages || ""}
+                    value={containerList.no_of_packages ?? "1"}
                     onChange={(e) =>
                       setContainerList((st) => ({
                         ...st,

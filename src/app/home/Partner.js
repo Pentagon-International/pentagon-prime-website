@@ -38,6 +38,50 @@ const Partner = ({ title, content }) => {
   const isSM = useMediaQuery("(min-width: 576px)");
 
   const columns = isXL ? 6 : isLG ? 4 : isMD ? 3 : isSM ? 2 : 1;
+
+  const splitIntoColumns = (array, cols) => {
+    const total = array.length;
+    const baseCount = Math.floor(total / cols);
+    const remainder = total % cols;
+
+    // Create empty columns
+    const result = Array.from({ length: cols }, () => []);
+
+    let currentIndex = 0;
+
+    // First pass: fill baseCount in all columns
+    for (let col = 0; col < cols; col++) {
+      for (let i = 0; i < baseCount; i++) {
+        result[col].push(array[currentIndex++]);
+      }
+    }
+
+    // Second pass: distribute remainder
+    if (remainder > 0) {
+      // First fill odd columns (0,2,4)
+      const oddColumns = [];
+      for (let i = 0; i < cols; i += 2) {
+        oddColumns.push(i);
+      }
+
+      // Then even columns (1,3,5)
+      const evenColumns = [];
+      for (let i = 1; i < cols; i += 2) {
+        evenColumns.push(i);
+      }
+
+      const order = [...oddColumns, ...evenColumns];
+
+      for (let i = 0; i < remainder; i++) {
+        result[order[i]].push(array[currentIndex++]);
+      }
+    }
+
+    return result;
+  };
+
+  const columnData = splitIntoColumns(partners, columns);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -61,11 +105,18 @@ const Partner = ({ title, content }) => {
       pb={"70px"}
       fluid
       bg={COLORS.backgroundColor}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
       <Flex
         align={"center"}
         justify={"space-between"}
         direction={isMobile ? "column" : "row"}
+        w={"100%"}
       >
         <Stack>
           <Title size="lg" tt={"uppercase"} fw={800}>
@@ -96,6 +147,12 @@ const Partner = ({ title, content }) => {
         pos={"relative"}
         // p={isMobile ? 0 : 20}
         w={isMobile ? "100%" : "100%"}
+        maw={1000}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
         // m={'0 auto'}
       >
         {/* <Carousel
@@ -180,77 +237,56 @@ const Partner = ({ title, content }) => {
             </CarouselSlide>
           ))}
         </Carousel> */}
-        <SimpleGrid
-          cols={{ base: 1, sm: 2, md: 3, lg: 4, xl: 6 }}
-          spacing={{ base: 10, md: 16 }}
+        <Flex
+          gap={{ base: 10, md: 16 }}
+          style={{ maxWidth: "1096px", margin: "0 auto" }}
+          align="flex-start"
         >
-          {partners.map((item, index) => {
-            return (
-              <Paper
-                key={index}
-                radius="lg"
-                p={"lg"}
-                shadow="sm"
-                withBorder
-                style={{
-                  maxHeight: "250px",
-                  height: "100%",
-                  textAlign: "center",
-                  backgroundColor: index%2!==0 ? "#e2f2ff02" : "#ffffff",
-                  transition: "all 0.3s ease",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-6px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 12px 30px rgba(0,0,0,0.08)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "none";
-                  e.currentTarget.style.boxShadow = "";
-                }}
-              >
-                <Center
-                  mb={16}
-                  maw={180}
-
+          {columnData.map((column, colIndex) => (
+            <Flex
+              key={colIndex}
+              direction="column"
+              gap={{ base: 10, md: 16 }}
+              flex={1}
+            >
+              {column.map((item, index) => (
+                <Paper
+                  key={index}
+                  radius="24px"
+                  p={16}
+                  withBorder
+                  shadow="sm"
                   style={{
-                    flex: 3.5,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
+                    textAlign: "center",
+                    marginTop: colIndex % 2 !== 0 && index == 0 ? "40px" : "",
+                    backgroundColor: (colIndex % 2 !== 0 && index%2 !== 0) || (colIndex % 2 === 0 && index%2 === 0) ? "#ffffffa0" : "#ffffff",
+                    transition: "all 0.3s ease",
+                    cursor: "pointer",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-6px)";
+                    e.currentTarget.style.boxShadow =
+                      "0 12px 30px rgba(0,0,0,0.08)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "none";
+                    e.currentTarget.style.boxShadow = "";
                   }}
                 >
-                  <Image
-                    src={item.fields.image.fields.file.url}
-                    alt={item.fields.image.fields.title}
-                    w="100%"
-                    h="100px"
-                    fit="contain"
-                  />
-                </Center>
-                {/* <Center
-                  mb={16}
-                  maw={180}
-                  style={{
-                    flex: 1,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <Text size="base" fw={700} c={COLORS.portColor}>
-                    {highlightText(item.fields.shortvalue)}
-                  </Text>
-                </Center> */}
-              </Paper>
-            );
-          })}
-        </SimpleGrid>
+                  <Center>
+                    <Image
+                      src={item.fields.image.fields.file.url}
+                      alt={item.fields.image.fields.title}
+                      w="100%"
+                      h={80}
+                      fit="contain"
+                    />
+                  </Center>
+                </Paper>
+              ))}
+            </Flex>
+          ))}
+        </Flex>
       </Box>
     </Container>
   );

@@ -272,7 +272,7 @@ export default function FreightLanesMarquee() {
         backgroundColor: COLORS.backgroundColor,
       }}
     >
-      <Container size="xl">
+      <Container maw={1300} px={20}>
         <Text
           ta="center"
           size="xs"

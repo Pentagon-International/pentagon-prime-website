@@ -9,6 +9,7 @@ const options = [
   { label: "Open Top Container", value: "OT" },
   { label: "ISO Tank Container", value: "TANK" }
 ];
+
 const contSize = [
   {
     label: `20 GP`,
@@ -31,6 +32,7 @@ const contSize = [
     isShow: ["GC"],
   },
 ];
+
 const dimension = {
   data: [
     {
@@ -48,6 +50,7 @@ const dimension = {
   ],
   isVisible: ["OT", "FR", "FB"],
 };
+
 const types = {
   TEXT: "text",
   NUMBER: "number",
