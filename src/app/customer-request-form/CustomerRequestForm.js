@@ -252,8 +252,8 @@ const CustomerRequestForm = (
     },
     validate: (values) => {
       const errors = {};
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const phoneRegex = /^\d{10,15}$/;
+      const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+      const phoneRegex = /^\d{10}$/;
 
       // Basic fields validation
       if (!values.customer_name) {
@@ -396,6 +396,10 @@ const CustomerRequestForm = (
         if (Object.keys(resultErrors).length > 0) {
           errors.result = [resultErrors];
         }
+      }
+
+      if(errors){
+        window.alert("Please fill all the required fields")
       }
 
       return errors;
@@ -1972,13 +1976,14 @@ const CustomerRequestForm = (
                   />
                 </Grid.Col>
                 <Grid.Col span={isMobile ? 12 : 6}>
-                  <TextInput
+                  <NumberInput
                     color={COLORS.portColor}
                     placeholder="Enter Mobile Number"
                     size={isMobile ? "md" : "lg"}
                     withAsterisk
                     label="Mobile Number"
                     radius="md"
+                    hideControls
                     styles={{
                       input: {
                         fontSize: isMobile

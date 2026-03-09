@@ -275,14 +275,16 @@ export const NavLink = memo(({ item }) => {
   const isSolutions = useMemo(() => pathname.startsWith('/service/'), [pathname]);
   const isResources = useMemo(() => resourcesPaths.includes(pathname), [pathname, resourcesPaths]);
   const isAbout = useMemo(() => pathname.startsWith('/about'), [pathname]);
+  const isGallery = useMemo(() => pathname.startsWith('/gallery'), [pathname]);
 
   // Now map menu item → active logic
   const isActive = useMemo(() =>
     (item.label === 'Home' && isHome) ||
     (item.label === 'Solutions' && isSolutions) ||
     (item.label === 'Resources' && isResources) ||
+    (item.label === 'Gallery' && isGallery) ||
     (item.label === 'About Us' && isAbout),
-    [item.label, isHome, isSolutions, isResources, isAbout]
+    [item.label, isHome, isSolutions, isResources, isGallery, isAbout]
   );
 
   const linkStyles = useMemo(() => ({
