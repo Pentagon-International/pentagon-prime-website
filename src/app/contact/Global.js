@@ -11,19 +11,44 @@ import {
   Image,
   Text,
   Title,
-  Tooltip,
+  Popover,
 } from "@mantine/core";
 import { IconPhoneCall, IconPinnedFilled } from "@tabler/icons-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { client } from "../api/contentful";
 import { COLORS } from "../utils/COLORS";
 import { useMediaQuery } from "@mantine/hooks";
 import { Carousel } from "@mantine/carousel";
-import { highlightText } from "../utils/highlightText";
+
+// Country → list of place names (branch names in Contentful)
+const COUNTRY_CONFIG = [
+  { country: "India", places: ["New Delhi", "Pune", "Bangalore", "Chennai", "Ahmedabad"] },
+  { country: "USA", places: ["USA"] },
+  { country: "Kenya", places: ["Kenya"] },
+  { country: "Dubai", places: ["Dubai"] },
+  { country: "Vietnam", places: ["Vietnam"] },
+  { country: "China", places: ["China"] },
+];
+
+// Place name → map position (percentage)
+const PLACE_COORDS = {
+  USA: { x: "21%", y: "48%" },
+  Kenya: { x: "62%", y: "62.5%" },
+  Dubai: { x: "66%", y: "51%" },
+  "New Delhi": { x: "73.5%", y: "50%" },
+  Pune: { x: "73%", y: "54%" },
+  Bangalore: { x: "73.5%", y: "57%" },
+  Chennai: { x: "75%", y: "57%" },
+  Vietnam: { x: "83.5%", y: "57%" },
+  Ahmedabad: { x: "71.5%", y: "52%" },
+  China: { x: "85.5%", y: "51%" },
+};
 
 const Global = () => {
   const [locationData, setLocationData] = useState([]);
-  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState("India");
+  const [popoverPlace, setPopoverPlace] = useState(null);
+  const mapSectionRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,9 +58,6 @@ const Global = () => {
           order: "sys.createdAt",
         });
         setLocationData(res.items);
-        if (res.items.length > 0) {
-          setSelectedPlace(res.items[0].fields.place);
-        }
       } catch (error) {
         console.error("Error fetching partners:", error);
       }
@@ -45,223 +67,171 @@ const Global = () => {
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  // Group countries
-  const indiaPlaces = ["New Delhi", "Pune", "Bangalore", "Chennai", "Ahmedabad"];
-  const overseasPlaces = ["USA", "Kenya", "Dubai", "Vietnam", "China"];
-
-  const indiaData = locationData.filter((item) =>
-    indiaPlaces.includes(item.fields.place)
-  );
-  const overseasData = locationData.filter((item) =>
-    overseasPlaces.includes(item.fields.place)
+  const handleCountryClick = useCallback(
+    (country) => {
+      setSelectedCountry(country);
+      setPopoverPlace(null);
+      mapSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    },
+    []
   );
 
-  const places = [
-    { name: "USA", x: "21%", y: "48%" },
-    { name: "Kenya", x: "62%", y: "62.5%" },
-    { name: "Dubai", x: "66%", y: "51%" },
-    { name: "New Delhi", x: "73.5%", y: "50%" },
-    { name: "Pune", x: "73%", y: "54%" },
-    { name: "Bangalore", x: "73.5%", y: "57%" },
-    { name: "Chennai", x: "75%", y: "57%" },
-    { name: "Vietnam", x: "83.5%", y: "57%" },
-    { name: "Ahmedabad", x: "71.5%", y: "52%" },
-    { name: "China", x: "85.5%", y: "51%" },
-  ];
+  const branchesForCountry = useMemo(() => {
+    const config = COUNTRY_CONFIG.find((c) => c.country === selectedCountry);
+    if (!config) return [];
+    return locationData.filter((item) =>
+      config.places.includes(item.fields.place)
+    );
+  }, [selectedCountry, locationData]);
 
-  const handlePlaceSelect = (placeName) => setSelectedPlace(placeName);
-
-  const renderCard = (item) => (
-    <Card
-      key={item.sys.id}
-      bg={selectedPlace === item.fields.place ? "rgb(0, 33, 95)" : "#FFF"}
-      c={selectedPlace === item.fields.place ? "#FFF" : "#000"}
-      shadow="md"
-      radius="32px"
-      p={30}
-      onMouseEnter={(e)=>{
-        if(selectedPlace !== item.fields.place){
-          e.currentTarget.style.backgroundColor = "rgb(0, 51, 145)";
-          e.currentTarget.style.color = "#FFF";
-          e.currentTarget.style.border = "3px solid rgb(0, 51, 145)";
-        }
-      }}
-      onMouseLeave={(e)=>{
-        if(selectedPlace !== item.fields.place){
-          e.currentTarget.style.backgroundColor = "#FFF";
-          e.currentTarget.style.color = "#000";
-          e.currentTarget.style.border = "3px solid #E0E0E0";
-        }
-      }}
-      onClick={() => setSelectedPlace(item.fields.place)}
-      style={{
-        transition: "all 0.5s ease",
-        cursor: "pointer",
-        height: "260px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        border: selectedPlace === item.fields.place ? "3px solid rgb(0, 33, 95)" : "3px solid #E0E0E0",
-      }}
-    >
-      {/* Title */}
-      <Title
-        size="md"
-        fw={700}
-        order={5}
-        c={selectedPlace === item.fields.place ? "white" : "inherit"}
-      >
-        {item.fields.place}
-      </Title>
-
-      {/* Address */}
-      <Text
-        size="smx"
-        mt={10}
-        c={selectedPlace === item.fields.place ? "white" : "inherit"}
+  const renderCountryCard = (countryName) => {
+    const isSelected = selectedCountry === countryName;
+    return (
+      <Card
+        key={countryName}
+        bg={isSelected ? "rgb(0, 33, 95)" : "#FFF"}
+        c={isSelected ? "#FFF" : "#000"}
+        shadow="md"
+        radius="24px"
+        p={16}
+        onMouseEnter={(e) => {
+          if (!isSelected) {
+            e.currentTarget.style.backgroundColor = "rgb(0, 51, 145)";
+            e.currentTarget.style.color = "#FFF";
+            e.currentTarget.style.border = "3px solid rgb(0, 51, 145)";
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!isSelected) {
+            e.currentTarget.style.backgroundColor = "#FFF";
+            e.currentTarget.style.color = "#000";
+            e.currentTarget.style.border = "3px solid #E0E0E0";
+          }
+        }}
+        onClick={() => handleCountryClick(countryName)}
         style={{
-          flexGrow: 1, // ✅ fills space evenly
-          overflow: "hidden",
-          textOverflow: "ellipsis",
+          transition: "all 0.5s ease",
+          cursor: "pointer",
+          minHeight: "60px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: isSelected ? "3px solid rgb(0, 33, 95)" : "3px solid #E0E0E0",
         }}
       >
-        {item.fields.address}
-      </Text>
+        <Title size="md" fw={700} order={5} c={isSelected ? "white" : "inherit"}>
+          {countryName}
+        </Title>
+      </Card>
+    );
+  };
 
-      {/* Contact */}
-      <Group align="center" wrap="nowrap" gap={5} mt={15}>
-        <IconPhoneCall
-          size={14}
-          color={
-            selectedPlace === item.fields.place ? "white" : COLORS.serviceColor
-          }
-        />
-        <Text
-          size="smx"
-          c={selectedPlace === item.fields.place ? "white" : "inherit"}
-        >
-          {item.fields.number}
-        </Text>
-      </Group>
-    </Card>
-  );
-
-  const renderCarousel = (data) => (
+  const countryCarousel = (
     <Carousel
       mt={20}
-      align={"start"}
+      align="start"
       slideSize="80%"
-      height={"auto"}
-      w={"100%"}
+      height="auto"
+      w="100%"
       slideGap="xs"
       loop
-      initialSlide={
-        selectedPlace
-          ? data.findIndex((item) => item.fields.place === selectedPlace)
-          : 0
-      }
-      onSlideChange={(index) => {
-        if (data[index]) setSelectedPlace(data[index].fields.place);
-      }}
       styles={{
-        controls: {
-          display: "none",
-          visibility: "hidden",
-          opacity: 0,
-          pointerEvents: "none",
-        },
+        controls: { display: "none", visibility: "hidden", opacity: 0, pointerEvents: "none" },
       }}
     >
-      {data.map((item) => (
-        <Carousel.Slide key={item.sys.id}>{renderCard(item)}</Carousel.Slide>
+      {COUNTRY_CONFIG.map(({ country }) => (
+        <Carousel.Slide key={country}>{renderCountryCard(country)}</Carousel.Slide>
       ))}
     </Carousel>
   );
 
   return (
     <Container fluid px={"7%"} py={"70px"} bg={COLORS.backgroundColor}>
-      {/* Header */}
       <Center tt={"uppercase"}>
         <Title size={isMobile ? "lg" : "xl"} fw={800} lh={"lgx2"}>
-          Our <span style={{ color: COLORS.serviceColor }}>Global</span>{" "}
-          Presence
+          Our <span style={{ color: COLORS.serviceColor }}>Global</span> Presence
         </Title>
       </Center>
 
-      {/* Map Section */}
-      <Box pos="relative" w="100%" mx="auto" py="lg" style={{borderRadius:"16px"}}>
+      {/* Country list – only country names */}
+      <Box mt={32}>
+        {isMobile ? (
+          countryCarousel
+        ) : (
+          <Grid columns={12} align="center" justify="flex-start" gutter="xl">
+            {COUNTRY_CONFIG.map(({ country }) => (
+              <GridCol key={country} span={2}>
+                {renderCountryCard(country)}
+              </GridCol>
+            ))}
+          </Grid>
+        )}
+      </Box>
+
+      {/* Map – pins only for selected country's branches */}
+      <Box
+        ref={mapSectionRef}
+        pos="relative"
+        w="100%"
+        mx="auto"
+        py="lg"
+        mt={40}
+        style={{ borderRadius: "16px" }}
+      >
         <Image
           src="/images/worldMap.png"
           alt="World Map"
-          style={{ width: "100%", height: "auto", borderRadius:"16px" }}
+          style={{ width: "100%", height: "auto", borderRadius: "16px" }}
         />
-        {places.map((place, idx) => (
-          <Tooltip
-            key={idx}
-            label={place.name}
-            arrowSize={8}
-            bg={"white"}
-            c={"rgb(0, 33, 95)"}
-            fz={20}
-            fw={600}
-            withArrow
-          >
-            <Box
-              onClick={() => handlePlaceSelect(place.name)}
-              style={{
-                position: "absolute",
-                left: place.x,
-                top: place.y,
-                transform: "translate(-50%, -100%)",
-                cursor: "pointer",
-              }}
+        {branchesForCountry.map((item) => {
+          const placeName = item.fields.place;
+          const coords = PLACE_COORDS[placeName];
+          if (!coords) return null;
+          const isPopoverOpen = popoverPlace === placeName;
+          return (
+            <Popover
+              key={item.sys.id}
+              position="bottom"
+              withArrow
+              shadow="md"
+              opened={isPopoverOpen}
+              onChange={(open) => { if (!open) setPopoverPlace(null); }}
             >
-              <IconPinnedFilled
-                size={selectedPlace === place.name ? 32 : 24}
-                stroke={1.5}
-                color={
-                  selectedPlace === place.name ? "rgb(0, 33, 95)" : "#e84c4c"
-                }
-              />
-            </Box>
-          </Tooltip>
-        ))}
-      </Box>
-
-      {/* India Section */}
-      <Box mt={40}>
-        <Title order={3} fw={800} mb={20} tt="uppercase">
-          {highlightText("# Indian # Branches")}
-        </Title>
-        {isMobile ? (
-          renderCarousel(indiaData)
-        ) : (
-          <Grid columns={12} align="center" justify="flex-start" gutter="xl">
-            {indiaData.map((item) => (
-              <GridCol key={item.sys.id} span={3}>
-                {renderCard(item)}
-              </GridCol>
-            ))}
-          </Grid>
-        )}
-      </Box>
-
-      {/* Overseas Section */}
-      <Box mt={60}>
-        <Title order={3} fw={800} mb={20} tt="uppercase">
-          {highlightText("# Overseas # Branches")}
-        </Title>
-        {isMobile ? (
-          renderCarousel(overseasData)
-        ) : (
-          <Grid columns={12} align="center" justify="flex-start" gutter="xl">
-            {overseasData.map((item) => (
-              <GridCol key={item.sys.id} span={3}>
-                {renderCard(item)}
-              </GridCol>
-            ))}
-          </Grid>
-        )}
+              <Popover.Target>
+                <Box
+                  onClick={() => setPopoverPlace((p) => (p === placeName ? null : placeName))}
+                  style={{
+                    position: "absolute",
+                    left: coords.x,
+                    top: coords.y,
+                    transform: "translate(-50%, -100%)",
+                    cursor: "pointer",
+                  }}
+                >
+                  <IconPinnedFilled
+                    size={isPopoverOpen ? 32 : 24}
+                    stroke={1.5}
+                    color={isPopoverOpen ? "rgb(0, 33, 95)" : "#e84c4c"}
+                  />
+                </Box>
+              </Popover.Target>
+              <Popover.Dropdown>
+                <Box maw={280}>
+                  <Text size="sm" fw={600} mb={4}>
+                    {item.fields.place}
+                  </Text>
+                  <Text size="xs" c="dimmed" mb={8}>
+                    {item.fields.address}
+                  </Text>
+                  <Group gap={6} align="center">
+                    <IconPhoneCall size={14} color={COLORS.serviceColor} />
+                    <Text size="xs">{item.fields.number}</Text>
+                  </Group>
+                </Box>
+              </Popover.Dropdown>
+            </Popover>
+          );
+        })}
       </Box>
     </Container>
   );
