@@ -56,6 +56,7 @@ const LayoutContent = memo(({ children }) => {
   const previousPathnameRef = useRef(pathname);
   const loadingCheckIntervalRef = useRef(null);
 
+
   // Set static page title for all pages
   useEffect(() => {
     document.title = "Pentagon Prime";
@@ -317,6 +318,16 @@ const WhatsAppButton = memo(() => {
 });
 
 export default function RootLayout({ children }) {
+  const ConditionalFooter = memo(() => {
+    const pathname = usePathname();
+    
+    const shouldHideFooter = pathname.startsWith('/service');
+    
+    if (shouldHideFooter) return null;
+    
+    return <Footer />;
+  });
+
   return (
     <html lang="en" className={libreBaskerville.variable}>
     <head>
@@ -329,7 +340,7 @@ export default function RootLayout({ children }) {
               <Notifications position="top-right" zIndex={9999} />
               <LayoutContent>{children}</LayoutContent>
               <WhatsAppButton />
-              <Footer />
+              <ConditionalFooter />
             </MantineProvider>
           </LoadingProvider>
         </QueryProvider>

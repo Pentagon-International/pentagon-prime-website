@@ -63,15 +63,20 @@ const Hero = ({ title, content }) => {
   const { seaData, airData, setSeaData, setAirData } = useTransportStore();
   const { setFormValues } = useCustomerRequestStore();
   const router = useRouter();
-  const isMobile = useMediaQuery("(max-width: 768px)");
+
+  // ── Breakpoints ──────────────────────────────────────────────────────────
+  const isMobile = useMediaQuery("(max-width: 576px)");
+  const isTablet = useMediaQuery("(max-width: 768px)");
   const isTabletOrBelow = useMediaQuery("(max-width: 1024px)");
+
   const Icon = IconArrowsDownUp;
   const notificationShownRef = useRef(false);
   const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef(null);
 
+  // ── Video cycle (unchanged logic) ────────────────────────────────────────
   useEffect(() => {
-    if (isMobile) return; // 🚀 stop everything on mobile
+    if (isMobile) return;
 
     const video = videoRef.current;
     if (!video) return;
@@ -88,7 +93,6 @@ const Hero = ({ title, content }) => {
     };
 
     startCycle();
-
     video.addEventListener("ended", startCycle);
 
     return () => {
@@ -97,7 +101,7 @@ const Hero = ({ title, content }) => {
     };
   }, [isMobile]);
 
-  // First, define the queries
+  // ── Queries (unchanged) ──────────────────────────────────────────────────
   const { data: seaPortData } = useQuery({
     queryKey: [`seaPortData`],
     queryFn: async () => {
@@ -137,7 +141,7 @@ const Hero = ({ title, content }) => {
     },
   });
 
-  // Then define the state that depends on the queries
+  // ── Form state (unchanged) ────────────────────────────────────────────────
   const [formValue, setFormValue] = useState({
     typeOfBooking: "FCL",
     origin: "",
@@ -148,37 +152,32 @@ const Hero = ({ title, content }) => {
     memoizedTransportData: seaData,
   });
 
-  // State for filtered options
   const [filteredOriginOptions, setFilteredOriginOptions] = useState(
-    seaData || []
+    seaData || [],
   );
   const [filteredDestinationOptions, setFilteredDestinationOptions] = useState(
-    seaData || []
+    seaData || [],
   );
 
-  // Now we can safely use seaPortData and airPortData in effects
   useEffect(() => {
     if (seaPortData) setSeaData(seaPortData || []);
     if (airPortData) setAirData(airPortData || []);
   }, [seaPortData, airPortData]);
 
-  // Update filtered options when data or selections change
   useEffect(() => {
     if (formValue?.memoizedTransportData) {
-      // Filter origin options based on selected destination
       if (formValue?.destination?.destination) {
         const filteredOrigins = formValue.memoizedTransportData.filter(
-          (item) => item.value !== formValue.destination.destination
+          (item) => item.value !== formValue.destination.destination,
         );
         setFilteredOriginOptions(filteredOrigins);
       } else {
         setFilteredOriginOptions(formValue.memoizedTransportData);
       }
 
-      // Filter destination options based on selected origin
       if (formValue?.origin?.origin) {
         const filteredDestinations = formValue.memoizedTransportData.filter(
-          (item) => item.value !== formValue.origin.origin
+          (item) => item.value !== formValue.origin.origin,
         );
         setFilteredDestinationOptions(filteredDestinations);
       } else {
@@ -191,7 +190,6 @@ const Hero = ({ title, content }) => {
     formValue?.memoizedTransportData,
   ]);
 
-  // Handle same location selection
   useEffect(() => {
     if (
       formValue?.origin?.origin &&
@@ -207,7 +205,6 @@ const Hero = ({ title, content }) => {
 
       notificationShownRef.current = true;
 
-      // Clear destination
       setFormValue((prev) => ({
         ...prev,
         destination: {
@@ -224,24 +221,21 @@ const Hero = ({ title, content }) => {
     }
   }, [formValue?.origin?.origin, formValue?.destination?.destination]);
 
-  // Update memoized transport data when transport type changes
   useEffect(() => {
     setFormValue((prev) => ({
       ...prev,
       memoizedTransportData: prev.activeTransport === "sea" ? seaData : airData,
-      // Reset selections when transport type changes
       origin: { origin: null },
       destination: { destination: null },
     }));
     setFilteredOriginOptions(
-      formValue.activeTransport === "sea" ? seaData : airData
+      formValue.activeTransport === "sea" ? seaData : airData,
     );
     setFilteredDestinationOptions(
-      formValue.activeTransport === "sea" ? seaData : airData
+      formValue.activeTransport === "sea" ? seaData : airData,
     );
   }, [formValue.activeTransport, seaData, airData]);
 
-  // Optimized swap function with filtered options
   const swapOriginDestination = useCallback(() => {
     if (!formValue?.origin?.origin || !formValue?.destination?.destination) {
       notifications.show({
@@ -273,7 +267,6 @@ const Hero = ({ title, content }) => {
     }));
   }, [formValue]);
 
-  // Check if form is valid for submission
   const isFormValid = useMemo(() => {
     return (
       formValue?.origin?.origin &&
@@ -288,13 +281,11 @@ const Hero = ({ title, content }) => {
   });
 
   const handleGetQuote = () => {
-    // Reset errors
     setFormErrors({
       origin: !formValue?.origin?.origin,
       destination: !formValue?.destination?.destination,
     });
 
-    // Check if fields are empty
     if (!formValue?.origin?.origin || !formValue?.destination?.destination) {
       notifications.show({
         title: "Error",
@@ -304,7 +295,6 @@ const Hero = ({ title, content }) => {
       return;
     }
 
-    // Check if origin and destination are same
     if (formValue.origin.origin === formValue.destination.destination) {
       notifications.show({
         title: "Error",
@@ -314,8 +304,6 @@ const Hero = ({ title, content }) => {
       return;
     }
 
-    // If all validations pass
-    // Ensure memoizedTransportData is set before navigation
     const formDataToStore = {
       ...formValue,
       memoizedTransportData:
@@ -323,15 +311,28 @@ const Hero = ({ title, content }) => {
         (formValue.activeTransport === "sea" ? seaData : airData),
     };
     setFormValues(formDataToStore);
-    // Use trailing slash to match next.config.mjs trailingSlash: true
-    // Use setTimeout to ensure sessionStorage persistence completes
     setTimeout(() => {
       router.push(`/customer-request-form/`);
     }, 50);
   };
 
+  // ── Derived responsive values ─────────────────────────────────────────────
+  // swap icon direction: vertical on desktop (fields stacked), horizontal on mobile row
+  const SwapIcon = isMobile ? IconArrowsLeftRight : IconArrowsDownUp;
+
+  // form card max-width: full on mobile, capped on larger screens
+  const formCardMaxWidth = isMobile ? "100%" : isTablet ? "100%" : "500px";
+
+  // title size
+  const titleSize = isMobile
+    ? TYPOGRAPHY.h1.mobile
+    : isTabletOrBelow
+      ? "36px"
+      : "44px";
+
   return (
     <Box style={styles.heroContainer}>
+      {/* overlay */}
       <Box
         style={{
           position: "absolute",
@@ -342,12 +343,13 @@ const Hero = ({ title, content }) => {
           pointerEvents: "none",
         }}
       />
+
       <Container
         fluid
-        px="2%"
+        px={isMobile ? "4%" : "2%"}
         mt={isTabletOrBelow ? 50 : 20}
         pt="60px"
-        pb={20}
+        pb={isMobile ? 40 : 20}
         style={{
           position: "relative",
           zIndex: 2,
@@ -359,17 +361,20 @@ const Hero = ({ title, content }) => {
         }}
       >
         <Flex
-          align="center"
+          align={isTabletOrBelow ? "center" : "center"}
           justify="space-between"
-          gap={40}
+          gap={isTabletOrBelow ? 24 : 40}
           direction={isTabletOrBelow ? "column" : "row"}
-          mih={!isMobile && 500}
+          w="100%"
+          mih={!isMobile ? 500 : undefined}
         >
+          {/* ── Left: Title + Form ── */}
           <Stack
-            h={"100%"}
+            h="100%"
             w={isTabletOrBelow ? "100%" : "55%"}
             gap={0}
             justify={isTabletOrBelow ? "center" : "flex-start"}
+            align={isTabletOrBelow ? "center" : "flex-start"}
           >
             <Title
               c="rgb(0, 33, 95)"
@@ -378,32 +383,41 @@ const Hero = ({ title, content }) => {
               order={1}
               lh={isMobile ? "md" : "xl"}
               tt="uppercase"
-              size={isMobile ? TYPOGRAPHY.h1.mobile : "44px"}
+              size={titleSize}
               ta={isTabletOrBelow ? "center" : "left"}
             >
               {highlightText(title)}
             </Title>
-            {/* <Text lh={isMobile ? "md" : "lgx"}  size={isMobile ? '20px' : '24px'} maw={isMobile ? '80%' : '40%'} fw={600} mt={15}>
-            {highlightText(content)}
-          </Text> */}
+
             <Box
-              h={"100%"}
+              w="100%"
               style={{
                 display: "flex",
+                maxWidth: 400,
                 justifyContent: isTabletOrBelow ? "center" : "flex-start",
               }}
             >
               <Stack
-                mt={isMobile ? "10%" : "4.25%"}
+                mt={isMobile ? "6%" : "4.25%"}
                 gap={0}
-                w={"100%"}
-                p={20}
-                style={styles.transportOptions}
+                w="100%"
+                p={isMobile ? 14 : 20}
+                style={{
+                  ...styles.transportOptions,
+                  maxWidth: formCardMaxWidth,
+                  borderRadius: isMobile ? "16px" : "24px",
+                }}
               >
-                <Flex gap={10}>
+                {/* ── Transport type tabs ── */}
+                <Flex gap={8}>
                   <TransportOption
                     type="sea"
-                    icon={<IconShip size={20} color={COLORS.primaryColor} />}
+                    icon={
+                      <IconShip
+                        size={isMobile ? 18 : 20}
+                        color={COLORS.primaryColor}
+                      />
+                    }
                     activeTransport={formValue?.activeTransport}
                     onClick={() =>
                       setFormValue((prev) => ({
@@ -419,7 +433,7 @@ const Hero = ({ title, content }) => {
                     type="air"
                     icon={
                       <IconPlaneInflight
-                        size={20}
+                        size={isMobile ? 18 : 20}
                         color={COLORS.primaryColor}
                       />
                     }
@@ -435,53 +449,49 @@ const Hero = ({ title, content }) => {
                     }
                   />
                 </Flex>
+
+                {/* ── Origin / Destination + Swap ── */}
                 <Flex direction="column" mt={5}>
                   <form>
                     <Flex
-                      direction={"row"}
-                      w={"100%"}
+                      direction="row"
+                      w="100%"
                       align="center"
-                      gap={"10"}
+                      gap={10}
                       justify="space-between"
                     >
-                      <Box w={"100%"}>
+                      <Box w="100%">
+                        {/* Origin */}
                         <Select
                           placeholder="Origin"
-                          size="lg"
+                          size={isMobile ? "md" : "lg"}
                           searchable
                           spellCheck={false}
                           clearable
-                          w={"100%"}
+                          w="100%"
                           limit={5}
                           data={filteredOriginOptions}
                           className="custom-placeholder"
                           radius="md"
-                          clearButtonProps={{
-                            style: {
-                              color: "#afb1b4",
-                            },
-                          }}
+                          clearButtonProps={{ style: { color: "#afb1b4" } }}
                           error={
                             formErrors.origin ? "Please Select origin" : null
                           }
                           styles={{
                             input: {
-                              fontSize: TYPOGRAPHY.input.large,
+                              fontSize: isMobile
+                                ? TYPOGRAPHY.body.normal
+                                : TYPOGRAPHY.input.large,
                               backgroundColor: "#ffffff45",
                               color: "#fff",
                               border: "2px solid white",
-                              "::placeholder": {
-                                color: "#fff",
-                                opacity: 1,
-                              },
+                              "::placeholder": { color: "#fff", opacity: 1 },
                             },
                             option: {
                               fontSize: TYPOGRAPHY.body.normal,
                               color: "#000",
                             },
-                            dropdown: {
-                              color: "#fff",
-                            },
+                            dropdown: { color: "#fff" },
                             label: {
                               fontSize: TYPOGRAPHY.label.large,
                               fontWeight: "600",
@@ -493,23 +503,21 @@ const Hero = ({ title, content }) => {
                               color: "red",
                             },
                           }}
-                          classNames={{
-                            input: "autocomplete-input",
-                          }}
+                          classNames={{ input: "autocomplete-input" }}
                           autoComplete="off"
                           leftSection={
                             formValue?.origin?.country ? (
                               <img
                                 src={`https://flagcdn.com/${getEmojiFlag(formValue?.origin?.country)}.svg`}
                                 alt=""
-                                style={{ width: 24, height:20 }}
+                                style={{ width: 24, height: 20 }}
                               />
                             ) : (
-                              <IconMapPin size={20} color={"white"} />
+                              <IconMapPin size={20} color="white" />
                             )
                           }
                           value={formValue?.origin?.origin}
-                          onChange={(value, opt) => {
+                          onChange={(value, opt) =>
                             setFormValue((prev) => ({
                               ...prev,
                               origin: {
@@ -520,25 +528,23 @@ const Hero = ({ title, content }) => {
                                 country: opt?.country || "",
                                 city: opt?.city || opt?.name || "",
                               },
-                            }));
-                          }}
+                            }))
+                          }
                         />
+
+                        {/* Destination */}
                         <Select
                           mt={10}
                           placeholder="Destination"
                           searchable
                           spellCheck={false}
                           clearable
-                          clearButtonProps={{
-                            style: {
-                              color: "#afb1b4",
-                            },
-                          }}
-                          size="lg"
+                          clearButtonProps={{ style: { color: "#afb1b4" } }}
+                          size={isMobile ? "md" : "lg"}
                           limit={5}
                           data={filteredDestinationOptions}
                           radius="md"
-                          w={"100%"}
+                          w="100%"
                           error={
                             formErrors.destination
                               ? "Please select destination"
@@ -546,22 +552,20 @@ const Hero = ({ title, content }) => {
                           }
                           styles={{
                             input: {
-                              fontSize: TYPOGRAPHY.input.large,
+                              fontSize: isMobile
+                                ? TYPOGRAPHY.body.normal
+                                : TYPOGRAPHY.input.large,
                               backgroundColor: "#ffffff45",
                               color: "#fff",
                               border: "2px solid white",
-                              textDecoration:"none"
+                              textDecoration: "none",
                             },
-                            item: {
-                              fontSize: TYPOGRAPHY.input.large,
-                            },
+                            item: { fontSize: TYPOGRAPHY.input.large },
                             option: {
                               fontSize: TYPOGRAPHY.body.normal,
                               color: "#000",
                             },
-                            dropdown: {
-                              color: "#fff",
-                            },
+                            dropdown: { color: "#fff" },
                             label: {
                               fontSize: TYPOGRAPHY.label.large,
                               fontWeight: "600",
@@ -573,19 +577,17 @@ const Hero = ({ title, content }) => {
                               color: "red",
                             },
                           }}
-                          classNames={{
-                            input: "autocomplete-input",
-                          }}
+                          classNames={{ input: "autocomplete-input" }}
                           autoComplete="off"
                           leftSection={
                             formValue?.destination?.country ? (
                               <img
                                 src={`https://flagcdn.com/${getEmojiFlag(formValue?.destination?.country)}.svg`}
                                 alt=""
-                                style={{ width: 24, height:20}}
+                                style={{ width: 24, height: 20 }}
                               />
                             ) : (
-                              <IconMapPin size={20} color={"white"} />
+                              <IconMapPin size={20} color="white" />
                             )
                           }
                           value={formValue?.destination?.destination}
@@ -604,40 +606,46 @@ const Hero = ({ title, content }) => {
                           }
                         />
                       </Box>
+
+                      {/* Swap button */}
                       <ActionIcon
                         variant="default"
-                        size={32}
+                        size={isMobile ? 28 : 32}
                         radius="xl"
                         bg={COLORS.secondaryColor}
-                        style={{ borderColor: COLORS.secondaryColor }}
+                        style={{
+                          borderColor: COLORS.secondaryColor,
+                          flexShrink: 0,
+                        }}
                         onClick={swapOriginDestination}
                         styles={{
-                          root: {
-                            alignItems: isMobile ? "center" : "flex-end",
-                          },
+                          root: { alignItems: "center" },
                         }}
                       >
-                        <Icon size={20} color={COLORS.primaryColor} />
+                        <SwapIcon
+                          size={isMobile ? 16 : 20}
+                          color={COLORS.primaryColor}
+                        />
                       </ActionIcon>
                     </Flex>
+
+                    {/* Get Quote button */}
                     <Button
                       fullWidth
-                      mt={25}
-                      size="lg"
+                      mt={isMobile ? 16 : 25}
+                      size={isMobile ? "md" : "lg"}
                       fw={600}
                       styles={{
-                        label: {
-                          fontSize: TYPOGRAPHY.button.large,
-                        },
+                        label: { fontSize: TYPOGRAPHY.button.large },
                       }}
-                      bg={"#0AC1F1"}
+                      bg="#0AC1F1"
                       onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = "#09B1D1";
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = "#0AC1F1";
                       }}
-                      radius={"md"}
+                      radius="md"
                       c={COLORS.primaryColor}
                       onClick={handleGetQuote}
                     >
@@ -648,10 +656,12 @@ const Hero = ({ title, content }) => {
               </Stack>
             </Box>
           </Stack>
+
+          {/* ── Right: Video / Text card ── */}
           {!isMobile && (
             <Box
               w={isTabletOrBelow ? "100%" : "50%"}
-              maw={800}
+              maw={isTabletOrBelow ? "600px" : 800}
               mx="auto"
               pos="relative"
               style={{
@@ -659,7 +669,7 @@ const Hero = ({ title, content }) => {
                 border: "3px solid #E0E0E0",
               }}
             >
-              {/* TEXT */}
+              {/* Text overlay */}
               <Box
                 style={{
                   position: "absolute",
@@ -674,30 +684,32 @@ const Hero = ({ title, content }) => {
                   transition: "opacity 0.8s ease, transform 0.8s ease",
                   pointerEvents: "none",
                   zIndex: 2,
-                  padding: "0 20px",
+                  padding: isTabletOrBelow ? "20px 16px" : "0 20px",
                   borderRadius: "16px",
                 }}
               >
                 <Text
-                  size="lg"
+                  size={isTabletOrBelow ? "md" : "lg"}
                   tt="uppercase"
                   align="center"
                   c="rgb(0, 33, 95)"
                   fw={700}
                 >
                   {highlightText(
-                    "#Book your shipment# as easy as booking an airline ticket"
+                    "#Book your shipment# as easy as booking an airline ticket",
                   )}
                 </Text>
               </Box>
 
-              {/* VIDEO */}
+              {/* Video */}
               <Box
                 style={{
                   width: "100%",
                   opacity: showVideo ? 1 : 0,
                   transition: "opacity 1s ease",
                   borderRadius: "16px",
+                  // Ensure card has a minimum height on tablet so it's not collapsed
+                  minHeight: isTabletOrBelow ? "220px" : undefined,
                 }}
               >
                 <video
@@ -760,7 +772,6 @@ const styles = {
     borderRadius: "24px",
     backgroundColor: "#222",
     gap: "10px",
-    maxWidth: "500px",
   },
   groupstyle: {
     padding: "10px 16px",

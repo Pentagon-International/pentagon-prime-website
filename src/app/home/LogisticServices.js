@@ -13,7 +13,7 @@ const LogisticsServices = ({ title }) => {
 
   const [serviceData, setServiceData] = useState([]);
 
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useMediaQuery("(max-width: 767px)");
 
   useEffect(() => {
     const fetchServiceData = async () => {
@@ -51,7 +51,7 @@ const LogisticsServices = ({ title }) => {
           View All Services
         </Button> */}
       </Flex>
-      <Grid columns={9} mt="lg" gutter="xl" w={'100%'}>
+      <Grid columns={9} mt="lg" gutter="lg" w={'100%'}>
         {isMobile ? (
           <Carousel
             align={isMobile ? 'start' : 'center'} slideSize="70%" height={300} w={'100%'} slideGap="xs" loop

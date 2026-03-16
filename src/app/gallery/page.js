@@ -8,6 +8,7 @@ import {
   Modal,
   Image,
   UnstyledButton,
+  Text,
 } from "@mantine/core";
 import { IconPlayerPlay } from "@tabler/icons-react";
 import { COLORS } from "@/app/utils/COLORS";
@@ -73,9 +74,12 @@ export default function GalleryPage() {
   return (
     <Box py={40} pt={100} px="2%" style={{ backgroundColor: COLORS.backgroundColor, minHeight: "60vh" }}>
       <Box mx="auto">
-        <Title order={1} ta="center" mb={40} style={{ color: "#0fc9f2", fontWeight: 800 }}>
-          Gallery
-        </Title>
+        <Box mb={40} style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+          <Title order={1} ta="center" mb={8} style={{ color: "#0fc9f2", fontWeight: 800 }}>
+            Cargo Showcase
+          </Title>
+          <Text size="sm" style={{fontWeight:600}}>See How we Deliver</Text>
+        </Box>
 
           {/* ODC Project Cargo Videos */}
         <Box style={{backgroundColor:"white", padding:"40px 32px", borderRadius:16, boxShadow:"0 0 10px 0 rgba(0, 0, 0, 0.1)"}}>

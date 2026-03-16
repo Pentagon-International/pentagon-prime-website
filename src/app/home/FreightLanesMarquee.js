@@ -10,6 +10,7 @@ import useTransportStore from "../store/transportStore";
 import useCustomerRequestStore from "../store/customerRequestStore";
 import getEmojiFlag from "../utils/isoMap";
 import { IconArrowNarrowRight } from "@tabler/icons-react";
+import { useMediaQuery } from "@mantine/hooks";
 
 const fetchTopLanes = async () => {
   const res = await fetch(
@@ -19,15 +20,15 @@ const fetchTopLanes = async () => {
   return res.json();
 };
 
-function LanePill({ item, onHoverStart, onHoverEnd, onLaneClick }) {
+function LanePill({ item, onHoverStart, onHoverEnd, onLaneClick, compact }) {
   const [hovered, setHovered] = useState(false);
   const [active, setActive] = useState(false);
 
   return (
     <Group
-      gap={8}
-      px={20}
-      py={12}
+      gap={compact ? 6 : 8}
+      px={compact ? 12 : 20}
+      py={compact ? 8 : 12}
       onMouseEnter={() => {
         setHovered(true);
         onHoverStart?.();
@@ -42,7 +43,7 @@ function LanePill({ item, onHoverStart, onHoverEnd, onLaneClick }) {
       onClick={() => onLaneClick?.(item)}
       style={{
         borderRadius: 999,
-        background: "linear-gradient(90deg, #f0fbfd, #dcf8f7 )",
+        background: "linear-gradient(90deg, #f0fbfd, #dcf8f7)",
         outline:
           hovered || active
             ? "2px solid rgb(0, 33, 95)"
@@ -60,30 +61,34 @@ function LanePill({ item, onHoverStart, onHoverEnd, onLaneClick }) {
     >
       <Box
         style={{
-          width: 8,
-          height: 8,
+          width: compact ? 6 : 8,
+          height: compact ? 6 : 8,
           borderRadius: "50%",
           background: "#2563EB",
         }}
       />
-      <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <Box
+        style={{ display: "flex", alignItems: "center", gap: compact ? 4 : 8 }}
+      >
         <img
           src={`https://flagcdn.com/${getEmojiFlag(item?.origin_country)}.svg`}
           alt=""
-          style={{ width: 24 }}
+          style={{ width: compact ? 18 : 24 }}
         />
-        <Text size="sm" fw={500} c="rgb(0, 33, 95)">
+        <Text size={compact ? "xs" : "sm"} fw={500} c="rgb(0, 33, 95)">
           {item.origin_name} ({item.origin_code})
         </Text>
       </Box>
-      <IconArrowNarrowRight color="rgb(0, 33, 95)" />
-      <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <IconArrowNarrowRight size={compact ? 14 : 16} color="rgb(0, 33, 95)" />
+      <Box
+        style={{ display: "flex", alignItems: "center", gap: compact ? 4 : 8 }}
+      >
         <img
           src={`https://flagcdn.com/${getEmojiFlag(item?.destination_country)}.svg`}
           alt=""
-          style={{ width: 24 }}
+          style={{ width: compact ? 18 : 24 }}
         />
-        <Text size="sm" fw={500} c="rgb(0, 33, 95)">
+        <Text size={compact ? "xs" : "sm"} fw={500} c="rgb(0, 33, 95)">
           {item.destination_name} ({item.destination_code})
         </Text>
       </Box>
@@ -91,7 +96,7 @@ function LanePill({ item, onHoverStart, onHoverEnd, onLaneClick }) {
   );
 }
 
-function MarqueeRow({ items, reverse = false, onLaneClick }) {
+function MarqueeRow({ items, reverse = false, onLaneClick, compact }) {
   const trackRef = useRef(null);
   const x = useMotionValue(0);
   const [distance, setDistance] = useState(0);
@@ -112,13 +117,8 @@ function MarqueeRow({ items, reverse = false, onLaneClick }) {
 
     let nextX = reverse ? currentX + moveBy : currentX - moveBy;
 
-    // 🔁 wrap seamlessly
-    if (!reverse && nextX <= -distance) {
-      nextX += distance;
-    }
-    if (reverse && nextX >= 0) {
-      nextX -= distance;
-    }
+    if (!reverse && nextX <= -distance) nextX += distance;
+    if (reverse && nextX >= 0) nextX -= distance;
 
     x.set(nextX);
   });
@@ -129,9 +129,9 @@ function MarqueeRow({ items, reverse = false, onLaneClick }) {
         ref={trackRef}
         style={{
           display: "flex",
-          gap: 16,
+          gap: compact ? 10 : 16,
           width: "max-content",
-          padding: "10px 0",
+          padding: "6px 0",
           x,
         }}
       >
@@ -142,6 +142,7 @@ function MarqueeRow({ items, reverse = false, onLaneClick }) {
             onHoverStart={() => setPaused(true)}
             onHoverEnd={() => setPaused(false)}
             onLaneClick={onLaneClick}
+            compact={compact}
           />
         ))}
       </motion.div>
@@ -151,6 +152,11 @@ function MarqueeRow({ items, reverse = false, onLaneClick }) {
 
 export default function FreightLanesMarquee() {
   const router = useRouter();
+
+  // ── Breakpoints ───────────────────────────────────────────────────────────
+  const isMobile = useMediaQuery("(max-width: 576px)");
+  const isTablet = useMediaQuery("(max-width: 768px)");
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ["top-lanes"],
     queryFn: fetchTopLanes,
@@ -231,22 +237,20 @@ export default function FreightLanesMarquee() {
     return airPortMap[code] || seaPortMap[code] || null;
   };
 
-  // Convert API → string lanes (ONLY valid ones)
+  // Convert API → string lanes (ONLY valid ones) — unchanged logic
   const lanes =
     data?.data
       ?.filter((item) => {
         const originExists =
-          airPortMap[item.origin_code] || seaPortMap[item.origin_code]
+          airPortMap[item.origin_code] || seaPortMap[item.origin_code];
         const destinationExists =
           airPortMap[item.destination_code] ||
-          seaPortMap[item.destination_code]
-
+          seaPortMap[item.destination_code];
         return originExists && destinationExists;
       })
       .map((item) => {
         const origin = getPortName(item.origin_code);
         const destination = getPortName(item.destination_code);
-
         return {
           origin_code: origin.code,
           destination_code: destination.code,
@@ -260,38 +264,70 @@ export default function FreightLanesMarquee() {
       }) || [];
 
   const total = lanes.length;
-  const perRow = Math.ceil(total / 3);
+
+  // On mobile show 2 rows, tablet/desktop show 3 rows — unchanged split logic
+  const rowCount = 3;
+  const perRow = Math.ceil(total / rowCount);
   const lanesRow1 = lanes.slice(0, perRow);
   const lanesRow2 = lanes.slice(perRow, perRow * 2);
   const lanesRow3 = lanes.slice(perRow * 2, total);
 
+  // compact pills on mobile/tablet
+  const compact = isMobile || isTablet;
+
   return (
     <Box
-      py={80}
-      style={{
-        backgroundColor: COLORS.backgroundColor,
-      }}
+      py={isMobile ? 48 : 80}
+      style={{ backgroundColor: COLORS.backgroundColor }}
     >
-      <Container maw={1300} px={20}>
+      <Container maw={1300} px={isMobile ? 16 : 20}>
         <Text
           ta="center"
-          size="xs"
+          size={isMobile ? "xs" : "xs"}
           fw={600}
           c="blue.6"
-          style={{ letterSpacing: 2 }}
+          style={{ letterSpacing: isMobile ? 1 : 2 }}
           mb={8}
         >
           INDIA-LED GLOBAL FREIGHT NETWORK
         </Text>
 
-        <Title ta="center" order={2} c="rgb(0, 33, 95)" mb={48}>
+        <Title
+          ta="center"
+          order={isMobile ? 3 : 2}
+          c="rgb(0, 33, 95)"
+          mb={isMobile ? 28 : 48}
+          size={isMobile ? "20px" : isTablet ? "24px" : undefined}
+        >
           Seamless Import & Export Cargo Operations
         </Title>
 
-        <Box style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-          <MarqueeRow items={lanesRow1} onLaneClick={handleLaneClick} />
-          <MarqueeRow items={lanesRow2} reverse onLaneClick={handleLaneClick} />
-          <MarqueeRow items={lanesRow3} onLaneClick={handleLaneClick} />
+        <Box
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: isMobile ? 14 : 24,
+          }}
+        >
+          <MarqueeRow
+            items={lanesRow1}
+            onLaneClick={handleLaneClick}
+            compact={compact}
+          />
+          <MarqueeRow
+            items={lanesRow2}
+            reverse
+            onLaneClick={handleLaneClick}
+            compact={compact}
+          />
+          {/* 3rd row only on tablet and above */}
+          {lanesRow3.length > 0 && (
+            <MarqueeRow
+              items={lanesRow3}
+              onLaneClick={handleLaneClick}
+              compact={compact}
+            />
+          )}
         </Box>
       </Container>
     </Box>

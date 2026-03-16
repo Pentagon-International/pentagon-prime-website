@@ -49,7 +49,7 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
   }, []);
 
   return (
-    <GridCol span={{ base: 12, sm: 6, md: 4, lg: 3 }} key={item.sys.id}>
+    <GridCol span={{ base: 12, sm: 4.5, md: 3 }} key={item.sys.id}>
       <Card
         onClick={handleClick}
         bg={backgroundColor}
