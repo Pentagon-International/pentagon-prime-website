@@ -321,7 +321,7 @@ const Hero = ({ title, content }) => {
   const SwapIcon = isMobile ? IconArrowsLeftRight : IconArrowsDownUp;
 
   // form card max-width: full on mobile, capped on larger screens
-  const formCardMaxWidth = isMobile ? "100%" : isTablet ? "100%" : "500px";
+  const formCardMaxWidth = isMobile ? "100%" : isTablet ? "100%" : "550px";
 
   // title size
   const titleSize = isMobile
@@ -393,7 +393,6 @@ const Hero = ({ title, content }) => {
               w="100%"
               style={{
                 display: "flex",
-                maxWidth: 400,
                 justifyContent: isTabletOrBelow ? "center" : "flex-start",
               }}
             >
