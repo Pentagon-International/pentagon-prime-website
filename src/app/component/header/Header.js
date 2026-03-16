@@ -35,7 +35,7 @@ const navItems = [
   { label: "Home", links: "/", dropdown: false },
   { label: "Solutions", links: "/service", dropdown: true },
   { label: "Resources", links: "/", dropdown: true },
-  { label: "Gallery", links: "/gallery", dropdown: false },
+  { label: "Cargo Showcase", links: "/gallery", dropdown: false },
   { label: "About Us", links: "/about", dropdown: false },
 ];
 

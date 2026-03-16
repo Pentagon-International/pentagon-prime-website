@@ -76,7 +76,7 @@ export default function GalleryPage() {
       <Box mx="auto">
         <Box mb={40} style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
           <Title order={1} ta="center" mb={8} style={{ color: "#0fc9f2", fontWeight: 800 }}>
-            Cargo Showcase
+            Cargo Movements
           </Title>
           <Text size="sm" style={{fontWeight:600}}>See How we Deliver</Text>
         </Box>
