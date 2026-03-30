@@ -100,7 +100,7 @@ const Partner = ({ title, content }) => {
 
   return (
     <Container
-      px={"4%"}
+      px={"2%"}
       pt={"40px"}
       pb={"70px"}
       fluid

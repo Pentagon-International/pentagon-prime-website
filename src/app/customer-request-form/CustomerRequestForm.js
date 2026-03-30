@@ -398,8 +398,9 @@ const CustomerRequestForm = (
         }
       }
 
-      if(errors){
-        window.alert("Please fill all the required fields")
+      // Only show alert when there are actual validation errors.
+      if (Object.keys(errors).length > 0) {
+        window.alert("Please fill all the required fields");
       }
 
       return errors;
@@ -608,7 +609,7 @@ const CustomerRequestForm = (
       unit,
       ...(readyDate && { date: dayjs(readyDate).format("YYYY-MM-DD") }),
     };
-    const tariffApiBase = "https://pulse.pentagonindia.net";
+    const tariffApiBase = "http://127.0.0.1:8000";
     const url = `${tariffApiBase}/api/check-tariff-charges/`;
     fetch(url, {
       method: "POST",
@@ -1239,7 +1240,7 @@ const CustomerRequestForm = (
       ...(readyDate && { date: dayjs(readyDate).format("YYYY-MM-DD") }),
     };
 
-    const tariffApiBase = "https://pulse.pentagonindia.net";
+    const tariffApiBase = "http://127.0.0.1:8000";
     const tariffUrl = `${tariffApiBase}/api/check-tariff-charges/`;
 
     setIsTariffChecking(true);

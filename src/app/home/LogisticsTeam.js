@@ -83,7 +83,7 @@ const LogisticsTeam = ({ title, content }) => {
   }, []);
 
   return (
-    <Container fluid px={'4%'} py={'50px'} bg={COLORS.backgroundColor}>
+    <Container fluid px={'2%'} py={'50px'} bg={COLORS.backgroundColor}>
       <Title size={isMobile ? TYPOGRAPHY.h5.desktop : 'lg'} lh={isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800}>
         {highlightText(title)}
       </Title>

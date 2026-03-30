@@ -282,7 +282,7 @@ export const NavLink = memo(({ item }) => {
     (item.label === 'Home' && isHome) ||
     (item.label === 'Solutions' && isSolutions) ||
     (item.label === 'Resources' && isResources) ||
-    (item.label === 'Gallery' && isGallery) ||
+    (item.label === 'Cargo Showcase' && isGallery) ||
     (item.label === 'About Us' && isAbout),
     [item.label, isHome, isSolutions, isResources, isGallery, isAbout]
   );

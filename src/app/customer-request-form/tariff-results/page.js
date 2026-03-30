@@ -2,6 +2,7 @@
 
 import {
   Accordion,
+  Badge,
   Box,
   Button,
   Container,
@@ -41,10 +42,70 @@ function TariffCardBlock({ item, index, expandedId, onExpand, isMobile }) {
   const price =
     item.overall_total ?? item.per_container_rate ?? item.total_rate ?? 0;
   const chargesList = item.charges ?? item.tariff_charges ?? [];
+  const vesselSchedules = item.vessel_schedules ?? [];
   const currency = chargesList[0]?.currency_code ?? "USD";
   const fsBody = isMobile ? TYPOGRAPHY.body.small : TYPOGRAPHY.body.normal;
   const fsSmall = isMobile ? TYPOGRAPHY.body.xsmall : TYPOGRAPHY.body.small;
   const fsCaption = TYPOGRAPHY.caption.small;
+  const formatDate = (value) => {
+    if (!value) return "—";
+    // Keep YYYY-MM-DD as-is to avoid timezone shifting in Date parsing.
+    if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+    return String(value);
+  };
+  const getMinTransitScheduleSummary = (schedules) => {
+    // "Nearest date" summary: pick the schedule with earliest `etd` (sail by).
+    // If `etd` is missing for all, fall back to earliest `eta` (arrival).
+    const candidates = (schedules ?? []).map((vs) => {
+      const transit = vs?.transit_time ?? vs?.schedule?.transit_time ?? null;
+      const sail = vs?.etd ?? vs?.schedule?.etd ?? null;
+      const arrival = vs?.eta ?? vs?.schedule?.eta ?? null;
+      const voyageNo = vs?.voyage_no ?? vs?.schedule?.voyage_no ?? null;
+      const transitNum =
+        transit == null || transit === "" ? null : Number(transit);
+      return {
+        transitRaw: transit,
+        transitNum,
+        sailStr: sail == null ? null : String(sail),
+        sail,
+        arrival,
+        voyageNo,
+        arrivalStr: arrival == null ? null : String(arrival),
+      };
+    });
+
+    const validWithEtd = candidates.filter((c) => c.sailStr != null);
+    const validWithEta = candidates.filter((c) => c.arrivalStr != null);
+
+    const pickPool = validWithEtd.length > 0 ? validWithEtd : validWithEta;
+    if (pickPool.length === 0) {
+      return { transitDays: "—", sailBy: "—", arrival: "—" };
+    }
+
+    pickPool.sort((a, b) => {
+      const aDate = (a.sailStr ?? a.arrivalStr) ?? "";
+      const bDate = (b.sailStr ?? b.arrivalStr) ?? "";
+      // YYYY-MM-DD sorts lexicographically.
+      const cmp = aDate.localeCompare(bDate);
+      if (cmp !== 0) return cmp;
+
+      // Tie-break: prefer smallest transit if available.
+      if (a.transitNum != null && b.transitNum != null) {
+        return a.transitNum - b.transitNum;
+      }
+      if (a.transitNum != null) return -1;
+      if (b.transitNum != null) return 1;
+      return 0;
+    });
+
+    const chosen = pickPool[0];
+    return {
+      transitDays: chosen.transitRaw,
+      sailBy: formatDate(chosen.sail),
+      arrival: formatDate(chosen.arrival),
+      voyageNo: chosen.voyageNo ?? "—",
+    };
+  };
   const getPortDetails = (code) => {
     return airPortMap[code] || seaPortMap[code] || null;
   };
@@ -92,6 +153,7 @@ function TariffCardBlock({ item, index, expandedId, onExpand, isMobile }) {
               borderRadius: expandedId
                 ? "16px 16px 0px 0px"
                 : "16px 16px 16px 16px",
+              borderBottom: expandedId ? `1px solid rgba(0,0,0,0.2)` : "none",
               boxShadow: "0 10px 30px rgba(0, 0, 0, 0.08)",
             }}
           >
@@ -160,9 +222,11 @@ function TariffCardBlock({ item, index, expandedId, onExpand, isMobile }) {
                 <Accordion.Control
                   styles={{
                     control: {
+                      backgroundColor: "rgba(0,33,95,0.9)",
                       padding: "8px 16px",
                       borderRadius: "8px",
                       border: "1px solid rgb(0,33,95)",
+                      color: "#fff",
                       width: "100%",
                       maxWidth: "250px",
                     },
@@ -171,8 +235,14 @@ function TariffCardBlock({ item, index, expandedId, onExpand, isMobile }) {
                       paddingRight: "5px",
                     },
                   }}
+                  onMouseEnter={(e)=>{
+                    e.currentTarget.style.backgroundColor = "rgba(0,33,95,1)";
+                  }}
+                  onMouseLeave={(e)=>{
+                    e.currentTarget.style.backgroundColor = "rgba(0,33,95,0.9)";
+                  }}
                 >
-                  Rate details
+                  Rate & Schedule details
                 </Accordion.Control>
                 {/* 
                 <Text size="xs" c="dimmed" fw={600} w={180} ta={"right"}>
@@ -309,9 +379,9 @@ function TariffCardBlock({ item, index, expandedId, onExpand, isMobile }) {
                       }}
                     >
                       {item.service === "AIR" ? (
-                        <IconPlaneTilt size={24} color={COLORS.serviceColor} />
+                        <IconPlaneTilt size={16} color={"rgb(0,33,95)"} />
                       ) : (
-                        <IconShip size={24} color={COLORS.serviceColor} />
+                        <IconShip size={16} color={"rgb(0,33,95)"} />
                       )}
 
                       <Text
@@ -344,6 +414,50 @@ function TariffCardBlock({ item, index, expandedId, onExpand, isMobile }) {
                           {item.days_remaining} days
                         </Text>
                       </Box>
+                    )}
+
+                    {vesselSchedules.length > 0 && (
+                      <Flex gap="xs" wrap="wrap" align="center">
+                        {(() => {
+                          const summary = getMinTransitScheduleSummary(
+                            vesselSchedules,
+                          );
+                          return (
+                            <>
+                              <Badge
+                                radius="xl"
+                                size={isMobile ? "sm" : "md"}
+                                p={12}
+                                px={16}
+                                variant="light"
+                                color="rgb(80,80,80)"
+                              >
+                                Transit: {summary.transitDays ?? "—"}d
+                              </Badge>
+                              <Badge
+                                radius="xl"
+                                size={isMobile ? "sm" : "md"}
+                                p={12}
+                                px={16}
+                                variant="light"
+                                color="rgb(0,33,95)"
+                              >
+                                Sail by: {summary.sailBy}
+                              </Badge>
+                              <Badge
+                                radius="xl"
+                                size={isMobile ? "sm" : "md"}
+                                p={12}
+                                px={16}
+                                variant="light"
+                                color="rgb(0,33,95)"
+                              >
+                                Arrival: {summary.arrival}
+                              </Badge>
+                            </>
+                          );
+                        })()}
+                      </Flex>
                     )}
                   </Flex>
                 </Flex>
@@ -391,6 +505,230 @@ function TariffCardBlock({ item, index, expandedId, onExpand, isMobile }) {
           </Box>
 
           <Accordion.Panel>
+            {vesselSchedules.length > 0 && (
+              <Box mb="lg">
+                <Text
+                  fw={700}
+                  c={COLORS.secondaryColor}
+                  style={{ fontSize: fsBody }}
+                  mb="sm"
+                >
+                  Vessel schedules ({vesselSchedules.length})
+                </Text>
+                <Flex direction="column" gap="md">
+                  {vesselSchedules.map((vs, i) => {
+                    const vesselName =
+                      vs?.schedule?.vessel_name ?? vs?.vessel_name ?? "—";
+                    const voyageNo = vs?.schedule?.voyage_no ?? "—";
+                    const serviceName =
+                      vs?.schedule?.service_name ??
+                      vs?.schedule?.service_code ??
+                      "—";
+                    const etd = formatDate(vs?.etd);
+                    const eta = formatDate(vs?.eta);
+                    const transitDays =
+                      vs?.transit_time ?? vs?.schedule?.transit_time ?? "—";
+                    const direct = vs?.direct;
+                    const cutOffDates = vs?.cut_off_dates ?? [];
+                    const routings = vs?.routings ?? [];
+
+                    return (
+                      <Box
+                        key={vs.schedule_id ?? `${i}-${vesselName}-${voyageNo}`}
+                        style={{
+                          border: "1px solid rgba(0,0,0,0.06)",
+                          borderRadius: 12,
+                          padding: rem(16),
+                          backgroundColor: "rgba(0,33,95,0.02)",
+                        }}
+                      >
+                        <Flex
+                          justify="space-between"
+                          align="flex-start"
+                          gap="md"
+                          wrap="wrap"
+                        >
+                          <Box style={{ minWidth: 260 }}>
+                            <Text
+                              fw={700}
+                              c={COLORS.secondaryColor}
+                              style={{ fontSize: fsBody }}
+                            >
+                              {vesselName}
+                              {voyageNo && voyageNo !== "—" ? ` (${voyageNo})` : ""}
+                            </Text>
+                            <Text
+                              size="sm"
+                              c="dimmed"
+                              style={{ fontSize: fsSmall }}
+                            >
+                              Service: {serviceName}
+                            </Text>
+                            <Text
+                              size="sm"
+                              c="dimmed"
+                              style={{ fontSize: fsSmall }}
+                            >
+                              Sail by: {etd} | Arrival: {eta}
+                            </Text>
+                          </Box>
+
+                          <Flex gap="xs" wrap="wrap" justify="flex-end">
+                            <Badge
+                              radius="xl"
+                              size={isMobile ? "sm" : "md"}
+                              variant="light"
+                              color="rgb(0,33,95)"
+                            >
+                              Transit: {transitDays}d
+                            </Badge>
+                            <Badge
+                              radius="xl"
+                              size={isMobile ? "sm" : "md"}
+                              variant="light"
+                              color="rgb(0,33,95)"
+                            >
+                              Voyage: {vs?.schedule?.voyage_no ?? "—"}
+                            </Badge>
+                            <Badge
+                              radius="xl"
+                              size={isMobile ? "sm" : "md"}
+                              variant="light"
+                              color="rgb(80,80,80)"
+                            >
+                              Sail by: {etd}
+                            </Badge>
+                            <Badge
+                              radius="xl"
+                              size={isMobile ? "sm" : "md"}
+                              variant="light"
+                              color="rgb(80,80,80)"
+                            >
+                              Arrival: {eta}
+                            </Badge>
+                            {direct != null && (
+                              <Badge
+                                radius="xl"
+                                size={isMobile ? "sm" : "md"}
+                                variant="light"
+                                color={
+                                  direct
+                                    ? "rgb(0,33,95)"
+                                    : "rgb(100,100,100)"
+                                }
+                              >
+                                {direct ? "Direct" : "Transshipment"}
+                              </Badge>
+                            )}
+                          </Flex>
+                        </Flex>
+
+                        {cutOffDates.length > 0 && (
+                          <Box mt="sm">
+                            <Text
+                              size="sm"
+                              c="dimmed"
+                              fw={600}
+                              style={{ fontSize: fsCaption }}
+                              mb={6}
+                            >
+                              Cut-off dates
+                            </Text>
+                            <Flex gap="xs" wrap="wrap">
+                              {cutOffDates.map((cd, j) => (
+                                <Badge
+                                  key={j}
+                                  radius="xl"
+                                  size={isMobile ? "sm" : "md"}
+                                  variant="light"
+                                  color="rgb(100,100,100)"
+                                >
+                                  {cd?.name ?? "—"}
+                                </Badge>
+                              ))}
+                            </Flex>
+                          </Box>
+                        )}
+
+                        {routings.length > 0 && (
+                          <Box mt="sm">
+                            <Text
+                              size="sm"
+                              c="dimmed"
+                              fw={600}
+                              style={{ fontSize: fsCaption }}
+                              mb={6}
+                            >
+                              Routings
+                            </Text>
+                            <Flex gap="xs" wrap="wrap">
+                              {(() => {
+                                const firstLeg = vs?.schedule ?? null;
+                                const flowedLegs = [
+                                  ...(firstLeg ? [firstLeg] : []),
+                                  ...(Array.isArray(routings) ? routings : []),
+                                ]
+                                  .filter(Boolean)
+                                  .sort((a, b) => {
+                                    const ao = a?.order_id ?? 0;
+                                    const bo = b?.order_id ?? 0;
+                                    return ao - bo;
+                                  });
+
+                                return (
+                                  <>
+                                    {flowedLegs.slice(0, 6).map((r, j) => (
+                                      <Badge
+                                        key={j}
+                                        radius="xl"
+                                        size={isMobile ? "sm" : "md"}
+                                        variant="light"
+                                        color="rgb(100,100,100)"
+                                      >
+                                        {(r?.order_id ?? j) +
+                                          ": " +
+                                          (r?.origin_code ?? "—") +
+                                          "→" +
+                                          (r?.destination_code ?? "—") +
+                                          " | Sail: " +
+                                          formatDate(r?.etd) +
+                                          " | Arrival: " +
+                                          formatDate(r?.eta)}
+                                      </Badge>
+                                    ))}
+                                    {flowedLegs.length > 6 && (
+                                      <Badge
+                                        radius="xl"
+                                        size={isMobile ? "sm" : "md"}
+                                        variant="light"
+                                        color="rgb(100,100,100)"
+                                      >
+                                        +{flowedLegs.length - 6} more
+                                      </Badge>
+                                    )}
+                                  </>
+                                );
+                              })()}
+                            </Flex>
+                          </Box>
+                        )}
+                      </Box>
+                    );
+                  })}
+                </Flex>
+              </Box>
+            )}
+
+            <Text
+              fw={700}
+              c={COLORS.secondaryColor}
+              style={{ fontSize: fsBody }}
+              mb="sm"
+              mt={"lg"}
+            >
+              Charges ({chargesList.length})
+            </Text>
+
             {chargesList.length > 0 ? (
               <ScrollArea type="auto">
                 <Table

@@ -393,6 +393,7 @@ const Hero = ({ title, content }) => {
               w="100%"
               style={{
                 display: "flex",
+                maxWidth: isTabletOrBelow ? "80%" : "100%",
                 justifyContent: isTabletOrBelow ? "center" : "flex-start",
               }}
             >
