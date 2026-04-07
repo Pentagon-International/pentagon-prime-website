@@ -609,7 +609,7 @@ const CustomerRequestForm = (
       unit,
       ...(readyDate && { date: dayjs(readyDate).format("YYYY-MM-DD") }),
     };
-    const tariffApiBase = "http://127.0.0.1:8000";
+    const tariffApiBase = "https://pulse.pentagonindia.net";
     const url = `${tariffApiBase}/api/check-tariff-charges/`;
     fetch(url, {
       method: "POST",
@@ -1240,7 +1240,7 @@ const CustomerRequestForm = (
       ...(readyDate && { date: dayjs(readyDate).format("YYYY-MM-DD") }),
     };
 
-    const tariffApiBase = "http://127.0.0.1:8000";
+    const tariffApiBase = "https://pulse.pentagonindia.net";
     const tariffUrl = `${tariffApiBase}/api/check-tariff-charges/`;
 
     setIsTariffChecking(true);
@@ -1597,11 +1597,11 @@ const CustomerRequestForm = (
               {estimatedPriceRange.min_total_rate &&
               estimatedPriceRange.max_total_rate ? (
                 <Text fw={800} size="md">
-                  ₹{estimatedPriceRange.min_total_rate.toLocaleString()}{" "}
+                  $ {estimatedPriceRange.min_total_rate.toLocaleString()}{" "}
                   <Text span size="sm">
                     {form.values.typeofBooking === "FCL" ? "/ctr" : form.values.typeofBooking === "LCL" ? "/cbm" : "/kg"}
                   </Text>
-                  {"  -  "}₹
+                  {"  -  "}$
                   {estimatedPriceRange.max_total_rate.toLocaleString()}{" "}
                   <Text span size="sm">
                     {form.values.typeofBooking === "FCL" ? "/ctr" : form.values.typeofBooking === "LCL" ? "/cbm" : "/kg"}

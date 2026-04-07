@@ -6,6 +6,7 @@ import React from 'react';
 import { COLORS } from '../utils/COLORS';
 import { highlightText } from '../utils/highlightText';
 import { useMediaQuery } from '@mantine/hooks';
+import { homeTypography } from "./homeTypography";
 
 // const desc = highlightText("Automation, AI, and real-time tracking optimize efficiency, reducing costs and delays.")
 // const desc2 = highlightText("As a logistics tech company, the Prime Network ensures fast, scalable, and reliable international shipping leveraging innovative solutions that redefine the logistics landscape.")
@@ -23,10 +24,28 @@ const PrimeNetwork = ({content}) => {
     <Container fluid px="2%" py="70px" bg={COLORS.backgroundColor}>
       <Flex gap="md" wrap="nowrap" direction={isMobile ? 'column' : 'row'} align={"center"}>
         <Flex direction={'column'}>
-          <Title tt="uppercase" tw="balance" fw={800}>
+          <Title
+            tt="uppercase"
+            tw="balance"
+            fw={800}
+            style={{
+              fontFamily: homeTypography.headingFontFamily,
+              fontSize: homeTypography.sectionTitle.fontSize,
+              lineHeight: homeTypography.sectionTitle.lineHeight,
+            }}
+          >
           {highlightText(title)}
           </Title>
-          <Text c={COLORS.textColor} size="base" lh="sm" maw={ isMobile ? '100%' : '80%'} mt={14}>
+          <Text
+            c={COLORS.textColor}
+            maw={ isMobile ? '100%' : '80%'}
+            mt={14}
+            style={{
+              fontFamily: homeTypography.bodyFontFamily,
+              fontSize: homeTypography.sectionSub.fontSize,
+              lineHeight: homeTypography.sectionSub.lineHeight,
+            }}
+          >
           {highlightText(description)}
           </Text>
         </Flex>

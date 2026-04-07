@@ -4,9 +4,9 @@ import { IconCircleCheck, IconCircleDashedCheck } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
 import { customerCentricListData } from "../utils/llistData";
 import { COLORS } from "../utils/COLORS";
-import { TYPOGRAPHY } from "../utils/TYPOGRAPHY";
 import { useMediaQuery } from "@mantine/hooks";
 import { highlightText } from "../utils/highlightText";
+import { homeTypography } from "./homeTypography";
 
 const CustomerCentric = () => {
   const [listData, setListData] = useState([]);
@@ -18,10 +18,13 @@ const CustomerCentric = () => {
     <Container fluid px={"2%"} py={"70px"} bg={COLORS.backgroundColor}>
       <Title
         tt={"uppercase"}
-        lh={isMobile ? "md" : "lgx2"}
         fw={800}
         mb={40}
-        size={isMobile ? TYPOGRAPHY.h4.mobile : TYPOGRAPHY.h3.desktop}
+        style={{
+          fontFamily: homeTypography.headingFontFamily,
+          fontSize: homeTypography.sectionTitle.fontSize,
+          lineHeight: homeTypography.sectionTitle.lineHeight,
+        }}
       >
         {highlightText("Built around you with a # customer-centric # approach")}
       </Title>
@@ -52,7 +55,16 @@ const CustomerCentric = () => {
                 }}
               >
                 <IconCircleCheck stroke={2.5} color="rgb(0, 33, 95)" style={{width: "36px", flexShrink: 0, height: "36px"}} />
-                <Text ta="left" fz={20} fw={500} dangerouslySetInnerHTML={{ __html: item.fields.description }} />
+                <Text
+                  ta="left"
+                  fw={500}
+                  dangerouslySetInnerHTML={{ __html: item.fields.description }}
+                  style={{
+                    fontFamily: homeTypography.bodyFontFamily,
+                    fontSize: homeTypography.sectionSub.fontSize,
+                    lineHeight: homeTypography.sectionSub.lineHeight,
+                  }}
+                />
               </Box>
               {/* {index<listData.length-1 && <span><Divider size="md" my="xs" w="70%" style={{justifySelf:"center", color:"#313131"}}  /></span> } */}
             </Grid.Col>

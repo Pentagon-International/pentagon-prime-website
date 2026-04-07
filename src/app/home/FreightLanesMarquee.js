@@ -11,6 +11,7 @@ import useCustomerRequestStore from "../store/customerRequestStore";
 import getEmojiFlag from "../utils/isoMap";
 import { IconArrowNarrowRight } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
+import { homeTypography } from "./homeTypography";
 
 const fetchTopLanes = async () => {
   const res = await fetch(
@@ -283,10 +284,14 @@ export default function FreightLanesMarquee() {
       <Container maw={1300} px={isMobile ? 16 : 20}>
         <Text
           ta="center"
-          size={isMobile ? "xs" : "xs"}
           fw={600}
           c="blue.6"
-          style={{ letterSpacing: isMobile ? 1 : 2 }}
+          style={{
+            letterSpacing: isMobile ? 1 : 2,
+            fontFamily: homeTypography.bodyFontFamily,
+            fontSize: homeTypography.sectionSub.fontSize,
+            lineHeight: homeTypography.sectionSub.lineHeight,
+          }}
           mb={8}
         >
           INDIA-LED GLOBAL FREIGHT NETWORK
@@ -297,7 +302,11 @@ export default function FreightLanesMarquee() {
           order={isMobile ? 3 : 2}
           c="rgb(0, 33, 95)"
           mb={isMobile ? 28 : 48}
-          size={isMobile ? "20px" : isTablet ? "24px" : undefined}
+          style={{
+            fontFamily: homeTypography.headingFontFamily,
+            fontSize: homeTypography.sectionTitle.fontSize,
+            lineHeight: homeTypography.sectionTitle.lineHeight,
+          }}
         >
           Seamless Import & Export Cargo Operations
         </Title>

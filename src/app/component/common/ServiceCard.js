@@ -16,6 +16,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import React, { memo, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useLoading } from "./LoadingContext";
+import { homeTypography } from "@/app/home/homeTypography";
 
 const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -91,6 +92,10 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
             size={theme.fontSizes.base}
             order={4}
             mt={20}
+            style={{
+              fontFamily: homeTypography.headingFontFamily,
+              fontSize: "1.1rem",
+            }}
           >
             {item.fields.service_title || item.fields.title}
           </Title>
@@ -98,7 +103,11 @@ const ServiceCard = ({ item, backgroundColor, border, anchorText }) => {
             tw="balance"
             lh={"sm"}
             size="sm"
-            style={{ flexGrow: 1 }}
+            style={{
+              flexGrow: 1,
+              fontFamily: homeTypography.bodyFontFamily,
+              fontSize: homeTypography.sectionSub.fontSize,
+            }}
           >
             {item.fields.service_description || item.fields.description}
           </Text>

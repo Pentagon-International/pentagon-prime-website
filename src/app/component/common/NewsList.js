@@ -16,6 +16,7 @@ import { TYPOGRAPHY } from '@/app/utils/TYPOGRAPHY';
 import Link from 'next/link';
 import { useMediaQuery } from '@mantine/hooks';
 import { Carousel } from '@mantine/carousel';
+import { homeTypography } from "@/app/home/homeTypography";
 
 const ITEMS_PER_VIEW = 3;
 
@@ -40,7 +41,16 @@ const NewsList = ({ newsItems }) => {
 
   return (
     <Container fluid px="2%" py={'70px'} bg={COLORS.backgroundColor}>
-      <Title mb="xl" size="lg" fw={800}>
+      <Title
+        mb="xl"
+        size="lg"
+        fw={800}
+        style={{
+          fontFamily: homeTypography.headingFontFamily,
+          fontSize: homeTypography.sectionTitle.fontSize,
+          lineHeight: homeTypography.sectionTitle.lineHeight,
+        }}
+      >
         NEWS & EVENTS
       </Title>
 
@@ -75,13 +85,39 @@ const NewsList = ({ newsItems }) => {
                       mah={'300px'}
                       mih={'300px'}
                     />
-                    <Text c="#999" fw={700} size="xs" mt={10} tt="uppercase">
+                    <Text
+                      c="#999"
+                      fw={700}
+                      size="xs"
+                      mt={10}
+                      tt="uppercase"
+                      style={{
+                        fontFamily: homeTypography.bodyFontFamily,
+                        fontSize: homeTypography.sectionSub.fontSize,
+                      }}
+                    >
                       {fields.newsName}
                     </Text>
-                    <Text fw={700} size="sm" c={COLORS.news_title}>
+                    <Text
+                      fw={700}
+                      size="sm"
+                      c={COLORS.news_title}
+                      style={{
+                        fontFamily: homeTypography.bodyFontFamily,
+                        fontSize: homeTypography.sectionSub.fontSize,
+                      }}
+                    >
                       {fields.newsTitle}
                     </Text>
-                    <Text fw={700} size="xs" c={COLORS.news_title}>
+                    <Text
+                      fw={700}
+                      size="xs"
+                      c={COLORS.news_title}
+                      style={{
+                        fontFamily: homeTypography.bodyFontFamily,
+                        fontSize: homeTypography.sectionSub.fontSize,
+                      }}
+                    >
                       {fields.newsDate}
                     </Text>
                   </Flex>
@@ -117,10 +153,28 @@ const NewsList = ({ newsItems }) => {
                       mah={'300px'}
                       mih={'300px'}
                     />
-                    <Text c="#999" fw={700} size="xs" mt={10} tt="uppercase">
+                    <Text
+                      c="#999"
+                      fw={700}
+                      size="xs"
+                      mt={10}
+                      tt="uppercase"
+                      style={{
+                        fontFamily: homeTypography.bodyFontFamily,
+                        fontSize: homeTypography.sectionSub.fontSize,
+                      }}
+                    >
                       {fields.newsName}
                     </Text>
-                    <Text fw={700} size="sm" c={COLORS.news_title}>
+                    <Text
+                      fw={700}
+                      size="sm"
+                      c={COLORS.news_title}
+                      style={{
+                        fontFamily: homeTypography.bodyFontFamily,
+                        fontSize: homeTypography.sectionSub.fontSize,
+                      }}
+                    >
                       {fields.newsTitle}
                     </Text>
 

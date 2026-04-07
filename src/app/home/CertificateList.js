@@ -7,6 +7,7 @@ import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from '@mantine/hooks';
 import Autoplay from 'embla-carousel-autoplay';
+import { homeTypography } from "./homeTypography";
 
 const styles = {
     image: {
@@ -40,7 +41,15 @@ const CertificateList = ({ certificateItems }) => {
         <Container fluid py={'70px'} bg={"#e0f1ff"}>
             <Stack spacing="lg">
                 <Center>
-                    <Title size="lg" fw={800} tt="uppercase">
+                    <Title
+                      fw={800}
+                      tt="uppercase"
+                      style={{
+                        fontFamily: homeTypography.headingFontFamily,
+                        fontSize: homeTypography.sectionTitle.fontSize,
+                        lineHeight: homeTypography.sectionTitle.lineHeight,
+                      }}
+                    >
                         Our Certifications & Affiliations
                     </Title>
                 </Center>

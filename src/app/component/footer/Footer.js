@@ -96,7 +96,13 @@ const Footer = () => {
   );
 
   return (
-    <footer style={{ backgroundColor: COLORS.backgroundColor, color: '#111', padding: '25px 0'}}>
+    <footer
+      style={{
+        backgroundColor: COLORS.backgroundColor,
+        color: '#111',
+        padding: '25px 0',
+      }}
+    >
       <Container fluid px="2%">
         {/* Top Section: Services on left, Company info on right */}
         <Flex
@@ -121,8 +127,13 @@ const Footer = () => {
                   >
                     Pentagon Prime
                   </Text>
-                  <Text size="xs" fw={500} c="rgb(0, 33, 95)" style={{alignSelf: 'flex-start'}}>
-                    Logistics.Automated
+                  <Text
+                    size="xs"
+                    fw={500}
+                    c="rgb(0, 33, 95)"
+                    style={{ alignSelf: 'flex-start' }}
+                  >
+                    Freight.Intelligent
                   </Text>
                 </Flex>
               </Box>
@@ -333,7 +344,7 @@ const Footer = () => {
         </Box> */}
         <Flex justify="space-between" align="center" mt={20}>
           <Text fz={isMobile ? 12 : 16} fw={500} c={COLORS.textColor}>
-            © 2024 Pentagon Prime. All Rights Reserved.
+            © 2026 Pentagon Prime. All Rights Reserved.
           </Text>
           <Link href="/privacy-policy/index.html" style={{ marginLeft:20, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}>
             <IconFileText size={18} color="rgb(0,33,95)" />

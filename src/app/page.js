@@ -1,4 +1,5 @@
 import { Box } from '@mantine/core';
+import AIProofSection from './home/AIProofSection';
 import News from './component/common/News';
 import Certificate from './home/Certificate';
 import CustomerCentric from './home/CustomerCentric';
@@ -9,7 +10,10 @@ import LogisticsServices from './home/LogisticServices';
 import LogisticsTeam from './home/LogisticsTeam';
 import Partner from './home/Partner';
 import PentagonPrime from './home/PentagonPrime';
+import PrimeAIDemoSection from './home/PrimeAIDemoSection';
 import PrimeNetwork from './home/PrimeNetwork';
+import PrimePlatformSection from './home/PrimePlatformSection';
+import ShipmentTrackingSection from './home/ShipmentTrackingSection';
 import Vision from './home/Vision';
 import { fetchEntries } from './utils/fetchEntries';
 import { fetchPrimeNetwork, fetchTradecontent, fetchTradeData } from './utils/trade';
@@ -32,12 +36,17 @@ const Page = async () => {
       <Hero title={heroData.title} content={heroData.content} />
       <FreightLanesMarquee />
       {/* <PentagonPrime title={primeData.title} content={primeData.content} title2={primeData.title2}/> */}
-      <Vision title={visionData.title} content={visionData.content} tradeItems={tradeItems} tradeContent={tradeContent} />
-      <LogisticsServices title={serviceData.title} />
-      <LogisticsTeam title={teamData.title} content={teamData.content} />
+      <Vision title={visionData.title} content={visionData.content} tradeItems={tradeItems} tradeContent={tradeContent} mode="top" />
+      <ShipmentTrackingSection />
+      <PrimeAIDemoSection />
+      <PrimePlatformSection />
+      <AIProofSection />
+      <Vision title={visionData.title} content={visionData.content} mode="details" />
+      {/* <LogisticsServices title={serviceData.title} /> */}
+      {/* <LogisticsTeam title={teamData.title} content={teamData.content} /> */}
       <Partner title={partnerData.title} content={partnerData.content} />
-      <CustomerCentric />
-      <PrimeNetwork content={primeNetwork} />
+      {/* <CustomerCentric /> */}
+      {/* <PrimeNetwork content={primeNetwork} /> */}
       <Certificate />
       <News />
       <HighlightContent />

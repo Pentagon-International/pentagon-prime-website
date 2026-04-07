@@ -66,12 +66,12 @@ export const featuresMap = {
   Solutions: [
     {
       icon: IconPlaneArrival,
-      title: "Air Freight Forwarding",
+      title: "AirFlow Intelligence",
       link: "/service/air-freight-forwarding",
     },
     {
       icon: IconShip,
-      title: "Sea Freight Forwarding",
+      title: "OceanRoute Intelligence",
       link: "/service/sea-freight-forwarding",
     },
     {
@@ -365,7 +365,6 @@ export const NavLink = memo(({ item }) => {
             fw={500}
             style={{ 
               color: textColor,
-              fontSize: TYPOGRAPHY.body.normal
             }}
           >
             {item.label}
@@ -398,7 +397,11 @@ export const NavLink = memo(({ item }) => {
         }}
       >
         <Group gap={10} justify="space-between">
-          <Text fw={500} size={TYPOGRAPHY.body.normal} color={COLORS.secondaryColor}>
+          <Text
+            fw={500}
+            size={TYPOGRAPHY.body.normal}
+            color={COLORS.secondaryColor}
+          >
             {item.label}
           </Text>
         </Group>
@@ -423,7 +426,6 @@ export const NavLink = memo(({ item }) => {
         fw={500}
         style={{ 
           color: textColor,
-          fontSize: TYPOGRAPHY.body.normal
         }}
       >
         {item.label}

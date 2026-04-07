@@ -22,6 +22,7 @@ import {
   IconClock,
   IconPlaneTilt,
 } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import useCustomerRequestStore from "../../store/customerRequestStore";
@@ -791,6 +792,35 @@ export default function TariffResultsPage() {
       return;
     }
   }, [tariffResult, router]);
+
+  useEffect(() => {
+    if (!tariffResult?.data?.length) return;
+
+    const exchangeMessages = Array.from(
+      new Set(
+        tariffResult.data.flatMap((item) => {
+          const charges = item.charges ?? item.tariff_charges ?? [];
+          return charges
+            .filter(
+              (charge) =>
+                charge?.currency_code &&
+                String(charge.currency_code).toUpperCase() !== "USD" &&
+                charge?.exchange_rate_message
+            )
+            .map((charge) => charge.exchange_rate_message);
+        })
+      )
+    );
+
+    exchangeMessages.forEach((message) => {
+      notifications.show({
+        color: "yellow",
+        title: "Exchange rate notice",
+        message,
+        autoClose: 5000,
+      });
+    });
+  }, [tariffResult]);
 
   const handleBackToForm = () => {
     clearTariffResult();

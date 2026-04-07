@@ -4,6 +4,7 @@ import { theme } from "@/app/utils/theme";
 import { Card, Stack, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import React, { memo } from "react";
+import { homeTypography } from "@/app/home/homeTypography";
 
 const PrimeListCard = ({ item, backgroundColor, IconComponent, iconColor }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -35,6 +36,7 @@ const PrimeListCard = ({ item, backgroundColor, IconComponent, iconColor }) => {
           mt={isMobile ? 0 : 20}
           c="rgb(0, 33, 95)"
           lh="sm"
+          style={{ fontFamily: homeTypography.headingFontFamily }}
         >
           {item.fields.service_title || item.fields.title}
         </Title>
@@ -46,6 +48,8 @@ const PrimeListCard = ({ item, backgroundColor, IconComponent, iconColor }) => {
           size="sm"
           style={{
             flexGrow: 1,
+            fontFamily: homeTypography.bodyFontFamily,
+            fontSize: homeTypography.sectionSub.fontSize,
           }}
         >
           {item.fields.service_description || item.fields.description}

@@ -22,6 +22,7 @@ import { client } from "../api/contentful";
 import { highlightText } from "../utils/highlightText";
 import { useMediaQuery } from "@mantine/hooks";
 import Autoplay from "embla-carousel-autoplay";
+import { homeTypography } from "./homeTypography";
 
 import { useMantineTheme } from "@mantine/core";
 
@@ -119,10 +120,25 @@ const Partner = ({ title, content }) => {
         w={"100%"}
       >
         <Stack>
-          <Title size="lg" tt={"uppercase"} fw={800}>
+          <Title
+            tt={"uppercase"}
+            fw={800}
+            style={{
+              fontFamily: homeTypography.headingFontFamily,
+              fontSize: homeTypography.sectionTitle.fontSize,
+              lineHeight: homeTypography.sectionTitle.lineHeight,
+            }}
+          >
             {highlightText(title)}
           </Title>
-          <Text c={COLORS.textColor} size="base" lh="sm">
+          <Text
+            c={COLORS.textColor}
+            style={{
+              fontFamily: homeTypography.bodyFontFamily,
+              fontSize: homeTypography.sectionSub.fontSize,
+              lineHeight: homeTypography.sectionSub.lineHeight,
+            }}
+          >
             {/* <Text size="sm" fw={500}> */}
             {highlightText(content)}
           </Text>
@@ -221,15 +237,27 @@ const Partner = ({ title, content }) => {
                   }}
                 >
                   <Text
-                    size="base"
-                    lh="sm"
                     maw={isMobile ? "100%" : "90%"}
                     tw="balance"
+                    style={{
+                      fontFamily: homeTypography.bodyFontFamily,
+                      fontSize: homeTypography.sectionSub.fontSize,
+                      lineHeight: homeTypography.sectionSub.lineHeight,
+                    }}
                   >
                     {highlightText(item.fields.content)}
                   </Text>
 
-                  <Text size="base" fw={700} c={COLORS.portColor} mt={16}>
+                  <Text
+                    fw={700}
+                    c={COLORS.portColor}
+                    mt={16}
+                    style={{
+                      fontFamily: homeTypography.bodyFontFamily,
+                      fontSize: homeTypography.sectionSub.fontSize,
+                      lineHeight: homeTypography.sectionSub.lineHeight,
+                    }}
+                  >
                     {highlightText(item.fields.shortvalue)}
                   </Text>
                 </Box>

@@ -7,6 +7,7 @@ import '@mantine/core/styles.css';
 import '@mantine/carousel/styles.css';
 import { kumbhSans, theme } from './utils/theme';
 import QueryProvider from './api/QueryProvider';
+import AIAssistantWidget from './component/common/AIAssistantWidget';
 import { Notifications, notifications } from "@mantine/notifications";
 import '@mantine/notifications/styles.css';
 import '@mantine/dates/styles.css';
@@ -339,6 +340,7 @@ export default function RootLayout({ children }) {
             <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
               <Notifications position="top-right" zIndex={9999} />
               <LayoutContent>{children}</LayoutContent>
+              <AIAssistantWidget />
               <WhatsAppButton />
               <ConditionalFooter />
             </MantineProvider>

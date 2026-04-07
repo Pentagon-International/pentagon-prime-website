@@ -29,6 +29,7 @@ const COUNTRY_CONFIG = [
   { country: "Vietnam", places: ["Vietnam"] },
   { country: "China", places: ["China"] },
 ];
+const ALWAYS_OPEN_COUNTRIES = new Set(["USA", "Kenya", "Dubai", "Vietnam", "China"]);
 
 // Place name → map position (percentage)
 const PLACE_COORDS = {
@@ -48,6 +49,8 @@ const Global = () => {
   const [locationData, setLocationData] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("India");
   const [popoverPlace, setPopoverPlace] = useState(null);
+  const [hoveredPlace, setHoveredPlace] = useState(null);
+  const [lockedIndiaPlace, setLockedIndiaPlace] = useState(null);
   const mapSectionRef = useRef(null);
 
   useEffect(() => {
@@ -71,6 +74,8 @@ const Global = () => {
     (country) => {
       setSelectedCountry(country);
       setPopoverPlace(null);
+      setHoveredPlace(null);
+      setLockedIndiaPlace(null);
       mapSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     },
     []
@@ -83,6 +88,24 @@ const Global = () => {
       config.places.includes(item.fields.place)
     );
   }, [selectedCountry, locationData]);
+
+  const placeCountryMap = useMemo(() => {
+    const map = {};
+    COUNTRY_CONFIG.forEach(({ country, places }) => {
+      places.forEach((place) => {
+        map[place] = country;
+      });
+    });
+    return map;
+  }, []);
+
+  // Show every known pin on initial load/page view
+  const allBranchesWithCoords = useMemo(() => {
+    const allPlaces = new Set(COUNTRY_CONFIG.flatMap((c) => c.places));
+    return locationData.filter(
+      (item) => allPlaces.has(item.fields.place) && PLACE_COORDS[item.fields.place]
+    );
+  }, [locationData]);
 
   const renderCountryCard = (countryName) => {
     const isSelected = selectedCountry === countryName;
@@ -168,7 +191,7 @@ const Global = () => {
         )}
       </Box>
 
-      {/* Map – pins only for selected country's branches */}
+      {/* Map – all configured pins visible */}
       <Box
         ref={mapSectionRef}
         pos="relative"
@@ -183,11 +206,17 @@ const Global = () => {
           alt="World Map"
           style={{ width: "100%", height: "auto", borderRadius: "16px" }}
         />
-        {branchesForCountry.map((item) => {
+        {allBranchesWithCoords.map((item) => {
           const placeName = item.fields.place;
           const coords = PLACE_COORDS[placeName];
           if (!coords) return null;
-          const isPopoverOpen = popoverPlace === placeName;
+          const countryName = placeCountryMap[placeName];
+          const isSelectedSingleCountry =
+            ALWAYS_OPEN_COUNTRIES.has(countryName) && selectedCountry === countryName;
+          const isPopoverOpen =
+            isSelectedSingleCountry ||
+            popoverPlace === placeName ||
+            hoveredPlace === placeName;
           return (
             <Popover
               key={item.sys.id}
@@ -195,11 +224,37 @@ const Global = () => {
               withArrow
               shadow="md"
               opened={isPopoverOpen}
-              onChange={(open) => { if (!open) setPopoverPlace(null); }}
+              onChange={(open) => {
+                if (!isSelectedSingleCountry && !open) setPopoverPlace(null);
+              }}
             >
               <Popover.Target>
                 <Box
-                  onClick={() => setPopoverPlace((p) => (p === placeName ? null : placeName))}
+                  onClick={() => {
+                    if (countryName) {
+                      setSelectedCountry(countryName);
+                    }
+                    if (countryName === "India") {
+                      // Click locks India pin popover, so it stays active after mouse leaves.
+                      setLockedIndiaPlace(placeName);
+                      setPopoverPlace(placeName);
+                    } else {
+                      setLockedIndiaPlace(null);
+                      setPopoverPlace(null);
+                    }
+                  }}
+                  onMouseEnter={() => {
+                    setHoveredPlace(placeName);
+                    if (countryName === "India" && !lockedIndiaPlace) {
+                      setPopoverPlace(placeName);
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredPlace(null);
+                    if (countryName === "India" && !lockedIndiaPlace) {
+                      setPopoverPlace(null);
+                    }
+                  }}
                   style={{
                     position: "absolute",
                     left: coords.x,
@@ -211,7 +266,11 @@ const Global = () => {
                   <IconPinnedFilled
                     size={isPopoverOpen ? 32 : 24}
                     stroke={1.5}
-                    color={isPopoverOpen ? "rgb(0, 33, 95)" : "#e84c4c"}
+                    color={
+                      countryName === "India"
+                        ? (isPopoverOpen ? "rgb(0, 33, 95)" : "#2FA84F")
+                        : (isPopoverOpen ? "rgb(0, 33, 95)" : "#e84c4c")
+                    }
                   />
                 </Box>
               </Popover.Target>

@@ -4,13 +4,30 @@ import { TYPOGRAPHY } from '@/app/utils/TYPOGRAPHY';
 import { Flex, Text, Title, Container, Group, Box } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { memo, useMemo } from 'react';
+import { homeTypography } from "@/app/home/homeTypography";
 
 const TradeItem = memo(({ tradeValue, tradeName }) => (
   <Flex justify="space-between" direction="column" wrap={'wrap'}>
-    <Title size="lg" c="rgb(0, 33, 95)" lh={'lgx2'} order={4}>
+    <Title
+      size="lg"
+      c="rgb(0, 33, 95)"
+      lh={'lgx2'}
+      order={4}
+      style={{ fontFamily: homeTypography.headingFontFamily }}
+    >
       {tradeValue}
     </Title>
-    <Text size='sm' c="rgb(54, 54, 54)" lh="sm">{tradeName}</Text>
+    <Text
+      size='sm'
+      c="rgb(54, 54, 54)"
+      lh="sm"
+      style={{
+        fontFamily: homeTypography.bodyFontFamily,
+        fontSize: homeTypography.sectionSub.fontSize,
+      }}
+    >
+      {tradeName}
+    </Text>
   </Flex>
 ));
 

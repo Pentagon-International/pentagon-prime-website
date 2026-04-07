@@ -239,7 +239,7 @@ const Header = () => {
                   c="rgb(0, 33, 95)"
                   style={{ alignSelf: "flex-start" }}
                 >
-                  Logistics.Automated
+                  Freight.Intelligent
                 </Text>
               </Flex>
             </Link>
@@ -311,27 +311,43 @@ const Header = () => {
         >
           <Link
             href="/"
-            onClick={() => {
-              startLoading();
-              closeDrawer();
-            }}
+            onClick={handleLogoClick}
             style={{
               display: "flex",
+              justifyContent: "center",
               alignItems: "center",
-              gap: 8,
-              textDecoration: "none",
+              gap: 5,
             }}
           >
-            <Image src={Images.logo_only} alt="Logo" h={36} />
-            <Text
-              fs="italic"
-              fw={700}
-              fz={16}
-              c="#326b7d"
-              className="logo-font"
+            <Image src={Images.logo_only} alt="Logo" h={48} />
+            <Flex
+              align="center"
+              justify="center"
+              style={{
+                textDecoration: "none",
+                flexDirection: "column",
+                alignSelf: "flex-end",
+              }}
             >
-              Pentagon Prime
-            </Text>
+              <Text
+                className="logo-font"
+                fs="italic"
+                fz={22}
+                fw={700}
+                tw="balance"
+                c="#326b7d"
+              >
+                Pentagon Prime
+              </Text>
+              <Text
+                size="xs"
+                fw={500}
+                c="rgb(0, 33, 95)"
+                style={{ alignSelf: "flex-start" }}
+              >
+                Freight.Intelligent
+              </Text>
+            </Flex>
           </Link>
           <UnstyledButton
             onClick={closeDrawer}

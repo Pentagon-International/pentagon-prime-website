@@ -10,7 +10,6 @@ import {
 } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "@/app/utils/COLORS";
-import { TYPOGRAPHY } from "@/app/utils/TYPOGRAPHY";
 import { useMediaQuery } from "@mantine/hooks";
 import { client } from "@/app/api/contentful";
 import * as TablerIcons from "@tabler/icons-react";
@@ -18,6 +17,7 @@ import { highlightText } from "../utils/highlightText";
 import { primeListData } from "../utils/llistData";
 import { Carousel } from "@mantine/carousel";
 import PrimeListCard from "../component/common/PrimeListCard";
+import { homeTypography } from "./homeTypography";
 
 const PentagonPrime = ({ title, content, title2 }) => {
   const [listData, setListData] = useState([]);
@@ -49,11 +49,14 @@ const PentagonPrime = ({ title, content, title2 }) => {
         <Title
           tt="uppercase"
           c={COLORS.headerBackground}
-          lh="md"
           mb={50}
           ta="center"
           fw={800}
-          size={isMobile ? TYPOGRAPHY.h3.mobile : TYPOGRAPHY.h1.mobile}
+          style={{
+            fontFamily: homeTypography.headingFontFamily,
+            fontSize: homeTypography.sectionTitle.fontSize,
+            lineHeight: homeTypography.sectionTitle.lineHeight,
+          }}
         >
           {highlightText(title2)}
         </Title>

@@ -2,7 +2,7 @@ import { COLORS } from "./COLORS";
 import { theme } from "./theme";
 
 const styles = {
-  "$": COLORS.serviceColor,
+  "$": COLORS.portColor,
   "#": COLORS.portColor,
   "%": COLORS.vision,
   "@": COLORS.primaryColor,

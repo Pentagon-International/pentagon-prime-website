@@ -1,7 +1,6 @@
 'use client';
 import { client } from '@/app/api/contentful';
 import { COLORS } from '@/app/utils/COLORS';
-import { TYPOGRAPHY } from '@/app/utils/TYPOGRAPHY';
 import { highlightText } from '@/app/utils/highlightText';
 import {
   Container,
@@ -15,6 +14,7 @@ import {
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import React, { useEffect, useState } from 'react';
+import { homeTypography } from "./homeTypography";
 
 const TeamMember = ({ image, title, description, reverse }) => {
   const imageUrl = image ? `https:${image}` : '/placeholder.jpg';
@@ -50,10 +50,28 @@ const TeamMember = ({ image, title, description, reverse }) => {
         </Box>
       </GridCol>
       <GridCol px={!isMobile && 'xl'} span={isMobile ? 12 : 6} order={reverse ? 1 : 2}>
-        <Title tt="uppercase" fw={800} lh={isMobile ? "md" : "lgx2"} size={isMobile ? "md" : "lg"} style={{ color: 'black' }}>
+        <Title
+          tt="uppercase"
+          fw={800}
+          style={{
+            color: 'black',
+            fontFamily: homeTypography.headingFontFamily,
+            fontSize: homeTypography.sectionTitle.fontSize,
+            lineHeight: homeTypography.sectionTitle.lineHeight,
+          }}
+        >
           {highlightText(title)}
         </Title>
-        <Text mt={10} c={COLORS.textColor} maw={isMobile ? '100%' : '80%'} size="base" lh="sm">
+        <Text
+          mt={10}
+          c={COLORS.textColor}
+          maw={isMobile ? '100%' : '80%'}
+          style={{
+            fontFamily: homeTypography.bodyFontFamily,
+            fontSize: homeTypography.sectionSub.fontSize,
+            lineHeight: homeTypography.sectionSub.lineHeight,
+          }}
+        >
           {highlightText(description)}
         </Text>
       </GridCol>
@@ -84,10 +102,27 @@ const LogisticsTeam = ({ title, content }) => {
 
   return (
     <Container fluid px={'2%'} py={'50px'} bg={COLORS.backgroundColor}>
-      <Title size={isMobile ? TYPOGRAPHY.h5.desktop : 'lg'} lh={isMobile ? 'md' : 'lgx2'} tt={'uppercase'} fw={800}>
+      <Title
+        tt={'uppercase'}
+        fw={800}
+        style={{
+          fontFamily: homeTypography.headingFontFamily,
+          fontSize: homeTypography.sectionTitle.fontSize,
+          lineHeight: homeTypography.sectionTitle.lineHeight,
+        }}
+      >
         {highlightText(title)}
       </Title>
-        <Text size={isMobile ? TYPOGRAPHY.body.small : "sm"} lh={isMobile ? "md" : "sm"} py={'sm'} maw={isMobile ? '80%' : '55%'} c={COLORS.textColor}>
+        <Text
+          py={'sm'}
+          maw={isMobile ? '80%' : '55%'}
+          c={COLORS.textColor}
+          style={{
+            fontFamily: homeTypography.bodyFontFamily,
+            fontSize: homeTypography.sectionSub.fontSize,
+            lineHeight: homeTypography.sectionSub.lineHeight,
+          }}
+        >
           {highlightText(content)}
         </Text>
         <Flex wrap="wrap" align="center" mt="30px" justify="center" gap="md">

@@ -39,6 +39,7 @@ import { useRouter } from "next/navigation";
 import useCustomerRequestStore from "../store/customerRequestStore";
 import values from "lodash/values";
 import getEmojiFlag from "../utils/isoMap";
+import { homeTypography } from "./homeTypography";
 
 const TransportOption = memo(({ type, icon, activeTransport, onClick }) => (
   <Group
@@ -323,13 +324,6 @@ const Hero = ({ title, content }) => {
   // form card max-width: full on mobile, capped on larger screens
   const formCardMaxWidth = isMobile ? "100%" : isTablet ? "100%" : "550px";
 
-  // title size
-  const titleSize = isMobile
-    ? TYPOGRAPHY.h1.mobile
-    : isTabletOrBelow
-      ? "36px"
-      : "44px";
-
   return (
     <Box style={styles.heroContainer}>
       {/* overlay */}
@@ -378,12 +372,16 @@ const Hero = ({ title, content }) => {
           >
             <Title
               c="rgb(0, 33, 95)"
-              style={{ zIndex: 100 }}
+              style={{
+                zIndex: 100,
+                fontFamily: homeTypography.headingFontFamily,
+                fontSize: homeTypography.heroTitle.fontSize,
+                lineHeight: homeTypography.heroTitle.lineHeight,
+              }}
               fw={900}
               order={1}
-              lh={isMobile ? "md" : "xl"}
               tt="uppercase"
-              size={titleSize}
+              lh={1.5}
               ta={isTabletOrBelow ? "center" : "left"}
             >
               {highlightText(title)}
@@ -694,6 +692,9 @@ const Hero = ({ title, content }) => {
                   align="center"
                   c="rgb(0, 33, 95)"
                   fw={700}
+                  style={{
+                    fontFamily: homeTypography.bodyFontFamily,
+                  }}
                 >
                   {highlightText(
                     "#Book your shipment# as easy as booking an airline ticket",

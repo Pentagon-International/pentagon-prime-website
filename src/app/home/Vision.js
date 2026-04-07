@@ -25,13 +25,13 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { COLORS } from "@/app/utils/COLORS";
-import { TYPOGRAPHY } from "@/app/utils/TYPOGRAPHY";
 import Images from "@/app/utils/image";
 import Trade from "../component/common/Trade";
 import { highlightText } from "../utils/highlightText";
 import { useRouter } from "next/navigation";
 import { useMediaQuery } from "@mantine/hooks";
 import { client } from "../api/contentful";
+import { homeTypography } from "./homeTypography";
 
 const styles = {
   container: {
@@ -73,7 +73,7 @@ const styles = {
   },
 };
 
-const Vision = ({ title, content, tradeItems, tradeContent }) => {
+const Vision = ({ title, content, tradeItems, tradeContent, mode = "full" }) => {
   const router = useRouter();
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [embla, setEmbla] = useState(null);
@@ -151,6 +151,9 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
     }
   }, [videoModalOpen]);
 
+  const showTopSection = mode === "full" || mode === "top";
+  const showDetailsSection = mode === "full" || mode === "details";
+
   return (
     <Container
       fluid
@@ -159,19 +162,26 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
       pb={40}
       style={styles.container}
     >
-      <Title
-        tt="uppercase"
-        c={COLORS.headerBackground}
-        lh="md"
-        mt={50}
-        ta="center"
-        fw={800}
-        size={isMobile ? TYPOGRAPHY.h3.mobile : TYPOGRAPHY.h1.mobile}
-      >
-        {highlightText("Why Pentagon Prime ?")}
-      </Title>
-      <Trade items={tradeItems} content={tradeContent} />
-      <Flex
+      {showTopSection && (
+        <>
+          <Title
+            tt="uppercase"
+            c={COLORS.headerBackground}
+            mt={50}
+            ta="center"
+            fw={800}
+            style={{
+              fontFamily: homeTypography.headingFontFamily,
+              fontSize: homeTypography.sectionTitle.fontSize,
+              lineHeight: homeTypography.sectionTitle.lineHeight,
+            }}
+          >
+            {highlightText("Why Pentagon Prime ?")}
+          </Title>
+          <Trade items={tradeItems} content={tradeContent} />
+        </>
+      )}
+      {showDetailsSection && <Flex
         direction={{ base: "column", md: "row" }}
         align="center"
         justify={"space-between"}
@@ -191,10 +201,29 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
           p={'0 2%'}
           mt={isMobile && 50}
         >
-          <Title tt={"uppercase"} c="rgb(0, 33, 95)" fw={800} size={isMobile ? TYPOGRAPHY.h4.mobile : TYPOGRAPHY.h3.desktop} lh={1}>
+          <Title
+            tt={"uppercase"}
+            c="rgb(0, 33, 95)"
+            fw={800}
+            style={{
+              fontFamily: homeTypography.headingFontFamily,
+              fontSize: homeTypography.sectionTitle.fontSize,
+              lineHeight: homeTypography.sectionTitle.lineHeight,
+            }}
+          >
             {highlightText(title)}
           </Title>
-          <Text mt={'lg'} c="rgb(54, 54, 54)" ta={'justify'} maw={"100%"} lh={"sm"} size="sm">
+          <Text
+            mt={'lg'}
+            c="rgb(54, 54, 54)"
+            ta={'justify'}
+            maw={"100%"}
+            style={{
+              fontFamily: homeTypography.bodyFontFamily,
+              fontSize: homeTypography.sectionSub.fontSize,
+              lineHeight: homeTypography.sectionSub.lineHeight,
+            }}
+          >
             {highlightText(content)}
           </Text>
           <Grid w={'100%'} gutter="xl" mt={'lg'}>
@@ -262,9 +291,12 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
                             <Text
                               tw="balance"
                               c={COLORS.textColor}
-                              lh={"sm"}
-                              size="sm"
-                              style={{ flexGrow: 1 }}
+                              style={{
+                                flexGrow: 1,
+                                fontFamily: homeTypography.bodyFontFamily,
+                                fontSize: homeTypography.sectionSub.fontSize,
+                                lineHeight: homeTypography.sectionSub.lineHeight,
+                              }}
                             >
                               {item.fields.visionDescription || item.fields.description}
                             </Text>
@@ -283,9 +315,12 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
                             <Text
                               tw="balance"
                               c={COLORS.textColor}
-                              lh={"sm"}
-                              size="sm"
-                              style={{ flexGrow: 1 }}
+                              style={{
+                                flexGrow: 1,
+                                fontFamily: homeTypography.bodyFontFamily,
+                                fontSize: homeTypography.sectionSub.fontSize,
+                                lineHeight: homeTypography.sectionSub.lineHeight,
+                              }}
                             >
                               {item.fields.visionDescription || item.fields.description}
                             </Text>
@@ -372,9 +407,12 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
                           <Text
                             tw="balance"
                             c={COLORS.textColor}
-                            lh={"sm"}
-                            size="sm"
-                            style={{ flexGrow: 1 }}
+                            style={{
+                              flexGrow: 1,
+                              fontFamily: homeTypography.bodyFontFamily,
+                              fontSize: homeTypography.sectionSub.fontSize,
+                              lineHeight: homeTypography.sectionSub.lineHeight,
+                            }}
                           >
                             {item.fields.visionDescription || item.fields.description}
                           </Text>
@@ -393,9 +431,12 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
                           <Text
                             tw="balance"
                             c={COLORS.textColor}
-                            lh={"sm"}
-                            size="sm"
-                            style={{ flexGrow: 1 }}
+                            style={{
+                              flexGrow: 1,
+                              fontFamily: homeTypography.bodyFontFamily,
+                              fontSize: homeTypography.sectionSub.fontSize,
+                              lineHeight: homeTypography.sectionSub.lineHeight,
+                            }}
                           >
                             {item.fields.visionDescription || item.fields.description}
                           </Text>
@@ -468,10 +509,10 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
           </Grid>
 
         </Flex>
-      </Flex>
+      </Flex>}
 
       {/* Mantine Carousel Video Modal */}
-      <Modal
+      {showDetailsSection && <Modal
         opened={videoModalOpen}
         onClose={() => setVideoModalOpen(false)}
         size="xl"
@@ -578,7 +619,7 @@ const Vision = ({ title, content, tradeItems, tradeContent }) => {
             {embla ? embla.selectedScrollSnap() + 1 : 1} / {videos.length}
           </Text>
         </Box>
-      </Modal>
+      </Modal>}
     </Container>
   );
 };
