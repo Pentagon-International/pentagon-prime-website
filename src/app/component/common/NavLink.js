@@ -66,12 +66,12 @@ export const featuresMap = {
   Solutions: [
     {
       icon: IconPlaneArrival,
-      title: "AirFlow Intelligence",
+      title: "Air Intelligence",
       link: "/service/air-freight-forwarding",
     },
     {
       icon: IconShip,
-      title: "OceanRoute Intelligence",
+      title: "Ocean Intelligence",
       link: "/service/sea-freight-forwarding",
     },
     {

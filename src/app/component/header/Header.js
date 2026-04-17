@@ -57,6 +57,7 @@ const DrawerFeatureItem = memo(({ feature, onClose }) => {
         <Group
           align="flex-start"
           gap="sm"
+          wrap="nowrap"
           onMouseEnter={(e) => {
             e.currentTarget.style.color = "rgb(0,33,95)";
           }}
@@ -65,14 +66,19 @@ const DrawerFeatureItem = memo(({ feature, onClose }) => {
           }}
         >
           {feature.icon && (
-            <IconPointFilled size={18} color={"inherit"} />
+            <IconPointFilled
+              size={16}
+              color={"inherit"}
+              style={{ flexShrink: 0, marginTop: 4}}
+            />
           )}
 
-          <div>
+          <div style={{ flex: 1 }}>
             <Text
               size={TYPOGRAPHY.body.normal}
               fw={500}
               c={"inherit"}
+              lh={1.5}
             >
               {feature.title}
             </Text>
@@ -239,7 +245,7 @@ const Header = () => {
                   c="rgb(0, 33, 95)"
                   style={{ alignSelf: "flex-start" }}
                 >
-                  Freight.Intelligent
+                  Logistics.Automated
                 </Text>
               </Flex>
             </Link>
@@ -345,7 +351,7 @@ const Header = () => {
                 c="rgb(0, 33, 95)"
                 style={{ alignSelf: "flex-start" }}
               >
-                Freight.Intelligent
+                Logistics.Automated
               </Text>
             </Flex>
           </Link>

@@ -37,8 +37,8 @@ const Footer = () => {
   // Reorganize services into 3 columns
   const services = useMemo(() => [
     [
-      { title: 'Air Freight Forwarding', slug: 'air-freight-forwarding' },
-      { title: 'Sea Freight Forwarding', slug: 'sea-freight-forwarding' },
+      { title: 'Air Intelligence', slug: 'air-freight-forwarding' },
+      { title: 'Ocean Intelligence', slug: 'sea-freight-forwarding' },
       { title: 'Multimodal Transport', slug: 'multimodal-transport' },
       { title: 'Cross Country Trade', slug: 'cross-country-trade' },
     ],
@@ -133,7 +133,7 @@ const Footer = () => {
                     c="rgb(0, 33, 95)"
                     style={{ alignSelf: 'flex-start' }}
                   >
-                    Freight.Intelligent
+                    Logistics.Automated
                   </Text>
                 </Flex>
               </Box>
