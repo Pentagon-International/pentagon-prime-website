@@ -1,4 +1,4 @@
-import { client } from "../api/contentful";
+import { client } from "@/lib/api/contentful";
 
 export const fetchTradeData = async () => {
     const res = await client.getEntries({

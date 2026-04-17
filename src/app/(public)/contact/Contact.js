@@ -1,0 +1,102 @@
+'use client';
+import { Container, Flex, Group, Image, Stack, Text, Title, Box } from '@mantine/core';
+import { TYPOGRAPHY } from '@/app/utils/TYPOGRAPHY';
+import { IconMail, IconPhone } from '@tabler/icons-react';
+import Images from '@/app/utils/image';
+import { useMediaQuery } from '@mantine/hooks';
+
+const Contact = () => {
+  const actionStyle = {
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    padding: '8px 12px',
+    margin: '-8px -12px', // Offset padding to maintain layout
+    borderRadius: '8px',
+    display: 'inline-flex',
+    alignItems: 'center',
+    '&:hover': {
+      backgroundColor: 'rgba(14, 201, 242, 0.1)',
+      transform: 'translateX(5px)',
+      '& .icon': {
+        transform: 'scale(1.1)',
+      },
+      '& .text': {
+        color: '#0EC9F2',
+      }
+    }
+  };
+
+  const isMobile = useMediaQuery('(max-width : 768px)')
+
+  return (
+    <Container fluid px={'7%'}>
+      <Flex
+        align={isMobile ? 'flex-start' : 'center'}
+        direction={isMobile ? 'column-reverse' : 'row'}
+        px={'auto'}
+        justify={isMobile ? 'center' : 'space-between'}
+        style={{
+          color: 'rgb(0, 33, 95)',
+          height: '100vh',
+        }}
+      >
+        <Stack p={isMobile ? 0 : 15} >
+          <Title size={isMobile ? TYPOGRAPHY.h2.mobile : TYPOGRAPHY.h2.desktop} lh={'lgx2'} fw={800} tt={'uppercase'}>Contact Us</Title>
+          <Text size={isMobile ? 'sm' : 'base'} lh={'28px'} fw={500} tw='balance' c={"rgb(53, 53, 53)"}>
+            Ready to begin your journey with Pentagon Prime, have a question, or
+            need assistance? <br />We're here to help.
+          </Text>
+          <Text size={isMobile ? TYPOGRAPHY.h5.mobile : 'base'} fw={700} mt={20} tt={'uppercase'}>Headquarters</Text>
+          <Text size='sm' tw="balance" maw={isMobile ? '100%' : '70%'} c={"rgb(53, 53, 53)"}>
+            Unit No. 204 Satellite Silver, Marol Naka Andheri Kurla Road,
+            <br />Andheri (East) Mumbai, Maharashtra – 400059, India
+          </Text>
+          <Text size='base' fw={700} tt={'uppercase'} mt={20}>Phone & Email Address</Text>
+
+          <Box style={actionStyle}>
+            <Group gap={10}>
+              <IconPhone
+                color="#0EC9F2"
+                size={20}
+                className="icon"
+                style={{ transition: 'transform 0.3s ease' }}
+              />
+              <Text
+                size='sm'
+                className="text"
+                style={{ transition: 'color 0.3s ease' }}
+                c={"rgb(53, 53, 53)"}
+                onClick={() => window.open('tel:02245966999')}
+              >
+                022 4596 6999
+              </Text>
+            </Group>
+          </Box>
+
+          <Box style={actionStyle}>
+            <Group gap={10}>
+              <IconMail
+                color="#0EC9F2"
+                size={20}
+                className="icon"
+                style={{ transition: 'transform 0.3s ease' }}
+              />
+              <Text
+                size='sm'
+                className="text"
+                c={"rgb(53, 53, 53)"}
+                style={{ transition: 'color 0.3s ease' }}
+                onClick={() => window.open('mailto:pentagon@pentagonindia.net')}
+              >
+                pentagon@pentagonindia.net
+              </Text>
+            </Group>
+          </Box>
+        </Stack>
+        <Image h={isMobile ? '35%' : '80%'} fit='contain' src={Images.contact_vector} alt="pentagon logo" />
+      </Flex>
+    </Container>
+  );
+};
+
+export default Contact;

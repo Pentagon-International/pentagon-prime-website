@@ -1,4 +1,4 @@
-import { client } from "../api/contentful";
+import { client } from "@/lib/api/contentful";
 
 export const fetchEntries = async (reference) => {
   const res = await client.getEntries({

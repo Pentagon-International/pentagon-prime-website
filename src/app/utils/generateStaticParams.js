@@ -1,4 +1,4 @@
-import { client } from "../api/contentful";
+import { client } from "@/lib/api/contentful";
 
 export async function getStaticParams(contentType, field) {
     const entries = await client.getEntries({
