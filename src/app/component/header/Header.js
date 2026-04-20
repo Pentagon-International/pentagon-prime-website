@@ -5,11 +5,11 @@ import {
   Button,
   Collapse,
   Container,
-  Divider,
   Drawer,
   Flex,
   Group,
   Image,
+  Stack,
   Text,
   UnstyledButton,
 } from "@mantine/core";
@@ -21,7 +21,8 @@ import Images from "@/app/utils/image";
 import { featuresMap, NavLink } from "../common/NavLink";
 import {
   IconChevronDown,
-  IconDots,
+  IconLayoutDashboard,
+  IconLogin,
   IconPhone,
   IconPointFilled,
   IconX,
@@ -69,17 +70,12 @@ const DrawerFeatureItem = memo(({ feature, onClose }) => {
             <IconPointFilled
               size={16}
               color={"inherit"}
-              style={{ flexShrink: 0, marginTop: 4}}
+              style={{ flexShrink: 0, marginTop: 4 }}
             />
           )}
 
           <div style={{ flex: 1 }}>
-            <Text
-              size={TYPOGRAPHY.body.normal}
-              fw={500}
-              c={"inherit"}
-              lh={1.5}
-            >
+            <Text size={TYPOGRAPHY.body.normal} fw={500} c={"inherit"} lh={1.5}>
               {feature.title}
             </Text>
 
@@ -105,13 +101,18 @@ const Header = () => {
   const router = useRouter();
   const { startLoading } = useLoading();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const authTarget = isLoggedIn ? "/dashboard" : "/auth/login";
-  const authLabel = isLoggedIn ? "Dashboard" : "Login";
+  const authLabel = isLoggedIn ? "Dashboard" : "Log";
 
   const isAuthTargetPage = useMemo(
     () => currentPath === authTarget || currentPath === `${authTarget}/`,
     [currentPath, authTarget],
+  );
+
+  const isContactPage = useMemo(
+    () => currentPath === "/contact" || currentPath === "/contact/",
+    [currentPath],
   );
 
   /* close drawer on route change */
@@ -162,6 +163,17 @@ const Header = () => {
     router.push(authTarget);
   }, [startLoading, router, authTarget]);
 
+  const handleTalkToPrimeClick = useCallback(() => {
+    startLoading();
+    router.push("/contact");
+  }, [startLoading, router]);
+
+  const handleDrawerTalkToPrimeClick = useCallback(() => {
+    startLoading();
+    router.push("/contact");
+    closeDrawer();
+  }, [startLoading, router, closeDrawer]);
+
   const handleDrawerItemClick = useCallback(
     (item) => {
       if (item.dropdown) {
@@ -195,6 +207,20 @@ const Header = () => {
     [isAuthTargetPage],
   );
 
+  const talkToPrimeButtonStyle = useMemo(
+    () => ({
+      border: "2px solid rgb(0, 33, 95)",
+      color: isContactPage ? "white" : "rgb(0, 33, 95)",
+      backgroundColor: isContactPage ? "rgb(0, 33, 95)" : "transparent",
+      transition: "all 0.25s ease",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "8px",
+    }),
+    [isContactPage],
+  );
+
   const handleButtonMouseEnter = useCallback((e) => {
     e.currentTarget.style.backgroundColor = "rgb(0, 33, 95)";
     e.currentTarget.style.color = "white";
@@ -208,6 +234,21 @@ const Header = () => {
       }
     },
     [isAuthTargetPage],
+  );
+
+  const handleTalkToPrimeMouseEnter = useCallback((e) => {
+    e.currentTarget.style.backgroundColor = "rgb(0, 33, 95)";
+    e.currentTarget.style.color = "white";
+  }, []);
+
+  const handleTalkToPrimeMouseLeave = useCallback(
+    (e) => {
+      if (!isContactPage) {
+        e.currentTarget.style.backgroundColor = "transparent";
+        e.currentTarget.style.color = "rgb(0, 33, 95)";
+      }
+    },
+    [isContactPage],
   );
 
   return (
@@ -258,20 +299,50 @@ const Header = () => {
             </Link>
 
             {/* ── Desktop nav ── */}
-            <Flex h="100%" gap={30} align="center" visibleFrom="md">
+            <Flex
+              h="100%"
+              gap={30}
+              align="center"
+              visibleFrom="md"
+              style={{ flex: 1, justifyContent: "center" }}
+            >
               {navItems.map((item) => (
                 <NavLink key={item.label} item={item} />
               ))}
             </Flex>
 
-            {/* ── Desktop CTA ── */}
-            <Group visibleFrom="md">
+            {/* ── Desktop CTA (Talk to Prime + Login/Dashboard, grouped at end) ── */}
+            <Group
+              gap="sm"
+              wrap="nowrap"
+              visibleFrom="md"
+              style={{ flexShrink: 0, minWidth: "fit-content" }}
+            >
               <Button
                 variant="outline"
                 size="md"
                 fz={TYPOGRAPHY.body.normal}
                 radius="md"
                 leftSection={<IconPhone stroke={1.5} size={18} />}
+                onClick={handleTalkToPrimeClick}
+                style={talkToPrimeButtonStyle}
+                onMouseEnter={handleTalkToPrimeMouseEnter}
+                onMouseLeave={handleTalkToPrimeMouseLeave}
+              >
+                Talk to Prime
+              </Button>
+              <Button
+                variant="outline"
+                size="md"
+                fz={TYPOGRAPHY.body.normal}
+                radius="md"
+                leftSection={
+                  isLoggedIn ? (
+                    <IconLayoutDashboard stroke={1.5} size={18} />
+                  ) : (
+                    <IconLogin stroke={1.5} size={18} />
+                  )
+                }
                 onClick={handleAuthClick}
                 style={buttonStyle}
                 onMouseEnter={handleButtonMouseEnter}
@@ -426,18 +497,43 @@ const Header = () => {
           ))}
         </Box>
 
-        {/* Drawer footer CTA */}
-        <Box
+        {/* Drawer footer CTA — Talk to Prime + Login/Dashboard */}
+        <Stack
+          gap="sm"
           px={20}
           py={20}
           style={{ borderTop: "1px solid #f0f0f0", flexShrink: 0 }}
         >
           <Button
-            variant="filled"
+            variant="outline"
             size="md"
             radius="md"
             fullWidth
             leftSection={<IconPhone stroke={1.5} size={18} />}
+            styles={{
+              label: { fontSize: TYPOGRAPHY.body.normal },
+            }}
+            style={{
+              border: "2px solid rgb(0, 33, 95)",
+              color: "rgb(0, 33, 95)",
+              height: "48px",
+            }}
+            onClick={handleDrawerTalkToPrimeClick}
+          >
+            Talk to Prime
+          </Button>
+          <Button
+            variant="filled"
+            size="md"
+            radius="md"
+            fullWidth
+            leftSection={
+              isLoggedIn ? (
+                <IconLayoutDashboard stroke={1.5} size={18} />
+              ) : (
+                <IconLogin stroke={1.5} size={18} />
+              )
+            }
             styles={{
               label: { fontSize: TYPOGRAPHY.body.normal },
             }}
@@ -450,7 +546,7 @@ const Header = () => {
           >
             {authLabel}
           </Button>
-        </Box>
+        </Stack>
       </Drawer>
     </Container>
   );

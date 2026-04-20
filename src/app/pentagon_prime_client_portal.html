@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pentagon Prime — Client Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0A1628;--blue:#1B5FD4;--blue-mid:#2E78F0;--blue-light:#EBF2FF;
+  --accent:#E8541A;--accent-soft:#FFF0E8;
+  --teal:#0E8A6E;--teal-bg:#E5F5F0;
+  --amber:#C08010;--amber-bg:#FEF4DC;
+  --red:#C42B1C;--red-bg:#FDEAE8;
+  --purple:#5B45C8;--purple-bg:#EEEAFF;
+  --bg:#F4F7FB;--bg2:#EDF1F8;--surface:#FFFFFF;
+  --border:#D8E2F0;--border2:#C4D2E8;
+  --txt:#0A1628;--txt2:#3D5070;--txt3:#7A8EA8;
+  --shadow:0 1px 3px rgba(10,22,40,.06),0 4px 14px rgba(10,22,40,.07);
+  --shadow-lg:0 8px 32px rgba(10,22,40,.14);
+  --radius:14px;--radius-sm:9px;
+  --font-head:'Barlow Condensed',sans-serif;--font:'Barlow',sans-serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--txt);font-size:14px;line-height:1.5;min-height:100vh}
+
+/* ══ TOP NAV ═══════════════════════════════════════════════ */
+.topnav{background:var(--navy);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,.06)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.logo-hex{width:34px;height:34px;background:var(--accent);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center}
+.logo-hex svg{width:15px;height:15px}
+.logo-name{font-family:var(--font-head);font-size:17px;font-weight:800;color:#fff;letter-spacing:.04em}
+.logo-name em{color:#5FA0F8;font-style:normal}
+.logo-tag{font-size:9px;color:rgba(255,255,255,.35);letter-spacing:.09em;text-transform:uppercase}
+.nav-tabs{display:flex;align-items:center;gap:2px}
+.nav-btn{font-family:var(--font);font-size:11.5px;font-weight:600;color:rgba(255,255,255,.5);padding:6px 14px;border-radius:7px;cursor:pointer;transition:.15s;border:none;background:none;text-transform:uppercase;letter-spacing:.07em;white-space:nowrap}
+.nav-btn:hover{color:#fff;background:rgba(255,255,255,.08)}
+.nav-btn.active{color:#fff;background:rgba(255,255,255,.13);box-shadow:inset 0 0 0 0.5px rgba(255,255,255,.18)}
+.nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.live-chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:0.5px solid rgba(255,255,255,.14);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;color:rgba(255,255,255,.8);letter-spacing:.04em;text-transform:uppercase}
+.live-dot{width:7px;height:7px;background:#3FDDA0;border-radius:50%;animation:lp 2s ease-in-out infinite}
+@keyframes lp{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(63,221,160,.4)}50%{opacity:.6;box-shadow:0 0 0 5px rgba(63,221,160,0)}}
+.time-chip{font-size:11px;color:rgba(255,255,255,.32)}
+.user-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:0.5px solid rgba(255,255,255,.14);border-radius:20px;padding:4px 12px 4px 6px;cursor:pointer;transition:.15s}
+.user-chip:hover{background:rgba(255,255,255,.12)}
+.user-avatar{width:26px;height:26px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:11px;font-weight:800;color:#fff}
+.user-name{font-size:11px;font-weight:600;color:rgba(255,255,255,.85)}
+
+/* ══ WELCOME BANNER ════════════════════════════════════════ */
+.welcome-bar{background:linear-gradient(135deg,var(--navy) 0%,#0D2856 100%);padding:20px 28px;border-bottom:1px solid rgba(255,255,255,.06)}
+.welcome-inner{max-width:1320px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.welcome-left h2{font-family:var(--font-head);font-size:22px;font-weight:800;color:#fff;letter-spacing:.02em}
+.welcome-left h2 span{color:#5FA0F8}
+.welcome-left p{font-size:12px;color:rgba(255,255,255,.45);margin-top:3px}
+.welcome-stats{display:flex;gap:24px}
+.ws{text-align:center}
+.ws-val{font-family:var(--font-head);font-size:22px;font-weight:800;color:#fff;line-height:1}
+.ws-lbl{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.07em;margin-top:2px}
+.ws-div{width:1px;background:rgba(255,255,255,.12);align-self:stretch}
+.btn-primary{background:var(--accent);color:#fff;font-family:var(--font);font-size:12px;font-weight:700;padding:9px 18px;border-radius:8px;border:none;cursor:pointer;text-transform:uppercase;letter-spacing:.06em;transition:.15s}
+.btn-primary:hover{background:#D04010}
+.btn-outline{background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);font-family:var(--font);font-size:12px;font-weight:600;padding:9px 18px;border-radius:8px;border:0.5px solid rgba(255,255,255,.2);cursor:pointer;text-transform:uppercase;letter-spacing:.06em;transition:.15s}
+.btn-outline:hover{background:rgba(255,255,255,.14)}
+
+/* ══ TABS & PANELS ══════════════════════════════════════════ */
+.tab-panel{display:none;animation:fadeIn .3s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.dash{max-width:1320px;margin:0 auto;padding:22px 28px 36px}
+
+/* ══ SHARED ════════════════════════════════════════════════ */
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.section-title{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);display:flex;align-items:center;gap:8px}
+.section-title::before{content:'';display:block;width:3px;height:13px;background:var(--blue);border-radius:2px}
+
+.kpi-grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+.kpi-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.kpi-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.kpi{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:18px 20px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s;cursor:default}
+.kpi:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.kpi-bar{position:absolute;top:0;left:0;right:0;height:3px;background:var(--kc,var(--blue));border-radius:var(--radius) var(--radius) 0 0}
+.kpi-ico{width:34px;height:34px;border-radius:8px;background:var(--ki,var(--blue-light));display:flex;align-items:center;justify-content:center;margin-bottom:11px;font-size:16px}
+.kpi-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--txt3);margin-bottom:4px}
+.kpi-val{font-family:var(--font-head);font-size:30px;font-weight:800;color:var(--txt);line-height:1;letter-spacing:-.02em}
+.kpi-val small{font-size:15px;font-weight:700;opacity:.55}
+.kpi-sub{font-size:11px;color:var(--txt3);margin-top:5px}
+.kpi-up{color:var(--teal);font-weight:600}.kpi-dn{color:var(--red);font-weight:600}
+
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px;overflow:hidden}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-family:var(--font-head);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--txt)}
+.bdg{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:20px}
+.bdg-live{background:var(--teal-bg);color:var(--teal)}.bdg-blue{background:var(--blue-light);color:var(--blue)}
+.bdg-ai{background:var(--purple-bg);color:var(--purple)}.bdg-warn{background:var(--amber-bg);color:var(--amber)}
+.bdg-red{background:var(--red-bg);color:var(--red)}.bdg-eco{background:var(--teal-bg);color:var(--teal)}
+
+.g2-1{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+.g3-w{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:16px;margin-bottom:16px}
+
+/* ══ SEARCH BAR ════════════════════════════════════════════ */
+.search-bar{display:flex;align-items:center;gap:10px;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 16px;margin-bottom:16px;box-shadow:var(--shadow)}
+.search-bar input{flex:1;border:none;outline:none;font-family:var(--font);font-size:13px;color:var(--txt);background:transparent}
+.search-bar input::placeholder{color:var(--txt3)}
+.fbtn{font-size:11px;font-weight:600;padding:5px 12px;border-radius:6px;border:0.5px solid var(--border);background:var(--bg);color:var(--txt2);cursor:pointer;transition:.15s;white-space:nowrap}
+.fbtn:hover,.fbtn.sel{background:var(--blue-light);border-color:var(--blue);color:var(--blue)}
+
+/* ══ TABLE ══════════════════════════════════════════════════ */
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--txt3);padding:10px 14px;border-bottom:1px solid var(--border);text-align:left;background:var(--bg);white-space:nowrap}
+.tbl td{padding:10px 14px;border-bottom:0.5px solid var(--border);color:var(--txt2);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}.tbl tr:hover td{background:#FAFCFF;cursor:pointer}
+.pill{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:20px}
+.p-blue{background:var(--blue-light);color:var(--blue)}.p-green{background:var(--teal-bg);color:var(--teal)}
+.p-amber{background:var(--amber-bg);color:var(--amber)}.p-red{background:var(--red-bg);color:var(--red)}
+.p-gray{background:var(--bg2);color:var(--txt3)}.p-purple{background:var(--purple-bg);color:var(--purple)}
+
+/* ══ ALERTS ═════════════════════════════════════════════════ */
+.al-row{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:0.5px solid var(--border)}
+.al-row:last-child{border-bottom:none;padding-bottom:0}
+.al-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:1px}
+.i-warn{background:var(--amber-bg)}.i-ok{background:var(--teal-bg)}.i-info{background:var(--blue-light)}.i-red{background:var(--red-bg)}.i-purple{background:var(--purple-bg)}
+.al-body{flex:1}.al-title{font-size:12px;font-weight:600;color:var(--txt)}.al-sub{font-size:10px;color:var(--txt3);margin-top:2px}
+.al-time{font-size:10px;color:var(--txt3);flex-shrink:0}
+
+/* ══ TIMELINE ════════════════════════════════════════════════ */
+.timeline{position:relative;padding-left:22px}
+.timeline::before{content:'';position:absolute;left:8px;top:8px;bottom:8px;width:1.5px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:18px}.tl-item:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-18px;top:4px;width:10px;height:10px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--border2)}
+.tl-title{font-size:12px;font-weight:600;color:var(--txt)}.tl-sub{font-size:10px;color:var(--txt3);margin-top:2px}
+.tl-time{font-size:10px;color:var(--txt3);float:right}
+
+/* ══ BARS ════════════════════════════════════════════════════ */
+.bar-bg{height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;margin-bottom:9px}
+.bar-fill{height:100%;border-radius:3px;transition:width 1s ease}
+.lbl-row{display:flex;justify-content:space-between;font-size:10px;margin-bottom:3px}
+.lbl-name{color:var(--txt2);font-weight:500}.lbl-val{color:var(--txt3)}
+
+/* ══ SHIPMENT DETAIL MODAL ═══════════════════════════════════ */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,22,40,.45);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow-lg);width:680px;max-width:95vw;max-height:90vh;overflow-y:auto}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:0.5px solid var(--border)}
+.modal-title{font-family:var(--font-head);font-size:16px;font-weight:800;color:var(--txt);letter-spacing:.04em}
+.modal-close{width:28px;height:28px;border-radius:7px;border:none;background:var(--bg2);cursor:pointer;font-size:16px;color:var(--txt3);display:flex;align-items:center;justify-content:center;transition:.15s}
+.modal-close:hover{background:var(--red-bg);color:var(--red)}
+.modal-body{padding:20px 24px 24px}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.modal-field{background:var(--bg);border-radius:var(--radius-sm);padding:10px 12px}
+.modal-field-lbl{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--txt3);margin-bottom:3px}
+.modal-field-val{font-size:13px;font-weight:600;color:var(--txt)}
+
+/* Journey progress */
+.journey{margin:18px 0}
+.journey-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--txt3);margin-bottom:14px}
+.journey-steps{display:flex;align-items:flex-start;position:relative;margin:0 10px}
+.journey-steps::before{content:'';position:absolute;top:16px;left:0;right:0;height:2px;background:var(--border);z-index:0}
+.j-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;z-index:1}
+.j-dot{width:14px;height:14px;border-radius:50%;border:2.5px solid var(--border);background:#fff;flex-shrink:0}
+.j-dot.done{background:var(--teal);border-color:var(--teal)}
+.j-dot.active{background:var(--blue-mid);border-color:var(--blue-mid);box-shadow:0 0 0 3px rgba(46,120,240,.2)}
+.j-label{font-size:9px;color:var(--txt3);text-align:center;font-weight:500}
+.j-label.done{color:var(--teal);font-weight:600}.j-label.active{color:var(--blue);font-weight:700}
+
+/* ══ INVOICE / DOCS ══════════════════════════════════════════ */
+.doc-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border)}
+.doc-row:last-child{border-bottom:none;padding-bottom:0}
+.doc-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.doc-info{flex:1}.doc-name{font-size:12px;font-weight:600;color:var(--txt)}.doc-meta{font-size:10px;color:var(--txt3);margin-top:1px}
+.doc-size{font-size:10px;color:var(--txt3);margin-right:8px}
+.dl-btn{font-size:10px;font-weight:700;padding:4px 10px;border-radius:6px;border:0.5px solid var(--border);background:var(--bg);color:var(--blue);cursor:pointer;text-transform:uppercase;letter-spacing:.05em;transition:.15s}
+.dl-btn:hover{background:var(--blue-light);border-color:var(--blue)}
+
+/* ══ SPEND CHART ════════════════════════════════════════════ */
+.spend-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin:8px 0 6px}
+.sb-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.sb-wrap{display:flex;flex-direction:column;justify-content:flex-end;gap:1px;width:100%;height:110px}
+.sb-sea{border-radius:3px 3px 0 0;background:var(--blue-mid)}
+.sb-air{background:var(--accent)}.sb-mul{background:var(--teal)}
+.sb-lbl{font-size:8.5px;color:var(--txt3)}
+
+/* ══ TRACKING MAP ═══════════════════════════════════════════ */
+.track-map-wrap{position:relative;border-radius:var(--radius-sm);overflow:hidden}
+.track-map-svg{width:100%;display:block}
+
+/* ══ SUPPORT ════════════════════════════════════════════════ */
+.support-card{background:linear-gradient(135deg,var(--navy) 0%,#152B5C 100%);border-radius:var(--radius);padding:20px 22px;color:#fff}
+.support-card h4{font-family:var(--font-head);font-size:15px;font-weight:800;color:#fff;letter-spacing:.04em;margin-bottom:6px}
+.support-card p{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:14px}
+.support-contact{display:flex;flex-direction:column;gap:8px}
+.sc-item{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.7)}
+.sc-item strong{color:#fff}
+
+/* ══ QUICK ACTIONS ══════════════════════════════════════════ */
+.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.qa-btn{display:flex;align-items:center;gap:10px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;cursor:pointer;transition:.15s}
+.qa-btn:hover{background:var(--blue-light);border-color:var(--blue)}
+.qa-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.qa-lbl{font-size:12px;font-weight:600;color:var(--txt2)}
+.qa-sub{font-size:10px;color:var(--txt3);margin-top:1px}
+
+/* ══ RATING ═════════════════════════════════════════════════ */
+.stars{color:#F5A623;font-size:14px;letter-spacing:2px}
+
+/* ══ FOOTER ════════════════════════════════════════════════ */
+.dash-footer{background:var(--surface);border-top:0.5px solid var(--border);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--txt3)}
+.cert-strip{display:flex;gap:8px}
+.cert{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:0.5px solid var(--border2);border-radius:4px;padding:3px 8px;color:var(--txt2);background:var(--bg2)}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.kpi{animation:fadeUp .45s ease both}
+.kpi:nth-child(1){animation-delay:.04s}.kpi:nth-child(2){animation-delay:.09s}
+.kpi:nth-child(3){animation-delay:.14s}.kpi:nth-child(4){animation-delay:.19s}
+.kpi:nth-child(5){animation-delay:.24s}
+.card{animation:fadeUp .5s ease both;animation-delay:.2s}
+</style>
+</head>
+<body>
+
+<!-- ══ TOP NAV ══════════════════════════════════════════════ -->
+<nav class="topnav">
+  <a class="logo" href="https://dev.pentagonprime.com/" target="_blank">
+    <div class="logo-hex"><svg viewBox="0 0 20 20" fill="none"><path d="M10 2L18 7.5V14.5L10 19L2 14.5V7.5Z" stroke="white" stroke-width="1.6"/><path d="M10 2V19M2 7.5L18 7.5M2 14.5L18 14.5" stroke="white" stroke-width=".7" opacity=".45"/></svg></div>
+    <div><div class="logo-name">Pentagon<em>Prime</em></div><div class="logo-tag">Client Portal</div></div>
+  </a>
+  <div class="nav-tabs">
+    <button class="nav-btn active" onclick="switchTab('overview',this)">My Dashboard</button>
+    <button class="nav-btn" onclick="switchTab('shipments',this)">My Shipments</button>
+    <button class="nav-btn" onclick="switchTab('tracking',this)">Live Tracking</button>
+    <button class="nav-btn" onclick="switchTab('documents',this)">Documents</button>
+    <button class="nav-btn" onclick="switchTab('invoices',this)">Invoices</button>
+    <button class="nav-btn" onclick="switchTab('support',this)">Support</button>
+  </div>
+  <div class="nav-right">
+    <div class="live-chip"><div class="live-dot"></div>Live</div>
+    <div class="time-chip" id="clock">—</div>
+    <div class="user-chip">
+      <div class="user-avatar">TS</div>
+      <div class="user-name">Tata Steel Ltd.</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ WELCOME BANNER ════════════════════════════════════════ -->
+<div class="welcome-bar">
+  <div class="welcome-inner">
+    <div class="welcome-left">
+      <h2>Welcome back, <span>Tata Steel Ltd.</span> 👋</h2>
+      <p>Account Manager: Priya Sharma &nbsp;·&nbsp; priya.sharma@pentagonprime.com &nbsp;·&nbsp; +91 98200 45678</p>
+    </div>
+    <div class="welcome-stats">
+      <div class="ws"><div class="ws-val" id="ws-active">14</div><div class="ws-lbl">Active Shipments</div></div>
+      <div class="ws-div"></div>
+      <div class="ws"><div class="ws-val">2</div><div class="ws-lbl">Need Attention</div></div>
+      <div class="ws-div"></div>
+      <div class="ws"><div class="ws-val">3</div><div class="ws-lbl">Pending Invoices</div></div>
+      <div class="ws-div"></div>
+      <div class="ws"><div class="ws-val">₹12.4L</div><div class="ws-lbl">Outstanding</div></div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn-outline" onclick="switchTab('tracking',document.querySelectorAll('.nav-btn')[2])">Track Shipment</button>
+      <button class="btn-primary" onclick="switchTab('support',document.querySelectorAll('.nav-btn')[5])">Get Quote</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     TAB 1 — MY DASHBOARD
+════════════════════════════════════════════════════════════ -->
+<div id="tab-overview" class="tab-panel active">
+<div class="dash">
+
+  <!-- My Shipment Summary KPIs -->
+  <div class="section-head"><div class="section-title">My Shipment Summary</div><div style="font-size:11px;color:var(--txt3)">Last updated: <span id="last-upd">—</span></div></div>
+  <div class="kpi-grid5">
+    <div class="kpi" style="--kc:var(--blue);--ki:#EBF2FF"><div class="kpi-bar"></div><div class="kpi-ico">🚢</div><div class="kpi-lbl">Active Shipments</div><div class="kpi-val"><span id="ov-active">14</span></div><div class="kpi-sub"><span class="kpi-up">↑ 3</span> from last month</div></div>
+    <div class="kpi" style="--kc:var(--teal);--ki:var(--teal-bg)"><div class="kpi-bar"></div><div class="kpi-ico" style="background:var(--teal-bg)">✅</div><div class="kpi-lbl">Delivered (MTD)</div><div class="kpi-val">8</div><div class="kpi-sub"><span class="kpi-up">100%</span> on time</div></div>
+    <div class="kpi" style="--kc:var(--amber);--ki:var(--amber-bg)"><div class="kpi-bar"></div><div class="kpi-ico" style="background:var(--amber-bg)">⚠️</div><div class="kpi-lbl">Need Attention</div><div class="kpi-val">2</div><div class="kpi-sub">Delay + Customs</div></div>
+    <div class="kpi" style="--kc:var(--accent);--ki:var(--accent-soft)"><div class="kpi-bar"></div><div class="kpi-ico" style="background:var(--accent-soft)">💰</div><div class="kpi-lbl">Freight Spend (MTD)</div><div class="kpi-val">₹<small>28.4L</small></div><div class="kpi-sub"><span class="kpi-dn">↑ 8%</span> vs last month</div></div>
+    <div class="kpi" style="--kc:var(--purple);--ki:var(--purple-bg)"><div class="kpi-bar"></div><div class="kpi-ico" style="background:var(--purple-bg)">📄</div><div class="kpi-lbl">Pending Invoices</div><div class="kpi-val">3</div><div class="kpi-sub">₹12.4L outstanding</div></div>
+  </div>
+
+  <div class="g2-1">
+    <!-- My Active Shipments snapshot -->
+    <div class="card">
+      <div class="card-head"><div class="card-title">My Active Shipments</div><span class="bdg bdg-live">● Live</span></div>
+      <div style="overflow-x:auto">
+        <table class="tbl" id="ov-table">
+          <thead><tr><th>B/L No.</th><th>Route</th><th>Mode</th><th>ETA</th><th>Status</th><th>Progress</th></tr></thead>
+          <tbody id="ov-tbody"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:12px;text-align:right"><button class="fbtn sel" onclick="switchTab('shipments',document.querySelectorAll('.nav-btn')[1])">View All Shipments →</button></div>
+    </div>
+
+    <!-- Right column -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <!-- Alerts for me -->
+      <div class="card">
+        <div class="card-head"><div class="card-title">Alerts For You</div><span class="bdg bdg-warn">2 Actions</span></div>
+        <div class="al-row"><div class="al-ico i-warn">⚠</div><div class="al-body"><div class="al-title">BL-20240892 — Delayed</div><div class="al-sub">Hamburg congestion · New ETA: Apr 14 (+2 days)</div></div><div class="al-time">2h</div></div>
+        <div class="al-row"><div class="al-ico i-red">🛃</div><div class="al-body"><div class="al-title">BL-20240888 — Customs Hold</div><div class="al-sub">Additional docs required at New York</div></div><div class="al-time">5h</div></div>
+        <div class="al-row"><div class="al-ico i-ok">✓</div><div class="al-body"><div class="al-title">BL-20240885 — Delivered</div><div class="al-sub">Chennai → Sydney · 3 days early</div></div><div class="al-time">1d</div></div>
+        <div class="al-row"><div class="al-ico i-info">📄</div><div class="al-body"><div class="al-title">Invoice #INV-2024-0312 Due</div><div class="al-sub">₹4.2L due in 5 days</div></div><div class="al-time">1d</div></div>
+      </div>
+      <!-- Quick Actions -->
+      <div class="card">
+        <div class="card-head"><div class="card-title">Quick Actions</div></div>
+        <div class="qa-grid">
+          <div class="qa-btn" onclick="switchTab('tracking',document.querySelectorAll('.nav-btn')[2])"><div class="qa-ico" style="background:var(--blue-light)">🔍</div><div><div class="qa-lbl">Track Shipment</div><div class="qa-sub">Enter B/L number</div></div></div>
+          <div class="qa-btn" onclick="switchTab('documents',document.querySelectorAll('.nav-btn')[3])"><div class="qa-ico" style="background:var(--teal-bg)">📁</div><div><div class="qa-lbl">My Documents</div><div class="qa-sub">BLs, certificates</div></div></div>
+          <div class="qa-btn" onclick="switchTab('invoices',document.querySelectorAll('.nav-btn')[4])"><div class="qa-ico" style="background:var(--accent-soft)">💳</div><div><div class="qa-lbl">Pay Invoice</div><div class="qa-sub">3 pending</div></div></div>
+          <div class="qa-btn" onclick="switchTab('support',document.querySelectorAll('.nav-btn')[5])"><div class="qa-ico" style="background:var(--purple-bg)">💬</div><div><div class="qa-lbl">Get a Quote</div><div class="qa-sub">New booking</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Spend + History -->
+  <div class="g3-w">
+    <!-- Monthly Spend Chart -->
+    <div class="card">
+      <div class="card-head"><div class="card-title">My Monthly Freight Spend</div><span class="bdg bdg-blue">₹ Lakhs</span></div>
+      <div class="spend-bars" id="spend-chart"></div>
+      <div style="display:flex;gap:14px;margin-top:4px">
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--txt2)"><div style="width:8px;height:8px;border-radius:2px;background:var(--blue-mid)"></div>Sea</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--txt2)"><div style="width:8px;height:8px;border-radius:2px;background:var(--accent)"></div>Air</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--txt2)"><div style="width:8px;height:8px;border-radius:2px;background:var(--teal)"></div>Multimodal</div>
+      </div>
+    </div>
+
+    <!-- Top lanes used by me -->
+    <div class="card">
+      <div class="card-head"><div class="card-title">My Top Routes</div><span class="bdg bdg-blue">Lifetime</span></div>
+      <div>
+        <div class="lbl-row"><span class="lbl-name">🚢 Mumbai → Hamburg</span><span class="lbl-val">84 shipments</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:90%;background:var(--blue-mid)"></div></div>
+        <div class="lbl-row"><span class="lbl-name">✈️ Delhi → Dubai</span><span class="lbl-val">62 shipments</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:68%;background:var(--accent)"></div></div>
+        <div class="lbl-row"><span class="lbl-name">🚢 JNPT → Los Angeles</span><span class="lbl-val">48 shipments</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:52%;background:var(--blue-mid)"></div></div>
+        <div class="lbl-row"><span class="lbl-name">🚢 Chennai → Singapore</span><span class="lbl-val">31 shipments</span></div>
+        <div class="bar-bg" style="margin-bottom:0"><div class="bar-fill" style="width:34%;background:var(--teal)"></div></div>
+      </div>
+    </div>
+
+    <!-- CO2 + My Account Manager -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <div class="card-head"><div class="card-title">My CO₂ Footprint</div><span class="bdg bdg-eco">Green</span></div>
+        <div style="display:flex;align-items:center;gap:16px">
+          <svg width="68" height="68" viewBox="0 0 68 68">
+            <circle cx="34" cy="34" r="26" fill="none" stroke="#E5F5F0" stroke-width="8"/>
+            <circle cx="34" cy="34" r="26" fill="none" stroke="#0E8A6E" stroke-width="8" stroke-dasharray="163.4" stroke-dashoffset="114.4" stroke-linecap="round" transform="rotate(-90 34 34)"/>
+            <text x="34" y="32" text-anchor="middle" font-size="12" font-weight="800" fill="#0A1628" font-family="Barlow Condensed,sans-serif">30%</text>
+            <text x="34" y="44" text-anchor="middle" font-size="7" fill="#7A8EA8" font-family="Barlow,sans-serif">vs sea-only</text>
+          </svg>
+          <div>
+            <div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">CO₂ This Month</div>
+            <div style="font-family:var(--font-head);font-size:22px;font-weight:800;color:var(--txt)">12.8<span style="font-size:13px;opacity:.5"> T</span></div>
+            <div style="font-size:11px;color:var(--teal);font-weight:600;margin-top:4px">↓ 2.1T vs last month</div>
+          </div>
+        </div>
+      </div>
+      <div class="support-card" style="flex:1">
+        <h4>Your Account Manager</h4>
+        <p>Dedicated support for Tata Steel Ltd.</p>
+        <div class="support-contact">
+          <div class="sc-item">👤 <strong>Priya Sharma</strong></div>
+          <div class="sc-item">📞 <strong>+91 98200 45678</strong></div>
+          <div class="sc-item">✉️ <strong>priya@pentagonprime.com</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     TAB 2 — MY SHIPMENTS (Past + Present)
+════════════════════════════════════════════════════════════ -->
+<div id="tab-shipments" class="tab-panel">
+<div class="dash">
+  <div class="section-head"><div class="section-title">My Shipments — All Time</div></div>
+  <div class="kpi-grid4">
+    <div class="kpi" style="--kc:var(--blue);--ki:#EBF2FF"><div class="kpi-bar"></div><div class="kpi-ico">📦</div><div class="kpi-lbl">Total Shipments</div><div class="kpi-val">312</div><div class="kpi-sub">Since 2018</div></div>
+    <div class="kpi" style="--kc:var(--teal);--ki:var(--teal-bg)"><div class="kpi-bar"></div><div class="kpi-ico" style="background:var(--teal-bg)">✅</div><div class="kpi-lbl">Delivered</div><div class="kpi-val">292</div><div class="kpi-sub"><span class="kpi-up">93.6%</span> on time</div></div>
+    <div class="kpi" style="--kc:var(--blue-mid);--ki:#EBF2FF"><div class="kpi-bar"></div><div class="kpi-ico">🚢</div><div class="kpi-lbl">Active Now</div><div class="kpi-val">14</div><div class="kpi-sub">Sea + Air + Multi</div></div>
+    <div class="kpi" style="--kc:var(--amber);--ki:var(--amber-bg)"><div class="kpi-bar"></div><div class="kpi-ico" style="background:var(--amber-bg)">⏳</div><div class="kpi-lbl">Delayed / Issue</div><div class="kpi-val">2</div><div class="kpi-sub">Action required</div></div>
+  </div>
+
+  <!-- Filter + Search -->
+  <div class="search-bar">
+    <span style="font-size:15px;color:var(--txt3)">🔍</span>
+    <input type="text" id="sh-search" placeholder="Search B/L number, vessel, destination, commodity…" oninput="renderAllShip()"/>
+    <button class="fbtn sel" onclick="sfilt('all',this)">All</button>
+    <button class="fbtn" onclick="sfilt('active',this)">Active</button>
+    <button class="fbtn" onclick="sfilt('transit',this)">In Transit</button>
+    <button class="fbtn" onclick="sfilt('delayed',this)">Delayed</button>
+    <button class="fbtn" onclick="sfilt('customs',this)">At Customs</button>
+    <button class="fbtn" onclick="sfilt('delivered',this)">Delivered</button>
+    <button class="fbtn" onclick="sfilt('past',this)">Past (2023)</button>
+  </div>
+
+  <div class="card" style="padding:0;overflow:auto;margin-bottom:16px">
+    <table class="tbl">
+      <thead><tr><th>B/L Number</th><th>Origin</th><th>Destination</th><th>Commodity</th><th>Mode</th><th>Weight / CBM</th><th>ETD</th><th>ETA</th><th>Status</th><th>Progress</th><th>Action</th></tr></thead>
+      <tbody id="sh-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- Alerts -->
+  <div class="g2">
+    <div class="card">
+      <div class="card-head"><div class="card-title">Shipments Needing Attention</div><span class="bdg bdg-warn">Action Required</span></div>
+      <div class="al-row"><div class="al-ico i-warn">⚠</div><div class="al-body"><div class="al-title">BL-20240892 — Hamburg Congestion Delay</div><div class="al-sub">FCL 40' · New ETA Apr 14 (was Apr 12) · MSC Gulsun vessel</div></div><div class="al-time">2h</div></div>
+      <div class="al-row"><div class="al-ico i-red">🛃</div><div class="al-body"><div class="al-title">BL-20240888 — Customs Documentation Required</div><div class="al-sub">New York CBP requesting Form 7512 · Please upload via Documents tab</div></div><div class="al-time">5h</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Recently Delivered</div><span class="bdg bdg-live">This Month</span></div>
+      <div class="al-row"><div class="al-ico i-ok">✓</div><div class="al-body"><div class="al-title">BL-20240885 · Chennai → Sydney</div><div class="al-sub">Delivered Apr 07 · 3 days early · Auto parts · 18T</div></div><div class="al-time">3d</div></div>
+      <div class="al-row"><div class="al-ico i-ok">✓</div><div class="al-body"><div class="al-title">BL-20240882 · JNPT → Hamburg</div><div class="al-sub">Delivered Apr 05 · On schedule · Flat steel · 24T</div></div><div class="al-time">5d</div></div>
+      <div class="al-row"><div class="al-ico i-ok">✓</div><div class="al-body"><div class="al-title">BL-20240871 · Mumbai → Singapore</div><div class="al-sub">Delivered Apr 02 · 1 day early · Wire rods · 12T</div></div><div class="al-time">8d</div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     TAB 3 — LIVE TRACKING
+════════════════════════════════════════════════════════════ -->
+<div id="tab-tracking" class="tab-panel">
+<div class="dash">
+  <div class="section-head"><div class="section-title">Live Shipment Tracking</div></div>
+
+  <!-- Track input -->
+  <div class="card" style="margin-bottom:16px">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="flex:1;min-width:260px">
+        <div style="font-size:11px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">Enter B/L Number or Booking Reference</div>
+        <div style="display:flex;gap:10px">
+          <input id="track-input" type="text" placeholder="e.g. BL-20240901" style="flex:1;border:0.5px solid var(--border);border-radius:8px;padding:10px 14px;font-family:var(--font);font-size:13px;color:var(--txt);outline:none;background:var(--bg)" oninput="filterTracking()"/>
+          <button class="btn-primary" onclick="filterTracking()">Track</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="fbtn sel" onclick="trkFilt('all',this)">All Active</button>
+        <button class="fbtn" onclick="trkFilt('sea',this)">Sea</button>
+        <button class="fbtn" onclick="trkFilt('air',this)">Air</button>
+        <button class="fbtn" onclick="trkFilt('delayed',this)">Delayed</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2-1">
+    <!-- Tracking cards list -->
+    <div id="track-list" style="display:flex;flex-direction:column;gap:12px"></div>
+
+    <!-- Live mini-map + vessel info -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:16px 18px 10px"><div class="card-head" style="margin-bottom:6px"><div class="card-title">Route Map</div><span class="bdg bdg-live">Live</span></div></div>
+        <svg class="track-map-svg" viewBox="0 0 380 220" xmlns="http://www.w3.org/2000/svg">
+          <rect width="380" height="220" fill="#D6E8F5"/>
+          <path d="M20 55 L90 44 L120 60 L132 82 L138 108 L130 132 L120 155 L108 175 L96 185 L82 195 L60 195 L46 180 L34 165 L24 148 L18 128 L18 100 L20 78Z" fill="#C0D4EC" stroke="#AABDDC" stroke-width=".7"/>
+          <path d="M168 38 L195 32 L210 40 L218 54 L217 68 L207 78 L192 80 L178 76 L166 66 L162 52Z" fill="#C0D4EC" stroke="#AABDDC" stroke-width=".7"/>
+          <path d="M220 50 L248 44 L272 46 L298 50 L318 58 L330 70 L332 84 L324 96 L308 103 L288 106 L268 104 L250 100 L232 96 L220 88 L215 74 L216 60Z" fill="#C0D4EC" stroke="#AABDDC" stroke-width=".7"/>
+          <path d="M252 108 L272 104 L284 112 L287 128 L282 144 L272 154 L258 158 L246 155 L238 144 L236 130 L240 116Z" fill="#C0D4EC" stroke="#AABDDC" stroke-width=".7"/>
+          <path d="M296 145 L330 138 L355 145 L362 160 L356 175 L340 182 L320 183 L304 178 L296 165 L294 153Z" fill="#C0D4EC" stroke="#AABDDC" stroke-width=".7"/>
+          <!-- Route Mumbai → Hamburg -->
+          <path d="M258 116 Q220 50 182 58" fill="none" stroke="#2E78F0" stroke-width="2" stroke-dasharray="7 3" opacity=".9"><animate attributeName="stroke-dashoffset" from="0" to="-40" dur="2s" repeatCount="indefinite"/></path>
+          <!-- Vessel position (animated) -->
+          <circle cx="225" cy="76" r="7" fill="#2E78F0" opacity=".2"/>
+          <circle cx="225" cy="76" r="4" fill="#2E78F0" stroke="white" stroke-width="1.5"/>
+          <!-- Origin -->
+          <circle cx="258" cy="118" r="4.5" fill="#E8541A" stroke="white" stroke-width="1.5"/>
+          <text x="258" y="132" text-anchor="middle" font-size="7.5" fill="#A03010" font-family="Barlow,sans-serif" font-weight="700">Mumbai</text>
+          <!-- Destination -->
+          <circle cx="182" cy="58" r="4" fill="#2E78F0" stroke="white" stroke-width="1.5"/>
+          <text x="182" y="50" text-anchor="middle" font-size="7.5" fill="#1045A0" font-family="Barlow,sans-serif" font-weight="700">Hamburg</text>
+          <!-- Legend -->
+          <rect x="8" y="198" width="160" height="17" rx="4" fill="white" opacity=".8"/>
+          <circle cx="18" cy="206" r="3" fill="#2E78F0"/><text x="25" y="210" font-size="7.5" fill="#3D5070" font-family="Barlow,sans-serif">Sea route</text>
+          <circle cx="80" cy="206" r="3" fill="#E8541A"/><text x="87" y="210" font-size="7.5" fill="#3D5070" font-family="Barlow,sans-serif">Origin</text>
+          <circle cx="130" cy="206" r="3" fill="#2E78F0"/><text x="137" y="210" font-size="7.5" fill="#3D5070" font-family="Barlow,sans-serif">Vessel</text>
+        </svg>
+        <div style="padding:10px 18px 14px;display:flex;gap:8px;flex-wrap:wrap">
+          <div style="background:var(--navy);color:rgba(255,255,255,.8);font-size:10px;font-weight:600;border-radius:6px;padding:4px 10px"><span style="color:#5FA0F8">BL-20240901</span> · MSC Gulsun</div>
+          <div style="background:var(--navy);color:rgba(255,255,255,.8);font-size:10px;font-weight:600;border-radius:6px;padding:4px 10px">60% complete</div>
+          <div style="background:var(--navy);color:rgba(255,255,255,.8);font-size:10px;font-weight:600;border-radius:6px;padding:4px 10px">ETA: <span style="color:#5FA0F8">Apr 23</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Last 15-Min Updates</div><span class="bdg bdg-live">Auto-refresh</span></div>
+        <div class="al-row"><div class="al-ico i-info">📡</div><div class="al-body"><div class="al-title">BL-20240901 — Position Updated</div><div class="al-sub">48.2°N, 14.5°W · North Atlantic · Speed 18.4kn</div></div><div class="al-time">2m</div></div>
+        <div class="al-row"><div class="al-ico i-warn">⚠</div><div class="al-body"><div class="al-title">BL-20240892 — Port Congestion Alert</div><div class="al-sub">Hamburg ETA revised +2 days due to berth wait</div></div><div class="al-time">14m</div></div>
+        <div class="al-row"><div class="al-ico i-ok">✓</div><div class="al-body"><div class="al-title">BL-20240900 — Departed Dubai</div><div class="al-sub">Air India Cargo · On schedule · Expected Delhi 18:40</div></div><div class="al-time">1h</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     TAB 4 — MY DOCUMENTS
+════════════════════════════════════════════════════════════ -->
+<div id="tab-documents" class="tab-panel">
+<div class="dash">
+  <div class="section-head"><div class="section-title">My Documents</div><span class="bdg bdg-blue" style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px">24 Files</span></div>
+  <div class="kpi-grid4">
+    <div class="kpi" style="--kc:var(--blue);--ki:#EBF2FF"><div class="kpi-bar"></div><div class="kpi-ico">📋</div><div class="kpi-lbl">Bills of Lading</div><div class="kpi-val">14</div><div class="kpi-sub">All shipments</div></div>
+    <div class="kpi" style="--kc:var(--teal);--ki:var(--teal-bg)"><div class="kpi-bar"></div><div class="kpi-ico" style="background:var(--teal-bg)">🏛</div><div class="kpi-lbl">Customs Docs</div><div class="kpi-val">8</div><div class="kpi-sub">Clearance certs</div></div>
+    <div class="kpi" style="--kc:var(--amber);--ki:var(--amber-bg)"><div class="kpi-bar"></div><div class="kpi-ico" style="background:var(--amber-bg)">📑</div><div class="kpi-lbl">Packing Lists</div><div class="kpi-val">12</div><div class="kpi-sub">All shipments</div></div>
+    <div class="kpi" style="--kc:var(--accent);--ki:var(--accent-soft)"><div class="kpi-bar"></div><div class="kpi-ico" style="background:var(--accent-soft)">⚠️</div><div class="kpi-lbl">Action Required</div><div class="kpi-val">1</div><div class="kpi-sub">Upload requested</div></div>
+  </div>
+
+  <!-- Upload needed -->
+  <div style="background:var(--red-bg);border:0.5px solid #F0B8B0;border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:18px">🔴</span>
+    <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--red)">Document Upload Required — BL-20240888</div><div style="font-size:11px;color:var(--txt3);margin-top:2px">CBP New York is requesting Form 7512 (In-Bond Entry). Please upload to prevent further customs delay.</div></div>
+    <button class="btn-primary" style="font-size:11px;padding:7px 14px">Upload Now</button>
+  </div>
+
+  <div class="search-bar">
+    <span style="font-size:15px;color:var(--txt3)">🔍</span>
+    <input type="text" placeholder="Search documents by name, B/L number, type…"/>
+    <button class="fbtn sel">All</button>
+    <button class="fbtn">Bills of Lading</button>
+    <button class="fbtn">Customs</button>
+    <button class="fbtn">Certificates</button>
+    <button class="fbtn">Packing Lists</button>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-head"><div class="card-title">Recent Documents</div><span class="bdg bdg-blue">Active Shipments</span></div>
+      <div class="doc-row"><div class="doc-ico" style="background:var(--blue-light)">📋</div><div class="doc-info"><div class="doc-name">BL-20240901 — Bill of Lading</div><div class="doc-meta">Mumbai → Hamburg · MSC Gulsun · Apr 02, 2024</div></div><div class="doc-size">248 KB</div><button class="dl-btn">↓ PDF</button></div>
+      <div class="doc-row"><div class="doc-ico" style="background:var(--teal-bg)">🏛</div><div class="doc-info"><div class="doc-name">BL-20240901 — Customs Invoice</div><div class="doc-meta">HS 720610 · Flat steel · FOB · PRIME validated</div></div><div class="doc-size">186 KB</div><button class="dl-btn">↓ PDF</button></div>
+      <div class="doc-row"><div class="doc-ico" style="background:var(--amber-bg)">📑</div><div class="doc-info"><div class="doc-name">BL-20240901 — Packing List</div><div class="doc-meta">24T net · 26T gross · 2 × 40' FCL</div></div><div class="doc-size">120 KB</div><button class="dl-btn">↓ PDF</button></div>
+      <div class="doc-row"><div class="doc-ico" style="background:var(--blue-light)">📋</div><div class="doc-info"><div class="doc-name">BL-20240900 — Air Waybill</div><div class="doc-meta">Delhi → Dubai · Air India Cargo · Apr 08, 2024</div></div><div class="doc-size">198 KB</div><button class="dl-btn">↓ PDF</button></div>
+      <div class="doc-row"><div class="doc-ico" style="background:var(--red-bg)">⚠️</div><div class="doc-info"><div class="doc-name">BL-20240888 — Form 7512 MISSING</div><div class="doc-meta" style="color:var(--red)">CBP New York — Required for customs clearance</div></div><div class="doc-size">—</div><button class="dl-btn" style="background:var(--red-bg);border-color:var(--red);color:var(--red)">Upload</button></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div class="card-title">Past Documents (2023–2024)</div><span class="bdg bdg-blue">Archive</span></div>
+      <div class="doc-row"><div class="doc-ico" style="background:var(--blue-light)">📋</div><div class="doc-info"><div class="doc-name">BL-20240882 — Bill of Lading</div><div class="doc-meta">JNPT → Hamburg · Delivered Apr 05</div></div><div class="doc-size">231 KB</div><button class="dl-btn">↓ PDF</button></div>
+      <div class="doc-row"><div class="doc-ico" style="background:var(--blue-light)">📋</div><div class="doc-info"><div class="doc-name">BL-20240885 — Bill of Lading</div><div class="doc-meta">Chennai → Sydney · Delivered Apr 07</div></div><div class="doc-size">218 KB</div><button class="dl-btn">↓ PDF</button></div>
+      <div class="doc-row"><div class="doc-ico" style="background:var(--teal-bg)">🏆</div><div class="doc-info"><div class="doc-name">Certificate of Origin — Q1 2024</div><div class="doc-meta">Flat steel · HS 720610 · FIEO certified</div></div><div class="doc-size">164 KB</div><button class="dl-btn">↓ PDF</button></div>
+      <div class="doc-row"><div class="doc-ico" style="background:var(--amber-bg)">📑</div><div class="doc-info"><div class="doc-name">Annual Compliance Pack 2023</div><div class="doc-meta">AEO certification docs · Customs audit trail</div></div><div class="doc-size">1.8 MB</div><button class="dl-btn">↓ ZIP</button></div>
+      <div class="doc-row"><div class="doc-ico" style="background:var(--purple-bg)">📊</div><div class="doc-info"><div class="doc-name">Freight Performance Report 2023</div><div class="doc-meta">312 shipments · On-time · Cost analysis</div></div><div class="doc-size">3.2 MB</div><button class="dl-btn">↓ PDF</button></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     TAB 5 — MY INVOICES
+════════════════════════════════════════════════════════════ -->
+<div id="tab-invoices" class="tab-panel">
+<div class="dash">
+  <div class="section-head"><div class="section-title">My Invoices & Payments</div></div>
+  <div class="kpi-grid4">
+    <div class="kpi" style="--kc:var(--red);--ki:var(--red-bg)"><div class="kpi-bar"></div><div class="kpi-ico" style="background:var(--red-bg)">💳</div><div class="kpi-lbl">Outstanding</div><div class="kpi-val">₹<small>12.4L</small></div><div class="kpi-sub">3 invoices pending</div></div>
+    <div class="kpi" style="--kc:var(--teal);--ki:var(--teal-bg)"><div class="kpi-bar"></div><div class="kpi-ico" style="background:var(--teal-bg)">✅</div><div class="kpi-lbl">Paid (MTD)</div><div class="kpi-val">₹<small>16L</small></div><div class="kpi-sub">4 invoices cleared</div></div>
+    <div class="kpi" style="--kc:var(--amber);--ki:var(--amber-bg)"><div class="kpi-bar"></div><div class="kpi-ico" style="background:var(--amber-bg)">⏰</div><div class="kpi-lbl">Due in 7 Days</div><div class="kpi-val">₹<small>4.2L</small></div><div class="kpi-sub">INV-2024-0312</div></div>
+    <div class="kpi" style="--kc:var(--blue);--ki:#EBF2FF"><div class="kpi-bar"></div><div class="kpi-ico">📊</div><div class="kpi-lbl">Total Paid (YTD)</div><div class="kpi-val">₹<small>1.8Cr</small></div><div class="kpi-sub">Since Jan 2024</div></div>
+  </div>
+
+  <!-- Pending invoices -->
+  <div class="section-head" style="margin-top:4px"><div class="section-title">Pending Invoices</div></div>
+  <div class="card" style="padding:0;overflow:auto;margin-bottom:16px">
+    <table class="tbl">
+      <thead><tr><th>Invoice No.</th><th>B/L Reference</th><th>Service</th><th>Amount</th><th>Issue Date</th><th>Due Date</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:700;color:var(--blue)">INV-2024-0314</td><td>BL-20240901</td><td>Sea FCL · Mumbai–Hamburg</td><td style="font-weight:700">₹5.8L</td><td>Apr 02</td><td style="font-weight:600;color:var(--red)">Apr 17</td><td><span class="pill p-amber">Due Soon</span></td><td><button class="dl-btn" style="color:var(--blue)">Pay Now</button></td></tr>
+        <tr><td style="font-weight:700;color:var(--blue)">INV-2024-0313</td><td>BL-20240900</td><td>Air Freight · Delhi–Dubai</td><td style="font-weight:700">₹2.4L</td><td>Apr 08</td><td style="font-weight:600;color:var(--amber)">Apr 22</td><td><span class="pill p-amber">Pending</span></td><td><button class="dl-btn" style="color:var(--blue)">Pay Now</button></td></tr>
+        <tr><td style="font-weight:700;color:var(--blue)">INV-2024-0312</td><td>BL-20240898</td><td>LCL · Chennai–Singapore</td><td style="font-weight:700">₹4.2L</td><td>Apr 01</td><td style="font-weight:600;color:var(--red)">Apr 15 ⚠</td><td><span class="pill p-red">Overdue</span></td><td><button class="dl-btn" style="background:var(--red-bg);border-color:var(--red);color:var(--red)">Pay Now</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="g2">
+    <!-- Payment history -->
+    <div class="card">
+      <div class="card-head"><div class="card-title">Payment History</div><span class="bdg bdg-blue">2024</span></div>
+      <div style="overflow-x:auto">
+        <table class="tbl">
+          <thead><tr><th>Invoice</th><th>Service</th><th>Amount</th><th>Paid On</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--blue);font-weight:600">INV-2024-0311</td><td>Sea FCL · JNPT–Hamburg</td><td style="font-weight:700">₹6.1L</td><td>Apr 05</td><td><span class="pill p-green">Paid</span></td></tr>
+            <tr><td style="color:var(--blue);font-weight:600">INV-2024-0310</td><td>Multimodal · Chennai–Sydney</td><td style="font-weight:700">₹3.8L</td><td>Apr 07</td><td><span class="pill p-green">Paid</span></td></tr>
+            <tr><td style="color:var(--blue);font-weight:600">INV-2024-0309</td><td>Air Freight · BOM–JFK</td><td style="font-weight:700">₹4.2L</td><td>Mar 28</td><td><span class="pill p-green">Paid</span></td></tr>
+            <tr><td style="color:var(--blue);font-weight:600">INV-2024-0308</td><td>Sea FCL · Mumbai–Hamburg</td><td style="font-weight:700">₹5.6L</td><td>Mar 22</td><td><span class="pill p-green">Paid</span></td></tr>
+            <tr><td style="color:var(--blue);font-weight:600">INV-2024-0307</td><td>Custom Clearance</td><td style="font-weight:700">₹0.3L</td><td>Mar 18</td><td><span class="pill p-green">Paid</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Spend summary + download -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <div class="card-head"><div class="card-title">Spend By Service</div><span class="bdg bdg-blue">YTD</span></div>
+        <div class="lbl-row"><span class="lbl-name">Sea FCL / LCL</span><span class="lbl-val">₹84L (61%)</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:61%;background:var(--blue-mid)"></div></div>
+        <div class="lbl-row"><span class="lbl-name">Air Freight</span><span class="lbl-val">₹38L (27%)</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:27%;background:var(--accent)"></div></div>
+        <div class="lbl-row"><span class="lbl-name">Customs Clearance</span><span class="lbl-val">₹9L (6%)</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:6%;background:var(--amber)"></div></div>
+        <div class="lbl-row"><span class="lbl-name">Warehousing / Misc</span><span class="lbl-val">₹8L (6%)</span></div>
+        <div class="bar-bg" style="margin-bottom:0"><div class="bar-fill" style="width:6%;background:var(--teal)"></div></div>
+      </div>
+      <div class="card" style="flex:1">
+        <div class="card-head"><div class="card-title">Statements</div></div>
+        <div class="doc-row"><div class="doc-ico" style="background:var(--blue-light)">📊</div><div class="doc-info"><div class="doc-name">Q1 2024 Account Statement</div><div class="doc-meta">Jan–Mar · 14 invoices · ₹62L</div></div><button class="dl-btn">↓ PDF</button></div>
+        <div class="doc-row"><div class="doc-ico" style="background:var(--bg2)">📊</div><div class="doc-info"><div class="doc-name">Annual Statement 2023</div><div class="doc-meta">Full year · 48 invoices · ₹1.2Cr</div></div><button class="dl-btn">↓ PDF</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     TAB 6 — SUPPORT
+════════════════════════════════════════════════════════════ -->
+<div id="tab-support" class="tab-panel">
+<div class="dash">
+  <div class="section-head"><div class="section-title">Support & New Bookings</div></div>
+
+  <div class="g3">
+    <!-- Get a Quote -->
+    <div class="card">
+      <div class="card-head"><div class="card-title">Request a Quote</div><span class="bdg bdg-ai">⚡ PRIME AI</span></div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="font-size:10px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Shipment Type</div>
+          <div style="display:flex;gap:6px">
+            <button class="fbtn sel" style="flex:1">🚢 Sea FCL</button>
+            <button class="fbtn" style="flex:1">🚢 Sea LCL</button>
+            <button class="fbtn" style="flex:1">✈️ Air</button>
+          </div>
+        </div>
+        <div><label style="font-size:10px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px">Origin</label><input type="text" placeholder="e.g. Mumbai, JNPT" style="width:100%;border:0.5px solid var(--border);border-radius:8px;padding:9px 12px;font-family:var(--font);font-size:13px;outline:none;background:var(--bg)"/></div>
+        <div><label style="font-size:10px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px">Destination</label><input type="text" placeholder="e.g. Hamburg, Germany" style="width:100%;border:0.5px solid var(--border);border-radius:8px;padding:9px 12px;font-family:var(--font);font-size:13px;outline:none;background:var(--bg)"/></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div><label style="font-size:10px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px">Weight (kg)</label><input type="number" placeholder="e.g. 24000" style="width:100%;border:0.5px solid var(--border);border-radius:8px;padding:9px 12px;font-family:var(--font);font-size:13px;outline:none;background:var(--bg)"/></div>
+          <div><label style="font-size:10px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px">Commodity</label><input type="text" placeholder="e.g. Flat steel" style="width:100%;border:0.5px solid var(--border);border-radius:8px;padding:9px 12px;font-family:var(--font);font-size:13px;outline:none;background:var(--bg)"/></div>
+        </div>
+        <div><label style="font-size:10px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px">Preferred Readiness Date</label><input type="date" style="width:100%;border:0.5px solid var(--border);border-radius:8px;padding:9px 12px;font-family:var(--font);font-size:13px;outline:none;background:var(--bg)"/></div>
+        <button class="btn-primary" style="width:100%;padding:11px;font-size:13px">⚡ Get PRIME AI Quote (under 10s)</button>
+        <div style="font-size:10px;color:var(--txt3);text-align:center">PRIME AI scans 50+ carriers and returns ranked options instantly</div>
+      </div>
+    </div>
+
+    <!-- Raise a Ticket -->
+    <div class="card">
+      <div class="card-head"><div class="card-title">Raise a Support Ticket</div><span class="bdg bdg-blue">24/7</span></div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="font-size:10px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Issue Type</div>
+          <select style="width:100%;border:0.5px solid var(--border);border-radius:8px;padding:9px 12px;font-family:var(--font);font-size:13px;color:var(--txt);outline:none;background:var(--bg)">
+            <option>Shipment Delay / Exception</option>
+            <option>Document Issue</option>
+            <option>Customs / Compliance</option>
+            <option>Invoice / Payment</option>
+            <option>Tracking Update</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div><label style="font-size:10px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px">Related B/L Number (optional)</label><input type="text" placeholder="e.g. BL-20240901" style="width:100%;border:0.5px solid var(--border);border-radius:8px;padding:9px 12px;font-family:var(--font);font-size:13px;outline:none;background:var(--bg)"/></div>
+        <div><label style="font-size:10px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px">Description</label><textarea rows="4" placeholder="Describe your issue clearly…" style="width:100%;border:0.5px solid var(--border);border-radius:8px;padding:9px 12px;font-family:var(--font);font-size:13px;color:var(--txt);outline:none;background:var(--bg);resize:vertical"></textarea></div>
+        <div><label style="font-size:10px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px">Priority</label>
+          <div style="display:flex;gap:6px">
+            <button class="fbtn" style="flex:1">🟢 Low</button>
+            <button class="fbtn sel" style="flex:1">🟡 Medium</button>
+            <button class="fbtn" style="flex:1">🔴 High</button>
+          </div>
+        </div>
+        <button class="btn-primary" style="width:100%;padding:11px">Submit Ticket</button>
+      </div>
+    </div>
+
+    <!-- Support contacts + open tickets -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="support-card">
+        <h4>Your Dedicated Team</h4>
+        <p>Pentagon Prime support for Tata Steel Ltd.</p>
+        <div class="support-contact">
+          <div class="sc-item">👤 <div><strong>Priya Sharma</strong> — Account Manager<br><span style="font-size:10px;opacity:.6">+91 98200 45678 · priya@pentagonprime.com</span></div></div>
+          <div class="sc-item">👤 <div><strong>Rohan Desai</strong> — Ops Coordinator<br><span style="font-size:10px;opacity:.6">+91 98765 12340 · rohan@pentagonprime.com</span></div></div>
+          <div class="sc-item">📞 <div><strong>24/7 Helpdesk</strong><br><span style="font-size:10px;opacity:.6">+91 22 4080 9999</span></div></div>
+          <div class="sc-item">💬 <strong>WhatsApp:</strong> +91 98200 45678</div>
+        </div>
+      </div>
+      <div class="card" style="flex:1">
+        <div class="card-head"><div class="card-title">Open Tickets</div><span class="bdg bdg-warn">2 Open</span></div>
+        <div class="al-row"><div class="al-ico i-warn">🎫</div><div class="al-body"><div class="al-title">TKT-2024-0089 — Customs Delay</div><div class="al-sub">BL-20240888 · New York · Medium priority</div></div><div class="al-time" style="background:var(--amber-bg);color:var(--amber);padding:2px 7px;border-radius:10px;font-weight:600">Open</div></div>
+        <div class="al-row"><div class="al-ico i-info">🎫</div><div class="al-body"><div class="al-title">TKT-2024-0082 — Rate Query</div><div class="al-sub">Q2 contract rates JNPT–Hamburg · In review</div></div><div class="al-time" style="background:var(--blue-light);color:var(--blue);padding:2px 7px;border-radius:10px;font-weight:600">Review</div></div>
+        <div style="margin-top:14px;padding-top:14px;border-top:0.5px solid var(--border)">
+          <div style="font-size:11px;font-weight:600;color:var(--txt3);margin-bottom:6px">Rate This Interaction</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="stars">★★★★★</div>
+            <span style="font-size:11px;color:var(--txt3)">4.8 / 5.0 &nbsp;·&nbsp; 24 reviews</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service request history -->
+  <div class="card">
+    <div class="card-head"><div class="card-title">Past Service Requests</div><span class="bdg bdg-blue">2024</span></div>
+    <div style="overflow-x:auto">
+      <table class="tbl">
+        <thead><tr><th>Ticket No.</th><th>Type</th><th>B/L Reference</th><th>Description</th><th>Raised</th><th>Resolved</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--blue);font-weight:600">TKT-2024-0078</td><td>Document Issue</td><td>BL-20240871</td><td>Missing COO for customs</td><td>Apr 01</td><td>Apr 02</td><td><span class="pill p-green">Resolved</span></td></tr>
+          <tr><td style="color:var(--blue);font-weight:600">TKT-2024-0072</td><td>Shipment Delay</td><td>BL-20240862</td><td>Port congestion – Singapore</td><td>Mar 28</td><td>Mar 30</td><td><span class="pill p-green">Resolved</span></td></tr>
+          <tr><td style="color:var(--blue);font-weight:600">TKT-2024-0065</td><td>Invoice Query</td><td>INV-2024-0302</td><td>Charge clarification requested</td><td>Mar 20</td><td>Mar 21</td><td><span class="pill p-green">Resolved</span></td></tr>
+          <tr><td style="color:var(--blue);font-weight:600">TKT-2024-0058</td><td>Rate Query</td><td>—</td><td>Q2 FCL spot rate JNPT–LA</td><td>Mar 12</td><td>Mar 13</td><td><span class="pill p-green">Resolved</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════ -->
+<div class="dash-footer">
+  <span>© 2026 Pentagon Prime · Client Portal · Tata Steel Ltd. · Data secure &amp; encrypted · Support: +91 22 4080 9999</span>
+  <div class="cert-strip">
+    <span class="cert">ISO</span><span class="cert">AEO</span><span class="cert">IATA</span>
+    <span class="cert">FIATA</span><span class="cert">Lognet</span><span class="cert">MTO</span>
+  </div>
+</div>
+
+<!-- ══ SHIPMENT DETAIL MODAL ═════════════════════════════════ -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="modal-title">Shipment Detail</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+/* ── Tab switching ─────────────────────────────────────────── */
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (id === 'overview') buildSpendChart();
+  if (id === 'tracking') { buildTrackCards(); filterTracking(); }
+}
+
+/* ── Clock ─────────────────────────────────────────────────── */
+function tick() {
+  const d = new Date();
+  const ts = d.toLocaleDateString('en-IN',{day:'2-digit',month:'short'}) + ' · ' + d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('clock').textContent = ts;
+  const lu = document.getElementById('last-upd');
+  if (lu) lu.textContent = ts;
+}
+tick(); setInterval(tick, 30000);
+
+/* ── Live counter ──────────────────────────────────────────── */
+setInterval(() => {
+  const el = document.getElementById('ov-active');
+  if (el) { const v = 14 + Math.floor(Math.random()*3)-1; el.textContent = v; document.getElementById('ws-active').textContent = v; }
+}, 9000);
+
+/* ══ SHIPMENT DATA (client-specific) ══════════════════════════ */
+const allShips = [
+  // Active
+  {bl:'BL-20240901',origin:'Mumbai',dest:'Hamburg',commodity:'Flat steel',mode:'🚢 Sea FCL',weight:'24T · 2×40\'',etd:'Apr 02',eta:'Apr 23',status:'transit',prog:60,vessel:'MSC Gulsun',carrier:'MSC',hs:'720610',steps:['Booking','Cargo Loaded','Departed JNPT','In Transit','Port Arrival','Customs','Delivered'],step:3},
+  {bl:'BL-20240900',origin:'Delhi',dest:'Dubai',commodity:'Auto spares',mode:'✈️ Air',weight:'1.8T · 12 CBM',etd:'Apr 08',eta:'Apr 09',status:'transit',prog:85,vessel:'AI Cargo AI-204',carrier:'Air India',hs:'870899',steps:['Booking','AWB Issued','Departed DEL','In Transit','Arrived DXB','Customs','Delivered'],step:4},
+  {bl:'BL-20240898',origin:'Chennai',dest:'Singapore',commodity:'Machinery parts',mode:'🚢 LCL',weight:'4.2T · 8 CBM',etd:'Apr 01',eta:'Apr 10',status:'transit',prog:90,vessel:'Evergreen Ever Excel',carrier:'Evergreen',hs:'842199',steps:['Booking','Cargo Loaded','Departed INMAA','In Transit','Port Arrival','Customs','Delivered'],step:5},
+  {bl:'BL-20240896',origin:'JNPT',dest:'Los Angeles',commodity:'Wire rods',mode:'🚢 Sea FCL',weight:'18T · 1×40\'',etd:'Mar 25',eta:'Apr 22',status:'delayed',prog:45,vessel:'COSCO Yantian',carrier:'COSCO',hs:'721310',steps:['Booking','Cargo Loaded','Departed JNPT','In Transit','Port Arrival','Customs','Delivered'],step:3},
+  {bl:'BL-20240892',origin:'Mumbai',dest:'Hamburg',commodity:'HR coils',mode:'🚢 Sea FCL',weight:'26T · 2×40\'',etd:'Mar 28',eta:'Apr 21',status:'delayed',prog:50,vessel:'MSC Gulsun',carrier:'MSC',hs:'720821',steps:['Booking','Cargo Loaded','Departed JNPT','In Transit','Port Arrival','Customs','Delivered'],step:3},
+  {bl:'BL-20240888',origin:'Delhi',dest:'New York',commodity:'Electrical goods',mode:'✈️ Air',weight:'0.9T · 4 CBM',etd:'Apr 06',eta:'Apr 07',status:'customs',prog:95,vessel:'AI Cargo AI-306',carrier:'Air India',hs:'854140',steps:['Booking','AWB Issued','Departed DEL','In Transit','Arrived JFK','Customs','Delivered'],step:5},
+  // Delivered
+  {bl:'BL-20240885',origin:'Chennai',dest:'Sydney',commodity:'Auto parts',mode:'🚢 Multimodal',weight:'18T · 2×20\'',etd:'Mar 20',eta:'Apr 07',status:'delivered',prog:100,vessel:'MSC Flavia',carrier:'MSC',hs:'870899',steps:['Booking','Cargo Loaded','Departed INMAA','In Transit','Port Arrival','Customs','Delivered'],step:7},
+  {bl:'BL-20240882',origin:'JNPT',dest:'Hamburg',commodity:'Flat steel',mode:'🚢 Sea FCL',weight:'24T · 2×40\'',etd:'Mar 15',eta:'Apr 05',status:'delivered',prog:100,vessel:'Maersk Elba',carrier:'Maersk',hs:'720610',steps:['Booking','Cargo Loaded','Departed JNPT','In Transit','Port Arrival','Customs','Delivered'],step:7},
+  {bl:'BL-20240879',origin:'Mumbai',dest:'Singapore',commodity:'Wire rods',mode:'🚢 LCL',weight:'7T · 12 CBM',etd:'Apr 04',eta:'Apr 13',status:'transit',prog:30,vessel:'Evergreen Ever Merit',carrier:'Evergreen',hs:'721310',steps:['Booking','Cargo Loaded','Departed JNPT','In Transit','Port Arrival','Customs','Delivered'],step:2},
+  // Past 2023
+  {bl:'BL-20231142',origin:'Mumbai',dest:'Hamburg',commodity:'CR coils',mode:'🚢 Sea FCL',weight:'22T · 2×40\'',etd:'Dec 10',eta:'Jan 02',status:'past',prog:100,vessel:'MSC Oscar',carrier:'MSC',hs:'720922',steps:['Booking','Cargo Loaded','Departed JNPT','In Transit','Port Arrival','Customs','Delivered'],step:7},
+  {bl:'BL-20231098',origin:'Delhi',dest:'Dubai',commodity:'Electronics',mode:'✈️ Air',weight:'2.1T · 14 CBM',etd:'Nov 22',eta:'Nov 23',status:'past',prog:100,vessel:'EK SkyCargo EK9801',carrier:'Emirates',hs:'854140',steps:['Booking','AWB Issued','Departed DEL','In Transit','Arrived DXB','Customs','Delivered'],step:7},
+];
+
+/* Overview table (active only) */
+function renderOvTable() {
+  const tbody = document.getElementById('ov-tbody');
+  if (!tbody) return;
+  const active = allShips.filter(s => s.status !== 'past');
+  const sMap = {transit:'<span class="pill p-blue">In Transit</span>',delayed:'<span class="pill p-amber">Delayed</span>',customs:'<span class="pill p-red">At Customs</span>',delivered:'<span class="pill p-green">Delivered</span>'};
+  const cMap = {transit:'var(--blue-mid)',delayed:'var(--amber)',customs:'var(--red)',delivered:'var(--teal)'};
+  tbody.innerHTML = active.map(r => `<tr onclick="openModal('${r.bl}')" title="Click for details">
+    <td style="font-weight:700;color:var(--blue);font-size:11px">${r.bl}</td>
+    <td style="font-size:11px">${r.origin} → ${r.dest}</td>
+    <td style="white-space:nowrap;font-size:11px">${r.mode}</td>
+    <td style="font-weight:600;font-size:11px">${r.eta}</td>
+    <td>${sMap[r.status]||''}</td>
+    <td style="min-width:80px">
+      <div style="height:4px;background:var(--bg2);border-radius:2px;overflow:hidden"><div style="height:100%;width:${r.prog}%;background:${cMap[r.status]};border-radius:2px"></div></div>
+      <div style="font-size:9px;color:var(--txt3);margin-top:2px">${r.prog}%</div>
+    </td>
+  </tr>`).join('');
+}
+renderOvTable();
+
+/* All shipments tab */
+let sFilter = 'all';
+function sfilt(f, btn) { sFilter = f; document.querySelectorAll('#tab-shipments .fbtn').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); renderAllShip(); }
+function renderAllShip() {
+  const q = (document.getElementById('sh-search')?.value||'').toLowerCase();
+  const tbody = document.getElementById('sh-tbody');
+  if (!tbody) return;
+  const sMap = {transit:'<span class="pill p-blue">In Transit</span>',delayed:'<span class="pill p-amber">Delayed</span>',customs:'<span class="pill p-red">At Customs</span>',delivered:'<span class="pill p-green">Delivered</span>',past:'<span class="pill p-gray">Past</span>'};
+  const cMap = {transit:'var(--blue-mid)',delayed:'var(--amber)',customs:'var(--red)',delivered:'var(--teal)',past:'var(--txt3)'};
+  const filtered = allShips.filter(r => {
+    const fOk = sFilter==='all' || (sFilter==='active' && ['transit','delayed','customs'].includes(r.status)) || (sFilter==='past' && r.status==='past') || r.status===sFilter;
+    const qOk = !q || Object.values(r).join(' ').toLowerCase().includes(q);
+    return fOk && qOk;
+  });
+  tbody.innerHTML = filtered.map(r => `<tr onclick="openModal('${r.bl}')" title="Click for shipment detail">
+    <td style="font-weight:700;color:var(--blue);font-size:11px">${r.bl}</td>
+    <td style="font-size:11px">${r.origin}</td><td style="font-size:11px">${r.dest}</td>
+    <td style="font-size:11px">${r.commodity}</td>
+    <td style="white-space:nowrap;font-size:11px">${r.mode}</td>
+    <td style="font-size:11px;color:var(--txt3)">${r.weight}</td>
+    <td style="color:var(--txt3);font-size:11px">${r.etd}</td>
+    <td style="font-weight:600;font-size:11px">${r.eta}</td>
+    <td>${sMap[r.status]||''}</td>
+    <td style="min-width:72px">
+      <div style="height:4px;background:var(--bg2);border-radius:2px;overflow:hidden"><div style="height:100%;width:${r.prog}%;background:${cMap[r.status]};border-radius:2px"></div></div>
+      <div style="font-size:9px;color:var(--txt3);margin-top:2px">${r.prog}%</div>
+    </td>
+    <td><button class="dl-btn" onclick="event.stopPropagation();openModal('${r.bl}')">Details</button></td>
+  </tr>`).join('');
+}
+renderAllShip();
+
+/* ══ TRACKING TAB ══════════════════════════════════════════ */
+let trkFilter = 'all';
+function trkFilt(f, btn) { trkFilter = f; document.querySelectorAll('#tab-tracking .fbtn').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); filterTracking(); }
+function filterTracking() {
+  const q = (document.getElementById('track-input')?.value||'').toLowerCase();
+  const active = allShips.filter(s => ['transit','delayed','customs'].includes(s.status));
+  const filtered = active.filter(r => {
+    const fOk = trkFilter==='all' || (trkFilter==='sea'&&r.mode.includes('🚢')) || (trkFilter==='air'&&r.mode.includes('✈️')) || trkFilter===r.status;
+    const qOk = !q || r.bl.toLowerCase().includes(q)||r.origin.toLowerCase().includes(q)||r.dest.toLowerCase().includes(q);
+    return fOk && qOk;
+  });
+  buildTrackCards(filtered);
+}
+function buildTrackCards(ships) {
+  if (!ships) ships = allShips.filter(s => ['transit','delayed','customs'].includes(s.status));
+  const wrap = document.getElementById('track-list');
+  if (!wrap) return;
+  const sMap = {transit:'p-blue',delayed:'p-amber',customs:'p-red',delivered:'p-green'};
+  const cMap = {transit:'var(--blue-mid)',delayed:'var(--amber)',customs:'var(--red)'};
+  wrap.innerHTML = ships.map(r => {
+    const stepsDone = r.steps.slice(0, r.step).map(s=>`<div class="j-step"><div class="j-dot done"></div><div class="j-label done">${s}</div></div>`).join('');
+    const stepActive = r.step < r.steps.length ? `<div class="j-step"><div class="j-dot active"></div><div class="j-label active">${r.steps[r.step]}</div></div>` : '';
+    const stepsLeft = r.steps.slice(r.step+1).map(s=>`<div class="j-step"><div class="j-dot"></div><div class="j-label">${s}</div></div>`).join('');
+    return `<div class="card" style="cursor:pointer" onclick="openModal('${r.bl}')">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div>
+          <div style="font-family:var(--font-head);font-size:15px;font-weight:800;color:var(--blue);letter-spacing:.04em">${r.bl}</div>
+          <div style="font-size:11px;color:var(--txt3);margin-top:2px">${r.origin} → ${r.dest} &nbsp;·&nbsp; ${r.mode} &nbsp;·&nbsp; ${r.commodity}</div>
+        </div>
+        <div style="text-align:right">
+          <span class="pill ${sMap[r.status]}">${r.status==='transit'?'In Transit':r.status==='delayed'?'Delayed':'At Customs'}</span>
+          <div style="font-size:11px;color:var(--txt3);margin-top:4px">ETA: <strong>${r.eta}</strong></div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--txt3);margin-bottom:8px">🚢 Vessel: <strong style="color:var(--txt2)">${r.vessel}</strong> &nbsp;·&nbsp; Carrier: <strong style="color:var(--txt2)">${r.carrier}</strong></div>
+      <div style="height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;margin-bottom:6px">
+        <div style="height:100%;width:${r.prog}%;background:${cMap[r.status]||'var(--teal)'};border-radius:3px;transition:width 1s ease"></div>
+      </div>
+      <div class="journey-steps" style="margin:10px 0 4px">${stepsDone}${stepActive}${stepsLeft}</div>
+      <div style="font-size:10px;color:var(--txt3);margin-top:6px">Click to view full details, documents &amp; milestones</div>
+    </div>`;
+  }).join('') || '<div class="card" style="text-align:center;color:var(--txt3);padding:40px">No shipments match your search.</div>';
+}
+
+/* ══ SHIPMENT DETAIL MODAL ════════════════════════════════ */
+function openModal(bl) {
+  const r = allShips.find(s => s.bl === bl);
+  if (!r) return;
+  const sLabel = {transit:'In Transit',delayed:'Delayed ⚠',customs:'At Customs',delivered:'Delivered ✓',past:'Completed'};
+  const cMap = {transit:'var(--blue-mid)',delayed:'var(--amber)',customs:'var(--red)',delivered:'var(--teal)',past:'var(--txt3)'};
+  const stepsDone = r.steps.slice(0, r.step).map(s=>`<div class="j-step"><div class="j-dot done"></div><div class="j-label done">${s}</div></div>`).join('');
+  const stepActive = r.step < r.steps.length ? `<div class="j-step"><div class="j-dot active"></div><div class="j-label active">${r.steps[r.step]}</div></div>` : '';
+  const stepsLeft = r.steps.slice(r.step+1).map(s=>`<div class="j-step"><div class="j-dot"></div><div class="j-label">${s}</div></div>`).join('');
+  document.getElementById('modal-title').textContent = bl + ' — Shipment Detail';
+  document.getElementById('modal-body').innerHTML = `
+    <div style="margin-bottom:14px;display:flex;align-items:center;gap:10px">
+      <span style="font-family:var(--font-head);font-size:18px;font-weight:800;color:${cMap[r.status]}">${sLabel[r.status]||''}</span>
+      <div style="height:6px;flex:1;background:var(--bg2);border-radius:3px;overflow:hidden"><div style="height:100%;width:${r.prog}%;background:${cMap[r.status]};border-radius:3px"></div></div>
+      <span style="font-size:12px;font-weight:700;color:var(--txt2)">${r.prog}%</span>
+    </div>
+    <div class="modal-grid">
+      <div class="modal-field"><div class="modal-field-lbl">Origin</div><div class="modal-field-val">${r.origin}</div></div>
+      <div class="modal-field"><div class="modal-field-lbl">Destination</div><div class="modal-field-val">${r.dest}</div></div>
+      <div class="modal-field"><div class="modal-field-lbl">Mode</div><div class="modal-field-val">${r.mode}</div></div>
+      <div class="modal-field"><div class="modal-field-lbl">Commodity</div><div class="modal-field-val">${r.commodity}</div></div>
+      <div class="modal-field"><div class="modal-field-lbl">Weight / CBM</div><div class="modal-field-val">${r.weight}</div></div>
+      <div class="modal-field"><div class="modal-field-lbl">HS Code</div><div class="modal-field-val">${r.hs}</div></div>
+      <div class="modal-field"><div class="modal-field-lbl">Vessel / Flight</div><div class="modal-field-val">${r.vessel}</div></div>
+      <div class="modal-field"><div class="modal-field-lbl">Carrier</div><div class="modal-field-val">${r.carrier}</div></div>
+      <div class="modal-field"><div class="modal-field-lbl">ETD</div><div class="modal-field-val">${r.etd}</div></div>
+      <div class="modal-field"><div class="modal-field-lbl">ETA</div><div class="modal-field-val">${r.eta}</div></div>
+    </div>
+    <div class="journey"><div class="journey-title">Shipment Journey</div>
+      <div class="journey-steps">${stepsDone}${stepActive}${stepsLeft}</div>
+    </div>
+    <div style="border-top:0.5px solid var(--border);padding-top:16px;margin-top:4px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--txt3);margin-bottom:10px">Documents</div>
+      <div class="doc-row"><div class="doc-ico" style="background:var(--blue-light)">📋</div><div class="doc-info"><div class="doc-name">Bill of Lading — ${bl}</div><div class="doc-meta">Auto-generated by PRIME AI · Validated</div></div><button class="dl-btn">↓ PDF</button></div>
+      <div class="doc-row"><div class="doc-ico" style="background:var(--teal-bg)">🏛</div><div class="doc-info"><div class="doc-name">Commercial Invoice</div><div class="doc-meta">HS ${r.hs} · Validated by PRIME</div></div><button class="dl-btn">↓ PDF</button></div>
+      <div class="doc-row"><div class="doc-ico" style="background:var(--amber-bg)">📑</div><div class="doc-info"><div class="doc-name">Packing List</div><div class="doc-meta">${r.weight}</div></div><button class="dl-btn">↓ PDF</button></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:18px">
+      <button class="btn-primary" style="flex:1">📞 Contact Account Manager</button>
+      <button class="btn-outline" style="flex:1;color:var(--txt);border-color:var(--border);background:var(--bg)" onclick="closeModal()">Close</button>
+    </div>
+  `;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
+
+/* ══ SPEND CHART ═══════════════════════════════════════════ */
+const months = ['May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr'];
+const seaS =  [18,22,16,25,28,30,24,21,26,30,32,34];
+const airS =  [8, 9, 7,10,12,13,11, 9,11,13,14,15];
+const mulS =  [2, 3, 2, 4, 4, 5, 4, 3, 4, 5, 5, 6];
+let spendBuilt = false;
+function buildSpendChart() {
+  if (spendBuilt) return; spendBuilt = true;
+  const wrap = document.getElementById('spend-chart');
+  if (!wrap) return;
+  const maxV = Math.max(...seaS.map((v,i)=>v+airS[i]+mulS[i]));
+  wrap.innerHTML = months.map((m,i) => {
+    const sh = Math.round((seaS[i]/maxV)*108);
+    const ah = Math.round((airS[i]/maxV)*108);
+    const mh = Math.round((mulS[i]/maxV)*108);
+    return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px">
+      <div style="width:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:1px;height:108px">
+        <div style="border-radius:2px 2px 0 0;background:var(--teal);height:${mh}px"></div>
+        <div style="background:var(--accent);height:${ah}px"></div>
+        <div style="background:var(--blue-mid);height:${sh}px"></div>
+      </div>
+      <div style="font-size:8px;color:var(--txt3)">${m}</div>
+    </div>`;
+  }).join('');
+}
+buildSpendChart();
+</script>
+</body>
+</html>
