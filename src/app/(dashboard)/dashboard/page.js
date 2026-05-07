@@ -173,25 +173,26 @@ export default function DashboardPage() {
                             fontWeight: 700,
                             color: "var(--blue)",
                             fontSize: "11px",
+                            minWidth: "120px",
                           }}
                         >
                           {r.bl}
                         </td>
-                        <td style={{ fontSize: "11px" }}>
+                        <td style={{ fontSize: "11px", minWidth: "150px"  }}>
                           {r.origin} → {r.dest}
                         </td>
                         <td style={{ whiteSpace: "nowrap", fontSize: "11px" }}>
                           {r.mode}
                         </td>
-                        <td style={{ fontWeight: 600, fontSize: "11px" }}>
+                        <td style={{ fontWeight: 600, fontSize: "11px", minWidth: "80px" }}>
                           {r.eta}
                         </td>
-                        <td>
+                        <td style={{ minWidth: "120px" }}>
                           <Text span className={pill.className}>
                             {pill.label}
                           </Text>
                         </td>
-                        <td style={{ minWidth: "80px" }}>
+                        <td style={{ minWidth: "120px" }}>
                           <Box
                             style={{
                               height: "4px",
@@ -228,7 +229,7 @@ export default function DashboardPage() {
             <Box style={{ marginTop: "12px", textAlign: "right" }}>
               <Button
                 component={Link}
-                href="/dashboard/shipments"
+                  href="/dashboard/shipments/"
                 className="fbtn sel"
               >
                 View All Shipments →
@@ -290,7 +291,7 @@ export default function DashboardPage() {
               </Box>
               <Box className="qa-grid">
                 <Link
-                  href="/dashboard/tracking"
+                  href="/dashboard/tracking/"
                   className="qa-btn"
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
@@ -306,7 +307,7 @@ export default function DashboardPage() {
                   </Box>
                 </Link>
                 <Link
-                  href="/dashboard/jobs"
+                  href="/dashboard/jobs/"
                   className="qa-btn"
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
@@ -322,7 +323,7 @@ export default function DashboardPage() {
                   </Box>
                 </Link>
                 <Link
-                  href="/dashboard/accounts"
+                  href="/dashboard/accounts/"
                   className="qa-btn"
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
@@ -338,7 +339,7 @@ export default function DashboardPage() {
                   </Box>
                 </Link>
                 <Link
-                  href="/dashboard/settings"
+                  href="/dashboard/settings/"
                   className="qa-btn"
                   style={{ textDecoration: "none", color: "inherit" }}
                 >

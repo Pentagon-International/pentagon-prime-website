@@ -138,7 +138,7 @@ export const featuresMap = {
     },
     {
       icon: IconTool,
-      title: "Tools",
+      title: "CBM Calculator",
       link: '/tools'
     },
     // {

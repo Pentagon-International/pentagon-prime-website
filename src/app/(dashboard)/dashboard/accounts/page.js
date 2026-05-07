@@ -87,13 +87,13 @@ export default function DashboardAccountsPage() {
             <tbody>
               {pendingInvoiceRows.map((r) => (
                 <tr key={r.invoice}>
-                  <td style={{ fontWeight: 700, color: "var(--blue)" }}>{r.invoice}</td>
-                  <td>{r.bl}</td>
-                  <td>{r.service}</td>
+                  <td style={{ fontWeight: 700, color: "var(--blue)", minWidth:"120px" }}>{r.invoice}</td>
+                  <td style={{minWidth:"120px"}}>{r.bl}</td>
+                  <td style={{minWidth:"180px"}}>{r.service}</td>
                   <td style={{ fontWeight: 700 }}>{r.amount}</td>
-                  <td>{r.issueDate}</td>
-                  <td style={r.dueStyle}>{r.dueDate}</td>
-                  <td>
+                  <td style={{minWidth:"80px"}}>{r.issueDate}</td>
+                  <td style={{...r.dueStyle, minWidth:"80px"}}>{r.dueDate}</td>
+                  <td style={{minWidth:"120px"}}>
                     <Text span className={r.statusClass}>
                       {r.statusLabel}
                     </Text>
@@ -131,10 +131,10 @@ export default function DashboardAccountsPage() {
                 <tbody>
                   {paymentHistoryRows.map((r) => (
                     <tr key={r.invoice}>
-                      <td style={{ color: "var(--blue)", fontWeight: 600 }}>{r.invoice}</td>
-                      <td>{r.service}</td>
+                      <td style={{ color: "var(--blue)", fontWeight: 600, minWidth:"120px" }}>{r.invoice}</td>
+                      <td style={{minWidth:"180px"}}>{r.service}</td>
                       <td style={{ fontWeight: 700 }}>{r.amount}</td>
-                      <td>{r.paidOn}</td>
+                      <td style={{ minWidth:"80px" }}>{r.paidOn}</td>
                       <td>
                         <Text span className="pill p-green">
                           Paid

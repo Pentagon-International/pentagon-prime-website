@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Button, Stack, Text, TextInput } from "@mantine/core";
+import { Box, Button, Group, Stack, Text, TextInput } from "@mantine/core";
 import {
   DOCUMENT_FILTER_CHIPS,
   pastDocumentRows,
@@ -87,6 +87,7 @@ export default function DashboardJobsPage() {
         </Box>
 
         <Box
+          className="upload-doc"
           style={{
             background: "var(--red-bg)",
             border: "0.5px solid #F0B8B0",
@@ -98,42 +99,48 @@ export default function DashboardJobsPage() {
             gap: "12px",
           }}
         >
-          <Text span style={{ fontSize: "18px" }}>
-            🔴
-          </Text>
-          <Box style={{ flex: 1 }}>
-            <Box style={{ fontSize: "13px", fontWeight: 600, color: "var(--red)" }}>Document Upload Required — BL-20240888</Box>
-            <Box style={{ fontSize: "11px", color: "var(--txt3)", marginTop: "2px" }}>
-              CBP New York is requesting Form 7512 (In-Bond Entry). Please upload to prevent further customs delay.
+          <Group gap={8} flex={1}>
+            <Text span style={{ fontSize: "18px" }}>
+              🔴
+            </Text>
+            <Box style={{ flex: 1 }}>
+              <Box style={{ fontSize: "13px", fontWeight: 600, color: "var(--red)" }}>Document Upload Required — BL-20240888</Box>
+              <Box style={{ fontSize: "11px", color: "var(--txt3)", marginTop: "2px" }}>
+                CBP New York is requesting Form 7512 (In-Bond Entry). Please upload to prevent further customs delay.
+              </Box>
             </Box>
-          </Box>
+          </Group>
           <Button type="button" className="btn-primary" style={{ fontSize: "11px", padding: "7px 14px" }}>
             Upload Now
           </Button>
         </Box>
 
         <Box className="search-bar">
-          <Text span style={{ fontSize: "15px", color: "var(--txt3)" }}>
-            🔍
-          </Text>
-          <TextInput
-            variant="unstyled"
-            placeholder="Search documents by name, B/L number, type…"
-            styles={{
-              root: { flex: 1, minWidth: 0 },
-              input: { width: "100%" },
-            }}
-          />
-          {DOCUMENT_FILTER_CHIPS.map((c) => (
-            <Button
-              key={c.id}
-              type="button"
-              className={`fbtn${docFilter === c.id ? " sel" : ""}`}
-              onClick={() => setDocFilter(c.id)}
-            >
-              {c.label}
-            </Button>
-          ))}
+          <Group gap={4} flex={1}>
+            <Text span style={{ fontSize: "15px", color: "var(--txt3)" }}>
+              🔍
+            </Text>
+            <TextInput
+              variant="unstyled"
+              placeholder="Search documents by name, B/L number, type…"
+              styles={{
+                root: { flex: 1, minWidth: 0 },
+                input: { width: "100%" },
+              }}
+            />
+          </Group>
+          <Group gap={4}>
+            {DOCUMENT_FILTER_CHIPS.map((c) => (
+              <Button
+                key={c.id}
+                type="button"
+                className={`fbtn${docFilter === c.id ? " sel" : ""}`}
+                onClick={() => setDocFilter(c.id)}
+              >
+                {c.label}
+              </Button>
+            ))}
+          </Group>
         </Box>
 
         <Box className="g2">

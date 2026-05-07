@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Box, Button, Text, TextInput } from "@mantine/core";
+import { Box, Button, Modal, Text, TextInput } from "@mantine/core";
 import {
   allShips,
   filterTrackingShips,
@@ -25,8 +25,7 @@ function TrackShipmentCard({ row, onOpen }) {
 
   return (
     <Box
-      className="card"
-      style={{ cursor: "pointer" }}
+      className="card tracking-shipment-card"
       onClick={() => onOpen(row.bl)}
       role="button"
       tabIndex={0}
@@ -34,7 +33,7 @@ function TrackShipmentCard({ row, onOpen }) {
         if (e.key === "Enter" || e.key === " ") onOpen(row.bl);
       }}
     >
-      <Box style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+      <Box className="tracking-card-head">
         <Box>
           <Box
             style={{
@@ -47,11 +46,11 @@ function TrackShipmentCard({ row, onOpen }) {
           >
             {row.bl}
           </Box>
-          <Box style={{ fontSize: "11px", color: "var(--txt3)", marginTop: "2px" }}>
+          <Box className="tracking-card-route" style={{ fontSize: "11px", color: "var(--txt3)", marginTop: "2px" }}>
             {`${row.origin} → ${row.dest}\u00a0·\u00a0${row.mode}\u00a0·\u00a0${row.commodity}`}
           </Box>
         </Box>
-        <Box style={{ textAlign: "right" }}>
+        <Box className="tracking-card-meta">
           <Text span className={pillClass}>
             {statusText}
           </Text>
@@ -60,7 +59,7 @@ function TrackShipmentCard({ row, onOpen }) {
           </Box>
         </Box>
       </Box>
-      <Box style={{ fontSize: "11px", color: "var(--txt3)", marginBottom: "8px" }}>
+      <Box className="tracking-card-vessel">
         🚢 Vessel: <strong style={{ color: "var(--txt2)" }}>{row.vessel}</strong>
         {"\u00a0·\u00a0"}
         Carrier: <strong style={{ color: "var(--txt2)" }}>{row.carrier}</strong>
@@ -128,9 +127,9 @@ export default function DashboardTrackingPage() {
           <Box className="section-title">Live Shipment Tracking</Box>
         </Box>
 
-        <Box className="card" style={{ marginBottom: "16px" }}>
-          <Box style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
-            <Box style={{ flex: 1, minWidth: "260px" }}>
+        <Box className="card tracking-search-card" style={{ marginBottom: "16px" }}>
+          <Box className="tracking-search-wrap">
+            <Box className="tracking-search-main">
               <Box
                 style={{
                   fontSize: "11px",
@@ -143,7 +142,7 @@ export default function DashboardTrackingPage() {
               >
                 Enter B/L Number or Booking Reference
               </Box>
-              <Box style={{ display: "flex", gap: "10px" }}>
+              <Box className="tracking-search-input-row">
                 <TextInput
                   id="track-input"
                   type="text"
@@ -169,7 +168,7 @@ export default function DashboardTrackingPage() {
                 </Button>
               </Box>
             </Box>
-            <Box style={{ display: "flex", gap: "8px", flexWrap: "wrap", alignSelf:"flex-end" }}>
+            <Box className="tracking-filter-chips">
               {TRK_FILTERS.map((t) => (
                 <Button
                   key={t.id}
@@ -195,7 +194,7 @@ export default function DashboardTrackingPage() {
             )}
           </Box>
 
-          <Box style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+          <Box className="tracking-side-stack">
             <Box className="card" style={{ padding: 0, overflow: "hidden" }}>
               <Box style={{ padding: "16px 18px 10px" }}>
                 <Box className="card-head" style={{ marginBottom: "6px" }}>
@@ -372,208 +371,199 @@ export default function DashboardTrackingPage() {
         </Box>
       </Box>
 
-      <Box id="modal" className={`modal-overlay${selected ? " open" : ""}`} onClick={closeModal}>
-        <Box className="modal" onClick={(e) => e.stopPropagation()}>
-          {selected && (
-            <>
-              <Box className="modal-head">
-                <Box className="modal-title" id="modal-title">
-                  {selected.bl} — Shipment Detail
+      <Modal
+        opened={!!selected}
+        onClose={closeModal}
+        centered
+        size="lg"
+        overlayProps={{ blur: 3 }}
+        title={
+          selected ? (
+            <Box className="modal-title">
+              {selected.bl} — Shipment Detail
+            </Box>
+          ) : null
+        }
+      >
+        {selected && (
+          <>
+            {/* Body */}
+            <Box className="modal-body">
+              {/* Progress */}
+              <Box
+                style={{
+                  marginBottom: "14px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
+              >
+                <Text
+                  span
+                  style={{
+                    fontFamily: "var(--font-head)",
+                    fontSize: "18px",
+                    fontWeight: 800,
+                    color: shipProgressColors[selected.status],
+                  }}
+                >
+                  {modalStatusLabel[selected.status]}
+                </Text>
+
+                <Box
+                  style={{
+                    height: "6px",
+                    flex: 1,
+                    background: "var(--bg2)",
+                    borderRadius: "3px",
+                    overflow: "hidden",
+                  }}
+                >
+                  <Box
+                    style={{
+                      height: "100%",
+                      width: `${selected.prog}%`,
+                      background: shipProgressColors[selected.status],
+                      borderRadius: "3px",
+                    }}
+                  />
                 </Box>
-                <Button type="button" className="modal-close" onClick={closeModal}>
-                  ✕
+
+                <Text span style={{ fontSize: "12px", fontWeight: 700, color: "var(--txt2)" }}>
+                  {selected.prog}%
+                </Text>
+              </Box>
+
+              {/* Grid */}
+              <Box className="modal-grid">
+                {[
+                  ["Origin", selected.origin],
+                  ["Destination", selected.dest],
+                  ["Mode", selected.mode],
+                  ["Commodity", selected.commodity],
+                  ["Weight / CBM", selected.weight],
+                  ["HS Code", selected.hs],
+                  ["Vessel / Flight", selected.vessel],
+                  ["Carrier", selected.carrier],
+                  ["ETD", selected.etd],
+                  ["ETA", selected.eta],
+                ].map(([label, value]) => (
+                  <Box className="modal-field" key={label}>
+                    <Box className="modal-field-lbl">{label}</Box>
+                    <Box className="modal-field-val">{value}</Box>
+                  </Box>
+                ))}
+              </Box>
+
+              {/* Journey */}
+              <Box className="journey">
+                <Box className="journey-title">Shipment Journey</Box>
+
+                <Box className="journey-steps">
+                  {selected.steps.slice(0, selected.step).map((step, i) => (
+                    <Box key={`done-${i}`} className="j-step">
+                      <Box className="j-dot done" />
+                      <Box className="j-label done">{step}</Box>
+                    </Box>
+                  ))}
+
+                  {selected.step < selected.steps.length && (
+                    <Box className="j-step">
+                      <Box className="j-dot active" />
+                      <Box className="j-label active">
+                        {selected.steps[selected.step]}
+                      </Box>
+                    </Box>
+                  )}
+
+                  {selected.steps.slice(selected.step + 1).map((step, i) => (
+                    <Box key={`left-${i}`} className="j-step">
+                      <Box className="j-dot" />
+                      <Box className="j-label">{step}</Box>
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+
+              {/* Documents */}
+              <Box
+                style={{
+                  borderTop: "0.5px solid var(--border)",
+                  paddingTop: "16px",
+                  marginTop: "4px",
+                }}
+              >
+                <Box
+                  style={{
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                    color: "var(--txt3)",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Documents
+                </Box>
+
+                {[
+                  {
+                    icon: "📋",
+                    bg: "var(--blue-light)",
+                    name: `Bill of Lading — ${selected.bl}`,
+                    meta: "Auto-generated by PRIME AI · Validated",
+                  },
+                  {
+                    icon: "🏛",
+                    bg: "var(--teal-bg)",
+                    name: "Commercial Invoice",
+                    meta: `HS ${selected.hs} · Validated by PRIME`,
+                  },
+                  {
+                    icon: "📑",
+                    bg: "var(--amber-bg)",
+                    name: "Packing List",
+                    meta: selected.weight,
+                  },
+                ].map((doc, i) => (
+                  <Box className="doc-row" key={i}>
+                    <Box className="doc-ico" style={{ background: doc.bg }}>
+                      {doc.icon}
+                    </Box>
+
+                    <Box className="doc-info">
+                      <Box className="doc-name">{doc.name}</Box>
+                      <Box className="doc-meta">{doc.meta}</Box>
+                    </Box>
+
+                    <Button className="dl-btn">↓ PDF</Button>
+                  </Box>
+                ))}
+              </Box>
+
+              {/* Actions */}
+              <Box style={{ display: "flex", gap: "10px", marginTop: "18px" }}>
+                <Button className="btn-primary" style={{ flex: 1 }}>
+                  📞 Contact Account Manager
+                </Button>
+
+                <Button
+                  className="btn-outline"
+                  style={{
+                    flex: 1,
+                    color: "var(--txt)",
+                    borderColor: "var(--border)",
+                    background: "var(--bg)",
+                  }}
+                  onClick={closeModal}
+                >
+                  Close
                 </Button>
               </Box>
-              <Box className="modal-body" id="modal-body">
-                <Box
-                  style={{
-                    marginBottom: "14px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                  }}
-                >
-                  <Text
-                    span
-                    style={{
-                      fontFamily: "var(--font-head)",
-                      fontSize: "18px",
-                      fontWeight: 800,
-                      color: shipProgressColors[selected.status],
-                    }}
-                  >
-                    {modalStatusLabel[selected.status]}
-                  </Text>
-                  <Box
-                    style={{
-                      height: "6px",
-                      flex: 1,
-                      background: "var(--bg2)",
-                      borderRadius: "3px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <Box
-                      style={{
-                        height: "100%",
-                        width: `${selected.prog}%`,
-                        background: shipProgressColors[selected.status],
-                        borderRadius: "3px",
-                      }}
-                    />
-                  </Box>
-                  <Text span style={{ fontSize: "12px", fontWeight: 700, color: "var(--txt2)" }}>
-                    {selected.prog}%
-                  </Text>
-                </Box>
-
-                <Box className="modal-grid">
-                  <Box className="modal-field">
-                    <Box className="modal-field-lbl">Origin</Box>
-                    <Box className="modal-field-val">{selected.origin}</Box>
-                  </Box>
-                  <Box className="modal-field">
-                    <Box className="modal-field-lbl">Destination</Box>
-                    <Box className="modal-field-val">{selected.dest}</Box>
-                  </Box>
-                  <Box className="modal-field">
-                    <Box className="modal-field-lbl">Mode</Box>
-                    <Box className="modal-field-val">{selected.mode}</Box>
-                  </Box>
-                  <Box className="modal-field">
-                    <Box className="modal-field-lbl">Commodity</Box>
-                    <Box className="modal-field-val">{selected.commodity}</Box>
-                  </Box>
-                  <Box className="modal-field">
-                    <Box className="modal-field-lbl">Weight / CBM</Box>
-                    <Box className="modal-field-val">{selected.weight}</Box>
-                  </Box>
-                  <Box className="modal-field">
-                    <Box className="modal-field-lbl">HS Code</Box>
-                    <Box className="modal-field-val">{selected.hs}</Box>
-                  </Box>
-                  <Box className="modal-field">
-                    <Box className="modal-field-lbl">Vessel / Flight</Box>
-                    <Box className="modal-field-val">{selected.vessel}</Box>
-                  </Box>
-                  <Box className="modal-field">
-                    <Box className="modal-field-lbl">Carrier</Box>
-                    <Box className="modal-field-val">{selected.carrier}</Box>
-                  </Box>
-                  <Box className="modal-field">
-                    <Box className="modal-field-lbl">ETD</Box>
-                    <Box className="modal-field-val">{selected.etd}</Box>
-                  </Box>
-                  <Box className="modal-field">
-                    <Box className="modal-field-lbl">ETA</Box>
-                    <Box className="modal-field-val">{selected.eta}</Box>
-                  </Box>
-                </Box>
-
-                <Box className="journey">
-                  <Box className="journey-title">Shipment Journey</Box>
-                  <Box className="journey-steps">
-                    {selected.steps.slice(0, selected.step).map((step, i) => (
-                      <Box key={`done-${i}`} className="j-step">
-                        <Box className="j-dot done"></Box>
-                        <Box className="j-label done">{step}</Box>
-                      </Box>
-                    ))}
-                    {selected.step < selected.steps.length && (
-                      <Box className="j-step">
-                        <Box className="j-dot active"></Box>
-                        <Box className="j-label active">{selected.steps[selected.step]}</Box>
-                      </Box>
-                    )}
-                    {selected.steps.slice(selected.step + 1).map((step, i) => (
-                      <Box key={`left-${i}`} className="j-step">
-                        <Box className="j-dot"></Box>
-                        <Box className="j-label">{step}</Box>
-                      </Box>
-                    ))}
-                  </Box>
-                </Box>
-
-                <Box
-                  style={{
-                    borderTop: "0.5px solid var(--border)",
-                    paddingTop: "16px",
-                    marginTop: "4px",
-                  }}
-                >
-                  <Box
-                    style={{
-                      fontSize: "11px",
-                      fontWeight: 700,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      color: "var(--txt3)",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    Documents
-                  </Box>
-                  <Box className="doc-row">
-                    <Box className="doc-ico" style={{ background: "var(--blue-light)" }}>
-                      📋
-                    </Box>
-                    <Box className="doc-info">
-                      <Box className="doc-name">Bill of Lading — {selected.bl}</Box>
-                      <Box className="doc-meta">Auto-generated by PRIME AI · Validated</Box>
-                    </Box>
-                    <Button type="button" className="dl-btn">
-                      ↓ PDF
-                    </Button>
-                  </Box>
-                  <Box className="doc-row">
-                    <Box className="doc-ico" style={{ background: "var(--teal-bg)" }}>
-                      🏛
-                    </Box>
-                    <Box className="doc-info">
-                      <Box className="doc-name">Commercial Invoice</Box>
-                      <Box className="doc-meta">HS {selected.hs} · Validated by PRIME</Box>
-                    </Box>
-                    <Button type="button" className="dl-btn">
-                      ↓ PDF
-                    </Button>
-                  </Box>
-                  <Box className="doc-row">
-                    <Box className="doc-ico" style={{ background: "var(--amber-bg)" }}>
-                      📑
-                    </Box>
-                    <Box className="doc-info">
-                      <Box className="doc-name">Packing List</Box>
-                      <Box className="doc-meta">{selected.weight}</Box>
-                    </Box>
-                    <Button type="button" className="dl-btn">
-                      ↓ PDF
-                    </Button>
-                  </Box>
-                </Box>
-
-                <Box style={{ display: "flex", gap: "10px", marginTop: "18px" }}>
-                  <Button type="button" className="btn-primary" style={{ flex: 1 }}>
-                    📞 Contact Account Manager
-                  </Button>
-                  <Button
-                    type="button"
-                    className="btn-outline"
-                    style={{
-                      flex: 1,
-                      color: "var(--txt)",
-                      borderColor: "var(--border)",
-                      background: "var(--bg)",
-                    }}
-                    onClick={closeModal}
-                  >
-                    Close
-                  </Button>
-                </Box>
-              </Box>
-            </>
-          )}
-        </Box>
-      </Box>
+            </Box>
+          </>
+        )}
+      </Modal>
     </Box>
   );
 }

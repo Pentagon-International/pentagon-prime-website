@@ -9,24 +9,10 @@ export default function LayoutWrapper({ children }) {
   return (
     <Box className="dashboard-app-shell">
       <Box component="nav" className="topnav">
-        <Box
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 5,
-            width: "100%",
-            padding: "10px 2%",
-          }}
-        >
+        <Box className="topnav-inner">
           <Link
             href="/"
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 5,
-            }}
+            className="dashboard-logo-link"
           >
             <Image src={Images.logo_only} alt="Logo" h={48} />
             <Flex
@@ -107,11 +93,11 @@ export default function LayoutWrapper({ children }) {
                 <Box className="ws-lbl">Outstanding</Box>
               </Box>
             </Box>
-            <Box style={{ display: "flex", gap: "10px" }}>
-              <Button component={Link} className="btn-outline" href={"/dashboard/tracking"}>
+            <Box className="welcome-actions">
+              <Button component={Link} className="btn-outline" href={"/dashboard/tracking/"}>
                 Track Shipment
               </Button>
-              <Button component={Link} className="btn-primary" href={"/dashboard/settings"}>
+              <Button component={Link} className="btn-primary" href={"/dashboard/settings/"}>
                 Get Quote
               </Button>
             </Box>

@@ -1,10 +1,10 @@
 export const navLinks = [
-  { href: "/dashboard", label: "My Dashboard" },
-  { href: "/dashboard/shipments", label: "My Shipments" },
-  { href: "/dashboard/tracking", label: "Live Tracking" },
-  { href: "/dashboard/jobs", label: "Documents" },
-  { href: "/dashboard/accounts", label: "Invoices" },
-  { href: "/dashboard/settings", label: "Support" },
+  { href: "/dashboard/", label: "My Dashboard" },
+  { href: "/dashboard/shipments/", label: "My Shipments" },
+  { href: "/dashboard/tracking/", label: "Live Tracking" },
+  { href: "/dashboard/jobs/", label: "Documents" },
+  { href: "/dashboard/accounts/", label: "Invoices" },
+  { href: "/dashboard/settings/", label: "Support" },
 ];
 
 export const overviewStats = [

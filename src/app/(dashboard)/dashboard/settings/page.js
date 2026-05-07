@@ -407,7 +407,7 @@ export default function DashboardSettingsPage() {
           </Box>
         </Box>
 
-        <Box className="card">
+        <Box className="card" mb={16}>
           <Box className="card-head">
             <Box className="card-title">Past Service Requests</Box>
             <Text span className="bdg bdg-blue">
@@ -430,14 +430,14 @@ export default function DashboardSettingsPage() {
               <tbody>
                 {pastServiceRequestRows.map((r) => (
                   <tr key={r.ticket}>
-                    <td style={{ color: "var(--blue)", fontWeight: 600 }}>
+                    <td style={{ color: "var(--blue)", fontWeight: 600, minWidth:"120px" }}>
                       {r.ticket}
                     </td>
-                    <td>{r.type}</td>
-                    <td>{r.bl}</td>
-                    <td>{r.description}</td>
-                    <td>{r.raised}</td>
-                    <td>{r.resolved}</td>
+                    <td style={{ minWidth:"120px" }}>{r.type}</td>
+                    <td style={{ minWidth:"120px" }}>{r.bl}</td>
+                    <td style={{ minWidth:"200px" }}>{r.description}</td>
+                    <td style={{ minWidth:"80px" }}>{r.raised}</td>
+                    <td style={{ minWidth:"80px" }}>{r.resolved}</td>
                     <td>
                       <Text span className="pill p-green">
                         Resolved
