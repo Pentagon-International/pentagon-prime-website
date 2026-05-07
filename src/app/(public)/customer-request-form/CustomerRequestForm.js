@@ -204,6 +204,7 @@ const CustomerRequestForm = (
     setMapDestination,
     setMapLoading,
     setTariffResult,
+    setTariffLoading,
   } = useCustomerRequestStore();
   const { seaData, airData, setSeaData, setAirData } = useTransportStore();
   const selectData = formValues?.typeOfBooking === "air" ? airData : seaData;
@@ -228,6 +229,7 @@ const CustomerRequestForm = (
     initialValues: {
       typeofBooking: formValues?.activeTransport === "sea" ? "FCL" : "AIR",
       category: formValues?.activeTransport === "sea" ? "FCL" : "AIR",
+      import_export: "export",
       customer_name: "",
       contact_number: "",
       email: "",
@@ -602,14 +604,18 @@ const CustomerRequestForm = (
       unit = "KG";
     }
     const readyDate = form.values?.result?.[0]?.origin?.ready_date;
+    const shipmentTerms = form.values?.result?.[0]?.origin?.shipment_type?.slice(0, 3);
+    const importExport = form.values?.import_export;
     const payload = {
       origin_code: originCode,
       destination_code: destinationCode,
       service: serviceForPayload,
       unit,
+      ...(importExport && { import_export: importExport }),
+      ...(shipmentTerms && { tos_code: shipmentTerms }),
       ...(readyDate && { date: dayjs(readyDate).format("YYYY-MM-DD") }),
     };
-    const tariffApiBase = "https://pulse.pentagonindia.net";
+    const tariffApiBase = "http://127.0.0.1:8000";
     const url = `${tariffApiBase}/api/check-tariff-charges/`;
     fetch(url, {
       method: "POST",
@@ -1078,6 +1084,21 @@ const CustomerRequestForm = (
       };
     });
   };
+  const hasSchedules = (schedules) =>
+    Array.isArray(schedules) && schedules.length > 0;
+
+  const hasVesselSchedulesInTariff = (tariffData) => {
+    if (!tariffData || typeof tariffData !== "object") return false;
+    if (
+      hasSchedules(tariffData.vessel_schedules) ||
+      hasSchedules(tariffData.route_vessel_schedules)
+    ) {
+      return true;
+    }
+    if (!Array.isArray(tariffData.data)) return false;
+    return tariffData.data.some((item) => hasSchedules(item?.vessel_schedules));
+  };
+
   const handleSubmit = async (values) => {
     // Validate all fields
     form.validate();
@@ -1107,6 +1128,7 @@ const CustomerRequestForm = (
       email: values.email,
       typeofBooking: bookingType,
       category: bookingType,
+      import_export: values.import_export || "export",
       result: [
         {
           origin: {
@@ -1232,18 +1254,24 @@ const CustomerRequestForm = (
     }
 
     const readyDate = values.result?.[0]?.origin?.ready_date;
+    const shipmentTerms = values.result?.[0]?.origin?.shipment_type?.slice(0, 3);
+    const importExport = values.import_export;
     const tariffPayload = {
       origin_code: originCode,
       destination_code: destinationCode,
       service: service,
       unit,
+      ...(importExport && { import_export: importExport }),
+      ...(shipmentTerms && { tos_code: shipmentTerms }),
       ...(readyDate && { date: dayjs(readyDate).format("YYYY-MM-DD") }),
     };
 
-    const tariffApiBase = "https://pulse.pentagonindia.net";
+    const tariffApiBase = "http://127.0.0.1:8000";
     const tariffUrl = `${tariffApiBase}/api/check-tariff-charges/`;
+    const scheduleUrl = `${tariffApiBase}/api/searates/schedules/by-points/`;
 
     setIsTariffChecking(true);
+    setTariffLoading(false);
     try {
       const tariffRes = await fetch(tariffUrl, {
         method: "POST",
@@ -1259,8 +1287,63 @@ const CustomerRequestForm = (
         Array.isArray(tariffData.data) &&
         tariffData.data.length > 0
       ) {
-        setTariffResult(tariffData);
-        router.push("/customer-request-form/tariff-results");
+        const shouldFetchSchedules =
+          !hasVesselSchedulesInTariff(tariffData) &&
+          originCode &&
+          destinationCode &&
+          readyDate;
+
+        if (shouldFetchSchedules) {
+          const schedulePayload = {
+            origin: originCode,
+            destination: destinationCode,
+            cargo_type: containerList.type || "GC",
+            from_date: dayjs(readyDate).format("YYYY-MM-DD"),
+            weeks: 4,
+            sort: "DEP",
+          };
+
+          setTariffLoading(true);
+          setTariffResult(null);
+          router.push("/customer-request-form/tariff-results");
+
+          try {
+            await fetch(scheduleUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(schedulePayload),
+            });
+
+            const refreshedTariffRes = await fetch(tariffUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(tariffPayload),
+            });
+            const refreshedTariffData = await refreshedTariffRes
+              .json()
+              .catch(() => null);
+
+            if (
+              refreshedTariffData &&
+              typeof refreshedTariffData.count === "number" &&
+              refreshedTariffData.count >= 1 &&
+              Array.isArray(refreshedTariffData.data) &&
+              refreshedTariffData.data.length > 0
+            ) {
+              setTariffResult(refreshedTariffData);
+            } else {
+              setTariffResult(tariffData);
+            }
+          } catch (scheduleErr) {
+            console.error("Schedule refresh error:", scheduleErr);
+            setTariffResult(tariffData);
+          } finally {
+            setTariffLoading(false);
+          }
+        } else {
+          setTariffResult(tariffData);
+          router.push("/customer-request-form/tariff-results");
+        }
         return;
       }
     } catch (err) {
@@ -2037,6 +2120,7 @@ const CustomerRequestForm = (
                   />
                 </Grid.Col>
 
+
                 <Grid.Col span={isMobile ? 12 : 6}>
                   <Select
                     withAsterisk
@@ -2070,7 +2154,7 @@ const CustomerRequestForm = (
                               },
                             ]
                           : [],
-                      }));
+                        }));
                     }}
                     styles={{
                       dropdown: { maxHeight: 200, overflowY: "auto" },
@@ -2078,8 +2162,48 @@ const CustomerRequestForm = (
                         fontSize: isMobile
                           ? TYPOGRAPHY.body.small
                           : TYPOGRAPHY.body.normal,
-                      },
+                        },
+                        input: {
+                          fontSize: isMobile
+                          ? TYPOGRAPHY.body.small
+                          : TYPOGRAPHY.body.normal,
+                        },
+                      label: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.small
+                          : TYPOGRAPHY.body.normal,
+                        },
+                        error: {
+                          fontSize: isMobile
+                          ? TYPOGRAPHY.body.xsmall
+                          : TYPOGRAPHY.body.small,
+                        },
+                    }}
+                    radius="md"
+                    error={form.errors?.result?.[0]?.origin?.shipment_type}
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={isMobile ? 12 : 3}>
+                  <Select
+                    label="Import / Export"
+                    placeholder="Select type"
+                    size={isMobile ? "md" : "lg"}
+                    data={[
+                      { label: "Export", value: "export" },
+                      { label: "Import", value: "import" },
+                    ]}
+                    value={form.values.import_export || "export"}
+                    onChange={(value) =>
+                      form.setFieldValue("import_export", value || "export")
+                    }
+                    styles={{
                       input: {
+                        fontSize: isMobile
+                          ? TYPOGRAPHY.body.small
+                          : TYPOGRAPHY.body.normal,
+                      },
+                      option: {
                         fontSize: isMobile
                           ? TYPOGRAPHY.body.small
                           : TYPOGRAPHY.body.normal,
@@ -2089,18 +2213,11 @@ const CustomerRequestForm = (
                           ? TYPOGRAPHY.body.small
                           : TYPOGRAPHY.body.normal,
                       },
-                      error: {
-                        fontSize: isMobile
-                          ? TYPOGRAPHY.body.xsmall
-                          : TYPOGRAPHY.body.small,
-                      },
                     }}
                     radius="md"
-                    error={form.errors?.result?.[0]?.origin?.shipment_type}
                   />
                 </Grid.Col>
-
-                <Grid.Col span={isMobile ? 12 : 6}>
+                <Grid.Col span={isMobile ? 12 : 3}>
                   <DateInput
                     size={isMobile ? "md" : "lg"}
                     name={"cargoReadyDate"}

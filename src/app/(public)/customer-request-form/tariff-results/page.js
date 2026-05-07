@@ -7,6 +7,7 @@ import {
   Button,
   Container,
   Flex,
+  Loader,
   rem,
   ScrollArea,
   Table,
@@ -506,16 +507,16 @@ function TariffCardBlock({ item, index, expandedId, onExpand, isMobile }) {
           </Box>
 
           <Accordion.Panel>
-            {vesselSchedules.length > 0 && (
-              <Box mb="lg">
-                <Text
-                  fw={700}
-                  c={COLORS.secondaryColor}
-                  style={{ fontSize: fsBody }}
-                  mb="sm"
-                >
-                  Vessel schedules ({vesselSchedules.length})
-                </Text>
+            <Box mb="lg">
+              <Text
+                fw={700}
+                c={COLORS.secondaryColor}
+                style={{ fontSize: fsBody }}
+                mb="sm"
+              >
+                Vessel schedules ({vesselSchedules.length})
+              </Text>
+              {vesselSchedules.length > 0 ? (
                 <Flex direction="column" gap="md">
                   {vesselSchedules.map((vs, i) => {
                     const vesselName =
@@ -717,8 +718,27 @@ function TariffCardBlock({ item, index, expandedId, onExpand, isMobile }) {
                     );
                   })}
                 </Flex>
-              </Box>
-            )}
+              ) : (
+                <Box
+                  style={{
+                    border: "1px solid rgba(0,0,0,0.06)",
+                    borderRadius: 12,
+                    padding: rem(16),
+                    backgroundColor: "rgba(0,33,95,0.02)",
+                  }}
+                >
+                  <Flex align="center" gap="sm" wrap="wrap">
+                    <IconAlertCircle size={20} color={COLORS.textColor} />
+                    <Text fw={600} c={COLORS.secondaryColor} style={{ fontSize: fsBody }}>
+                      No vessel schedules right now.
+                    </Text>
+                  </Flex>
+                  <Text size="sm" c="dimmed" style={{ fontSize: fsSmall, marginTop: 6 }}>
+                    We will share schedule details once they are available for this carrier and route.
+                  </Text>
+                </Box>
+              )}
+            </Box>
 
             <Text
               fw={700}
@@ -781,17 +801,18 @@ function TariffCardBlock({ item, index, expandedId, onExpand, isMobile }) {
 
 export default function TariffResultsPage() {
   const router = useRouter();
-  const { tariffResult, clearTariffResult } = useCustomerRequestStore();
+  const { tariffResult, tariffLoading, clearTariffResult, setTariffLoading } =
+    useCustomerRequestStore();
   const [expandedId, setExpandedId] = useState(null);
   const isMobile =
     typeof window !== "undefined" ? useMediaQuery("(max-width: 768px)") : false;
 
   useEffect(() => {
-    if (!tariffResult?.data?.length) {
+    if (!tariffLoading && !tariffResult?.data?.length) {
       router.replace("/customer-request-form");
       return;
     }
-  }, [tariffResult, router]);
+  }, [tariffResult, tariffLoading, router]);
 
   useEffect(() => {
     if (!tariffResult?.data?.length) return;
@@ -823,14 +844,29 @@ export default function TariffResultsPage() {
   }, [tariffResult]);
 
   const handleBackToForm = () => {
+    setTariffLoading(false);
     clearTariffResult();
     router.push("/customer-request-form");
   };
 
   const handleGoHome = () => {
+    setTariffLoading(false);
     clearTariffResult();
     router.push("/");
   };
+
+  if (tariffLoading) {
+    return (
+      <Box style={{ minHeight: "100vh", display: "grid", placeItems: "center" }}>
+        <Flex direction="column" align="center" gap="sm">
+          <Loader size="lg" />
+          <Text c={COLORS.secondaryColor} fw={600}>
+            Loading tariff schedules...
+          </Text>
+        </Flex>
+      </Box>
+    );
+  }
 
   if (!tariffResult?.data?.length) {
     return null;
