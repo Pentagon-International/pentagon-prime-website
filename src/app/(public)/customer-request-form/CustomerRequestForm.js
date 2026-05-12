@@ -615,7 +615,7 @@ const CustomerRequestForm = (
       ...(shipmentTerms && { tos_code: shipmentTerms }),
       ...(readyDate && { date: dayjs(readyDate).format("YYYY-MM-DD") }),
     };
-    const tariffApiBase = "http://127.0.0.1:8000";
+    const tariffApiBase = "https://pulse.pentagonindia.net";
     const url = `${tariffApiBase}/api/check-tariff-charges/`;
     fetch(url, {
       method: "POST",
@@ -1266,7 +1266,7 @@ const CustomerRequestForm = (
       ...(readyDate && { date: dayjs(readyDate).format("YYYY-MM-DD") }),
     };
 
-    const tariffApiBase = "http://127.0.0.1:8000";
+    const tariffApiBase = "https://pulse.pentagonindia.net";
     const tariffUrl = `${tariffApiBase}/api/check-tariff-charges/`;
     const scheduleUrl = `${tariffApiBase}/api/searates/schedules/by-points/`;
 
