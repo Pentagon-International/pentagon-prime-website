@@ -281,7 +281,7 @@ export default function FreightLanesMarquee() {
       py={isMobile ? 48 : 80}
       style={{ backgroundColor: COLORS.backgroundColor }}
     >
-      <Container maw={1300} px={isMobile ? 16 : 20}>
+      <Container maw={1600} px={isMobile ? 16 : 20}>
         <Text
           ta="center"
           fw={600}

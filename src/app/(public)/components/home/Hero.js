@@ -8,15 +8,19 @@ import {
   Alert,
   AspectRatio,
   Autocomplete,
+  Badge,
   Box,
   Button,
+  Card,
   Container,
+  Divider,
   Flex,
   Group,
   Image,
   Select,
   Stack,
   Text,
+  TextInput,
   Title,
 } from "@mantine/core";
 import {
@@ -25,6 +29,7 @@ import {
   IconArrowsLeftRight,
   IconMapPin,
   IconPlaneInflight,
+  IconSearch,
   IconShip,
 } from "@tabler/icons-react";
 import { highlightText } from "@/app/utils/highlightText";
@@ -40,6 +45,21 @@ import useCustomerRequestStore from "@/store/customerRequestStore";
 import values from "lodash/values";
 import getEmojiFlag from "@/app/utils/isoMap";
 import { homeTypography } from "./homeTypography";
+
+const mockShipments = {
+  "PPTM-2024-04821": {
+    blNo: "PPTM-2024-04821",
+    route: "Mumbai (BOM) -> Jebel Ali (DXB) -> Suez -> Rotterdam (RTM)",
+    eta: "Mar 30",
+    status: "On Track",
+    events: [
+      { title: "Departed - Mumbai (BOM)", date: "Mar 10, 2026" },
+      { title: "Transshipment - Dubai (DXB)", date: "Mar 18, 2026" },
+      { title: "In Transit - Suez Canal", date: "Mar 23, 2026" },
+      { title: "Arrival - Rotterdam (RTM)", date: "Mar 30, 2026 (ETA)" },
+    ],
+  },
+};
 
 const TransportOption = memo(({ type, icon, activeTransport, onClick }) => (
   <Group
@@ -280,6 +300,40 @@ const Hero = ({ title, content }) => {
     origin: false,
     destination: false,
   });
+  const [heroMode, setHeroMode] = useState("quote");
+  const [trackQuery, setTrackQuery] = useState("");
+  const [searchedTrackRef, setSearchedTrackRef] = useState("");
+
+  const trackedShipment = useMemo(() => {
+    if (!searchedTrackRef) return null;
+    const normalized = searchedTrackRef.trim().toUpperCase();
+    return (
+      mockShipments[normalized] || {
+        blNo: normalized,
+        route: "Mumbai (BOM) -> Jebel Ali (DXB) -> Suez -> Rotterdam (RTM)",
+        eta: "Mar 30",
+        status: "In Progress",
+        events: [
+          { title: "Booking Confirmed", date: "Shipment details synced" },
+          { title: "Gate In Completed", date: "Origin terminal updated" },
+          { title: "In Transit", date: "Latest milestone available" },
+        ],
+      }
+    );
+  }, [searchedTrackRef]);
+
+  const handleTrackShipment = () => {
+    const value = trackQuery.trim();
+    if (!value) {
+      notifications.show({
+        title: "Error",
+        message: "Please enter your B/L number or booking reference",
+        color: "red",
+      });
+      return;
+    }
+    setSearchedTrackRef(value);
+  };
 
   const handleGetQuote = () => {
     setFormErrors({
@@ -331,7 +385,9 @@ const Hero = ({ title, content }) => {
         style={{
           position: "absolute",
           inset: 0,
-          backgroundColor: "rgba(255,255,255,0.70)",
+          // backgroundColor: "rgba(0,0,0,0.05)",
+          // backdropFilter: "blur(3px)",
+          // WebkitBackdropFilter: "blur(3px)",
           boxShadow: "inset 0 -8px 20px -8px rgba(0, 0, 0, 0.25)",
           zIndex: 1,
           pointerEvents: "none",
@@ -378,7 +434,7 @@ const Hero = ({ title, content }) => {
                 fontSize: homeTypography.heroTitle.fontSize,
                 lineHeight: homeTypography.heroTitle.lineHeight,
               }}
-              fw={900}
+              fw={800}
               order={1}
               tt="uppercase"
               lh={1.5}
@@ -406,51 +462,85 @@ const Hero = ({ title, content }) => {
                   borderRadius: isMobile ? "16px" : "24px",
                 }}
               >
-                {/* ── Transport type tabs ── */}
-                <Flex gap={8}>
-                  <TransportOption
-                    type="sea"
-                    icon={
-                      <IconShip
-                        size={isMobile ? 18 : 20}
-                        color={COLORS.primaryColor}
+                {/* ── Transport type tabs + Quote/Track ── */}
+                  <Box w="100%" mb={10} style={{display: "flex", justifyContent: "center", alignItems: "center", color: "#fff", borderRadius: "10px", padding: "10px"}}> <Text size="sm" c="#fff" fw={600}>Get Quote or Track Shipment</Text></Box>
+                <Flex gap={8} align="center" justify="space-between" wrap="wrap">
+                  {heroMode === "quote" && (
+                    <Flex gap={8}>
+                      <TransportOption
+                        type="sea"
+                        icon={
+                          <IconShip
+                            size={isMobile ? 18 : 20}
+                            color={COLORS.primaryColor}
+                          />
+                        }
+                        activeTransport={formValue?.activeTransport}
+                        onClick={() =>
+                          setFormValue((prev) => ({
+                            ...prev,
+                            typeOfBooking: "FCL",
+                            activeTransport: "sea",
+                            origin: { origin: null },
+                            destination: { destination: null },
+                          }))
+                        }
                       />
-                    }
-                    activeTransport={formValue?.activeTransport}
-                    onClick={() =>
-                      setFormValue((prev) => ({
-                        ...prev,
-                        typeOfBooking: "FCL",
-                        activeTransport: "sea",
-                        origin: { origin: null },
-                        destination: { destination: null },
-                      }))
-                    }
-                  />
-                  <TransportOption
-                    type="air"
-                    icon={
-                      <IconPlaneInflight
-                        size={isMobile ? 18 : 20}
-                        color={COLORS.primaryColor}
+                      <TransportOption
+                        type="air"
+                        icon={
+                          <IconPlaneInflight
+                            size={isMobile ? 18 : 20}
+                            color={COLORS.primaryColor}
+                          />
+                        }
+                        activeTransport={formValue?.activeTransport}
+                        onClick={() =>
+                          setFormValue((prev) => ({
+                            ...prev,
+                            origin: { origin: null },
+                            destination: { destination: null },
+                            typeOfBooking: "AIR",
+                            activeTransport: "air",
+                          }))
+                        }
                       />
-                    }
-                    activeTransport={formValue?.activeTransport}
-                    onClick={() =>
-                      setFormValue((prev) => ({
-                        ...prev,
-                        origin: { origin: null },
-                        destination: { destination: null },
-                        typeOfBooking: "AIR",
-                        activeTransport: "air",
-                      }))
-                    }
+                    </Flex>
+                  )}
+                  {heroMode === "track" && (
+                    <Text size="sm" c="#fff" fw={600}>Track Shipment</Text>
+                  )}
+                  <Select
+                    value={heroMode}
+                    onChange={(value) => setHeroMode(value || "quote")}
+                    data={[
+                      { label: "Quote", value: "quote" },
+                      { label: "Track", value: "track" },
+                    ]}
+                    size={isMobile ? "xs" : "sm"}
+                    radius="md"
+                    w={isMobile ? 110 : 140}
+                    mr={42}
+                    styles={{
+                      input: {
+                        fontSize: TYPOGRAPHY.body.small,
+                        backgroundColor: "#ffffff45",
+                        color: "#fff",
+                        border: "2px solid white",
+                        fontWeight: 600,
+                      },
+                      option: {
+                        fontSize: TYPOGRAPHY.body.small,
+                        color: "#000",
+                      },
+                    }}
                   />
                 </Flex>
 
-                {/* ── Origin / Destination + Swap ── */}
+                {/* ── Origin / Destination + Swap OR Track ── */}
                 <Flex direction="column" mt={5}>
                   <form>
+                    {heroMode === "quote" ? (
                     <Flex
                       direction="row"
                       w="100%"
@@ -626,8 +716,83 @@ const Hero = ({ title, content }) => {
                         />
                       </ActionIcon>
                     </Flex>
+                    ) : (
+                      <Stack gap="sm" pt={4}>
+                        <Text
+                          size="sm"
+                          c="#fff"
+                          style={{
+                            fontFamily: homeTypography.bodyFontFamily,
+                            fontSize: homeTypography.sectionSub.fontSize,
+                            lineHeight: homeTypography.sectionSub.lineHeight,
+                          }}
+                        >
+                          Enter your B/L number or booking reference to view current
+                          shipment milestones.
+                        </Text>
+                        <TextInput
+                          value={trackQuery}
+                          onChange={(event) =>
+                            setTrackQuery(event.currentTarget.value)
+                          }
+                          onKeyDown={(event) => {
+                            if (event.key === "Enter") handleTrackShipment();
+                          }}
+                          radius="md"
+                          size={isMobile ? "md" : "lg"}
+                          placeholder="PPTM-2024-04821"
+                          leftSection={<IconSearch size={16} color="#fff" />}
+                          styles={{
+                            input: {
+                              fontSize: isMobile
+                                ? TYPOGRAPHY.body.normal
+                                : TYPOGRAPHY.input.large,
+                              backgroundColor: "#ffffff45",
+                              color: "#fff",
+                              border: "2px solid white",
+                            },
+                          }}
+                        />
+                        {/* {trackedShipment && (
+                          <Card radius="lg" p="md" withBorder bg="#FFFFFF">
+                            <Flex
+                              justify="space-between"
+                              align="center"
+                              wrap="wrap"
+                              gap="sm"
+                            >
+                              <Text
+                                fw={700}
+                                c={COLORS.headerBackground}
+                                size="sm"
+                              >
+                                B/L: {trackedShipment.blNo}
+                              </Text>
+                              <Badge color="teal" variant="light">
+                                {trackedShipment.status} - ETA {trackedShipment.eta}
+                              </Badge>
+                            </Flex>
+                            <Text mt="xs" c={COLORS.textColor} size="sm">
+                              {trackedShipment.route}
+                            </Text>
+                            <Divider my="sm" />
+                            <Stack gap="xs">
+                              {trackedShipment.events.map((event, index) => (
+                                <Box key={`${event.title}-${index}`}>
+                                  <Text fw={600} c={COLORS.headerBackground} size="sm">
+                                    {event.title}
+                                  </Text>
+                                  <Text c={COLORS.textColor} size="xs">
+                                    {event.date}
+                                  </Text>
+                                </Box>
+                              ))}
+                            </Stack>
+                          </Card>
+                        )} */}
+                      </Stack>
+                    )}
 
-                    {/* Get Quote button */}
                     <Button
                       fullWidth
                       mt={isMobile ? 16 : 25}
@@ -645,9 +810,11 @@ const Hero = ({ title, content }) => {
                       }}
                       radius="md"
                       c={COLORS.primaryColor}
-                      onClick={handleGetQuote}
+                      onClick={
+                        heroMode === "quote" ? handleGetQuote : handleTrackShipment
+                      }
                     >
-                      Get Quote
+                      {heroMode === "quote" ? "Get Quote" : "Track Shipment"}
                     </Button>
                   </form>
                 </Flex>
@@ -741,9 +908,10 @@ const styles = {
   heroContainer: {
     position: "relative",
     minHeight: "100vh",
-    backgroundImage: "url(/images/hero_background_3.jpeg)",
+    backgroundColor: "#fff",
+    backgroundImage: "url(/images/hero_bg.png)",
     backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundPosition: "top",
     backgroundRepeat: "no-repeat",
     overflow: "hidden",
   },

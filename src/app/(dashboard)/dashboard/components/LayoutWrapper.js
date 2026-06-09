@@ -2,48 +2,64 @@ import Link from "next/link";
 import Images from "@/app/utils/image";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
-import { Box, Button, Flex, Group, Image, Text, Title } from "@mantine/core";
-import { IconMail, IconPhone, IconUser, IconUserFilled } from "@tabler/icons-react";
+import { Box, Button, Flex, Group, Image, Text, Title, Tooltip } from "@mantine/core";
+import { IconArrowLeft, IconChevronLeft, IconMail, IconPhone, IconUser, IconUserFilled } from "@tabler/icons-react";
 
 export default function LayoutWrapper({ children }) {
   return (
     <Box className="dashboard-app-shell">
       <Box component="nav" className="topnav">
         <Box className="topnav-inner">
-          <Link
-            href="/"
-            className="dashboard-logo-link"
-          >
-            <Image src={Images.logo_only} alt="Logo" h={48} />
-            <Flex
-              align="center"
-              justify="center"
-              style={{
-                textDecoration: "none",
-                flexDirection: "column",
-                alignSelf: "flex-end",
-              }}
+          <Flex align="center" w="100%" gap={4}>
+            <Link href="/">
+              <Tooltip 
+                label="Back to Home" 
+                position="bottom" 
+                withArrow 
+                styles={{
+                  tooltip: {
+                    fontSize: "12px",
+                    padding: "4px 8px",
+                  },
+                }}>
+                <IconChevronLeft size={32} color="#000000D0" />
+              </Tooltip>
+            </Link>
+            <Link
+              href="/"
+              className="dashboard-logo-link"
             >
-              <Text
-                className="logo-font"
-                fs="italic"
-                fz={22}
-                fw={700}
-                tw="balance"
-                c="#326b7d"
+              <Image src={Images.logo_only} alt="Logo" h={48} />
+              <Flex
+                align="center"
+                justify="center"
+                style={{
+                  textDecoration: "none",
+                  flexDirection: "column",
+                  alignSelf: "flex-end",
+                }}
               >
-                Pentagon Prime
-              </Text>
-              <Text
-                size="xs"
-                fw={500}
-                c="rgb(0, 33, 95)"
-                style={{ alignSelf: "flex-start" }}
-              >
-                Logistics.Automated
-              </Text>
-            </Flex>
-          </Link>
+                <Text
+                  className="logo-font"
+                  fs="italic"
+                  fz={22}
+                  fw={700}
+                  tw="balance"
+                  c="#326b7d"
+                >
+                  Pentagon Prime
+                </Text>
+                <Text
+                  size="xs"
+                  fw={500}
+                  c="rgb(0, 33, 95)"
+                  style={{ alignSelf: "flex-start" }}
+                >
+                  Logistics.Automated
+                </Text>
+              </Flex>
+            </Link>
+          </Flex>
           <Sidebar />
           <Topbar />
         </Box>
@@ -53,7 +69,7 @@ export default function LayoutWrapper({ children }) {
           <Box className="welcome-inner">
             <Box className="welcome-left">
               <Title order={2}>
-                Welcome back, <span>Tata Steel Ltd.</span> 👋
+                Welcome back, <span>ABC Corporation</span> 👋
               </Title>
               <Group spacing={2} mt={4} gap={4} justify="flex-start">
                 <IconUserFilled size={16} color="#5FA0F8" />
@@ -107,7 +123,7 @@ export default function LayoutWrapper({ children }) {
       </Box>
       <Box className="dash-footer">
         <span>
-          © 2026 Pentagon Prime · Client Portal · Tata Steel Ltd. · Data secure
+          © 2026 Pentagon Prime · Client Portal · ABC Corporation · Data secure
           &amp; encrypted · Support: +91 22 4080 9999
         </span>
         <Box className="cert-strip">

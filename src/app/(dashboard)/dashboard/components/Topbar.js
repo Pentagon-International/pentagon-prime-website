@@ -21,18 +21,20 @@ export default function Topbar() {
 
   return (
     <Box className="nav-right">
+      <Text fz={12} fw={600} c="#000" bg="#FFD700" p={4} style={{borderRadius: 8}}>
+        ! Demo Mode
+      </Text>
       <Box className="live-chip">
         <Box className="live-dot" />
-        Live
+        <Text className="time-chip" id="clock">
+          {clockText}
+        </Text>
       </Box>
-      <Text className="time-chip" id="clock">
-        {clockText}
-      </Text>
       <Box className="user-chip">
         <Avatar className="user-avatar" radius="md" size={"sm"} color={"#fff"}>
-          TS
+          AC
         </Avatar>
-        <Text className="user-name">Tata Steel Ltd.</Text>
+        <Text className="user-name">ABC Corporation</Text>
       </Box>
     </Box>
   );

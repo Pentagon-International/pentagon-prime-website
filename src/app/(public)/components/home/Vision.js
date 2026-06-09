@@ -159,7 +159,7 @@ const Vision = ({ title, content, tradeItems, tradeContent, mode = "full" }) => 
       fluid
       px={"2%"}
       py={20}
-      pb={40}
+      pb={mode === "top" ? 10 : 40}
       style={styles.container}
     >
       {showTopSection && (

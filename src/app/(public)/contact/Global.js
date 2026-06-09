@@ -28,21 +28,23 @@ const COUNTRY_CONFIG = [
   { country: "Dubai", places: ["Dubai"] },
   { country: "Vietnam", places: ["Vietnam"] },
   { country: "China", places: ["China"] },
+  { country: "Saudi Arabia", places: ["Saudi Arabia"] },
 ];
-const ALWAYS_OPEN_COUNTRIES = new Set(["USA", "Kenya", "Dubai", "Vietnam", "China"]);
+const ALWAYS_OPEN_COUNTRIES = new Set(["USA", "Kenya", "Dubai", "Vietnam", "China", "Saudi Arabia"]);
 
 // Place name → map position (percentage)
 const PLACE_COORDS = {
-  USA: { x: "21%", y: "48%" },
-  Kenya: { x: "62%", y: "62.5%" },
-  Dubai: { x: "66%", y: "51%" },
-  "New Delhi": { x: "73.5%", y: "50%" },
-  Pune: { x: "73%", y: "54%" },
-  Bangalore: { x: "73.5%", y: "57%" },
-  Chennai: { x: "75%", y: "57%" },
-  Vietnam: { x: "83.5%", y: "57%" },
-  Ahmedabad: { x: "71.5%", y: "52%" },
-  China: { x: "85.5%", y: "51%" },
+    USA: { x: "21%", y: "48%" },
+    Kenya: { x: "62%", y: "62.5%" },
+    "Saudi Arabia": { x: "61.5%", y: "51%" },
+    Dubai: { x: "66%", y: "51%" },
+    "New Delhi": { x: "73.5%", y: "50%" },
+    Pune: { x: "73%", y: "54%" },
+    Bangalore: { x: "73.5%", y: "57%" },
+    Chennai: { x: "75%", y: "57%" },
+    Vietnam: { x: "83.5%", y: "57%" },
+    Ahmedabad: { x: "71.5%", y: "52%" },
+    China: { x: "85.5%", y: "51%" },
 };
 
 const Global = () => {
@@ -181,9 +183,9 @@ const Global = () => {
         {isMobile ? (
           countryCarousel
         ) : (
-          <Grid columns={12} align="center" justify="flex-start" gutter="xl">
+          <Grid columns={15} align="center" justify="flex-start" gutter="sm">
             {COUNTRY_CONFIG.map(({ country }) => (
-              <GridCol key={country} span={2}>
+              <GridCol key={country} span={country === "Saudi Arabia" ? 3 : 2}>
                 {renderCountryCard(country)}
               </GridCol>
             ))}
@@ -279,13 +281,17 @@ const Global = () => {
                   <Text size="sm" fw={600} mb={4}>
                     {item.fields.place}
                   </Text>
-                  <Text size="xs" c="dimmed" mb={8}>
-                    {item.fields.address}
-                  </Text>
-                  <Group gap={6} align="center">
-                    <IconPhoneCall size={14} color={COLORS.serviceColor} />
-                    <Text size="xs">{item.fields.number}</Text>
-                  </Group>
+                  {item.fields.address && (
+                    <Text size="xs" c="dimmed" mb={8}>
+                      {item.fields.address}
+                    </Text>
+                  )}
+                  {item.fields.number && (
+                    <Group gap={6} align="center">
+                      <IconPhoneCall size={14} color={COLORS.serviceColor} />
+                      <Text size="xs">{item.fields.number}</Text>
+                    </Group>
+                  )}
                 </Box>
               </Popover.Dropdown>
             </Popover>

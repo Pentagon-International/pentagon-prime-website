@@ -17,5 +17,5 @@ export const COLORS = {
   accordian_background : '#F5F5F5',
   arrow_background : '#F3F3F3',
   news_title : '#121212',
-  backgroundColor:"#EFF6FF",
+  backgroundColor:"#FFF",
 };

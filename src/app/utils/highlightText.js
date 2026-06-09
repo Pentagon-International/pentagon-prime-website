@@ -30,7 +30,7 @@ export const highlightText = (text) => {
         }
         if (char === "*") {
           return (
-            <span key={index} style={{ fontWeight: styles["*"], color: "#0a0a0a"  }}>
+            <span key={index} style={{ color: "#222222"  }}>
               {highlightText(content)} {/* Recursive call to handle nested % */}
             </span>
           );

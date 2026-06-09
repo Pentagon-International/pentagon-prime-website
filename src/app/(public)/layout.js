@@ -8,7 +8,6 @@ import "@mantine/core/styles.css";
 import "@mantine/carousel/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/dates/styles.css";
-import AIAssistantWidget from "@/components/common/AIAssistantWidget";
 import { IconBrandWhatsapp } from "@tabler/icons-react";
 import Loader from "@/components/common/Loader";
 import { useLoading } from "@/components/common/LoadingContext";
@@ -284,7 +283,6 @@ export default function PublicLayout({ children }) {
   return (
     <>
       <LayoutContent>{children}</LayoutContent>
-      <AIAssistantWidget />
       <WhatsAppButton />
       {!shouldHideFooter && <Footer />}
     </>

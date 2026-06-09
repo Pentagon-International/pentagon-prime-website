@@ -12,6 +12,7 @@ import QueryProvider from "@/lib/api/QueryProvider";
 import Images from "@/app/utils/image";
 import { Libre_Baskerville } from "next/font/google";
 import { LoadingProvider } from "@/components/common/LoadingContext";
+import AIAssistantWidget from "@/components/common/AIAssistantWidget";
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
             <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
               <Notifications position="top-right" zIndex={9999} />
               {children}
+              <AIAssistantWidget />
             </MantineProvider>
           </LoadingProvider>
         </QueryProvider>

@@ -184,6 +184,8 @@ const ListAttachments = ({ data = [], onDelete }) => {
   );
 };
 
+const Pulse_url = process.env.PULSE_BASE_URL || "http://127.0.0.1:8000";
+
 const CustomerRequestForm = (
   data = {
     type: undefined,
@@ -214,6 +216,7 @@ const CustomerRequestForm = (
   const [estimatedPriceRange, setEstimatedPriceRange] = useState({
     min_total_rate: null,
     max_total_rate: null,
+    total_rate: null,
   });
 
   // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS
@@ -586,10 +589,10 @@ const CustomerRequestForm = (
 
   useEffect(() => {
     if (!originCode || !destinationCode) {
-      setEstimatedPriceRange({ min_total_rate: null, max_total_rate: null });
+      setEstimatedPriceRange({ min_total_rate: null, max_total_rate: null, total_rate: null });
       return;
     }
-    setEstimatedPriceRange({ min_total_rate: null, max_total_rate: null });
+    setEstimatedPriceRange({ min_total_rate: null, max_total_rate: null, total_rate: null });
     let unit;
     if (serviceForPayload === "FCL") {
       const cargoType = containerList.type ?? activeType ?? "GC";
@@ -615,7 +618,7 @@ const CustomerRequestForm = (
       ...(shipmentTerms && { tos_code: shipmentTerms }),
       ...(readyDate && { date: dayjs(readyDate).format("YYYY-MM-DD") }),
     };
-    const tariffApiBase = "https://pulse.pentagonindia.net";
+    const tariffApiBase = Pulse_url ? Pulse_url : "http://127.0.0.1:8000";
     const url = `${tariffApiBase}/api/check-tariff-charges/`;
     fetch(url, {
       method: "POST",
@@ -628,19 +631,23 @@ const CustomerRequestForm = (
           data?.freight_min_total_rate ?? data?.min_total_rate;
         const maxVal =
           data?.freight_max_total_rate ?? data?.max_total_rate;
+        const totalVal =
+          data?.freight_total_rate ?? data?.total_rate;
         const minRate = minVal != null ? Number(minVal) : NaN;
         const maxRate = maxVal != null ? Number(maxVal) : NaN;
+        const totalRate = totalVal != null ? Number(totalVal) : NaN;
         if (!Number.isNaN(minRate) && !Number.isNaN(maxRate)) {
           setEstimatedPriceRange({
             min_total_rate: minRate,
             max_total_rate: maxRate,
+            total_rate: totalRate,
           });
         } else {
-          setEstimatedPriceRange({ min_total_rate: null, max_total_rate: null });
+          setEstimatedPriceRange({ min_total_rate: null, max_total_rate: null, total_rate: null });
         }
       })
       .catch(() => {
-        setEstimatedPriceRange({ min_total_rate: null, max_total_rate: null });
+        setEstimatedPriceRange({ min_total_rate: null, max_total_rate: null, total_rate: null });
       });
   }, [
     originCode,
@@ -1266,7 +1273,7 @@ const CustomerRequestForm = (
       ...(readyDate && { date: dayjs(readyDate).format("YYYY-MM-DD") }),
     };
 
-    const tariffApiBase = "https://pulse.pentagonindia.net";
+    const tariffApiBase = Pulse_url ? Pulse_url : "http://127.0.0.1:8000";
     const tariffUrl = `${tariffApiBase}/api/check-tariff-charges/`;
     const scheduleUrl = `${tariffApiBase}/api/searates/schedules/by-points/`;
 
@@ -1677,18 +1684,17 @@ const CustomerRequestForm = (
               <Text fw={600} mb={8} fz={20} c="rgb(0,33,95)">
                 Estimated Freight Price Range
               </Text>
-              {estimatedPriceRange.min_total_rate &&
-              estimatedPriceRange.max_total_rate ? (
+              {estimatedPriceRange.total_rate != null ? (
                 <Text fw={800} size="md">
-                  $ {estimatedPriceRange.min_total_rate.toLocaleString()}{" "}
+                  $ {estimatedPriceRange.total_rate.toLocaleString()}{" "}
                   <Text span size="sm">
                     {form.values.typeofBooking === "FCL" ? "/ctr" : form.values.typeofBooking === "LCL" ? "/cbm" : "/kg"}
                   </Text>
-                  {"  -  "}$
+                  {/* {"  -  "}$
                   {estimatedPriceRange.max_total_rate.toLocaleString()}{" "}
                   <Text span size="sm">
                     {form.values.typeofBooking === "FCL" ? "/ctr" : form.values.typeofBooking === "LCL" ? "/cbm" : "/kg"}
-                  </Text>
+                  </Text> */}
                 </Text>
               ) : (
                 <Text fw={600} size="sm" c="rgba(0,0,0,0.8)">

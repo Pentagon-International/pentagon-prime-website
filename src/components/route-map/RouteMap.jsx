@@ -28,37 +28,38 @@ export default function RouteMap() {
   return (
     <div style={{ backgroundColor: COLORS.backgroundColor, padding: "0" }}>
       <div style={{ position: "relative", height: "80vh", width: "100%",boxShadow:"0 0 8px rgba(0, 0, 0, 0.3)",borderRadius: "16px", zIndex:10 }}>
-        <MapContainer
-          zoom={2}
-          minZoom={2}
-          maxZoom={8}
-          zoomControl={false}
-          scrollWheelZoom={false}
-          maxBounds={[
-            [-85, -180],
-            [85, 180],
-          ]}
-          maxBoundsViscosity={1.0}
-          style={{
-            height: "100%",
-            width: "100%",
-            borderRadius: "16px",
-          }}
-        >
-          <ZoomControl position="bottomright" />
+      <MapContainer
+        zoom={3}
+        minZoom={3}
+        maxZoom={9}
+        zoomControl={false}
+        scrollWheelZoom={false}
+        maxBounds={[
+          [-85, -180],
+          [85, 180],
+        ]}
+        maxBoundsViscosity={1.0}
+        style={{
+          height: "100%",
+          width: "100%",
+          borderRadius: "16px",
+        }}
+      >
+        <ZoomControl position="bottomright" />
 
-          <TileLayer
-            attribution="© OpenStreetMap contributors"
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+        <TileLayer
+          attribution='&copy; OpenStreetMap &copy; CARTO'
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          subdomains={['a', 'b', 'c', 'd']}
+          maxZoom={20}
+        />
 
-          {/* 🔥 ONLY ONE LOADING CHANNEL */}
-          <RouteLayer
-            origin={mapOrigin}
-            destination={mapDestination}
-            setLoading={setIsMapLoading}
-          />
-        </MapContainer>
+        <RouteLayer
+          origin={mapOrigin}
+          destination={mapDestination}
+          setLoading={setIsMapLoading}
+        />
+      </MapContainer>
 
         {isMapLoading && (
           <div

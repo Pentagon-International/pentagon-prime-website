@@ -3,7 +3,7 @@ export const homeTypography = {
   bodyFontFamily: "inherit",
   headingFontFamily: "inherit",
   heroTitle: {
-    fontSize: "clamp(32px, 4vw, 48px)",
+    fontSize: "clamp(28px, 3.5vw, 44px)",
     lineHeight: "1.2",
     fontWeight: 700,
     letterSpacing: "0",
