@@ -184,7 +184,7 @@ const ListAttachments = ({ data = [], onDelete }) => {
   );
 };
 
-const Pulse_url = process.env.PULSE_BASE_URL || "http://127.0.0.1:8000";
+const Pulse_url = process.env.NEXT_PUBLIC_PULSE_BASE_URL || "http://127.0.0.1:8000";
 
 const CustomerRequestForm = (
   data = {

@@ -5,16 +5,32 @@ import { useEffect, useState } from "react";
 import { createSimpleMarker } from "./markerIcon";
 import L from "leaflet";
 import { resolvePortCoords } from "./getPortCoords";
+import { fetchSeaRoute } from "./fetchSeaRoute";
+import { airRoutePositions } from "./airRoutePositions";
 
-export default function RouteLayer({ origin, destination, setLoading }) {
+function straightLinePositions(originCoords, destinationCoords) {
+  return [
+    [originCoords.lat, originCoords.lng],
+    [destinationCoords.lat, destinationCoords.lng],
+  ];
+}
+
+export default function RouteLayer({
+  origin,
+  destination,
+  isAirRoute = false,
+  setLoading,
+}) {
   const map = useMap();
   const [originCoords, setOriginCoords] = useState(null);
   const [destinationCoords, setDestinationCoords] = useState(null);
+  const [routePositions, setRoutePositions] = useState(null);
 
   useEffect(() => {
     if (!origin?.country || !destination?.country) {
       setOriginCoords(null);
       setDestinationCoords(null);
+      setRoutePositions(null);
       setLoading(false);
       return;
     }
@@ -31,8 +47,35 @@ export default function RouteLayer({ origin, destination, setLoading }) {
         const destinationData = await resolvePortCoords(destination);
         if (cancelled) return;
 
+        if (!originData || !destinationData) {
+          setOriginCoords(null);
+          setDestinationCoords(null);
+          setRoutePositions(null);
+          return;
+        }
+
         setOriginCoords(originData);
         setDestinationCoords(destinationData);
+
+        if (isAirRoute) {
+          if (!cancelled) {
+            setRoutePositions(airRoutePositions(originData, destinationData));
+          }
+        } else {
+          try {
+            const { positions } = await fetchSeaRoute(
+              originData,
+              destinationData
+            );
+            if (!cancelled) setRoutePositions(positions);
+          } catch {
+            if (!cancelled) {
+              setRoutePositions(
+                straightLinePositions(originData, destinationData)
+              );
+            }
+          }
+        }
       } finally {
         if (!cancelled) {
           requestAnimationFrame(() => {
@@ -46,7 +89,7 @@ export default function RouteLayer({ origin, destination, setLoading }) {
     return () => {
       cancelled = true;
     };
-  }, [origin?.country, destination?.country]);
+  }, [origin?.country, destination?.country, isAirRoute]);
 
   const originName = origin?.name || origin;
   const destinationName = destination?.name || destination;
@@ -54,12 +97,12 @@ export default function RouteLayer({ origin, destination, setLoading }) {
   useEffect(() => {
     if (!map || !originCoords || !destinationCoords) return;
 
-    const bounds = L.latLngBounds(
-      [originCoords.lat, originCoords.lng],
-      [destinationCoords.lat, destinationCoords.lng]
-    );
+    const points =
+      routePositions ??
+      straightLinePositions(originCoords, destinationCoords);
 
-    // Ensure map has layout then center on route with padding
+    const bounds = L.latLngBounds(points);
+
     map.invalidateSize();
     map.fitBounds(bounds, {
       padding: [80, 80],
@@ -72,9 +115,13 @@ export default function RouteLayer({ origin, destination, setLoading }) {
     originCoords?.lng,
     destinationCoords?.lat,
     destinationCoords?.lng,
+    routePositions,
   ]);
 
   if (!originCoords || !destinationCoords) return null;
+
+  const linePositions =
+    routePositions ?? straightLinePositions(originCoords, destinationCoords);
 
   return (
     <>
@@ -104,12 +151,9 @@ export default function RouteLayer({ origin, destination, setLoading }) {
 
       {/* ROUTE LINE */}
       <Polyline
-        positions={[
-          [originCoords.lat, originCoords.lng],
-          [destinationCoords.lat, destinationCoords.lng],
-        ]}
+        positions={linePositions}
         pathOptions={{
-          color: "#0d6efd",
+          color: isAirRoute ? "#C40C0C" : "#0d6efd",
           weight: 3,
           dashArray: "10 14",
           className: "animated-route",

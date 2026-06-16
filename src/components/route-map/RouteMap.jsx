@@ -22,6 +22,8 @@ L.Icon.Default.mergeOptions({
 export default function RouteMap() {
   const mapOrigin = useCustomerRequestStore((s) => s.mapOrigin);
   const mapDestination = useCustomerRequestStore((s) => s.mapDestination);
+  const isAirRoute =
+    useCustomerRequestStore((s) => s.formValues?.activeTransport) === "air";
 
   const [isMapLoading, setIsMapLoading] = useState(false);
 
@@ -57,6 +59,7 @@ export default function RouteMap() {
         <RouteLayer
           origin={mapOrigin}
           destination={mapDestination}
+          isAirRoute={isAirRoute}
           setLoading={setIsMapLoading}
         />
       </MapContainer>

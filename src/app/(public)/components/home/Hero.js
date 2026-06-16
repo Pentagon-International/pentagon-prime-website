@@ -425,6 +425,7 @@ const Hero = ({ title, content }) => {
             gap={0}
             justify={isTabletOrBelow ? "center" : "flex-start"}
             align={isTabletOrBelow ? "center" : "flex-start"}
+            style={{ flex: isTabletOrBelow ? 0 : 1 }}
           >
             <Title
               c="rgb(0, 33, 95)"
@@ -832,6 +833,7 @@ const Hero = ({ title, content }) => {
               style={{
                 borderRadius: "16px",
                 border: "3px solid #E0E0E0",
+               flex: isTabletOrBelow ? 0 : 1.10,
               }}
             >
               {/* Text overlay */}

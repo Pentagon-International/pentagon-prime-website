@@ -30,7 +30,7 @@ const HighlightContent = () => {
             lineHeight: homeTypography.sectionSub.lineHeight,
           }}
         >
-          6 business verticals • 600+ team • 26+ locations • 5 countries
+          6 business verticals • 600+ team • 12+ locations • 6 countries
         </Text>
       </Stack>
     </Container>
